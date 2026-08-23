@@ -1,0 +1,578 @@
+{
+  "settings": {
+    "components": {
+      "code": true,
+      "binaries": false
+    },
+    "targetId": "net10.0",
+    "targetDisplayName": ".NETCoreApp,Version=v10.0"
+  },
+  "analysisStartTime": "2026-08-23T07:32:31.7698882Z",
+  "analysisEndTime": "2026-08-23T07:32:32.517337Z",
+  "privacyModeHelpUrl": "https://go.microsoft.com/fwlink/?linkid=2270980",
+  "stats": {
+    "summary": {
+      "projects": 1,
+      "issues": 6,
+      "incidents": 17,
+      "effort": 17
+    },
+    "charts": {
+      "severity": {
+        "Mandatory": 1,
+        "Optional": 4,
+        "Potential": 12,
+        "Information": 0
+      },
+      "category": {
+        "NuGet": 6,
+        "Project": 1,
+        "Api": 10
+      }
+    }
+  },
+  "projects": [
+    {
+      "path": "meguri\\meguri.csproj",
+      "startingProject": true,
+      "issues": 6,
+      "storyPoints": 17,
+      "properties": {
+        "appName": "meguri",
+        "projectKind": "AspNetCore",
+        "frameworks": [
+          "netcoreapp2.0"
+        ],
+        "languages": [
+          "C#"
+        ],
+        "tools": [
+          "MSBuild"
+        ],
+        "isSdkStyle": true,
+        "numberOfFiles": 79,
+        "numberOfCodeFiles": 67,
+        "linesTotal": 3366,
+        "linesOfCode": 3275,
+        "totalApiScanned": 2669,
+        "minLinesOfCodeToChange": 10,
+        "maxLinesOfCodeToChange": 10
+      },
+      "ruleInstances": [
+        {
+          "incidentId": "078c0365-da5d-463e-8012-7786e27b46f6",
+          "ruleId": "NuGet.0002",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.Tools, 2.0.3\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools 10.0.11",
+              "protected": "Microsoft.EntityFrameworkCore.Tools, 2.0.3\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools 10.0.11"
+            },
+            "kind": "File",
+            "path": "meguri\\meguri.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.Tools, 2.0.3\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools 10.0.11",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.Tools, 2.0.3\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools 10.0.11",
+            "label": "Microsoft.EntityFrameworkCore.Tools 2.0.3",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.Tools",
+              "PackageVersion": "2.0.3",
+              "PackageNewVersion": "10.0.11",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "ba11cea9-b9fc-400f-8cd3-0e599d4ca114",
+          "ruleId": "NuGet.0002",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.VisualStudio.Web.CodeGeneration.Design, 2.0.4\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nRemove Microsoft.VisualStudio.Web.CodeGeneration.Design, and replace with new package Microsoft.VisualStudio.Web.CodeGeneration.Design 10.0.2",
+              "protected": "Microsoft.VisualStudio.Web.CodeGeneration.Design, 2.0.4\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nRemove Microsoft.VisualStudio.Web.CodeGeneration.Design, and replace with new package Microsoft.VisualStudio.Web.CodeGeneration.Design 10.0.2"
+            },
+            "kind": "File",
+            "path": "meguri\\meguri.csproj",
+            "snippet": "Microsoft.VisualStudio.Web.CodeGeneration.Design, 2.0.4\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nRemove Microsoft.VisualStudio.Web.CodeGeneration.Design, and replace with new package Microsoft.VisualStudio.Web.CodeGeneration.Design 10.0.2",
+            "protectedSnippet": "Microsoft.VisualStudio.Web.CodeGeneration.Design, 2.0.4\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nRemove Microsoft.VisualStudio.Web.CodeGeneration.Design, and replace with new package Microsoft.VisualStudio.Web.CodeGeneration.Design 10.0.2",
+            "label": "Microsoft.VisualStudio.Web.CodeGeneration.Design 2.0.4",
+            "properties": {
+              "PackageId": "Microsoft.VisualStudio.Web.CodeGeneration.Design",
+              "PackageVersion": "2.0.4",
+              "PackageNewVersion": "10.0.2",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "a97be942-16fe-414d-bbec-00ff972fe40f",
+          "ruleId": "NuGet.0005",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.AspNetCore.All, 2.0.9\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.AspNetCore.All, and replace with new package Microsoft.AspNetCore.All, 2.2.8",
+              "protected": "Microsoft.AspNetCore.All, 2.0.9\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.AspNetCore.All, and replace with new package Microsoft.AspNetCore.All, 2.2.8"
+            },
+            "kind": "File",
+            "path": "meguri\\meguri.csproj",
+            "snippet": "Microsoft.AspNetCore.All, 2.0.9\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.AspNetCore.All, and replace with new package Microsoft.AspNetCore.All, 2.2.8",
+            "protectedSnippet": "Microsoft.AspNetCore.All, 2.0.9\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.AspNetCore.All, and replace with new package Microsoft.AspNetCore.All, 2.2.8",
+            "label": "Microsoft.AspNetCore.All 2.0.9",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.All",
+              "PackageVersion": "2.0.9",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "32923c7c-a698-4fa9-9396-3fa084e2f919",
+          "ruleId": "NuGet.0005",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.EntityFrameworkCore.Tools, 2.0.3\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools, 10.0.11",
+              "protected": "Microsoft.EntityFrameworkCore.Tools, 2.0.3\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools, 10.0.11"
+            },
+            "kind": "File",
+            "path": "meguri\\meguri.csproj",
+            "snippet": "Microsoft.EntityFrameworkCore.Tools, 2.0.3\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools, 10.0.11",
+            "protectedSnippet": "Microsoft.EntityFrameworkCore.Tools, 2.0.3\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.EntityFrameworkCore.Tools, and replace with new package Microsoft.EntityFrameworkCore.Tools, 10.0.11",
+            "label": "Microsoft.EntityFrameworkCore.Tools 2.0.3",
+            "properties": {
+              "PackageId": "Microsoft.EntityFrameworkCore.Tools",
+              "PackageVersion": "2.0.3",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "0e68b1e6-1ab5-4140-8b59-25acc1cc777a",
+          "ruleId": "NuGet.0004",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.NETCore.App, 2.0.0\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nMicrosoft.NETCore.App, 2.2.8",
+              "protected": "Microsoft.NETCore.App, 2.0.0\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nMicrosoft.NETCore.App, 2.2.8"
+            },
+            "kind": "File",
+            "path": "meguri\\meguri.csproj",
+            "snippet": "Microsoft.NETCore.App, 2.0.0\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nMicrosoft.NETCore.App, 2.2.8",
+            "protectedSnippet": "Microsoft.NETCore.App, 2.0.0\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nMicrosoft.NETCore.App, 2.2.8",
+            "label": "Microsoft.NETCore.App 2.0.0",
+            "properties": {
+              "PackageId": "Microsoft.NETCore.App",
+              "PackageVersion": "2.0.0",
+              "PackageNewVersion": "2.2.8",
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "e230ad0d-1cb3-484d-a0e3-2727c0b13181",
+          "ruleId": "NuGet.0005",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "Microsoft.NETCore.App, 2.0.0\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.NETCore.App, and replace with new package Microsoft.NETCore.App, 2.2.8",
+              "protected": "Microsoft.NETCore.App, 2.0.0\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.NETCore.App, and replace with new package Microsoft.NETCore.App, 2.2.8"
+            },
+            "kind": "File",
+            "path": "meguri\\meguri.csproj",
+            "snippet": "Microsoft.NETCore.App, 2.0.0\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.NETCore.App, and replace with new package Microsoft.NETCore.App, 2.2.8",
+            "protectedSnippet": "Microsoft.NETCore.App, 2.0.0\n\n\u30EC\u30B3\u30E1\u30F3\u30C7\u30FC\u30B7\u30E7\u30F3\uFF1A\n\nThis package has been deprecated as part of the .NET Package Deprecation effort. You can learn more about it from https://github.com/dotnet/announcements/issues/217\nRemove Microsoft.NETCore.App, and replace with new package Microsoft.NETCore.App, 2.2.8",
+            "label": "Microsoft.NETCore.App 2.0.0",
+            "properties": {
+              "PackageId": "Microsoft.NETCore.App",
+              "PackageVersion": "2.0.0",
+              "PackageNewVersion": null,
+              "PackageReplacements": null
+            }
+          }
+        },
+        {
+          "incidentId": "7ae24551-5f32-4503-a3b1-1483be83a43a",
+          "ruleId": "Project.0002",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "\u73FE\u5728\u306E\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF: netcoreapp2.0\n\u63A8\u5968\u3055\u308C\u308B\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF: net10.0",
+              "protected": "\u73FE\u5728\u306E\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF: netcoreapp2.0\n\u63A8\u5968\u3055\u308C\u308B\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF: net10.0"
+            },
+            "kind": "File",
+            "path": "meguri\\meguri.csproj",
+            "snippet": "\u73FE\u5728\u306E\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF: netcoreapp2.0\n\u63A8\u5968\u3055\u308C\u308B\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF: net10.0",
+            "protectedSnippet": "\u73FE\u5728\u306E\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF: netcoreapp2.0\n\u63A8\u5968\u3055\u308C\u308B\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF: net10.0",
+            "properties": {
+              "CurrentTargetFramework": "netcoreapp2.0",
+              "RecommendedTargetFramework": "net10.0"
+            }
+          }
+        },
+        {
+          "incidentId": "4c96a7e5-512c-421f-94c6-56a7d215d716",
+          "ruleId": "Api.0002",
+          "description": "WebHostBuilder, IWebHost, and WebHost are obsolete ",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "public static IWebHost BuildWebHost(string[] args)",
+              "protected": "T:Microsoft.AspNetCore.Hosting.IWebHost"
+            },
+            "kind": "File",
+            "path": "meguri\\Program.cs",
+            "snippet": "public static IWebHost BuildWebHost(string[] args)",
+            "protectedSnippet": "T:Microsoft.AspNetCore.Hosting.IWebHost",
+            "label": "T:Microsoft.AspNetCore.Hosting.IWebHost",
+            "properties": {
+              "CharCount": "620"
+            },
+            "links": [
+              {
+                "title": "API \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/aspnet-core/10/webhostbuilder-deprecated.md",
+                "isCustom": false
+              }
+            ],
+            "line": 19,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "cc7699d0-a67f-49e1-a513-a46ad20e42b1",
+          "ruleId": "Api.0002",
+          "description": "WebHostBuilder, IWebHost, and WebHost are obsolete ",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "WebHost.CreateDefaultBuilder(args)",
+              "protected": "T:Microsoft.AspNetCore.WebHost"
+            },
+            "kind": "File",
+            "path": "meguri\\Program.cs",
+            "snippet": "WebHost.CreateDefaultBuilder(args)",
+            "protectedSnippet": "T:Microsoft.AspNetCore.WebHost",
+            "label": "T:Microsoft.AspNetCore.WebHost",
+            "properties": {
+              "CharCount": "620"
+            },
+            "links": [
+              {
+                "title": "API \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/aspnet-core/10/webhostbuilder-deprecated.md",
+                "isCustom": false
+              }
+            ],
+            "line": 20,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "c2f8282a-b381-4885-a2a3-893cf0d1c2e8",
+          "ruleId": "Api.0002",
+          "description": "WebHostBuilder, IWebHost, and WebHost are obsolete ",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "WebHost.CreateDefaultBuilder(args)\r\n                .UseStartup\u003CStartup\u003E()\r\n                .Build()",
+              "protected": "T:Microsoft.AspNetCore.Hosting.IWebHost"
+            },
+            "kind": "File",
+            "path": "meguri\\Program.cs",
+            "snippet": "WebHost.CreateDefaultBuilder(args)\r\n                .UseStartup\u003CStartup\u003E()\r\n                .Build()",
+            "protectedSnippet": "T:Microsoft.AspNetCore.Hosting.IWebHost",
+            "label": "T:Microsoft.AspNetCore.Hosting.IWebHost",
+            "properties": {
+              "CharCount": "620"
+            },
+            "links": [
+              {
+                "title": "API \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/aspnet-core/10/webhostbuilder-deprecated.md",
+                "isCustom": false
+              }
+            ],
+            "line": 20,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "0df97414-1fe8-4ba1-87e4-34a3a7baeb6b",
+          "ruleId": "Api.0002",
+          "description": "WebHostBuilder, IWebHost, and WebHost are obsolete ",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "BuildWebHost(args).Run();",
+              "protected": "T:Microsoft.AspNetCore.Hosting.IWebHost"
+            },
+            "kind": "File",
+            "path": "meguri\\Program.cs",
+            "snippet": "BuildWebHost(args).Run();",
+            "protectedSnippet": "T:Microsoft.AspNetCore.Hosting.IWebHost",
+            "label": "T:Microsoft.AspNetCore.Hosting.IWebHost",
+            "properties": {
+              "CharCount": "620"
+            },
+            "links": [
+              {
+                "title": "API \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/aspnet-core/10/webhostbuilder-deprecated.md",
+                "isCustom": false
+              }
+            ],
+            "line": 16,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "455886b3-c0ec-427e-bb3c-57c663cf38fd",
+          "ruleId": "Api.0002",
+          "description": "This type is obsolete and will be removed in a future version. The recommended alternative is Microsoft.AspNetCore.Hosting.IWebHostEnvironment. Microsoft.Extensions.Hosting",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "public void Configure(IApplicationBuilder app, IHostingEnvironment env)",
+              "protected": "T:Microsoft.AspNetCore.Hosting.IHostingEnvironment"
+            },
+            "kind": "File",
+            "path": "meguri\\Startup.cs",
+            "snippet": "public void Configure(IApplicationBuilder app, IHostingEnvironment env)",
+            "protectedSnippet": "T:Microsoft.AspNetCore.Hosting.IHostingEnvironment",
+            "label": "T:Microsoft.AspNetCore.Hosting.IHostingEnvironment",
+            "properties": {
+              "CharCount": "2103"
+            },
+            "line": 42,
+            "column": 8
+          }
+        },
+        {
+          "incidentId": "4546642f-ace6-4dea-be57-1832129988ee",
+          "ruleId": "Api.0003",
+          "description": "Breaking change: Exception diagnostics are suppressed when IExceptionHandler.TryHandleAsync returns true ",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "app.UseExceptionHandler(\u0022/Home/Error\u0022);",
+              "protected": "M:Microsoft.AspNetCore.Builder.ExceptionHandlerExtensions.UseExceptionHandler(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String)"
+            },
+            "kind": "File",
+            "path": "meguri\\Startup.cs",
+            "snippet": "app.UseExceptionHandler(\u0022/Home/Error\u0022);",
+            "protectedSnippet": "M:Microsoft.AspNetCore.Builder.ExceptionHandlerExtensions.UseExceptionHandler(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String)",
+            "label": "M:Microsoft.AspNetCore.Builder.ExceptionHandlerExtensions.UseExceptionHandler(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.String)",
+            "properties": {
+              "CharCount": "2103"
+            },
+            "links": [
+              {
+                "title": "API \u30C9\u30AD\u30E5\u30E1\u30F3\u30C8",
+                "url": "https://github.com/dotnet/docs/blob/main/docs/core/compatibility/aspnet-core/10/exception-handler-diagnostics-suppressed.md",
+                "isCustom": false
+              }
+            ],
+            "line": 51,
+            "column": 16
+          }
+        },
+        {
+          "incidentId": "773b5aed-958f-4e78-a26f-34178f8716ed",
+          "ruleId": "Api.0002",
+          "description": "API is available in package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore, 8.0.6. Add package reference to Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore, 8.0.6",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "app.UseDatabaseErrorPage();",
+              "protected": "T:Microsoft.AspNetCore.Builder.DatabaseErrorPageExtensions"
+            },
+            "kind": "File",
+            "path": "meguri\\Startup.cs",
+            "snippet": "app.UseDatabaseErrorPage();",
+            "protectedSnippet": "T:Microsoft.AspNetCore.Builder.DatabaseErrorPageExtensions",
+            "label": "T:Microsoft.AspNetCore.Builder.DatabaseErrorPageExtensions",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore",
+              "PackageNewVersion": "8.0.6",
+              "CharCount": "2103"
+            },
+            "line": 47,
+            "column": 16
+          }
+        },
+        {
+          "incidentId": "4a85804e-b478-4655-9f9d-a00a6d28d9ec",
+          "ruleId": "Api.0002",
+          "description": "API is available in package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore, 8.0.6. Add package reference to Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore, 8.0.6",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "app.UseDatabaseErrorPage();",
+              "protected": "M:Microsoft.AspNetCore.Builder.DatabaseErrorPageExtensions.UseDatabaseErrorPage(Microsoft.AspNetCore.Builder.IApplicationBuilder)"
+            },
+            "kind": "File",
+            "path": "meguri\\Startup.cs",
+            "snippet": "app.UseDatabaseErrorPage();",
+            "protectedSnippet": "M:Microsoft.AspNetCore.Builder.DatabaseErrorPageExtensions.UseDatabaseErrorPage(Microsoft.AspNetCore.Builder.IApplicationBuilder)",
+            "label": "M:Microsoft.AspNetCore.Builder.DatabaseErrorPageExtensions.UseDatabaseErrorPage(Microsoft.AspNetCore.Builder.IApplicationBuilder)",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore",
+              "PackageNewVersion": "8.0.6",
+              "CharCount": "2103"
+            },
+            "line": 47,
+            "column": 16
+          }
+        },
+        {
+          "incidentId": "f8c5e03b-1728-427f-b69b-1dcad73ebfa9",
+          "ruleId": "Api.0002",
+          "description": "API is available in package Microsoft.AspNetCore.Identity.EntityFrameworkCore, 8.0.6. Add package reference to Microsoft.AspNetCore.Identity.EntityFrameworkCore, 8.0.6",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "services.AddIdentity\u003CApplicationUser, IdentityRole\u003E()\r\n                .AddEntityFrameworkStores\u003CApplicationDbContext\u003E()\r\n                .AddDefaultTokenProviders();",
+              "protected": "T:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions"
+            },
+            "kind": "File",
+            "path": "meguri\\Startup.cs",
+            "snippet": "services.AddIdentity\u003CApplicationUser, IdentityRole\u003E()\r\n                .AddEntityFrameworkStores\u003CApplicationDbContext\u003E()\r\n                .AddDefaultTokenProviders();",
+            "protectedSnippet": "T:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions",
+            "label": "T:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+              "PackageNewVersion": "8.0.6",
+              "CharCount": "2103"
+            },
+            "line": 31,
+            "column": 12
+          }
+        },
+        {
+          "incidentId": "0842404e-7a67-4e92-9be0-896b1fa11c7e",
+          "ruleId": "Api.0002",
+          "description": "API is available in package Microsoft.AspNetCore.Identity.EntityFrameworkCore, 8.0.6. Add package reference to Microsoft.AspNetCore.Identity.EntityFrameworkCore, 8.0.6",
+          "projectPath": "meguri\\meguri.csproj",
+          "state": "Active",
+          "location": {
+            "snippetModel": {
+              "unrestricted": "services.AddIdentity\u003CApplicationUser, IdentityRole\u003E()\r\n                .AddEntityFrameworkStores\u003CApplicationDbContext\u003E()\r\n                .AddDefaultTokenProviders();",
+              "protected": "M:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions.AddEntityFrameworkStores\u0060\u00601(Microsoft.AspNetCore.Identity.IdentityBuilder)"
+            },
+            "kind": "File",
+            "path": "meguri\\Startup.cs",
+            "snippet": "services.AddIdentity\u003CApplicationUser, IdentityRole\u003E()\r\n                .AddEntityFrameworkStores\u003CApplicationDbContext\u003E()\r\n                .AddDefaultTokenProviders();",
+            "protectedSnippet": "M:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions.AddEntityFrameworkStores\u0060\u00601(Microsoft.AspNetCore.Identity.IdentityBuilder)",
+            "label": "M:Microsoft.Extensions.DependencyInjection.IdentityEntityFrameworkBuilderExtensions.AddEntityFrameworkStores\u0060\u00601(Microsoft.AspNetCore.Identity.IdentityBuilder)",
+            "properties": {
+              "PackageId": "Microsoft.AspNetCore.Identity.EntityFrameworkCore",
+              "PackageNewVersion": "8.0.6",
+              "CharCount": "2103"
+            },
+            "line": 31,
+            "column": 12
+          }
+        }
+      ],
+      "features": []
+    }
+  ],
+  "rules": {
+    "NuGet.0002": {
+      "id": "NuGet.0002",
+      "isFeature": false,
+      "description": "\u9078\u629E\u3057\u305F\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF\u306B\u306F\u3001NuGet \u30D1\u30C3\u30B1\u30FC\u30B8\u306E\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3092\u304A\u52E7\u3081\u3057\u307E\u3059\u3002\n\n\u6A19\u6E96\u306E .NET \u30D1\u30C3\u30B1\u30FC\u30B8\u3067\u306F\u3001\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E\u5BFE\u8C61\u3068\u306A\u308B .NET \u306E\u30D0\u30FC\u30B8\u30E7\u30F3\u3068\u4E00\u81F4\u3059\u308B\u30D0\u30FC\u30B8\u30E7\u30F3\u3092\u304A\u52E7\u3081\u3057\u307E\u3059\u3002\n\n\u4ED6\u306E\u3044\u304F\u3064\u304B\u306E\u30D1\u30C3\u30B1\u30FC\u30B8\u3082\u3001\u9078\u629E\u3057\u305F\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF\u306B\u9069\u3057\u3066\u3044\u307E\u3059\u3002",
+      "label": "NuGet \u30D1\u30C3\u30B1\u30FC\u30B8\u306E\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3092\u304A\u3059\u3059\u3081\u3057\u307E\u3059",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262530",
+          "isCustom": false
+        }
+      ]
+    },
+    "NuGet.0005": {
+      "id": "NuGet.0005",
+      "isFeature": false,
+      "description": "NuGet \u30D1\u30C3\u30B1\u30FC\u30B8\u306F\u975E\u63A8\u5968\u3067\u3059\u3002\n\n\u305D\u306E\u30C9\u30AD\u30E5\u30E1\u30F3\u30C8\u306B\u30A2\u30AF\u30BB\u30B9\u3057\u3001\u3053\u306E\u30D1\u30C3\u30B1\u30FC\u30B8\u306B\u3088\u3063\u3066\u63D0\u4F9B\u3055\u308C\u308B\u6A5F\u80FD\u306E\u7F6E\u304D\u63DB\u3048\u306B\u95A2\u3059\u308B\u30AC\u30A4\u30C0\u30F3\u30B9\u304C\u3042\u308B\u304B\u3069\u3046\u304B\u3092\u78BA\u8A8D\u3057\u307E\u3059\u3002",
+      "label": "NuGet \u30D1\u30C3\u30B1\u30FC\u30B8\u306F\u975E\u63A8\u5968\u3067\u3059",
+      "severity": "Optional",
+      "effort": 1,
+      "links": [
+        {
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262531",
+          "isCustom": false
+        }
+      ]
+    },
+    "NuGet.0004": {
+      "id": "NuGet.0004",
+      "isFeature": false,
+      "description": "NuGet \u30D1\u30C3\u30B1\u30FC\u30B8\u306B\u30BB\u30AD\u30E5\u30EA\u30C6\u30A3\u306E\u8106\u5F31\u6027\u304C\u542B\u307E\u308C\u3066\u3044\u307E\u3059\u3002\n\n\u30D1\u30C3\u30B1\u30FC\u30B8\u306F\u3001\u65E2\u77E5\u306E\u30BB\u30AD\u30E5\u30EA\u30C6\u30A3\u306E\u8106\u5F31\u6027\u3092\u89E3\u6C7A\u3059\u308B\u65B0\u3057\u3044\u30D0\u30FC\u30B8\u30E7\u30F3\u306B\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002",
+      "label": "NuGet \u30D1\u30C3\u30B1\u30FC\u30B8\u306B\u30BB\u30AD\u30E5\u30EA\u30C6\u30A3\u306E\u8106\u5F31\u6027\u304C\u542B\u307E\u308C\u3066\u3044\u307E\u3059",
+      "severity": "Optional",
+      "effort": 1
+    },
+    "Project.0002": {
+      "id": "Project.0002",
+      "isFeature": false,
+      "description": "\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF\u306F\u3001\u3053\u306E\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u7528\u306B\u9078\u629E\u3057\u305F\u65B0\u3057\u3044\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF\u306B\u5909\u66F4\u3059\u308B\u5FC5\u8981\u304C\u3042\u308A\u307E\u3059\u3002\n\n\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u4E2D\u3001\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF\u306F\u3001\u8A72\u5F53\u3059\u308B\u5834\u5408\u3001\u5BFE\u5FDC\u3059\u308B\u30D7\u30E9\u30C3\u30C8\u30D5\u30A9\u30FC\u30E0\u306B\u8ABF\u6574\u3055\u308C\u307E\u3059\u3002\u5834\u5408\u306B\u3088\u3063\u3066\u306F\u3001\u6700\u65B0\u306E .NET \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF (Windows\u3001iOS\u3001Android \u306A\u3069) \u3067\u72EC\u81EA\u306E\u30D7\u30E9\u30C3\u30C8\u30D5\u30A9\u30FC\u30E0\u3092\u6301\u3064\u3088\u3046\u306B\u306A\u3063\u305F\u6A5F\u80FD\u3092\u4F7F\u7528\u3057\u3066\u3044\u305F\u5834\u5408\u3001\u30A2\u30C3\u30D7\u30B0\u30EC\u30FC\u30C9\u5F8C\u306B\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u3067\u8907\u6570\u306E\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF\u304C\u767A\u751F\u3059\u308B\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u3002",
+      "label": "\u30D7\u30ED\u30B8\u30A7\u30AF\u30C8\u306E\u30BF\u30FC\u30B2\u30C3\u30C8 \u30D5\u30EC\u30FC\u30E0\u30EF\u30FC\u30AF\u3092\u5909\u66F4\u3059\u308B\u5FC5\u8981\u304C\u3042\u308B",
+      "severity": "Mandatory",
+      "effort": 1,
+      "links": [
+        {
+          "title": ".NET Framework\u304B\u3089 .NET \u3078\u306E\u79FB\u690D\u306E\u6982\u8981",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265227",
+          "isCustom": false
+        },
+        {
+          "title": ".NET \u30D7\u30ED\u30B8\u30A7\u30AF\u30C8 SDK",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2265226",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0002": {
+      "id": "Api.0002",
+      "isFeature": false,
+      "description": "\u9078\u629E\u3057\u305F .NET \u30D0\u30FC\u30B8\u30E7\u30F3\u3067\u306F API \u306E\u30BD\u30FC\u30B9\u306B\u4E92\u63DB\u6027\u304C\u3042\u308A\u307E\u305B\u3093\u3002\u53E4\u3044 API \u3092\u524A\u9664\u3057\u305F\u308A\u30E1\u30BD\u30C3\u30C9 \u30B7\u30B0\u30CD\u30C1\u30E3\u3092\u5909\u66F4\u3057\u305F\u308A\u3059\u308B\u306A\u3069\u3001\u65B0\u3057\u3044\u30D0\u30FC\u30B8\u30E7\u30F3\u3092\u30BF\u30FC\u30B2\u30C3\u30C8\u306B\u3059\u308B\u5834\u5408\u306F\u3001\u6B63\u5E38\u306B\u30B3\u30F3\u30D1\u30A4\u30EB\u3059\u308B\u305F\u3081\u306B\u30B3\u30FC\u30C9\u306E\u5909\u66F4\u304C\u5FC5\u8981\u306B\u306A\u308A\u307E\u3059\u3002",
+      "label": "\u9078\u629E\u3057\u305F .NET \u30D0\u30FC\u30B8\u30E7\u30F3\u3067\u306F\u30BD\u30FC\u30B9\u306B\u4E92\u63DB\u6027\u304C\u3042\u308A\u307E\u305B\u3093",
+      "severity": "Potential",
+      "effort": 1,
+      "links": [
+        {
+          "title": ".NET \u306E\u7834\u58CA\u7684\u5909\u66F4",
+          "url": "https://go.microsoft.com/fwlink/?linkid=2262679",
+          "isCustom": false
+        }
+      ]
+    },
+    "Api.0003": {
+      "id": "Api.0003",
+      "isFeature": false,
+      "description": "\u9078\u629E\u3057\u305F .NET \u30D0\u30FC\u30B8\u30E7\u30F3\u3067 API \u306E\u52D5\u4F5C\u304C\u5909\u66F4\u3055\u308C\u3066\u3044\u307E\u3059\u3002\u518D\u30B3\u30F3\u30D1\u30A4\u30EB\u3092\u5FC5\u8981\u3068\u305B\u305A\u306B\u30B3\u30FC\u30C9\u3068\u30D0\u30A4\u30CA\u30EA\u306E\u52D5\u4F5C\u304C\u5B9F\u884C\u6642\u306B\u7570\u306A\u308B\u5834\u5408\u304C\u3042\u308A\u307E\u3059\u304C\u3001\u65B0\u3057\u3044\u52D5\u4F5C\u304C\u671B\u307E\u3057\u304F\u306A\u304F\u3001\u66F4\u65B0\u304C\u5FC5\u8981\u306B\u306A\u308B\u53EF\u80FD\u6027\u304C\u3042\u308A\u307E\u3059\u3002",
+      "label": "\u9078\u629E\u3057\u305F .NET \u30D0\u30FC\u30B8\u30E7\u30F3\u3067\u306E\u52D5\u4F5C\u306E\u5909\u66F4",
+      "severity": "Potential",
+      "effort": 1
+    }
+  }
+}
