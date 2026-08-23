@@ -45,7 +45,7 @@ namespace meguri
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                // UseDatabaseErrorPage was removed in newer ASP.NET Core versions; DeveloperExceptionPage provides similar local diagnostics.
             }
             else
             {
