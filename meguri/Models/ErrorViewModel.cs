@@ -1,9 +1,7 @@
 using System;
 
-namespace meguri.Models
-{
-    public class ErrorViewModel
-    {
+namespace meguri.Models {
+    public class ErrorViewModel {
         public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);

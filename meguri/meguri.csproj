@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <UserSecretsId>aspnet-meguri-C05BB45D-59C8-4B64-B0B8-85F18DC87411</UserSecretsId>
