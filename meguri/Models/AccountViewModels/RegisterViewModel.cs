@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace meguri.Models.AccountViewModels
-{
-    public class RegisterViewModel
-    {
+namespace meguri.Models.AccountViewModels {
+    public class RegisterViewModel {
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]

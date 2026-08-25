@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace meguri.Models.ManageViewModels
-{
-    public class IndexViewModel
-    {
+namespace meguri.Models.ManageViewModels {
+    public class IndexViewModel {
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }

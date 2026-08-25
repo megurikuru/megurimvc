@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace meguri.Models.ManageViewModels
-{
-    public class ChangePasswordViewModel
-    {
+namespace meguri.Models.ManageViewModels {
+    public class ChangePasswordViewModel {
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Current password")]

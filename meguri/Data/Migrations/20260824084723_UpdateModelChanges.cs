@@ -2,14 +2,11 @@
 
 #nullable disable
 
-namespace meguri.Data.Migrations
-{
+namespace meguri.Data.Migrations {
     /// <inheritdoc />
-    public partial class UpdateModelChanges : Migration
-    {
+    public partial class UpdateModelChanges : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropIndex(
                 name: "IX_AspNetUserRoles_UserId",
                 table: "AspNetUserRoles");
@@ -34,8 +31,7 @@ namespace meguri.Data.Migrations
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropForeignKey(
                 name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                 table: "AspNetUserTokens");
