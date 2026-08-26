@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 
-namespace meguri.Models.ManageViewModels {
+namespace Meguri.Models.ManageViewModels {
     public class ExternalLoginsViewModel {
         public IList<UserLoginInfo> CurrentLogins { get; set; }
 

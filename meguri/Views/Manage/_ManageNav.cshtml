@@ -1,4 +1,8 @@
-﻿@using meguri.Views.Manage
+﻿@using Meguri
+@using Meguri.Models
+@using Meguri.Models.AccountViewModels
+@using Meguri.Models.ManageViewModels
+@using Meguri.Views.Manage
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

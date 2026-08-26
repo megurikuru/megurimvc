@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using meguri.Models;
+using Meguri.Models;
 
-namespace meguri.Controllers {
+namespace Meguri.Controllers {
     public class HomeController : Controller {
         public IActionResult Index() {
             return View();

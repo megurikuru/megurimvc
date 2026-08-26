@@ -3,11 +3,11 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using meguri.Data;
+using Meguri.Data;
 
 #nullable disable
 
-namespace meguri.Data.Migrations {
+namespace Meguri.Data.Migrations {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot {
         protected override void BuildModel(ModelBuilder modelBuilder) {
@@ -136,7 +136,7 @@ namespace meguri.Data.Migrations {
                 b.ToTable("AspNetUserTokens", (string)null);
             });
 
-            modelBuilder.Entity("meguri.Models.ApplicationUser", b => {
+            modelBuilder.Entity("Meguri.Models.ApplicationUser", b => {
                 b.Property<string>("Id")
                     .HasColumnType("TEXT");
 
@@ -208,7 +208,7 @@ namespace meguri.Data.Migrations {
             });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b => {
-                b.HasOne("meguri.Models.ApplicationUser", null)
+                b.HasOne("Meguri.Models.ApplicationUser", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
@@ -216,7 +216,7 @@ namespace meguri.Data.Migrations {
             });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b => {
-                b.HasOne("meguri.Models.ApplicationUser", null)
+                b.HasOne("Meguri.Models.ApplicationUser", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
@@ -230,7 +230,7 @@ namespace meguri.Data.Migrations {
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
 
-                b.HasOne("meguri.Models.ApplicationUser", null)
+                b.HasOne("Meguri.Models.ApplicationUser", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)
@@ -238,7 +238,7 @@ namespace meguri.Data.Migrations {
             });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b => {
-                b.HasOne("meguri.Models.ApplicationUser", null)
+                b.HasOne("Meguri.Models.ApplicationUser", null)
                     .WithMany()
                     .HasForeignKey("UserId")
                     .OnDelete(DeleteBehavior.Cascade)

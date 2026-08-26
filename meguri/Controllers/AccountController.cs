@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using meguri.Models;
-using meguri.Models.AccountViewModels;
-using meguri.Services;
+using Meguri.Models;
+using Meguri.Models.AccountViewModels;
+using Meguri.Services;
 
-namespace meguri.Controllers {
+namespace Meguri.Controllers {
     [Authorize]
     [Route("[controller]/[action]")]
     public class AccountController : Controller {

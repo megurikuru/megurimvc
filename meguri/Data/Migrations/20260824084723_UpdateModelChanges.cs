@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace meguri.Data.Migrations {
+namespace Meguri.Data.Migrations {
     /// <inheritdoc />
     public partial class UpdateModelChanges : Migration {
         /// <inheritdoc />

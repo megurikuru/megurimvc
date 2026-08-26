@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace meguri.Models.ManageViewModels {
+namespace Meguri.Models.ManageViewModels {
     public class ShowRecoveryCodesViewModel {
         public string[] RecoveryCodes { get; set; }
     }

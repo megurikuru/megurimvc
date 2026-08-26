@@ -5,13 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using meguri.Data;
-using meguri.Models;
-using meguri.Services;
+using Meguri.Data;
+using Meguri.Models;
+using Meguri.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure services (migrated from Startup.cs)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -21,7 +20,6 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 
-// Use controller-based views (replaces legacy AddMvc with endpoint routing)
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

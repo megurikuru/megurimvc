@@ -17,4 +17,10 @@
     <PackageReference Include="NuGet.Protocol" Version="6.12.5" />
     <!--<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />-->
   </ItemGroup>
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\toshi\source\repos\megurimvc\Meguri\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\toshi\source\repos\megurimvc\Meguri\.editorconfig" />
+  </ItemGroup>
 </Project>

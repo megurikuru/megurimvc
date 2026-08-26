@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace meguri.Data.Migrations {
+namespace Meguri.Data.Migrations {
     public partial class CreateIdentitySchema : Migration {
         protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(

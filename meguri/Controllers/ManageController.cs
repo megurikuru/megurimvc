@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using meguri.Models;
-using meguri.Models.ManageViewModels;
-using meguri.Services;
+using Meguri.Models;
+using Meguri.Models.ManageViewModels;
+using Meguri.Services;
 
-namespace meguri.Controllers {
+namespace Meguri.Controllers {
     [Authorize]
     [Route("[controller]/[action]")]
     public class ManageController : Controller {
@@ -450,7 +450,7 @@ namespace meguri.Controllers {
         private string GenerateQrCodeUri(string email, string unformattedKey) {
             return string.Format(
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode("meguri"),
+                _urlEncoder.Encode("Meguri"),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }
