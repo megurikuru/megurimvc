@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Meguri.Models;
 using Meguri.Models.AccountViewModels;
-using Meguri.Services;
 
 namespace Meguri.Controllers {
     [Authorize]
@@ -20,13 +19,13 @@ namespace Meguri.Controllers {
     public class AccountController : Controller {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IEmailSender<ApplicationUser> _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
+            IEmailSender<ApplicationUser> emailSender,
             ILogger<AccountController> logger) {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -66,7 +65,13 @@ namespace Meguri.Controllers {
                 if (result.IsLockedOut) {
                     _logger.LogWarning("User account locked out.");
                     return RedirectToAction(nameof(Lockout));
-                } else {
+                }
+                if (result.IsNotAllowed) {
+                    // E-Mail未確認のユーザーがログインしようとした場合
+                    ModelState.AddModelError(string.Empty, "E-Mailアドレスの確認が完了していません。登録時に送信された確認メールをご確認ください。");
+                    return View(model);
+                }
+                else {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
@@ -193,17 +198,22 @@ namespace Meguri.Controllers {
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
-                    await _emailSender.SendEmailConfirmationAsync(model.Email, callbackUrl);
+                    await _emailSender.SendConfirmationLinkAsync(user, model.Email, callbackUrl);
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation("User created a new account with password.");
-                    return RedirectToLocal(returnUrl);
+                    // E-Mail確認が必須なので、自動ログインせずに確認画面へリダイレクト
+                    return RedirectToAction(nameof(RegisterConfirmation));
                 }
                 AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult RegisterConfirmation() {
+            return View();
         }
 
         [HttpPost]
@@ -315,8 +325,7 @@ namespace Meguri.Controllers {
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.ResetPasswordCallbackLink(user.Id, code, Request.Scheme);
-                await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                await _emailSender.SendPasswordResetLinkAsync(user, model.Email, callbackUrl);
                 return RedirectToAction(nameof(ForgotPasswordConfirmation));
             }
 
