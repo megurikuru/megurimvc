@@ -13,6 +13,10 @@ using System;
 // ビルダーを作成
 var builder = WebApplication.CreateBuilder(args);
 
+// appsettings.jsonや環境変数のURLを最優先として
+// KestralのデフォルトのURL（http://localhost:5000）が使われないようにする
+builder.WebHost.UseSetting(WebHostDefaults.PreferHostingUrlsKey, "true");
+
 // DB接続文字列をappsettings.jsonから取得
 var connectionString = builder.Configuration.GetConnectionString(
     "DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found."
@@ -25,13 +29,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // ASP.NET Core Identityを設定（ユーザー認証・認可システム）
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-    // E-Mail確認を必須にする
-    options.SignIn.RequireConfirmedEmail = true;
-})
-    .AddEntityFrameworkStores<ApplicationDbContext>()   // データベースにユーザー情報を保存
-    .AddDefaultTokenProviders();                        // パスワードリセット、2要素認証用のトークン生成機能
+builder.Services
+    .AddIdentity<ApplicationUser, IdentityRole>(options => {
+        options.SignIn.RequireConfirmedEmail = true;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();                    // パスワードリセット、2要素認証用のトークン生成機能
 
 // メール送信サービスの設定と登録
 var smtpServerConf = builder.Configuration.GetSection("SMTPServerConf");                                    // appsettings.jsonからSMTPサーバー設定を取得
@@ -45,7 +48,7 @@ builder.Services.AddControllersWithViews();
 // アプリケーションのビルド(サービス登録完了後、リクエスト処理パイプラインを構築するWebApplicationインスタンスを作成)
 var app = builder.Build();
 
-// 開発時のみデータベース開発者ページを有効化する。
+// 開発時のみデータベース開発者ページを有効化する
 if (app.Environment.IsDevelopment()) {
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
