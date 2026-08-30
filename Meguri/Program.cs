@@ -3,12 +3,14 @@ using Meguri.Models;
 using Meguri.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Net;
 
 // ビルダーを作成
 var builder = WebApplication.CreateBuilder(args);
@@ -45,8 +47,26 @@ builder.Services.Configure<SMTPServerConf>(smtpServerConf);                     
 // MVC機能を有効化(コントローラーとビューのサポートを追加)
 builder.Services.AddControllersWithViews();
 
+// Apacheなどのリバースプロキシ対応設定
+builder.Services.Configure<ForwardedHeadersOptions>(options => {
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+
+    // appsettings.jsonから信頼するプロキシIPアドレスのリストを取得
+    var knownProxies = builder.Configuration.GetSection("ForwardedHeaders:KnownProxies").Get<string[]>();
+    if (knownProxies != null) {
+        foreach (var proxy in knownProxies) {
+            if (IPAddress.TryParse(proxy, out var ipAddress)) {
+                options.KnownProxies.Add(ipAddress);
+            }
+        }
+    }
+});
+
 // アプリケーションのビルド(サービス登録完了後、リクエスト処理パイプラインを構築するWebApplicationインスタンスを作成)
 var app = builder.Build();
+
+// リバースプロキシのヘッダーを処理（UseRouting()より前に配置）
+app.UseForwardedHeaders();
 
 // 開発時のみデータベース開発者ページを有効化する
 if (app.Environment.IsDevelopment()) {
@@ -58,6 +78,11 @@ if (app.Environment.IsDevelopment()) {
 
 // 静的ファイル(CSS、JavaScript、画像など)をwwwrootフォルダから配信
 app.UseStaticFiles();
+
+// 本番環境ではHTTPSにリダイレクト（Apacheでリダイレクトする場合は不要）
+if (!app.Environment.IsDevelopment()) {
+    app.UseHttpsRedirection();
+}
 
 // ルーティングを有効化(URLをコントローラー/アクションにマッピング)
 app.UseRouting();
