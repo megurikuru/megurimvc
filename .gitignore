@@ -436,4 +436,5 @@ FodyWeavers.xsd
 *.db-shm
 *.db-wal
 
-
+# Meguri
+appsettings.json
