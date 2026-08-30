@@ -47,15 +47,32 @@ builder.Services.Configure<SMTPServerConf>(smtpServerConf);                     
 // MVC機能を有効化(コントローラーとビューのサポートを追加)
 builder.Services.AddControllersWithViews();
 
+
+
 // Apacheなどのリバースプロキシ対応設定
+// リバースプロキシ経由でアクセスされた際に、クライアントの実際のIPアドレスやプロトコル(HTTP/HTTPS)を
+// 正しく取得できるようにする設定
 builder.Services.Configure<ForwardedHeadersOptions>(options => {
+    // X-Forwarded-For: クライアントの実IPアドレスを取得
+    // X-Forwarded-Proto: クライアントが使用したプロトコル(http/https)を取得
+    // これらのヘッダーをASP.NET Coreが信頼して処理するように設定
     options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 
+    // デフォルトで信頼されているプライベートネットワークとプロキシをすべてクリア
+    // これにより、明示的に指定したプロキシのみを信頼する設定にする
+    // （セキュリティ上、すべてのプロキシを信頼しない場合はこの行を削除）
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+
     // appsettings.jsonから信頼するプロキシIPアドレスのリストを取得
+    // 例: "ForwardedHeaders": { "KnownProxies": ["192.168.1.1", "10.0.0.1"] }
     var knownProxies = builder.Configuration.GetSection("ForwardedHeaders:KnownProxies").Get<string[]>();
     if (knownProxies != null) {
+        // 設定されている各プロキシIPアドレスを信頼リストに追加
         foreach (var proxy in knownProxies) {
+            // IPアドレスとして正しい形式かチェック
             if (IPAddress.TryParse(proxy, out var ipAddress)) {
+                // 有効なIPアドレスの場合、信頼するプロキシリストに追加
                 options.KnownProxies.Add(ipAddress);
             }
         }
@@ -78,11 +95,6 @@ if (app.Environment.IsDevelopment()) {
 
 // 静的ファイル(CSS、JavaScript、画像など)をwwwrootフォルダから配信
 app.UseStaticFiles();
-
-// 本番環境ではHTTPSにリダイレクト（Apacheでリダイレクトする場合は不要）
-if (!app.Environment.IsDevelopment()) {
-    app.UseHttpsRedirection();
-}
 
 // ルーティングを有効化(URLをコントローラー/アクションにマッピング)
 app.UseRouting();
