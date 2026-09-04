@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Meguri.Models.AccountViewModels {
     public class LoginWithRecoveryCodeViewModel {
-        [Required]
+        [Required(ErrorMessage = "Validation_Required")]
         [DataType(DataType.Text)]
-        [Display(Name = "Recovery Code")]
+        [Display(Name = "Account_Field_RecoveryCode")]
         public string RecoveryCode { get; set; }
     }
 }

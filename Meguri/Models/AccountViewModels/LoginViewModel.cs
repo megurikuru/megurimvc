@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace Meguri.Models.AccountViewModels {
     public class LoginViewModel {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Validation_Required")]
+        [EmailAddress(ErrorMessage = "Validation_InvalidEmail")]
+        [Display(Name = "Account_Field_Email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Validation_Required")]
         [DataType(DataType.Password)]
+        [Display(Name = "Account_Field_Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Remember me?")]
+        [Display(Name = "Account_Field_RememberMe")]
         public bool RememberMe { get; set; }
     }
 }

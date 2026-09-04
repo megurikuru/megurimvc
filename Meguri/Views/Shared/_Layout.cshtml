@@ -21,7 +21,7 @@
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only">@SharedLocalizer["Nav_ToggleNavigation"]</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -30,9 +30,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Nav_Home"]</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">@SharedLocalizer["Nav_About"]</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">@SharedLocalizer["Nav_Contact"]</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
@@ -42,7 +42,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2026 - meguri</p>
+            <p>@SharedLocalizer["Footer_Copyright"]</p>
         </footer>
     </div>
 
