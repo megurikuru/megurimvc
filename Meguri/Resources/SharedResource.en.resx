@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+	<value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+	<value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+	<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+	<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Nav_ToggleNavigation" xml:space="preserve">
+	<value>Toggle navigation</value>
+  </data>
+  <data name="Nav_Home" xml:space="preserve">
+	<value>Home</value>
+  </data>
+  <data name="Nav_About" xml:space="preserve">
+	<value>About</value>
+  </data>
+  <data name="Nav_Contact" xml:space="preserve">
+	<value>Contact</value>
+  </data>
+  <data name="Footer_Copyright" xml:space="preserve">
+	<value>&amp;copy; 2026 - meguri</value>
+  </data>
+
+  <data name="Auth_HelloUser" xml:space="preserve">
+	<value>Hello {0}!</value>
+  </data>
+  <data name="Auth_ManageTitle" xml:space="preserve">
+	<value>Manage</value>
+  </data>
+  <data name="Auth_Logout" xml:space="preserve">
+	<value>Log out</value>
+  </data>
+  <data name="Auth_Register" xml:space="preserve">
+	<value>Register</value>
+  </data>
+  <data name="Auth_Login" xml:space="preserve">
+	<value>Log in</value>
+  </data>
+
+  <data name="Home_Title" xml:space="preserve">
+	<value>Home</value>
+  </data>
+  <data name="Home_LearnMore" xml:space="preserve">
+	<value>Learn More</value>
+  </data>
+  <data name="Home_Carousel_Previous" xml:space="preserve">
+	<value>Previous</value>
+  </data>
+  <data name="Home_Carousel_Next" xml:space="preserve">
+	<value>Next</value>
+  </data>
+  <data name="Home_Banner1_Text" xml:space="preserve">
+	<value>Learn how to build ASP.NET apps that can run anywhere.</value>
+  </data>
+  <data name="Home_Banner2_Text" xml:space="preserve">
+	<value>There are powerful new features in Visual Studio for building modern web apps.</value>
+  </data>
+  <data name="Home_Banner3_Text" xml:space="preserve">
+	<value>Bring in libraries from NuGet and npm, and automate tasks using Grunt or Gulp.</value>
+  </data>
+  <data name="Home_Banner4_Text" xml:space="preserve">
+	<value>Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.</value>
+  </data>
+  <data name="Home_Section_Uses" xml:space="preserve">
+	<value>Application uses</value>
+  </data>
+  <data name="Home_Section_HowTo" xml:space="preserve">
+	<value>How to</value>
+  </data>
+  <data name="Home_Section_Overview" xml:space="preserve">
+	<value>Overview</value>
+  </data>
+  <data name="Home_Section_RunDeploy" xml:space="preserve">
+	<value>Run &amp; Deploy</value>
+  </data>
+  <data name="Home_Uses_Item1" xml:space="preserve">
+	<value>Sample pages using ASP.NET Core MVC</value>
+  </data>
+  <data name="Home_Uses_Item2" xml:space="preserve">
+	<value><![CDATA[Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a>]]></value>
+  </data>
+  <data name="Home_HowTo_Item1" xml:space="preserve">
+	<value>Add a Controller and View</value>
+  </data>
+  <data name="Home_HowTo_Item2" xml:space="preserve">
+	<value>Manage User Secrets using Secret Manager.</value>
+  </data>
+  <data name="Home_HowTo_Item3" xml:space="preserve">
+	<value>Use logging to log a message.</value>
+  </data>
+  <data name="Home_HowTo_Item4" xml:space="preserve">
+	<value>Add packages using NuGet.</value>
+  </data>
+  <data name="Home_HowTo_Item5" xml:space="preserve">
+	<value>Target development, staging or production environment.</value>
+  </data>
+  <data name="Home_Overview_Item1" xml:space="preserve">
+	<value>Conceptual overview of what is ASP.NET Core</value>
+  </data>
+  <data name="Home_Overview_Item2" xml:space="preserve">
+	<value>Fundamentals of ASP.NET Core such as Startup and middleware.</value>
+  </data>
+  <data name="Home_Overview_Item3" xml:space="preserve">
+	<value>Working with Data</value>
+  </data>
+  <data name="Home_Overview_Item4" xml:space="preserve">
+	<value>Security</value>
+  </data>
+  <data name="Home_Overview_Item5" xml:space="preserve">
+	<value>Client side development</value>
+  </data>
+  <data name="Home_Overview_Item6" xml:space="preserve">
+	<value>Develop on different platforms</value>
+  </data>
+  <data name="Home_Overview_Item7" xml:space="preserve">
+	<value>Read more on the documentation site</value>
+  </data>
+  <data name="Home_RunDeploy_Item1" xml:space="preserve">
+	<value>Run your app</value>
+  </data>
+  <data name="Home_RunDeploy_Item2" xml:space="preserve">
+	<value>Run tools such as EF migrations and more</value>
+  </data>
+  <data name="Home_RunDeploy_Item3" xml:space="preserve">
+	<value>Publish to Microsoft Azure Web Apps</value>
+  </data>
+
+  <data name="About_Title" xml:space="preserve">
+	<value>About</value>
+  </data>
+  <data name="About_Info" xml:space="preserve">
+	<value>Use this area to provide additional information.</value>
+  </data>
+  <data name="Contact_Title" xml:space="preserve">
+	<value>Contact</value>
+  </data>
+  <data name="Contact_Support" xml:space="preserve">
+	<value>Support</value>
+  </data>
+  <data name="Contact_Marketing" xml:space="preserve">
+	<value>Marketing</value>
+  </data>
+
+  <data name="Controller_About_Message" xml:space="preserve">
+	<value>Your application description page.</value>
+  </data>
+  <data name="Controller_Contact_Message" xml:space="preserve">
+	<value>Your contact page.</value>
+  </data>
+
+  <data name="Account_AccessDenied_Title" xml:space="preserve">
+	<value>Access denied</value>
+  </data>
+  <data name="Account_AccessDenied_Message" xml:space="preserve">
+	<value>You do not have access to this resource.</value>
+  </data>
+  <data name="Account_ConfirmEmail_Title" xml:space="preserve">
+	<value>Confirm email</value>
+  </data>
+  <data name="Account_ConfirmEmail_Thanks" xml:space="preserve">
+	<value>Thank you for confirming your email.</value>
+  </data>
+  <data name="Account_Register_Title" xml:space="preserve">
+	<value>Register</value>
+  </data>
+  <data name="Account_ExternalLogin_AssociateAccount" xml:space="preserve">
+	<value>Associate your {0} account.</value>
+  </data>
+  <data name="Account_ExternalLogin_SuccessMessage" xml:space="preserve">
+	<value><![CDATA[You've successfully authenticated with <strong>{0}</strong>.]]></value>
+  </data>
+  <data name="Account_ExternalLogin_EnterEmailAndRegister" xml:space="preserve">
+	<value>Please enter an email address for this site below and click the Register button to finish logging in.</value>
+  </data>
+  <data name="Account_Register_Button" xml:space="preserve">
+	<value>Register</value>
+  </data>
+  <data name="Account_ForgotPassword_Title" xml:space="preserve">
+	<value>Forgot your password?</value>
+  </data>
+  <data name="Account_ForgotPassword_EnterEmail" xml:space="preserve">
+	<value>Enter your email.</value>
+  </data>
+  <data name="Account_Submit_Button" xml:space="preserve">
+	<value>Submit</value>
+  </data>
+  <data name="Account_ForgotPasswordConfirmation_Title" xml:space="preserve">
+	<value>Forgot password confirmation</value>
+  </data>
+  <data name="Account_ForgotPasswordConfirmation_Message" xml:space="preserve">
+	<value>Please check your email to reset your password.</value>
+  </data>
+  <data name="Account_Lockout_Title" xml:space="preserve">
+	<value>Locked out</value>
+  </data>
+  <data name="Account_Lockout_Message" xml:space="preserve">
+	<value>This account has been locked out, please try again later.</value>
+  </data>
+  <data name="Account_Login_Title" xml:space="preserve">
+	<value>Log in</value>
+  </data>
+  <data name="Account_Login_UseLocalAccount" xml:space="preserve">
+	<value>Use a local account to log in.</value>
+  </data>
+  <data name="Account_Login_Button" xml:space="preserve">
+	<value>Log in</value>
+  </data>
+  <data name="Account_Login_ForgotPassword" xml:space="preserve">
+	<value>Forgot your password?</value>
+  </data>
+  <data name="Account_Login_RegisterNewUser" xml:space="preserve">
+	<value>Register as a new user?</value>
+  </data>
+  <data name="Account_Login_UseAnotherService" xml:space="preserve">
+	<value>Use another service to log in.</value>
+  </data>
+  <data name="Account_Login_NoExternalServices" xml:space="preserve">
+	<value>There are no external authentication services configured. See</value>
+  </data>
+  <data name="Account_Login_ThisArticle" xml:space="preserve">
+	<value>this article</value>
+  </data>
+  <data name="Account_Login_NoExternalServices_Detail" xml:space="preserve">
+	<value>for details on setting up this ASP.NET application to support logging in via external services.</value>
+  </data>
+  <data name="Account_Login_ExternalProviderButtonTitle" xml:space="preserve">
+	<value>Log in using your {0} account</value>
+  </data>
+  <data name="Account_LoginWith2fa_Title" xml:space="preserve">
+	<value>Two-factor authentication</value>
+  </data>
+  <data name="Account_LoginWith2fa_Description" xml:space="preserve">
+	<value>Your login is protected with an authenticator app. Enter your authenticator code below.</value>
+  </data>
+  <data name="Account_LoginWith2fa_NoAuthenticator" xml:space="preserve">
+	<value>Don't have access to your authenticator device? You can</value>
+  </data>
+  <data name="Account_LoginWith2fa_RecoveryLinkText" xml:space="preserve">
+	<value>log in with a recovery code</value>
+  </data>
+  <data name="Account_LoginWithRecoveryCode_Title" xml:space="preserve">
+	<value>Recovery code verification</value>
+  </data>
+  <data name="Account_LoginWithRecoveryCode_Description" xml:space="preserve">
+	<value>You have requested to login with a recovery code. This login will not be remembered until you provide an authenticator app code at login or disable 2FA and login again.</value>
+  </data>
+  <data name="Account_Register_CreateNewAccount" xml:space="preserve">
+	<value>Create a new account.</value>
+  </data>
+  <data name="Account_RegisterConfirmation_Title" xml:space="preserve">
+	<value>Registration complete</value>
+  </data>
+  <data name="Account_RegisterConfirmation_Thanks" xml:space="preserve">
+	<value>Thank you for registering.</value>
+  </data>
+  <data name="Account_RegisterConfirmation_EmailSent" xml:space="preserve">
+	<value>A confirmation email has been sent to your registered email address. Please click the link in the email to activate your account.</value>
+  </data>
+  <data name="Account_RegisterConfirmation_CheckSpam" xml:space="preserve">
+	<value>If you do not receive the email, please check your spam folder.</value>
+  </data>
+  <data name="Account_ResetPassword_Title" xml:space="preserve">
+	<value>Reset password</value>
+  </data>
+  <data name="Account_ResetPassword_Description" xml:space="preserve">
+	<value>Reset your password.</value>
+  </data>
+  <data name="Account_ResetPassword_ResetButton" xml:space="preserve">
+	<value>Reset</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmation_Title" xml:space="preserve">
+	<value>Reset password confirmation</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmation_Success" xml:space="preserve">
+	<value>Your password has been reset. Please</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmation_ClickHereToLogin" xml:space="preserve">
+	<value>click here to log in</value>
+  </data>
+  <data name="Account_SignedOut_Title" xml:space="preserve">
+	<value>Signed out</value>
+  </data>
+  <data name="Account_SignedOut_Message" xml:space="preserve">
+	<value>You have successfully signed out.</value>
+  </data>
+  <data name="Account_Field_Email" xml:space="preserve">
+	<value>Email</value>
+  </data>
+  <data name="Account_Field_Password" xml:space="preserve">
+	<value>Password</value>
+  </data>
+  <data name="Account_Field_ConfirmPassword" xml:space="preserve">
+	<value>Confirm password</value>
+  </data>
+  <data name="Account_Field_RememberMe" xml:space="preserve">
+	<value>Remember me?</value>
+  </data>
+  <data name="Account_Field_AuthenticatorCode" xml:space="preserve">
+	<value>Authenticator code</value>
+  </data>
+  <data name="Account_Field_RememberMachine" xml:space="preserve">
+	<value>Remember this machine</value>
+  </data>
+  <data name="Account_Field_RecoveryCode" xml:space="preserve">
+	<value>Recovery code</value>
+  </data>
+  <data name="Validation_Required" xml:space="preserve">
+	<value>The {0} field is required.</value>
+  </data>
+  <data name="Validation_InvalidEmail" xml:space="preserve">
+	<value>The {0} field is not a valid e-mail address.</value>
+  </data>
+  <data name="Validation_StringLength" xml:space="preserve">
+	<value>The {0} must be at least {2} and at max {1} characters long.</value>
+  </data>
+  <data name="Validation_Compare" xml:space="preserve">
+	<value>The {0} and {1} do not match.</value>
+  </data>
+</root>

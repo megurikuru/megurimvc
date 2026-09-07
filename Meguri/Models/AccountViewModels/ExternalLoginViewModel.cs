@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Meguri.Models.AccountViewModels {
     public class ExternalLoginViewModel {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Validation_Required")]
+        [EmailAddress(ErrorMessage = "Validation_InvalidEmail")]
+        [Display(Name = "Account_Field_Email")]
         public string Email { get; set; }
     }
 }

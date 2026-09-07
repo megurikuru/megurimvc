@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+	<value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+	<value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+	<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+	<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <data name="Nav_ToggleNavigation" xml:space="preserve">
+	<value>ナビゲーションを切り替え</value>
+  </data>
+  <data name="Nav_Home" xml:space="preserve">
+	<value>ホーム</value>
+  </data>
+  <data name="Nav_About" xml:space="preserve">
+	<value>このサイトについて</value>
+  </data>
+  <data name="Nav_Contact" xml:space="preserve">
+	<value>お問い合わせ</value>
+  </data>
+  <data name="Footer_Copyright" xml:space="preserve">
+	<value>&amp;copy; 2026 - meguri</value>
+  </data>
+
+  <data name="Auth_HelloUser" xml:space="preserve">
+	<value>{0} さん、こんにちは！</value>
+  </data>
+  <data name="Auth_ManageTitle" xml:space="preserve">
+	<value>アカウント管理</value>
+  </data>
+  <data name="Auth_Logout" xml:space="preserve">
+	<value>ログアウト</value>
+  </data>
+  <data name="Auth_Register" xml:space="preserve">
+	<value>新規登録</value>
+  </data>
+  <data name="Auth_Login" xml:space="preserve">
+	<value>ログイン</value>
+  </data>
+
+  <data name="Home_Title" xml:space="preserve">
+	<value>ホーム</value>
+  </data>
+  <data name="Home_LearnMore" xml:space="preserve">
+	<value>詳細を見る</value>
+  </data>
+  <data name="Home_Carousel_Previous" xml:space="preserve">
+	<value>前へ</value>
+  </data>
+  <data name="Home_Carousel_Next" xml:space="preserve">
+	<value>次へ</value>
+  </data>
+  <data name="Home_Banner1_Text" xml:space="preserve">
+	<value>どこでも実行できる ASP.NET アプリの作り方を学びましょう。</value>
+  </data>
+  <data name="Home_Banner2_Text" xml:space="preserve">
+	<value>Visual Studio にはモダンな Web アプリ開発のための強力な機能があります。</value>
+  </data>
+  <data name="Home_Banner3_Text" xml:space="preserve">
+	<value>NuGet や npm のライブラリを取り込み、Grunt や Gulp でタスクを自動化できます。</value>
+  </data>
+  <data name="Home_Banner4_Text" xml:space="preserve">
+	<value>Microsoft Azure で Web アプリを構築、デプロイ、スケールする方法を学びましょう。</value>
+  </data>
+  <data name="Home_Section_Uses" xml:space="preserve">
+	<value>アプリの利用例</value>
+  </data>
+  <data name="Home_Section_HowTo" xml:space="preserve">
+	<value>手順</value>
+  </data>
+  <data name="Home_Section_Overview" xml:space="preserve">
+	<value>概要</value>
+  </data>
+  <data name="Home_Section_RunDeploy" xml:space="preserve">
+	<value>実行とデプロイ</value>
+  </data>
+  <data name="Home_Uses_Item1" xml:space="preserve">
+	<value>ASP.NET Core MVC を使ったサンプルページ</value>
+  </data>
+  <data name="Home_Uses_Item2" xml:space="preserve">
+	<value><![CDATA[<a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a> を使ったテーマ設定]]></value>
+  </data>
+  <data name="Home_HowTo_Item1" xml:space="preserve">
+	<value>コントローラーとビューを追加する</value>
+  </data>
+  <data name="Home_HowTo_Item2" xml:space="preserve">
+	<value>Secret Manager で User Secrets を管理する</value>
+  </data>
+  <data name="Home_HowTo_Item3" xml:space="preserve">
+	<value>ロギングでメッセージを記録する</value>
+  </data>
+  <data name="Home_HowTo_Item4" xml:space="preserve">
+	<value>NuGet でパッケージを追加する</value>
+  </data>
+  <data name="Home_HowTo_Item5" xml:space="preserve">
+	<value>開発/ステージング/本番環境を切り替える</value>
+  </data>
+  <data name="Home_Overview_Item1" xml:space="preserve">
+	<value>ASP.NET Core とは何かの概念的な概要</value>
+  </data>
+  <data name="Home_Overview_Item2" xml:space="preserve">
+	<value>Startup やミドルウェアなど ASP.NET Core の基礎</value>
+  </data>
+  <data name="Home_Overview_Item3" xml:space="preserve">
+	<value>データの扱い方</value>
+  </data>
+  <data name="Home_Overview_Item4" xml:space="preserve">
+	<value>セキュリティ</value>
+  </data>
+  <data name="Home_Overview_Item5" xml:space="preserve">
+	<value>クライアントサイド開発</value>
+  </data>
+  <data name="Home_Overview_Item6" xml:space="preserve">
+	<value>異なるプラットフォームでの開発</value>
+  </data>
+  <data name="Home_Overview_Item7" xml:space="preserve">
+	<value>ドキュメントサイトでさらに読む</value>
+  </data>
+  <data name="Home_RunDeploy_Item1" xml:space="preserve">
+	<value>アプリを実行する</value>
+  </data>
+  <data name="Home_RunDeploy_Item2" xml:space="preserve">
+	<value>EF マイグレーションなどのツールを実行する</value>
+  </data>
+  <data name="Home_RunDeploy_Item3" xml:space="preserve">
+	<value>Microsoft Azure Web Apps に発行する</value>
+  </data>
+
+  <data name="About_Title" xml:space="preserve">
+	<value>このサイトについて</value>
+  </data>
+  <data name="About_Info" xml:space="preserve">
+	<value>このエリアでは追加情報を提供します。</value>
+  </data>
+  <data name="Contact_Title" xml:space="preserve">
+	<value>お問い合わせ</value>
+  </data>
+  <data name="Contact_Support" xml:space="preserve">
+	<value>サポート</value>
+  </data>
+  <data name="Contact_Marketing" xml:space="preserve">
+	<value>マーケティング</value>
+  </data>
+
+  <data name="Controller_About_Message" xml:space="preserve">
+	<value>アプリケーションの説明ページです。</value>
+  </data>
+  <data name="Controller_Contact_Message" xml:space="preserve">
+	<value>お問い合わせページです。</value>
+  </data>
+
+  <data name="Account_AccessDenied_Title" xml:space="preserve">
+	<value>アクセス拒否</value>
+  </data>
+  <data name="Account_AccessDenied_Message" xml:space="preserve">
+	<value>このリソースにアクセスする権限がありません。</value>
+  </data>
+  <data name="Account_ConfirmEmail_Title" xml:space="preserve">
+	<value>メール確認</value>
+  </data>
+  <data name="Account_ConfirmEmail_Thanks" xml:space="preserve">
+	<value>メール確認ありがとうございます。</value>
+  </data>
+  <data name="Account_Register_Title" xml:space="preserve">
+	<value>新規登録</value>
+  </data>
+  <data name="Account_ExternalLogin_AssociateAccount" xml:space="preserve">
+	<value>{0} アカウントを関連付けます。</value>
+  </data>
+  <data name="Account_ExternalLogin_SuccessMessage" xml:space="preserve">
+	<value><![CDATA[<strong>{0}</strong> での認証に成功しました。]]></value>
+  </data>
+  <data name="Account_ExternalLogin_EnterEmailAndRegister" xml:space="preserve">
+	<value>このサイトで使用するメールアドレスを入力し、登録ボタンを押してログインを完了してください。</value>
+  </data>
+  <data name="Account_Register_Button" xml:space="preserve">
+	<value>登録</value>
+  </data>
+  <data name="Account_ForgotPassword_Title" xml:space="preserve">
+	<value>パスワードをお忘れですか？</value>
+  </data>
+  <data name="Account_ForgotPassword_EnterEmail" xml:space="preserve">
+	<value>メールアドレスを入力してください。</value>
+  </data>
+  <data name="Account_Submit_Button" xml:space="preserve">
+	<value>送信</value>
+  </data>
+  <data name="Account_ForgotPasswordConfirmation_Title" xml:space="preserve">
+	<value>パスワード再設定の確認</value>
+  </data>
+  <data name="Account_ForgotPasswordConfirmation_Message" xml:space="preserve">
+	<value>パスワード再設定のため、メールをご確認ください。</value>
+  </data>
+  <data name="Account_Lockout_Title" xml:space="preserve">
+	<value>アカウントロック</value>
+  </data>
+  <data name="Account_Lockout_Message" xml:space="preserve">
+	<value>このアカウントはロックされています。しばらくしてから再試行してください。</value>
+  </data>
+  <data name="Account_Login_Title" xml:space="preserve">
+	<value>ログイン</value>
+  </data>
+  <data name="Account_Login_UseLocalAccount" xml:space="preserve">
+	<value>ローカルアカウントでログインします。</value>
+  </data>
+  <data name="Account_Login_Button" xml:space="preserve">
+	<value>ログイン</value>
+  </data>
+  <data name="Account_Login_ForgotPassword" xml:space="preserve">
+	<value>パスワードをお忘れですか？</value>
+  </data>
+  <data name="Account_Login_RegisterNewUser" xml:space="preserve">
+	<value>新規ユーザーとして登録しますか？</value>
+  </data>
+  <data name="Account_Login_UseAnotherService" xml:space="preserve">
+	<value>他のサービスでログイン</value>
+  </data>
+  <data name="Account_Login_NoExternalServices" xml:space="preserve">
+	<value>外部認証サービスが設定されていません。詳細は</value>
+  </data>
+  <data name="Account_Login_ThisArticle" xml:space="preserve">
+	<value>この記事</value>
+  </data>
+  <data name="Account_Login_NoExternalServices_Detail" xml:space="preserve">
+	<value>を参照し、外部サービス経由のログインをサポートするよう設定してください。</value>
+  </data>
+  <data name="Account_Login_ExternalProviderButtonTitle" xml:space="preserve">
+	<value>{0} アカウントでログイン</value>
+  </data>
+  <data name="Account_LoginWith2fa_Title" xml:space="preserve">
+	<value>2要素認証</value>
+  </data>
+  <data name="Account_LoginWith2fa_Description" xml:space="preserve">
+	<value>このログインは認証アプリで保護されています。認証コードを入力してください。</value>
+  </data>
+  <data name="Account_LoginWith2fa_NoAuthenticator" xml:space="preserve">
+	<value>認証デバイスにアクセスできませんか？</value>
+  </data>
+  <data name="Account_LoginWith2fa_RecoveryLinkText" xml:space="preserve">
+	<value>回復コードでログイン</value>
+  </data>
+  <data name="Account_LoginWithRecoveryCode_Title" xml:space="preserve">
+	<value>回復コード確認</value>
+  </data>
+  <data name="Account_LoginWithRecoveryCode_Description" xml:space="preserve">
+	<value>回復コードでのログインが要求されました。このログインは、認証アプリのコードでログインするか 2FA を無効化して再ログインするまで記憶されません。</value>
+  </data>
+  <data name="Account_Register_CreateNewAccount" xml:space="preserve">
+	<value>新しいアカウントを作成します。</value>
+  </data>
+  <data name="Account_RegisterConfirmation_Title" xml:space="preserve">
+	<value>ユーザー登録完了</value>
+  </data>
+  <data name="Account_RegisterConfirmation_Thanks" xml:space="preserve">
+	<value>ご登録ありがとうございます。</value>
+  </data>
+  <data name="Account_RegisterConfirmation_EmailSent" xml:space="preserve">
+	<value>登録された E-Mail アドレスに確認メールを送信しました。メール内のリンクをクリックして、アカウントを有効化してください。</value>
+  </data>
+  <data name="Account_RegisterConfirmation_CheckSpam" xml:space="preserve">
+	<value>確認メールが届かない場合は、迷惑メールフォルダをご確認ください。</value>
+  </data>
+  <data name="Account_ResetPassword_Title" xml:space="preserve">
+	<value>パスワード再設定</value>
+  </data>
+  <data name="Account_ResetPassword_Description" xml:space="preserve">
+	<value>パスワードを再設定します。</value>
+  </data>
+  <data name="Account_ResetPassword_ResetButton" xml:space="preserve">
+	<value>再設定</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmation_Title" xml:space="preserve">
+	<value>パスワード再設定完了</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmation_Success" xml:space="preserve">
+	<value>パスワードが再設定されました。ログインするには</value>
+  </data>
+  <data name="Account_ResetPasswordConfirmation_ClickHereToLogin" xml:space="preserve">
+	<value>こちらをクリック</value>
+  </data>
+  <data name="Account_SignedOut_Title" xml:space="preserve">
+	<value>サインアウト</value>
+  </data>
+  <data name="Account_SignedOut_Message" xml:space="preserve">
+	<value>正常にサインアウトしました。</value>
+  </data>
+  <data name="Account_Field_Email" xml:space="preserve">
+	<value>メールアドレス</value>
+  </data>
+  <data name="Account_Field_Password" xml:space="preserve">
+	<value>パスワード</value>
+  </data>
+  <data name="Account_Field_ConfirmPassword" xml:space="preserve">
+	<value>パスワード（確認）</value>
+  </data>
+  <data name="Account_Field_RememberMe" xml:space="preserve">
+	<value>ログイン状態を保持する</value>
+  </data>
+  <data name="Account_Field_AuthenticatorCode" xml:space="preserve">
+	<value>認証コード</value>
+  </data>
+  <data name="Account_Field_RememberMachine" xml:space="preserve">
+	<value>この端末を記憶する</value>
+  </data>
+  <data name="Account_Field_RecoveryCode" xml:space="preserve">
+	<value>回復コード</value>
+  </data>
+  <data name="Validation_Required" xml:space="preserve">
+	<value>{0} は必須です。</value>
+  </data>
+  <data name="Validation_InvalidEmail" xml:space="preserve">
+	<value>有効なメールアドレスを入力してください。</value>
+  </data>
+  <data name="Validation_StringLength" xml:space="preserve">
+	<value>{0} は {2} 文字以上 {1} 文字以下で入力してください。</value>
+  </data>
+  <data name="Validation_Compare" xml:space="preserve">
+	<value>{0} と {1} が一致しません。</value>
+  </data>
+</root>

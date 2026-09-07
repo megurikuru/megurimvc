@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = SharedLocalizer["Home_Title"];
 }
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
@@ -14,9 +14,9 @@
             <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
+                    @SharedLocalizer["Home_Banner1_Text"]
                     <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
+                        @SharedLocalizer["Home_LearnMore"]
                     </a>
                 </p>
             </div>
@@ -25,9 +25,9 @@
             <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
+                    @SharedLocalizer["Home_Banner2_Text"]
                     <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
+                        @SharedLocalizer["Home_LearnMore"]
                     </a>
                 </p>
             </div>
@@ -36,9 +36,9 @@
             <img src="~/images/banner3.svg" alt="Package Management" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
-                    Bring in libraries from NuGet and npm, and automate tasks using Grunt or Gulp.
+                    @SharedLocalizer["Home_Banner3_Text"]
                     <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                        Learn More
+                        @SharedLocalizer["Home_LearnMore"]
                     </a>
                 </p>
             </div>
@@ -47,9 +47,9 @@
             <img src="~/images/banner4.svg" alt="Microsoft Azure" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
+                    @SharedLocalizer["Home_Banner4_Text"]
                     <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
+                        @SharedLocalizer["Home_LearnMore"]
                     </a>
                 </p>
             </div>
@@ -57,50 +57,50 @@
     </div>
     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
+        <span class="sr-only">@SharedLocalizer["Home_Carousel_Previous"]</span>
     </a>
     <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
+        <span class="sr-only">@SharedLocalizer["Home_Carousel_Next"]</span>
     </a>
 </div>
 
 <div class="row">
     <div class="col-md-3">
-        <h2>Application uses</h2>
+        <h2>@SharedLocalizer["Home_Section_Uses"]</h2>
         <ul>
-            <li>Sample pages using ASP.NET Core MVC</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
+            <li>@SharedLocalizer["Home_Uses_Item1"]</li>
+            <li>@SharedLocalizer["Home_Uses_Item2"]</li>
         </ul>
     </div>
     <div class="col-md-3">
-        <h2>How to</h2>
+        <h2>@SharedLocalizer["Home_Section_HowTo"]</h2>
         <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">@SharedLocalizer["Home_HowTo_Item1"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">@SharedLocalizer["Home_HowTo_Item2"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">@SharedLocalizer["Home_HowTo_Item3"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">@SharedLocalizer["Home_HowTo_Item4"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">@SharedLocalizer["Home_HowTo_Item5"]</a></li>
         </ul>
     </div>
     <div class="col-md-3">
-        <h2>Overview</h2>
+        <h2>@SharedLocalizer["Home_Section_Overview"]</h2>
         <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">@SharedLocalizer["Home_Overview_Item1"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">@SharedLocalizer["Home_Overview_Item2"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">@SharedLocalizer["Home_Overview_Item3"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">@SharedLocalizer["Home_Overview_Item4"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">@SharedLocalizer["Home_Overview_Item5"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">@SharedLocalizer["Home_Overview_Item6"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">@SharedLocalizer["Home_Overview_Item7"]</a></li>
         </ul>
     </div>
     <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
+        <h2>@SharedLocalizer["Home_Section_RunDeploy"]</h2>
         <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">@SharedLocalizer["Home_RunDeploy_Item1"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">@SharedLocalizer["Home_RunDeploy_Item2"]</a></li>
+            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">@SharedLocalizer["Home_RunDeploy_Item3"]</a></li>
         </ul>
     </div>
 </div>

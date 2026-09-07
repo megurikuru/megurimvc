@@ -1,15 +1,18 @@
-﻿using Meguri.Data;
+﻿using Meguri;
+using Meguri.Data;
 using Meguri.Models;
 using Meguri.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Globalization;
 using System.Net;
 
 // ビルダーを作成
@@ -45,7 +48,13 @@ builder.Services.Configure<SMTPServerConf>(smtpServerConf);                     
 
 
 // MVC機能を有効化(コントローラーとビューのサポートを追加)
-builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services
+    .AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization(options => {
+        options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(SharedResource));
+    });
 
 
 
@@ -82,6 +91,19 @@ builder.Services.Configure<ForwardedHeadersOptions>(options => {
 // アプリケーションのビルド(サービス登録完了後、リクエスト処理パイプラインを構築するWebApplicationインスタンスを作成)
 var app = builder.Build();
 
+var supportedCultures = new[] {
+    new CultureInfo("ja"),
+    new CultureInfo("en")
+};
+
+var localizationOptions = new RequestLocalizationOptions {
+    DefaultRequestCulture = new RequestCulture("ja"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+
+localizationOptions.ApplyCurrentCultureToResponseHeaders = true;
+
 // リバースプロキシのヘッダーを処理（UseRouting()より前に配置）
 app.UseForwardedHeaders();
 
@@ -92,6 +114,8 @@ if (app.Environment.IsDevelopment()) {
 } else {
     app.UseExceptionHandler("/Home/Error");
 }
+
+app.UseRequestLocalization(localizationOptions);
 
 // 静的ファイル(CSS、JavaScript、画像など)をwwwrootフォルダから配信
 app.UseStaticFiles();
