@@ -1,17 +1,16 @@
 @{
-		ViewData["Title"] = "ユーザー登録完了";
+		ViewData["Title"] = SharedLocalizer["Account_RegisterConfirmation_Title"];
 }
 
 <h2>@ViewData["Title"]</h2>
 <div>
 		<p>
-				ご登録ありがとうございます。
+				@SharedLocalizer["Account_RegisterConfirmation_Thanks"]
 		</p>
 		<p>
-				登録されたE-Mailアドレスに確認メールを送信しました。<br />
-				メール内のリンクをクリックして、アカウントを有効化してください。
+				@SharedLocalizer["Account_RegisterConfirmation_EmailSent"]
 		</p>
 		<p>
-				確認メールが届かない場合は、迷惑メールフォルダをご確認ください。
+				@SharedLocalizer["Account_RegisterConfirmation_CheckSpam"]
 		</p>
 </div>
