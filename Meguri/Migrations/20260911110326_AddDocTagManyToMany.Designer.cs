@@ -3,6 +3,7 @@ using System;
 using Meguri.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Meguri.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260911110326_AddDocTagManyToMany")]
+    partial class AddDocTagManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace Meguri.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("DocTag", b =>
+                {
+                    b.Property<int>("DocsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DocsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("DocTags", (string)null);
+                });
 
             modelBuilder.Entity("Meguri.Models.ApplicationUser", b =>
                 {
@@ -116,13 +134,10 @@ namespace Meguri.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ParentId")
+                    b.Property<int>("ParentId")
                         .HasColumnType("integer");
 
                     b.Property<bool>("Sexual")
@@ -153,94 +168,6 @@ namespace Meguri.Migrations
                     b.ToTable("Docs");
                 });
 
-            modelBuilder.Entity("Meguri.Models.DocImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DocId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
-
-                    b.HasIndex("DocId", "ImageId")
-                        .IsUnique();
-
-                    b.ToTable("DocImages");
-                });
-
-            modelBuilder.Entity("Meguri.Models.DocTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("DocId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("TagId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TagId");
-
-                    b.HasIndex("DocId", "TagId")
-                        .IsUnique();
-
-                    b.ToTable("DocTags");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Caption")
-                        .HasColumnType("text");
-
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("bytea");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("Meguri.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -250,22 +177,12 @@ namespace Meguri.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ParentTagId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentTagId");
-
-                    b.HasIndex("Name", "ParentTagId")
-                        .IsUnique();
 
                     b.ToTable("Tags");
                 });
@@ -402,6 +319,21 @@ namespace Meguri.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DocTag", b =>
+                {
+                    b.HasOne("Meguri.Models.Doc", null)
+                        .WithMany()
+                        .HasForeignKey("DocsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Meguri.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Meguri.Models.Doc", b =>
                 {
                     b.HasOne("Meguri.Models.Category", "Category")
@@ -411,54 +343,6 @@ namespace Meguri.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Meguri.Models.DocImage", b =>
-                {
-                    b.HasOne("Meguri.Models.Doc", "Doc")
-                        .WithMany("DocImages")
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Meguri.Models.Image", "Image")
-                        .WithMany("DocImages")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doc");
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("Meguri.Models.DocTag", b =>
-                {
-                    b.HasOne("Meguri.Models.Doc", "Doc")
-                        .WithMany("DocTags")
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Meguri.Models.Tag", "Tag")
-                        .WithMany("DocTags")
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doc");
-
-                    b.Navigation("Tag");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Tag", b =>
-                {
-                    b.HasOne("Meguri.Models.Tag", "ParentTag")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentTagId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("ParentTag");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -515,25 +399,6 @@ namespace Meguri.Migrations
             modelBuilder.Entity("Meguri.Models.Category", b =>
                 {
                     b.Navigation("Docs");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Doc", b =>
-                {
-                    b.Navigation("DocImages");
-
-                    b.Navigation("DocTags");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Image", b =>
-                {
-                    b.Navigation("DocImages");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Tag", b =>
-                {
-                    b.Navigation("Children");
-
-                    b.Navigation("DocTags");
                 });
 #pragma warning restore 612, 618
         }
