@@ -11,21 +11,19 @@
         <form method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
             <input asp-for="RememberMe" type="hidden" />
             <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="TwoFactorCode"></label>
+            <div class="mb-3">
+                <label asp-for="TwoFactorCode" class="form-label"></label>
                 <input asp-for="TwoFactorCode" class="form-control" autocomplete="off" />
                 <span asp-validation-for="TwoFactorCode" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label asp-for="RememberMachine">
-                        <input asp-for="RememberMachine" />
-                        @Html.DisplayNameFor(m => m.RememberMachine)
-                    </label>
-                </div>
+            <div class="mb-3 form-check">
+                <label asp-for="RememberMachine" class="form-check-label">
+                    <input asp-for="RememberMachine" class="form-check-input" />
+                    @Html.DisplayNameFor(m => m.RememberMachine)
+                </label>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-default">@SharedLocalizer["Account_Login_Button"]</button>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-secondary">@SharedLocalizer["Account_Login_Button"]</button>
             </div>
         </form>
     </div>
