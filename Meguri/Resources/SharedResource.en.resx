@@ -25,9 +25,46 @@
   <data name="Nav_Contact" xml:space="preserve">
 	<value>Contact</value>
   </data>
+  <data name="Nav_Forum" xml:space="preserve">
+	<value>Forum</value>
+  </data>
+  <data name="Nav_Murmurs" xml:space="preserve">
+	<value>Murmurs</value>
+  </data>
+  <data name="Nav_Members" xml:space="preserve">
+	<value>Members</value>
+  </data>
+  <data name="Nav_Messages" xml:space="preserve">
+	<value>Messages</value>
+  </data>
+  <data name="Nav_Illustrations" xml:space="preserve">
+	<value>Illustrations</value>
+  </data>
+  <data name="Nav_Manga" xml:space="preserve">
+	<value>Manga</value>
+  </data>
+  <data name="Nav_Novels" xml:space="preserve">
+	<value>Novels</value>
+  </data>
+  <data name="Nav_Others" xml:space="preserve">
+	<value>Others</value>
+  </data>
+  <data name="Nav_Cosplay" xml:space="preserve">
+	<value>Cosplay</value>
+  </data>
   <data name="Footer_Copyright" xml:space="preserve">
 	<value>&amp;copy; 2026 - meguri</value>
   </data>
+
+
+
+
+
+
+
+
+
+
 
   <data name="Auth_HelloUser" xml:space="preserve">
 	<value>Hello {0}!</value>

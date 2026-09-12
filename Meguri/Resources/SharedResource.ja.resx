@@ -25,9 +25,46 @@
   <data name="Nav_Contact" xml:space="preserve">
 	<value>お問い合わせ</value>
   </data>
+  <data name="Nav_Forum" xml:space="preserve">
+	<value>掲示板</value>
+  </data>
+  <data name="Nav_Murmurs" xml:space="preserve">
+	<value>つぶやき</value>
+  </data>
+  <data name="Nav_Members" xml:space="preserve">
+	<value>メンバー</value>
+  </data>
+  <data name="Nav_Messages" xml:space="preserve">
+	<value>メッセージ</value>
+  </data>
+  <data name="Nav_Illustrations" xml:space="preserve">
+	<value>イラスト</value>
+  </data>
+  <data name="Nav_Manga" xml:space="preserve">
+	<value>漫画</value>
+  </data>
+  <data name="Nav_Novels" xml:space="preserve">
+	<value>小説</value>
+  </data>
+  <data name="Nav_Others" xml:space="preserve">
+	<value>その他</value>
+  </data>
+  <data name="Nav_Cosplay" xml:space="preserve">
+	<value>コスプレ</value>
+  </data>
   <data name="Footer_Copyright" xml:space="preserve">
 	<value>&amp;copy; 2026 - meguri</value>
   </data>
+
+
+
+
+
+
+
+
+
+
 
   <data name="Auth_HelloUser" xml:space="preserve">
 	<value>{0} さん、こんにちは！</value>
