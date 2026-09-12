@@ -52,9 +52,14 @@
   <data name="Nav_Cosplay" xml:space="preserve">
 	<value>コスプレ</value>
   </data>
+  <data name="Nav_Community" xml:space="preserve">
+	<value>○○界隈</value>
+  </data>
   <data name="Footer_Copyright" xml:space="preserve">
 	<value>&amp;copy; 2026 - meguri</value>
   </data>
+
+
 
 
 
