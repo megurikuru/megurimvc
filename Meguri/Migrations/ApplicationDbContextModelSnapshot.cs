@@ -17,7 +17,7 @@ namespace Meguri.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.11")
+                .HasAnnotation("ProductVersion", "10.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -86,22 +86,6 @@ namespace Meguri.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Meguri.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
-                });
-
             modelBuilder.Entity("Meguri.Models.Doc", b =>
                 {
                     b.Property<int>("Id")
@@ -110,11 +94,11 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("FandomId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
@@ -142,9 +126,9 @@ namespace Meguri.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.HasIndex("Created");
+
+                    b.HasIndex("FandomId");
 
                     b.HasIndex("ParentId");
 
@@ -205,6 +189,22 @@ namespace Meguri.Migrations
                         .IsUnique();
 
                     b.ToTable("DocTags");
+                });
+
+            modelBuilder.Entity("Meguri.Models.Fandom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Fandoms");
                 });
 
             modelBuilder.Entity("Meguri.Models.Image", b =>
@@ -404,13 +404,13 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.Doc", b =>
                 {
-                    b.HasOne("Meguri.Models.Category", "Category")
+                    b.HasOne("Meguri.Models.Fandom", "Fandom")
                         .WithMany("Docs")
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("FandomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Fandom");
                 });
 
             modelBuilder.Entity("Meguri.Models.DocImage", b =>
@@ -512,16 +512,16 @@ namespace Meguri.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Meguri.Models.Category", b =>
-                {
-                    b.Navigation("Docs");
-                });
-
             modelBuilder.Entity("Meguri.Models.Doc", b =>
                 {
                     b.Navigation("DocImages");
 
                     b.Navigation("DocTags");
+                });
+
+            modelBuilder.Entity("Meguri.Models.Fandom", b =>
+                {
+                    b.Navigation("Docs");
                 });
 
             modelBuilder.Entity("Meguri.Models.Image", b =>

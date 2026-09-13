@@ -1,585 +1,672 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
-	<value>text/microsoft-resx</value>
+    <value>text/microsoft-resx</value>
   </resheader>
   <resheader name="version">
-	<value>2.0</value>
+    <value>2.0</value>
   </resheader>
   <resheader name="reader">
-	<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-	<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-
   <data name="Nav_ToggleNavigation" xml:space="preserve">
-	<value>ナビゲーションを切り替え</value>
+    <value>ナビゲーションを切り替え</value>
   </data>
   <data name="Nav_Home" xml:space="preserve">
-	<value>ホーム</value>
+    <value>ホーム</value>
   </data>
   <data name="Nav_About" xml:space="preserve">
-	<value>このサイトについて</value>
+    <value>このサイトについて</value>
   </data>
   <data name="Nav_Contact" xml:space="preserve">
-	<value>お問い合わせ</value>
+    <value>お問い合わせ</value>
   </data>
   <data name="Nav_Forum" xml:space="preserve">
-	<value>掲示板</value>
+    <value>掲示板</value>
   </data>
   <data name="Nav_Murmurs" xml:space="preserve">
-	<value>つぶやき</value>
+    <value>つぶやき</value>
   </data>
   <data name="Nav_Members" xml:space="preserve">
-	<value>メンバー</value>
+    <value>メンバー</value>
   </data>
   <data name="Nav_Messages" xml:space="preserve">
-	<value>メッセージ</value>
+    <value>メッセージ</value>
   </data>
   <data name="Nav_Illustrations" xml:space="preserve">
-	<value>イラスト</value>
+    <value>イラスト</value>
   </data>
   <data name="Nav_Manga" xml:space="preserve">
-	<value>漫画</value>
+    <value>漫画</value>
   </data>
   <data name="Nav_Novels" xml:space="preserve">
-	<value>小説</value>
+    <value>小説</value>
   </data>
   <data name="Nav_Others" xml:space="preserve">
-	<value>その他</value>
+    <value>その他</value>
   </data>
   <data name="Nav_Cosplay" xml:space="preserve">
-	<value>コスプレ</value>
+    <value>コスプレ</value>
   </data>
-  <data name="Nav_Community" xml:space="preserve">
-	<value>○○界隈</value>
+  <data name="Nav_Fandom" xml:space="preserve">
+    <value>○○界隈</value>
   </data>
   <data name="Footer_Copyright" xml:space="preserve">
-	<value>&amp;copy; 2026 - meguri</value>
+    <value>&amp;copy; 2026 - meguri</value>
   </data>
-
-
-
-
-
-
-
-
-
-
-
-
-
   <data name="Auth_HelloUser" xml:space="preserve">
-	<value>{0} さん、こんにちは！</value>
+    <value>{0} さん、こんにちは！</value>
   </data>
   <data name="Auth_ManageTitle" xml:space="preserve">
-	<value>アカウント管理</value>
+    <value>アカウント管理</value>
   </data>
   <data name="Auth_Logout" xml:space="preserve">
-	<value>ログアウト</value>
+    <value>ログアウト</value>
   </data>
   <data name="Auth_Register" xml:space="preserve">
-	<value>新規登録</value>
+    <value>新規登録</value>
   </data>
   <data name="Auth_Login" xml:space="preserve">
-	<value>ログイン</value>
+    <value>ログイン</value>
   </data>
-
   <data name="Home_Title" xml:space="preserve">
-	<value>ホーム</value>
+    <value>ホーム</value>
   </data>
   <data name="Home_LearnMore" xml:space="preserve">
-	<value>詳細を見る</value>
+    <value>詳細を見る</value>
   </data>
   <data name="Home_Carousel_Previous" xml:space="preserve">
-	<value>前へ</value>
+    <value>前へ</value>
   </data>
   <data name="Home_Carousel_Next" xml:space="preserve">
-	<value>次へ</value>
+    <value>次へ</value>
   </data>
   <data name="Home_Banner1_Text" xml:space="preserve">
-	<value>どこでも実行できる ASP.NET アプリの作り方を学びましょう。</value>
+    <value>どこでも実行できる ASP.NET アプリの作り方を学びましょう。</value>
   </data>
   <data name="Home_Banner2_Text" xml:space="preserve">
-	<value>Visual Studio にはモダンな Web アプリ開発のための強力な機能があります。</value>
+    <value>Visual Studio にはモダンな Web アプリ開発のための強力な機能があります。</value>
   </data>
   <data name="Home_Banner3_Text" xml:space="preserve">
-	<value>NuGet や npm のライブラリを取り込み、Grunt や Gulp でタスクを自動化できます。</value>
+    <value>NuGet や npm のライブラリを取り込み、Grunt や Gulp でタスクを自動化できます。</value>
   </data>
   <data name="Home_Banner4_Text" xml:space="preserve">
-	<value>Microsoft Azure で Web アプリを構築、デプロイ、スケールする方法を学びましょう。</value>
+    <value>Microsoft Azure で Web アプリを構築、デプロイ、スケールする方法を学びましょう。</value>
   </data>
   <data name="Home_Section_Uses" xml:space="preserve">
-	<value>アプリの利用例</value>
+    <value>アプリの利用例</value>
   </data>
   <data name="Home_Section_HowTo" xml:space="preserve">
-	<value>手順</value>
+    <value>手順</value>
   </data>
   <data name="Home_Section_Overview" xml:space="preserve">
-	<value>概要</value>
+    <value>概要</value>
   </data>
   <data name="Home_Section_RunDeploy" xml:space="preserve">
-	<value>実行とデプロイ</value>
+    <value>実行とデプロイ</value>
   </data>
   <data name="Home_Uses_Item1" xml:space="preserve">
-	<value>ASP.NET Core MVC を使ったサンプルページ</value>
+    <value>ASP.NET Core MVC を使ったサンプルページ</value>
   </data>
   <data name="Home_Uses_Item2" xml:space="preserve">
-	<value><![CDATA[<a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a> を使ったテーマ設定]]></value>
+    <value>&lt;a href="https://go.microsoft.com/fwlink/?LinkID=398939"&gt;Bootstrap&lt;/a&gt; を使ったテーマ設定</value>
   </data>
   <data name="Home_HowTo_Item1" xml:space="preserve">
-	<value>コントローラーとビューを追加する</value>
+    <value>コントローラーとビューを追加する</value>
   </data>
   <data name="Home_HowTo_Item2" xml:space="preserve">
-	<value>Secret Manager で User Secrets を管理する</value>
+    <value>Secret Manager で User Secrets を管理する</value>
   </data>
   <data name="Home_HowTo_Item3" xml:space="preserve">
-	<value>ロギングでメッセージを記録する</value>
+    <value>ロギングでメッセージを記録する</value>
   </data>
   <data name="Home_HowTo_Item4" xml:space="preserve">
-	<value>NuGet でパッケージを追加する</value>
+    <value>NuGet でパッケージを追加する</value>
   </data>
   <data name="Home_HowTo_Item5" xml:space="preserve">
-	<value>開発/ステージング/本番環境を切り替える</value>
+    <value>開発/ステージング/本番環境を切り替える</value>
   </data>
   <data name="Home_Overview_Item1" xml:space="preserve">
-	<value>ASP.NET Core とは何かの概念的な概要</value>
+    <value>ASP.NET Core とは何かの概念的な概要</value>
   </data>
   <data name="Home_Overview_Item2" xml:space="preserve">
-	<value>Startup やミドルウェアなど ASP.NET Core の基礎</value>
+    <value>Startup やミドルウェアなど ASP.NET Core の基礎</value>
   </data>
   <data name="Home_Overview_Item3" xml:space="preserve">
-	<value>データの扱い方</value>
+    <value>データの扱い方</value>
   </data>
   <data name="Home_Overview_Item4" xml:space="preserve">
-	<value>セキュリティ</value>
+    <value>セキュリティ</value>
   </data>
   <data name="Home_Overview_Item5" xml:space="preserve">
-	<value>クライアントサイド開発</value>
+    <value>クライアントサイド開発</value>
   </data>
   <data name="Home_Overview_Item6" xml:space="preserve">
-	<value>異なるプラットフォームでの開発</value>
+    <value>異なるプラットフォームでの開発</value>
   </data>
   <data name="Home_Overview_Item7" xml:space="preserve">
-	<value>ドキュメントサイトでさらに読む</value>
+    <value>ドキュメントサイトでさらに読む</value>
   </data>
   <data name="Home_RunDeploy_Item1" xml:space="preserve">
-	<value>アプリを実行する</value>
+    <value>アプリを実行する</value>
   </data>
   <data name="Home_RunDeploy_Item2" xml:space="preserve">
-	<value>EF マイグレーションなどのツールを実行する</value>
+    <value>EF マイグレーションなどのツールを実行する</value>
   </data>
   <data name="Home_RunDeploy_Item3" xml:space="preserve">
-	<value>Microsoft Azure Web Apps に発行する</value>
+    <value>Microsoft Azure Web Apps に発行する</value>
   </data>
-
   <data name="About_Title" xml:space="preserve">
-	<value>このサイトについて</value>
+    <value>このサイトについて</value>
   </data>
   <data name="About_Info" xml:space="preserve">
-	<value>このエリアでは追加情報を提供します。</value>
+    <value>このエリアでは追加情報を提供します。</value>
   </data>
   <data name="Contact_Title" xml:space="preserve">
-	<value>お問い合わせ</value>
+    <value>お問い合わせ</value>
   </data>
   <data name="Contact_Support" xml:space="preserve">
-	<value>サポート</value>
+    <value>サポート</value>
   </data>
   <data name="Contact_Marketing" xml:space="preserve">
-	<value>マーケティング</value>
+    <value>マーケティング</value>
   </data>
-
   <data name="Controller_About_Message" xml:space="preserve">
-	<value>アプリケーションの説明ページです。</value>
+    <value>アプリケーションの説明ページです。</value>
   </data>
   <data name="Controller_Contact_Message" xml:space="preserve">
-	<value>お問い合わせページです。</value>
+    <value>お問い合わせページです。</value>
   </data>
-
   <data name="Account_AccessDenied_Title" xml:space="preserve">
-	<value>アクセス拒否</value>
+    <value>アクセス拒否</value>
   </data>
   <data name="Account_AccessDenied_Message" xml:space="preserve">
-	<value>このリソースにアクセスする権限がありません。</value>
+    <value>このリソースにアクセスする権限がありません。</value>
   </data>
   <data name="Account_ConfirmEmail_Title" xml:space="preserve">
-	<value>メール確認</value>
+    <value>メール確認</value>
   </data>
   <data name="Account_ConfirmEmail_Thanks" xml:space="preserve">
-	<value>メール確認ありがとうございます。</value>
+    <value>メール確認ありがとうございます。</value>
   </data>
   <data name="Account_Register_Title" xml:space="preserve">
-	<value>新規登録</value>
+    <value>新規登録</value>
   </data>
   <data name="Account_ExternalLogin_AssociateAccount" xml:space="preserve">
-	<value>{0} アカウントを関連付けます。</value>
+    <value>{0} アカウントを関連付けます。</value>
   </data>
   <data name="Account_ExternalLogin_SuccessMessage" xml:space="preserve">
-	<value><![CDATA[<strong>{0}</strong> での認証に成功しました。]]></value>
+    <value>&lt;strong&gt;{0}&lt;/strong&gt; での認証に成功しました。</value>
   </data>
   <data name="Account_ExternalLogin_EnterEmailAndRegister" xml:space="preserve">
-	<value>このサイトで使用するメールアドレスを入力し、登録ボタンを押してログインを完了してください。</value>
+    <value>このサイトで使用するメールアドレスを入力し、登録ボタンを押してログインを完了してください。</value>
   </data>
   <data name="Account_Register_Button" xml:space="preserve">
-	<value>登録</value>
+    <value>登録</value>
   </data>
   <data name="Account_ForgotPassword_Title" xml:space="preserve">
-	<value>パスワードをお忘れですか？</value>
+    <value>パスワードをお忘れですか？</value>
   </data>
   <data name="Account_ForgotPassword_EnterEmail" xml:space="preserve">
-	<value>メールアドレスを入力してください。</value>
+    <value>メールアドレスを入力してください。</value>
   </data>
   <data name="Account_Submit_Button" xml:space="preserve">
-	<value>送信</value>
+    <value>送信</value>
   </data>
   <data name="Account_ForgotPasswordConfirmation_Title" xml:space="preserve">
-	<value>パスワード再設定の確認</value>
+    <value>パスワード再設定の確認</value>
   </data>
   <data name="Account_ForgotPasswordConfirmation_Message" xml:space="preserve">
-	<value>パスワード再設定のため、メールをご確認ください。</value>
+    <value>パスワード再設定のため、メールをご確認ください。</value>
   </data>
   <data name="Account_Lockout_Title" xml:space="preserve">
-	<value>アカウントロック</value>
+    <value>アカウントロック</value>
   </data>
   <data name="Account_Lockout_Message" xml:space="preserve">
-	<value>このアカウントはロックされています。しばらくしてから再試行してください。</value>
+    <value>このアカウントはロックされています。しばらくしてから再試行してください。</value>
   </data>
   <data name="Account_Login_Title" xml:space="preserve">
-	<value>ログイン</value>
+    <value>ログイン</value>
   </data>
   <data name="Account_Login_UseLocalAccount" xml:space="preserve">
-	<value>ローカルアカウントでログインします。</value>
+    <value>ローカルアカウントでログインします。</value>
   </data>
   <data name="Account_Login_Button" xml:space="preserve">
-	<value>ログイン</value>
+    <value>ログイン</value>
   </data>
   <data name="Account_Login_ForgotPassword" xml:space="preserve">
-	<value>パスワードをお忘れですか？</value>
+    <value>パスワードをお忘れですか？</value>
   </data>
   <data name="Account_Login_RegisterNewUser" xml:space="preserve">
-	<value>新規ユーザーとして登録しますか？</value>
+    <value>新規ユーザーとして登録しますか？</value>
   </data>
   <data name="Account_Login_UseAnotherService" xml:space="preserve">
-	<value>他のサービスでログイン</value>
+    <value>他のサービスでログイン</value>
   </data>
   <data name="Account_Login_NoExternalServices" xml:space="preserve">
-	<value>外部認証サービスが設定されていません。詳細は</value>
+    <value>外部認証サービスが設定されていません。詳細は</value>
   </data>
   <data name="Account_Login_ThisArticle" xml:space="preserve">
-	<value>この記事</value>
+    <value>この記事</value>
   </data>
   <data name="Account_Login_NoExternalServices_Detail" xml:space="preserve">
-	<value>を参照し、外部サービス経由のログインをサポートするよう設定してください。</value>
+    <value>を参照し、外部サービス経由のログインをサポートするよう設定してください。</value>
   </data>
   <data name="Account_Login_ExternalProviderButtonTitle" xml:space="preserve">
-	<value>{0} アカウントでログイン</value>
+    <value>{0} アカウントでログイン</value>
   </data>
   <data name="Account_LoginWith2fa_Title" xml:space="preserve">
-	<value>2要素認証</value>
+    <value>2要素認証</value>
   </data>
   <data name="Account_LoginWith2fa_Description" xml:space="preserve">
-	<value>このログインは認証アプリで保護されています。認証コードを入力してください。</value>
+    <value>このログインは認証アプリで保護されています。認証コードを入力してください。</value>
   </data>
   <data name="Account_LoginWith2fa_NoAuthenticator" xml:space="preserve">
-	<value>認証デバイスにアクセスできませんか？</value>
+    <value>認証デバイスにアクセスできませんか？</value>
   </data>
   <data name="Account_LoginWith2fa_RecoveryLinkText" xml:space="preserve">
-	<value>回復コードでログイン</value>
+    <value>回復コードでログイン</value>
   </data>
   <data name="Account_LoginWithRecoveryCode_Title" xml:space="preserve">
-	<value>回復コード確認</value>
+    <value>回復コード確認</value>
   </data>
   <data name="Account_LoginWithRecoveryCode_Description" xml:space="preserve">
-	<value>回復コードでのログインが要求されました。このログインは、認証アプリのコードでログインするか 2FA を無効化して再ログインするまで記憶されません。</value>
+    <value>回復コードでのログインが要求されました。このログインは、認証アプリのコードでログインするか 2FA を無効化して再ログインするまで記憶されません。</value>
   </data>
   <data name="Account_Register_CreateNewAccount" xml:space="preserve">
-	<value>新しいアカウントを作成します。</value>
+    <value>新しいアカウントを作成します。</value>
   </data>
   <data name="Account_RegisterConfirmation_Title" xml:space="preserve">
-	<value>ユーザー登録完了</value>
+    <value>ユーザー登録完了</value>
   </data>
   <data name="Account_RegisterConfirmation_Thanks" xml:space="preserve">
-	<value>ご登録ありがとうございます。</value>
+    <value>ご登録ありがとうございます。</value>
   </data>
   <data name="Account_RegisterConfirmation_EmailSent" xml:space="preserve">
-	<value>登録された E-Mail アドレスに確認メールを送信しました。メール内のリンクをクリックして、アカウントを有効化してください。</value>
+    <value>登録された E-Mail アドレスに確認メールを送信しました。メール内のリンクをクリックして、アカウントを有効化してください。</value>
   </data>
   <data name="Account_RegisterConfirmation_CheckSpam" xml:space="preserve">
-	<value>確認メールが届かない場合は、迷惑メールフォルダをご確認ください。</value>
+    <value>確認メールが届かない場合は、迷惑メールフォルダをご確認ください。</value>
   </data>
   <data name="Account_ResetPassword_Title" xml:space="preserve">
-	<value>パスワード再設定</value>
+    <value>パスワード再設定</value>
   </data>
   <data name="Account_ResetPassword_Description" xml:space="preserve">
-	<value>パスワードを再設定します。</value>
+    <value>パスワードを再設定します。</value>
   </data>
   <data name="Account_ResetPassword_ResetButton" xml:space="preserve">
-	<value>再設定</value>
+    <value>再設定</value>
   </data>
   <data name="Account_ResetPasswordConfirmation_Title" xml:space="preserve">
-	<value>パスワード再設定完了</value>
+    <value>パスワード再設定完了</value>
   </data>
   <data name="Account_ResetPasswordConfirmation_Success" xml:space="preserve">
-	<value>パスワードが再設定されました。ログインするには</value>
+    <value>パスワードが再設定されました。ログインするには</value>
   </data>
   <data name="Account_ResetPasswordConfirmation_ClickHereToLogin" xml:space="preserve">
-	<value>こちらをクリック</value>
+    <value>こちらをクリック</value>
   </data>
   <data name="Account_SignedOut_Title" xml:space="preserve">
-	<value>サインアウト</value>
+    <value>サインアウト</value>
   </data>
   <data name="Account_SignedOut_Message" xml:space="preserve">
-	<value>正常にサインアウトしました。</value>
+    <value>正常にサインアウトしました。</value>
   </data>
   <data name="Account_Field_Email" xml:space="preserve">
-	<value>メールアドレス</value>
+    <value>メールアドレス</value>
   </data>
   <data name="Account_Field_Password" xml:space="preserve">
-	<value>パスワード</value>
+    <value>パスワード</value>
   </data>
   <data name="Account_Field_ConfirmPassword" xml:space="preserve">
-	<value>パスワード（確認）</value>
+    <value>パスワード（確認）</value>
   </data>
   <data name="Account_Field_RememberMe" xml:space="preserve">
-	<value>ログイン状態を保持する</value>
+    <value>ログイン状態を保持する</value>
   </data>
   <data name="Account_Field_AuthenticatorCode" xml:space="preserve">
-	<value>認証コード</value>
+    <value>認証コード</value>
   </data>
   <data name="Account_Field_RememberMachine" xml:space="preserve">
-	<value>この端末を記憶する</value>
+    <value>この端末を記憶する</value>
   </data>
   <data name="Account_Field_RecoveryCode" xml:space="preserve">
-	<value>回復コード</value>
+    <value>回復コード</value>
   </data>
   <data name="Validation_Required" xml:space="preserve">
-	<value>{0} は必須です。</value>
+    <value>{0} は必須です。</value>
   </data>
   <data name="Validation_InvalidEmail" xml:space="preserve">
-	<value>有効なメールアドレスを入力してください。</value>
+    <value>有効なメールアドレスを入力してください。</value>
   </data>
   <data name="Validation_StringLength" xml:space="preserve">
-	<value>{0} は {2} 文字以上 {1} 文字以下で入力してください。</value>
+    <value>{0} は {2} 文字以上 {1} 文字以下で入力してください。</value>
   </data>
   <data name="Validation_Compare" xml:space="preserve">
-	<value>{0} と {1} が一致しません。</value>
+    <value>{0} と {1} が一致しません。</value>
   </data>
   <data name="Common_Close" xml:space="preserve">
-	<value>閉じる</value>
+    <value>閉じる</value>
   </data>
   <data name="Manage_Profile_Title" xml:space="preserve">
-	<value>プロフィール</value>
+    <value>プロフィール</value>
   </data>
   <data name="Manage_Profile_Username" xml:space="preserve">
-	<value>ユーザー名</value>
+    <value>ユーザー名</value>
   </data>
   <data name="Manage_Profile_Email" xml:space="preserve">
-	<value>メールアドレス</value>
+    <value>メールアドレス</value>
   </data>
   <data name="Manage_Profile_PhoneNumber" xml:space="preserve">
-	<value>電話番号</value>
+    <value>電話番号</value>
   </data>
   <data name="Manage_Profile_SendVerificationEmail" xml:space="preserve">
-	<value>確認メールを送信</value>
+    <value>確認メールを送信</value>
   </data>
   <data name="Manage_Profile_Save" xml:space="preserve">
-	<value>保存</value>
+    <value>保存</value>
   </data>
   <data name="Manage_AccountManagement_Title" xml:space="preserve">
-	<value>アカウント管理</value>
+    <value>アカウント管理</value>
   </data>
   <data name="Manage_AccountManagement_Subtitle" xml:space="preserve">
-	<value>アカウント設定を変更</value>
+    <value>アカウント設定を変更</value>
   </data>
   <data name="Manage_Nav_Profile" xml:space="preserve">
-	<value>プロフィール</value>
+    <value>プロフィール</value>
   </data>
   <data name="Manage_Nav_Password" xml:space="preserve">
-	<value>パスワード</value>
+    <value>パスワード</value>
   </data>
   <data name="Manage_Nav_ExternalLogins" xml:space="preserve">
-	<value>外部ログイン</value>
+    <value>外部ログイン</value>
   </data>
   <data name="Manage_Nav_TwoFactorAuthentication" xml:space="preserve">
-	<value>二段階認証</value>
+    <value>二段階認証</value>
   </data>
   <data name="Manage_ChangePassword_Title" xml:space="preserve">
-	<value>パスワード変更</value>
+    <value>パスワード変更</value>
   </data>
   <data name="Manage_ChangePassword_NewPassword" xml:space="preserve">
-	<value>新しいパスワード</value>
+    <value>新しいパスワード</value>
   </data>
   <data name="Manage_ChangePassword_ConfirmPassword" xml:space="preserve">
-	<value>新しいパスワード（確認）</value>
+    <value>新しいパスワード（確認）</value>
   </data>
   <data name="Manage_ChangePassword_UpdateButton" xml:space="preserve">
-	<value>パスワードを更新</value>
+    <value>パスワードを更新</value>
   </data>
   <data name="Manage_SetPassword_Title" xml:space="preserve">
-	<value>パスワードを設定</value>
+    <value>パスワードを設定</value>
   </data>
   <data name="Manage_SetPassword_Description" xml:space="preserve">
-	<value>このサイトにはローカルのユーザー名/パスワードがありません。外部ログインなしでログインできるように、ローカルアカウントを追加してください。</value>
+    <value>このサイトにはローカルのユーザー名/パスワードがありません。外部ログインなしでログインできるように、ローカルアカウントを追加してください。</value>
   </data>
   <data name="Manage_SetPassword_NewPassword" xml:space="preserve">
-	<value>新しいパスワード</value>
+    <value>新しいパスワード</value>
   </data>
   <data name="Manage_SetPassword_ConfirmPassword" xml:space="preserve">
-	<value>新しいパスワード（確認）</value>
+    <value>新しいパスワード（確認）</value>
   </data>
   <data name="Manage_SetPassword_Button" xml:space="preserve">
-	<value>パスワードを設定</value>
+    <value>パスワードを設定</value>
   </data>
   <data name="Manage_Disable2fa_Title" xml:space="preserve">
-	<value>二段階認証 (2FA) を無効にする</value>
+    <value>二段階認証 (2FA) を無効にする</value>
   </data>
   <data name="Manage_Disable2fa_Warning" xml:space="preserve">
-	<value>この操作は 2FA だけを無効化します。</value>
+    <value>この操作は 2FA だけを無効化します。</value>
   </data>
   <data name="Manage_Disable2fa_Description_Part1" xml:space="preserve">
-	<value>2FA を無効化しても、認証アプリで使われているキーは変更されません。鍵を変更したい場合は</value>
+    <value>2FA を無効化しても、認証アプリで使われているキーは変更されません。鍵を変更したい場合は</value>
   </data>
   <data name="Manage_Disable2fa_ResetLink" xml:space="preserve">
-	<value>認証キーをリセット</value>
+    <value>認証キーをリセット</value>
   </data>
   <data name="Manage_Disable2fa_Button" xml:space="preserve">
-	<value>2FA を無効化</value>
+    <value>2FA を無効化</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_Title" xml:space="preserve">
-	<value>二段階認証 (2FA) の回復コードを生成</value>
+    <value>二段階認証 (2FA) の回復コードを生成</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_Warning" xml:space="preserve">
-	<value>この操作により、新しい回復コードが生成されます。</value>
+    <value>この操作により、新しい回復コードが生成されます。</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_Description" xml:space="preserve">
-	<value>端末を紛失し、回復コードがない場合は、アカウントへのアクセス権を失います。</value>
+    <value>端末を紛失し、回復コードがない場合は、アカウントへのアクセス権を失います。</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_DescriptionExtra" xml:space="preserve">
-	<value>新しい回復コードを生成しても、認証アプリで使われているキーは変更されません。鍵を変更したい場合は</value>
+    <value>新しい回復コードを生成しても、認証アプリで使われているキーは変更されません。鍵を変更したい場合は</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_ResetLink" xml:space="preserve">
-	<value>認証キーをリセット</value>
+    <value>認証キーをリセット</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_Button" xml:space="preserve">
-	<value>回復コードを生成</value>
+    <value>回復コードを生成</value>
   </data>
   <data name="Manage_ResetAuthenticator_Title" xml:space="preserve">
-	<value>認証キーをリセット</value>
+    <value>認証キーをリセット</value>
   </data>
   <data name="Manage_ResetAuthenticator_Warning" xml:space="preserve">
-	<value>認証キーをリセットすると、認証アプリは再設定を行うまで動作しません。</value>
+    <value>認証キーをリセットすると、認証アプリは再設定を行うまで動作しません。</value>
   </data>
   <data name="Manage_ResetAuthenticator_Description" xml:space="preserve">
-	<value>この処理では、認証アプリを確認するまで 2FA が無効化され、2FA の回復コードもリセットされます。認証アプリの設定を完了しないと、アカウントにアクセスできなくなる場合があります。</value>
+    <value>この処理では、認証アプリを確認するまで 2FA が無効化され、2FA の回復コードもリセットされます。認証アプリの設定を完了しないと、アカウントにアクセスできなくなる場合があります。</value>
   </data>
   <data name="Manage_ResetAuthenticator_Button" xml:space="preserve">
-	<value>認証キーをリセット</value>
+    <value>認証キーをリセット</value>
   </data>
   <data name="Manage_ShowRecoveryCodes_Title" xml:space="preserve">
-	<value>回復コード</value>
+    <value>回復コード</value>
   </data>
   <data name="Manage_ShowRecoveryCodes_Warning" xml:space="preserve">
-	<value>これらのコードは安全な場所に保管してください。</value>
+    <value>これらのコードは安全な場所に保管してください。</value>
   </data>
   <data name="Manage_ShowRecoveryCodes_Description" xml:space="preserve">
-	<value>端末を紛失し、回復コードがない場合は、アカウントへのアクセス権を失います。</value>
+    <value>端末を紛失し、回復コードがない場合は、アカウントへのアクセス権を失います。</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_Title" xml:space="preserve">
-	<value>二段階認証</value>
+    <value>二段階認証</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_NoCodes" xml:space="preserve">
-	<value>回復コードが残っていません。</value>
+    <value>回復コードが残っていません。</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_NoCodes_Message" xml:space="preserve">
-	<value>回復コードを使ってログインする前に、新しい回復コードを生成してください。</value>
+    <value>回復コードを使ってログインする前に、新しい回復コードを生成してください。</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_OneCodeLeft" xml:space="preserve">
-	<value>回復コードが 1 件残っています。</value>
+    <value>回復コードが 1 件残っています。</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_OneCodeLeft_Message" xml:space="preserve">
-	<value>新しい回復コードを生成できます。</value>
+    <value>新しい回復コードを生成できます。</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_CodesLeft" xml:space="preserve">
-	<value>回復コードが {0} 件残っています。</value>
+    <value>回復コードが {0} 件残っています。</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_CodesLeft_Message" xml:space="preserve">
-	<value>新しい回復コードを生成することをお勧めします。</value>
+    <value>新しい回復コードを生成することをお勧めします。</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_Disable2FA" xml:space="preserve">
-	<value>2FA を無効化</value>
+    <value>2FA を無効化</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_ResetRecoveryCodes" xml:space="preserve">
-	<value>回復コードをリセット</value>
+    <value>回復コードをリセット</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_AuthenticatorApp" xml:space="preserve">
-	<value>認証アプリ</value>
+    <value>認証アプリ</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_AddAuthenticator" xml:space="preserve">
-	<value>認証アプリを追加</value>
+    <value>認証アプリを追加</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_ConfigureAuthenticator" xml:space="preserve">
-	<value>認証アプリを設定</value>
+    <value>認証アプリを設定</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_ResetAuthenticatorKey" xml:space="preserve">
-	<value>認証キーをリセット</value>
+    <value>認証キーをリセット</value>
   </data>
   <data name="Manage_EnableAuthenticator_Title" xml:space="preserve">
-	<value>認証アプリを有効化</value>
+    <value>認証アプリを有効化</value>
   </data>
   <data name="Manage_EnableAuthenticator_Intro" xml:space="preserve">
-	<value>認証アプリを使うには、次の手順に従ってください。</value>
+    <value>認証アプリを使うには、次の手順に従ってください。</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction_Part1" xml:space="preserve">
-	<value>Microsoft Authenticator などの二段階認証アプリをダウンロードして</value>
+    <value>Microsoft Authenticator などの二段階認証アプリをダウンロードして</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction_Or" xml:space="preserve">
-	<value>または</value>
+    <value>または</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction_Part2" xml:space="preserve">
-	<value>を使います。Google Authenticator は</value>
+    <value>を使います。Google Authenticator は</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction_And" xml:space="preserve">
-	<value>と</value>
+    <value>と</value>
   </data>
   <data name="Manage_EnableAuthenticator_ScanPrompt_Part1" xml:space="preserve">
-	<value>QR コードを読み取るか、このキー</value>
+    <value>QR コードを読み取るか、このキー</value>
   </data>
   <data name="Manage_EnableAuthenticator_ScanPrompt_Part2" xml:space="preserve">
-	<value>を二段階認証アプリに入力してください。スペースや大文字小文字は区別されません。</value>
+    <value>を二段階認証アプリに入力してください。スペースや大文字小文字は区別されません。</value>
   </data>
   <data name="Manage_EnableAuthenticator_QRHint" xml:space="preserve">
-	<value>QR コード生成を有効にするには、</value>
+    <value>QR コード生成を有効にするには、</value>
   </data>
   <data name="Manage_EnableAuthenticator_Documentation" xml:space="preserve">
-	<value>ドキュメント</value>
+    <value>ドキュメント</value>
   </data>
   <data name="Manage_EnableAuthenticator_ConfirmationPrompt" xml:space="preserve">
-	<value>QR コードを読み取ったり、上記のキーを入力した後、二段階認証アプリが一意のコードを提供します。下の確認ボックスにそのコードを入力してください。</value>
+    <value>QR コードを読み取ったり、上記のキーを入力した後、二段階認証アプリが一意のコードを提供します。下の確認ボックスにそのコードを入力してください。</value>
   </data>
   <data name="Manage_EnableAuthenticator_VerificationCode" xml:space="preserve">
-	<value>確認コード</value>
+    <value>確認コード</value>
   </data>
   <data name="Manage_EnableAuthenticator_VerifyButton" xml:space="preserve">
-	<value>確認</value>
+    <value>確認</value>
   </data>
   <data name="Manage_ExternalLogins_Title" xml:space="preserve">
-	<value>外部ログインの管理</value>
+    <value>外部ログインの管理</value>
   </data>
   <data name="Manage_ExternalLogins_Registered" xml:space="preserve">
-	<value>登録済みログイン</value>
+    <value>登録済みログイン</value>
   </data>
   <data name="Manage_ExternalLogins_Remove" xml:space="preserve">
-	<value>削除</value>
+    <value>削除</value>
   </data>
   <data name="Manage_ExternalLogins_RemoveButtonTitle" xml:space="preserve">
-	<value>この {0} ログインをアカウントから削除</value>
+    <value>この {0} ログインをアカウントから削除</value>
   </data>
   <data name="Manage_ExternalLogins_AddService" xml:space="preserve">
-	<value>ログインに別のサービスを追加</value>
+    <value>ログインに別のサービスを追加</value>
   </data>
   <data name="Manage_ExternalLogins_ProviderButtonTitle" xml:space="preserve">
-	<value>{0} アカウントを使ってログイン</value>
+    <value>{0} アカウントを使ってログイン</value>
   </data>
 </root>

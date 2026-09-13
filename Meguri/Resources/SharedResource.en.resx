@@ -1,585 +1,672 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
   <resheader name="resmimetype">
-	<value>text/microsoft-resx</value>
+    <value>text/microsoft-resx</value>
   </resheader>
   <resheader name="version">
-	<value>2.0</value>
+    <value>2.0</value>
   </resheader>
   <resheader name="reader">
-	<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-	<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-
   <data name="Nav_ToggleNavigation" xml:space="preserve">
-	<value>Toggle navigation</value>
+    <value>Toggle navigation</value>
   </data>
   <data name="Nav_Home" xml:space="preserve">
-	<value>Home</value>
+    <value>Home</value>
   </data>
   <data name="Nav_About" xml:space="preserve">
-	<value>About</value>
+    <value>About</value>
   </data>
   <data name="Nav_Contact" xml:space="preserve">
-	<value>Contact</value>
+    <value>Contact</value>
   </data>
   <data name="Nav_Forum" xml:space="preserve">
-	<value>Forum</value>
+    <value>Forum</value>
   </data>
   <data name="Nav_Murmurs" xml:space="preserve">
-	<value>Murmurs</value>
+    <value>Murmurs</value>
   </data>
   <data name="Nav_Members" xml:space="preserve">
-	<value>Members</value>
+    <value>Members</value>
   </data>
   <data name="Nav_Messages" xml:space="preserve">
-	<value>Messages</value>
+    <value>Messages</value>
   </data>
   <data name="Nav_Illustrations" xml:space="preserve">
-	<value>Illustrations</value>
+    <value>Illustrations</value>
   </data>
   <data name="Nav_Manga" xml:space="preserve">
-	<value>Manga</value>
+    <value>Manga</value>
   </data>
   <data name="Nav_Novels" xml:space="preserve">
-	<value>Novels</value>
+    <value>Novels</value>
   </data>
   <data name="Nav_Others" xml:space="preserve">
-	<value>Others</value>
+    <value>Others</value>
   </data>
   <data name="Nav_Cosplay" xml:space="preserve">
-	<value>Cosplay</value>
+    <value>Cosplay</value>
   </data>
-  <data name="Nav_Community" xml:space="preserve">
-	<value>Community</value>
+  <data name="Nav_Fandom" xml:space="preserve">
+    <value>Fandom</value>
   </data>
   <data name="Footer_Copyright" xml:space="preserve">
-	<value>&amp;copy; 2026 - meguri</value>
+    <value>&amp;copy; 2026 - meguri</value>
   </data>
-
-
-
-
-
-
-
-
-
-
-
-
-
   <data name="Auth_HelloUser" xml:space="preserve">
-	<value>Hello {0}!</value>
+    <value>Hello {0}!</value>
   </data>
   <data name="Auth_ManageTitle" xml:space="preserve">
-	<value>Manage</value>
+    <value>Manage</value>
   </data>
   <data name="Auth_Logout" xml:space="preserve">
-	<value>Log out</value>
+    <value>Log out</value>
   </data>
   <data name="Auth_Register" xml:space="preserve">
-	<value>Register</value>
+    <value>Register</value>
   </data>
   <data name="Auth_Login" xml:space="preserve">
-	<value>Log in</value>
+    <value>Log in</value>
   </data>
-
   <data name="Home_Title" xml:space="preserve">
-	<value>Home</value>
+    <value>Home</value>
   </data>
   <data name="Home_LearnMore" xml:space="preserve">
-	<value>Learn More</value>
+    <value>Learn More</value>
   </data>
   <data name="Home_Carousel_Previous" xml:space="preserve">
-	<value>Previous</value>
+    <value>Previous</value>
   </data>
   <data name="Home_Carousel_Next" xml:space="preserve">
-	<value>Next</value>
+    <value>Next</value>
   </data>
   <data name="Home_Banner1_Text" xml:space="preserve">
-	<value>Learn how to build ASP.NET apps that can run anywhere.</value>
+    <value>Learn how to build ASP.NET apps that can run anywhere.</value>
   </data>
   <data name="Home_Banner2_Text" xml:space="preserve">
-	<value>There are powerful new features in Visual Studio for building modern web apps.</value>
+    <value>There are powerful new features in Visual Studio for building modern web apps.</value>
   </data>
   <data name="Home_Banner3_Text" xml:space="preserve">
-	<value>Bring in libraries from NuGet and npm, and automate tasks using Grunt or Gulp.</value>
+    <value>Bring in libraries from NuGet and npm, and automate tasks using Grunt or Gulp.</value>
   </data>
   <data name="Home_Banner4_Text" xml:space="preserve">
-	<value>Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.</value>
+    <value>Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.</value>
   </data>
   <data name="Home_Section_Uses" xml:space="preserve">
-	<value>Application uses</value>
+    <value>Application uses</value>
   </data>
   <data name="Home_Section_HowTo" xml:space="preserve">
-	<value>How to</value>
+    <value>How to</value>
   </data>
   <data name="Home_Section_Overview" xml:space="preserve">
-	<value>Overview</value>
+    <value>Overview</value>
   </data>
   <data name="Home_Section_RunDeploy" xml:space="preserve">
-	<value>Run &amp; Deploy</value>
+    <value>Run &amp; Deploy</value>
   </data>
   <data name="Home_Uses_Item1" xml:space="preserve">
-	<value>Sample pages using ASP.NET Core MVC</value>
+    <value>Sample pages using ASP.NET Core MVC</value>
   </data>
   <data name="Home_Uses_Item2" xml:space="preserve">
-	<value><![CDATA[Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a>]]></value>
+    <value>Theming using &lt;a href="https://go.microsoft.com/fwlink/?LinkID=398939"&gt;Bootstrap&lt;/a&gt;</value>
   </data>
   <data name="Home_HowTo_Item1" xml:space="preserve">
-	<value>Add a Controller and View</value>
+    <value>Add a Controller and View</value>
   </data>
   <data name="Home_HowTo_Item2" xml:space="preserve">
-	<value>Manage User Secrets using Secret Manager.</value>
+    <value>Manage User Secrets using Secret Manager.</value>
   </data>
   <data name="Home_HowTo_Item3" xml:space="preserve">
-	<value>Use logging to log a message.</value>
+    <value>Use logging to log a message.</value>
   </data>
   <data name="Home_HowTo_Item4" xml:space="preserve">
-	<value>Add packages using NuGet.</value>
+    <value>Add packages using NuGet.</value>
   </data>
   <data name="Home_HowTo_Item5" xml:space="preserve">
-	<value>Target development, staging or production environment.</value>
+    <value>Target development, staging or production environment.</value>
   </data>
   <data name="Home_Overview_Item1" xml:space="preserve">
-	<value>Conceptual overview of what is ASP.NET Core</value>
+    <value>Conceptual overview of what is ASP.NET Core</value>
   </data>
   <data name="Home_Overview_Item2" xml:space="preserve">
-	<value>Fundamentals of ASP.NET Core such as Startup and middleware.</value>
+    <value>Fundamentals of ASP.NET Core such as Startup and middleware.</value>
   </data>
   <data name="Home_Overview_Item3" xml:space="preserve">
-	<value>Working with Data</value>
+    <value>Working with Data</value>
   </data>
   <data name="Home_Overview_Item4" xml:space="preserve">
-	<value>Security</value>
+    <value>Security</value>
   </data>
   <data name="Home_Overview_Item5" xml:space="preserve">
-	<value>Client side development</value>
+    <value>Client side development</value>
   </data>
   <data name="Home_Overview_Item6" xml:space="preserve">
-	<value>Develop on different platforms</value>
+    <value>Develop on different platforms</value>
   </data>
   <data name="Home_Overview_Item7" xml:space="preserve">
-	<value>Read more on the documentation site</value>
+    <value>Read more on the documentation site</value>
   </data>
   <data name="Home_RunDeploy_Item1" xml:space="preserve">
-	<value>Run your app</value>
+    <value>Run your app</value>
   </data>
   <data name="Home_RunDeploy_Item2" xml:space="preserve">
-	<value>Run tools such as EF migrations and more</value>
+    <value>Run tools such as EF migrations and more</value>
   </data>
   <data name="Home_RunDeploy_Item3" xml:space="preserve">
-	<value>Publish to Microsoft Azure Web Apps</value>
+    <value>Publish to Microsoft Azure Web Apps</value>
   </data>
-
   <data name="About_Title" xml:space="preserve">
-	<value>About</value>
+    <value>About</value>
   </data>
   <data name="About_Info" xml:space="preserve">
-	<value>Use this area to provide additional information.</value>
+    <value>Use this area to provide additional information.</value>
   </data>
   <data name="Contact_Title" xml:space="preserve">
-	<value>Contact</value>
+    <value>Contact</value>
   </data>
   <data name="Contact_Support" xml:space="preserve">
-	<value>Support</value>
+    <value>Support</value>
   </data>
   <data name="Contact_Marketing" xml:space="preserve">
-	<value>Marketing</value>
+    <value>Marketing</value>
   </data>
-
   <data name="Controller_About_Message" xml:space="preserve">
-	<value>Your application description page.</value>
+    <value>Your application description page.</value>
   </data>
   <data name="Controller_Contact_Message" xml:space="preserve">
-	<value>Your contact page.</value>
+    <value>Your contact page.</value>
   </data>
-
   <data name="Account_AccessDenied_Title" xml:space="preserve">
-	<value>Access denied</value>
+    <value>Access denied</value>
   </data>
   <data name="Account_AccessDenied_Message" xml:space="preserve">
-	<value>You do not have access to this resource.</value>
+    <value>You do not have access to this resource.</value>
   </data>
   <data name="Account_ConfirmEmail_Title" xml:space="preserve">
-	<value>Confirm email</value>
+    <value>Confirm email</value>
   </data>
   <data name="Account_ConfirmEmail_Thanks" xml:space="preserve">
-	<value>Thank you for confirming your email.</value>
+    <value>Thank you for confirming your email.</value>
   </data>
   <data name="Account_Register_Title" xml:space="preserve">
-	<value>Register</value>
+    <value>Register</value>
   </data>
   <data name="Account_ExternalLogin_AssociateAccount" xml:space="preserve">
-	<value>Associate your {0} account.</value>
+    <value>Associate your {0} account.</value>
   </data>
   <data name="Account_ExternalLogin_SuccessMessage" xml:space="preserve">
-	<value><![CDATA[You've successfully authenticated with <strong>{0}</strong>.]]></value>
+    <value>You've successfully authenticated with &lt;strong&gt;{0}&lt;/strong&gt;.</value>
   </data>
   <data name="Account_ExternalLogin_EnterEmailAndRegister" xml:space="preserve">
-	<value>Please enter an email address for this site below and click the Register button to finish logging in.</value>
+    <value>Please enter an email address for this site below and click the Register button to finish logging in.</value>
   </data>
   <data name="Account_Register_Button" xml:space="preserve">
-	<value>Register</value>
+    <value>Register</value>
   </data>
   <data name="Account_ForgotPassword_Title" xml:space="preserve">
-	<value>Forgot your password?</value>
+    <value>Forgot your password?</value>
   </data>
   <data name="Account_ForgotPassword_EnterEmail" xml:space="preserve">
-	<value>Enter your email.</value>
+    <value>Enter your email.</value>
   </data>
   <data name="Account_Submit_Button" xml:space="preserve">
-	<value>Submit</value>
+    <value>Submit</value>
   </data>
   <data name="Account_ForgotPasswordConfirmation_Title" xml:space="preserve">
-	<value>Forgot password confirmation</value>
+    <value>Forgot password confirmation</value>
   </data>
   <data name="Account_ForgotPasswordConfirmation_Message" xml:space="preserve">
-	<value>Please check your email to reset your password.</value>
+    <value>Please check your email to reset your password.</value>
   </data>
   <data name="Account_Lockout_Title" xml:space="preserve">
-	<value>Locked out</value>
+    <value>Locked out</value>
   </data>
   <data name="Account_Lockout_Message" xml:space="preserve">
-	<value>This account has been locked out, please try again later.</value>
+    <value>This account has been locked out, please try again later.</value>
   </data>
   <data name="Account_Login_Title" xml:space="preserve">
-	<value>Log in</value>
+    <value>Log in</value>
   </data>
   <data name="Account_Login_UseLocalAccount" xml:space="preserve">
-	<value>Use a local account to log in.</value>
+    <value>Use a local account to log in.</value>
   </data>
   <data name="Account_Login_Button" xml:space="preserve">
-	<value>Log in</value>
+    <value>Log in</value>
   </data>
   <data name="Account_Login_ForgotPassword" xml:space="preserve">
-	<value>Forgot your password?</value>
+    <value>Forgot your password?</value>
   </data>
   <data name="Account_Login_RegisterNewUser" xml:space="preserve">
-	<value>Register as a new user?</value>
+    <value>Register as a new user?</value>
   </data>
   <data name="Account_Login_UseAnotherService" xml:space="preserve">
-	<value>Use another service to log in.</value>
+    <value>Use another service to log in.</value>
   </data>
   <data name="Account_Login_NoExternalServices" xml:space="preserve">
-	<value>There are no external authentication services configured. See</value>
+    <value>There are no external authentication services configured. See</value>
   </data>
   <data name="Account_Login_ThisArticle" xml:space="preserve">
-	<value>this article</value>
+    <value>this article</value>
   </data>
   <data name="Account_Login_NoExternalServices_Detail" xml:space="preserve">
-	<value>for details on setting up this ASP.NET application to support logging in via external services.</value>
+    <value>for details on setting up this ASP.NET application to support logging in via external services.</value>
   </data>
   <data name="Account_Login_ExternalProviderButtonTitle" xml:space="preserve">
-	<value>Log in using your {0} account</value>
+    <value>Log in using your {0} account</value>
   </data>
   <data name="Account_LoginWith2fa_Title" xml:space="preserve">
-	<value>Two-factor authentication</value>
+    <value>Two-factor authentication</value>
   </data>
   <data name="Account_LoginWith2fa_Description" xml:space="preserve">
-	<value>Your login is protected with an authenticator app. Enter your authenticator code below.</value>
+    <value>Your login is protected with an authenticator app. Enter your authenticator code below.</value>
   </data>
   <data name="Account_LoginWith2fa_NoAuthenticator" xml:space="preserve">
-	<value>Don't have access to your authenticator device? You can</value>
+    <value>Don't have access to your authenticator device? You can</value>
   </data>
   <data name="Account_LoginWith2fa_RecoveryLinkText" xml:space="preserve">
-	<value>log in with a recovery code</value>
+    <value>log in with a recovery code</value>
   </data>
   <data name="Account_LoginWithRecoveryCode_Title" xml:space="preserve">
-	<value>Recovery code verification</value>
+    <value>Recovery code verification</value>
   </data>
   <data name="Account_LoginWithRecoveryCode_Description" xml:space="preserve">
-	<value>You have requested to login with a recovery code. This login will not be remembered until you provide an authenticator app code at login or disable 2FA and login again.</value>
+    <value>You have requested to login with a recovery code. This login will not be remembered until you provide an authenticator app code at login or disable 2FA and login again.</value>
   </data>
   <data name="Account_Register_CreateNewAccount" xml:space="preserve">
-	<value>Create a new account.</value>
+    <value>Create a new account.</value>
   </data>
   <data name="Account_RegisterConfirmation_Title" xml:space="preserve">
-	<value>Registration complete</value>
+    <value>Registration complete</value>
   </data>
   <data name="Account_RegisterConfirmation_Thanks" xml:space="preserve">
-	<value>Thank you for registering.</value>
+    <value>Thank you for registering.</value>
   </data>
   <data name="Account_RegisterConfirmation_EmailSent" xml:space="preserve">
-	<value>A confirmation email has been sent to your registered email address. Please click the link in the email to activate your account.</value>
+    <value>A confirmation email has been sent to your registered email address. Please click the link in the email to activate your account.</value>
   </data>
   <data name="Account_RegisterConfirmation_CheckSpam" xml:space="preserve">
-	<value>If you do not receive the email, please check your spam folder.</value>
+    <value>If you do not receive the email, please check your spam folder.</value>
   </data>
   <data name="Account_ResetPassword_Title" xml:space="preserve">
-	<value>Reset password</value>
+    <value>Reset password</value>
   </data>
   <data name="Account_ResetPassword_Description" xml:space="preserve">
-	<value>Reset your password.</value>
+    <value>Reset your password.</value>
   </data>
   <data name="Account_ResetPassword_ResetButton" xml:space="preserve">
-	<value>Reset</value>
+    <value>Reset</value>
   </data>
   <data name="Account_ResetPasswordConfirmation_Title" xml:space="preserve">
-	<value>Reset password confirmation</value>
+    <value>Reset password confirmation</value>
   </data>
   <data name="Account_ResetPasswordConfirmation_Success" xml:space="preserve">
-	<value>Your password has been reset. Please</value>
+    <value>Your password has been reset. Please</value>
   </data>
   <data name="Account_ResetPasswordConfirmation_ClickHereToLogin" xml:space="preserve">
-	<value>click here to log in</value>
+    <value>click here to log in</value>
   </data>
   <data name="Account_SignedOut_Title" xml:space="preserve">
-	<value>Signed out</value>
+    <value>Signed out</value>
   </data>
   <data name="Account_SignedOut_Message" xml:space="preserve">
-	<value>You have successfully signed out.</value>
+    <value>You have successfully signed out.</value>
   </data>
   <data name="Account_Field_Email" xml:space="preserve">
-	<value>Email</value>
+    <value>Email</value>
   </data>
   <data name="Account_Field_Password" xml:space="preserve">
-	<value>Password</value>
+    <value>Password</value>
   </data>
   <data name="Account_Field_ConfirmPassword" xml:space="preserve">
-	<value>Confirm password</value>
+    <value>Confirm password</value>
   </data>
   <data name="Account_Field_RememberMe" xml:space="preserve">
-	<value>Remember me?</value>
+    <value>Remember me?</value>
   </data>
   <data name="Account_Field_AuthenticatorCode" xml:space="preserve">
-	<value>Authenticator code</value>
+    <value>Authenticator code</value>
   </data>
   <data name="Account_Field_RememberMachine" xml:space="preserve">
-	<value>Remember this machine</value>
+    <value>Remember this machine</value>
   </data>
   <data name="Account_Field_RecoveryCode" xml:space="preserve">
-	<value>Recovery code</value>
+    <value>Recovery code</value>
   </data>
   <data name="Validation_Required" xml:space="preserve">
-	<value>The {0} field is required.</value>
+    <value>The {0} field is required.</value>
   </data>
   <data name="Validation_InvalidEmail" xml:space="preserve">
-	<value>The {0} field is not a valid e-mail address.</value>
+    <value>The {0} field is not a valid e-mail address.</value>
   </data>
   <data name="Validation_StringLength" xml:space="preserve">
-	<value>The {0} must be at least {2} and at max {1} characters long.</value>
+    <value>The {0} must be at least {2} and at max {1} characters long.</value>
   </data>
   <data name="Validation_Compare" xml:space="preserve">
-	<value>The {0} and {1} do not match.</value>
+    <value>The {0} and {1} do not match.</value>
   </data>
   <data name="Common_Close" xml:space="preserve">
-	<value>Close</value>
+    <value>Close</value>
   </data>
   <data name="Manage_Profile_Title" xml:space="preserve">
-	<value>Profile</value>
+    <value>Profile</value>
   </data>
   <data name="Manage_Profile_Username" xml:space="preserve">
-	<value>Username</value>
+    <value>Username</value>
   </data>
   <data name="Manage_Profile_Email" xml:space="preserve">
-	<value>Email</value>
+    <value>Email</value>
   </data>
   <data name="Manage_Profile_PhoneNumber" xml:space="preserve">
-	<value>Phone number</value>
+    <value>Phone number</value>
   </data>
   <data name="Manage_Profile_SendVerificationEmail" xml:space="preserve">
-	<value>Send verification email</value>
+    <value>Send verification email</value>
   </data>
   <data name="Manage_Profile_Save" xml:space="preserve">
-	<value>Save</value>
+    <value>Save</value>
   </data>
   <data name="Manage_AccountManagement_Title" xml:space="preserve">
-	<value>Manage your account</value>
+    <value>Manage your account</value>
   </data>
   <data name="Manage_AccountManagement_Subtitle" xml:space="preserve">
-	<value>Change your account settings</value>
+    <value>Change your account settings</value>
   </data>
   <data name="Manage_Nav_Profile" xml:space="preserve">
-	<value>Profile</value>
+    <value>Profile</value>
   </data>
   <data name="Manage_Nav_Password" xml:space="preserve">
-	<value>Password</value>
+    <value>Password</value>
   </data>
   <data name="Manage_Nav_ExternalLogins" xml:space="preserve">
-	<value>External logins</value>
+    <value>External logins</value>
   </data>
   <data name="Manage_Nav_TwoFactorAuthentication" xml:space="preserve">
-	<value>Two-factor authentication</value>
+    <value>Two-factor authentication</value>
   </data>
   <data name="Manage_ChangePassword_Title" xml:space="preserve">
-	<value>Change password</value>
+    <value>Change password</value>
   </data>
   <data name="Manage_ChangePassword_NewPassword" xml:space="preserve">
-	<value>New password</value>
+    <value>New password</value>
   </data>
   <data name="Manage_ChangePassword_ConfirmPassword" xml:space="preserve">
-	<value>Confirm new password</value>
+    <value>Confirm new password</value>
   </data>
   <data name="Manage_ChangePassword_UpdateButton" xml:space="preserve">
-	<value>Update password</value>
+    <value>Update password</value>
   </data>
   <data name="Manage_SetPassword_Title" xml:space="preserve">
-	<value>Set password</value>
+    <value>Set password</value>
   </data>
   <data name="Manage_SetPassword_Description" xml:space="preserve">
-	<value>You do not have a local username/password for this site. Add a local account so you can log in without an external login.</value>
+    <value>You do not have a local username/password for this site. Add a local account so you can log in without an external login.</value>
   </data>
   <data name="Manage_SetPassword_NewPassword" xml:space="preserve">
-	<value>New password</value>
+    <value>New password</value>
   </data>
   <data name="Manage_SetPassword_ConfirmPassword" xml:space="preserve">
-	<value>Confirm new password</value>
+    <value>Confirm new password</value>
   </data>
   <data name="Manage_SetPassword_Button" xml:space="preserve">
-	<value>Set password</value>
+    <value>Set password</value>
   </data>
   <data name="Manage_Disable2fa_Title" xml:space="preserve">
-	<value>Disable two-factor authentication (2FA)</value>
+    <value>Disable two-factor authentication (2FA)</value>
   </data>
   <data name="Manage_Disable2fa_Warning" xml:space="preserve">
-	<value>This action only disables 2FA.</value>
+    <value>This action only disables 2FA.</value>
   </data>
   <data name="Manage_Disable2fa_Description_Part1" xml:space="preserve">
-	<value>Disabling 2FA does not change the keys used in authenticator apps. If you want to change the key,</value>
+    <value>Disabling 2FA does not change the keys used in authenticator apps. If you want to change the key,</value>
   </data>
   <data name="Manage_Disable2fa_ResetLink" xml:space="preserve">
-	<value>reset your authenticator keys</value>
+    <value>reset your authenticator keys</value>
   </data>
   <data name="Manage_Disable2fa_Button" xml:space="preserve">
-	<value>Disable 2FA</value>
+    <value>Disable 2FA</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_Title" xml:space="preserve">
-	<value>Generate two-factor authentication (2FA) recovery codes</value>
+    <value>Generate two-factor authentication (2FA) recovery codes</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_Warning" xml:space="preserve">
-	<value>This action generates new recovery codes.</value>
+    <value>This action generates new recovery codes.</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_Description" xml:space="preserve">
-	<value>If you lose your device and do not have the recovery codes, you will lose access to your account.</value>
+    <value>If you lose your device and do not have the recovery codes, you will lose access to your account.</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_DescriptionExtra" xml:space="preserve">
-	<value>Generating new recovery codes does not change the keys used in authenticator apps. If you want to change the key,</value>
+    <value>Generating new recovery codes does not change the keys used in authenticator apps. If you want to change the key,</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_ResetLink" xml:space="preserve">
-	<value>reset your authenticator keys</value>
+    <value>reset your authenticator keys</value>
   </data>
   <data name="Manage_GenerateRecoveryCodes_Button" xml:space="preserve">
-	<value>Generate recovery codes</value>
+    <value>Generate recovery codes</value>
   </data>
   <data name="Manage_ResetAuthenticator_Title" xml:space="preserve">
-	<value>Reset authenticator key</value>
+    <value>Reset authenticator key</value>
   </data>
   <data name="Manage_ResetAuthenticator_Warning" xml:space="preserve">
-	<value>If you reset your authenticator key, your authenticator app will not work until you reconfigure it.</value>
+    <value>If you reset your authenticator key, your authenticator app will not work until you reconfigure it.</value>
   </data>
   <data name="Manage_ResetAuthenticator_Description" xml:space="preserve">
-	<value>This process disables 2FA until you verify your authenticator app and also resets your 2FA recovery codes. If you do not complete authenticator app configuration, you may lose access to your account.</value>
+    <value>This process disables 2FA until you verify your authenticator app and also resets your 2FA recovery codes. If you do not complete authenticator app configuration, you may lose access to your account.</value>
   </data>
   <data name="Manage_ResetAuthenticator_Button" xml:space="preserve">
-	<value>Reset authenticator key</value>
+    <value>Reset authenticator key</value>
   </data>
   <data name="Manage_ShowRecoveryCodes_Title" xml:space="preserve">
-	<value>Recovery codes</value>
+    <value>Recovery codes</value>
   </data>
   <data name="Manage_ShowRecoveryCodes_Warning" xml:space="preserve">
-	<value>Put these codes in a safe place.</value>
+    <value>Put these codes in a safe place.</value>
   </data>
   <data name="Manage_ShowRecoveryCodes_Description" xml:space="preserve">
-	<value>If you lose your device and do not have the recovery codes, you will lose access to your account.</value>
+    <value>If you lose your device and do not have the recovery codes, you will lose access to your account.</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_Title" xml:space="preserve">
-	<value>Two-factor authentication</value>
+    <value>Two-factor authentication</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_NoCodes" xml:space="preserve">
-	<value>You have no recovery codes left.</value>
+    <value>You have no recovery codes left.</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_NoCodes_Message" xml:space="preserve">
-	<value>You must generate a new set of recovery codes before you can log in with a recovery code.</value>
+    <value>You must generate a new set of recovery codes before you can log in with a recovery code.</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_OneCodeLeft" xml:space="preserve">
-	<value>You have 1 recovery code left.</value>
+    <value>You have 1 recovery code left.</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_OneCodeLeft_Message" xml:space="preserve">
-	<value>You can generate a new set of recovery codes.</value>
+    <value>You can generate a new set of recovery codes.</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_CodesLeft" xml:space="preserve">
-	<value>You have {0} recovery codes left.</value>
+    <value>You have {0} recovery codes left.</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_CodesLeft_Message" xml:space="preserve">
-	<value>You should generate a new set of recovery codes.</value>
+    <value>You should generate a new set of recovery codes.</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_Disable2FA" xml:space="preserve">
-	<value>Disable 2FA</value>
+    <value>Disable 2FA</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_ResetRecoveryCodes" xml:space="preserve">
-	<value>Reset recovery codes</value>
+    <value>Reset recovery codes</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_AuthenticatorApp" xml:space="preserve">
-	<value>Authenticator app</value>
+    <value>Authenticator app</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_AddAuthenticator" xml:space="preserve">
-	<value>Add authenticator app</value>
+    <value>Add authenticator app</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_ConfigureAuthenticator" xml:space="preserve">
-	<value>Configure authenticator app</value>
+    <value>Configure authenticator app</value>
   </data>
   <data name="Manage_TwoFactorAuthentication_ResetAuthenticatorKey" xml:space="preserve">
-	<value>Reset authenticator key</value>
+    <value>Reset authenticator key</value>
   </data>
   <data name="Manage_EnableAuthenticator_Title" xml:space="preserve">
-	<value>Enable authenticator</value>
+    <value>Enable authenticator</value>
   </data>
   <data name="Manage_EnableAuthenticator_Intro" xml:space="preserve">
-	<value>To use an authenticator app, follow these steps:</value>
+    <value>To use an authenticator app, follow these steps:</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction_Part1" xml:space="preserve">
-	<value>Download a two-factor authenticator app such as Microsoft Authenticator for</value>
+    <value>Download a two-factor authenticator app such as Microsoft Authenticator for</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction_Or" xml:space="preserve">
-	<value>or</value>
+    <value>or</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction_Part2" xml:space="preserve">
-	<value>for</value>
+    <value>for</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction_And" xml:space="preserve">
-	<value>and</value>
+    <value>and</value>
   </data>
   <data name="Manage_EnableAuthenticator_ScanPrompt_Part1" xml:space="preserve">
-	<value>Scan the QR code or enter this key</value>
+    <value>Scan the QR code or enter this key</value>
   </data>
   <data name="Manage_EnableAuthenticator_ScanPrompt_Part2" xml:space="preserve">
-	<value>into your authenticator app. Spaces and casing do not matter.</value>
+    <value>into your authenticator app. Spaces and casing do not matter.</value>
   </data>
   <data name="Manage_EnableAuthenticator_QRHint" xml:space="preserve">
-	<value>To enable QR code generation, please read our</value>
+    <value>To enable QR code generation, please read our</value>
   </data>
   <data name="Manage_EnableAuthenticator_Documentation" xml:space="preserve">
-	<value>documentation</value>
+    <value>documentation</value>
   </data>
   <data name="Manage_EnableAuthenticator_ConfirmationPrompt" xml:space="preserve">
-	<value>Once you have scanned the QR code or entered the key above, your authenticator app will provide you with a unique code. Enter the code in the confirmation box below.</value>
+    <value>Once you have scanned the QR code or entered the key above, your authenticator app will provide you with a unique code. Enter the code in the confirmation box below.</value>
   </data>
   <data name="Manage_EnableAuthenticator_VerificationCode" xml:space="preserve">
-	<value>Verification code</value>
+    <value>Verification code</value>
   </data>
   <data name="Manage_EnableAuthenticator_VerifyButton" xml:space="preserve">
-	<value>Verify</value>
+    <value>Verify</value>
   </data>
   <data name="Manage_ExternalLogins_Title" xml:space="preserve">
-	<value>Manage your external logins</value>
+    <value>Manage your external logins</value>
   </data>
   <data name="Manage_ExternalLogins_Registered" xml:space="preserve">
-	<value>Registered Logins</value>
+    <value>Registered Logins</value>
   </data>
   <data name="Manage_ExternalLogins_Remove" xml:space="preserve">
-	<value>Remove</value>
+    <value>Remove</value>
   </data>
   <data name="Manage_ExternalLogins_RemoveButtonTitle" xml:space="preserve">
-	<value>Remove this {0} login from your account</value>
+    <value>Remove this {0} login from your account</value>
   </data>
   <data name="Manage_ExternalLogins_AddService" xml:space="preserve">
-	<value>Add another service to log in.</value>
+    <value>Add another service to log in.</value>
   </data>
   <data name="Manage_ExternalLogins_ProviderButtonTitle" xml:space="preserve">
-	<value>Log in using your {0} account</value>
+    <value>Log in using your {0} account</value>
   </data>
 </root>

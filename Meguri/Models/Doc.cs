@@ -9,7 +9,7 @@ namespace Meguri.Models {
 
     [Table("Docs")]
     [Index(nameof(ParentId))]
-    [Index(nameof(CategoryId))]
+    [Index(nameof(FandomId))]
     [Index(nameof(Created))]
     [Index(nameof(Updated))]
     public class Doc {
@@ -18,15 +18,15 @@ namespace Meguri.Models {
         public string Name { get; set; }
         public string Text { get; set; }
         public int? ParentId { get; set; }
-        public int CategoryId { get; set; }
+        public int FandomId { get; set; }
         public bool Sexual  { get; set; } = false;
         public bool Violence  { get; set; } = false;
         public bool IsPublic { get; set; } = false;
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
-        // CategoryとDocは一対多の関係
-        public Category Category { get; set; }
+        // FandomとDocは一対多の関係
+        public Fandom Fandom { get; set; }
 
         // DocとTagは中間テーブルを介した多対多の関係
         public ICollection<DocTag> DocTags { get; set; } = new List<DocTag>();
