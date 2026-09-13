@@ -3,6 +3,7 @@ using System;
 using Meguri.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Meguri.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260913082515_RenameCategoryToFandom")]
+    partial class RenameCategoryToFandom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,11 +97,11 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("FandomId")
-                        .HasColumnType("integer");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
@@ -126,9 +129,9 @@ namespace Meguri.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("FandomId");
+                    b.HasIndex("Created");
 
                     b.HasIndex("ParentId");
 
@@ -404,13 +407,13 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.Doc", b =>
                 {
-                    b.HasOne("Meguri.Models.Fandom", "Fandom")
+                    b.HasOne("Meguri.Models.Fandom", "Category")
                         .WithMany("Docs")
-                        .HasForeignKey("FandomId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Fandom");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Meguri.Models.DocImage", b =>

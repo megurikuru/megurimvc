@@ -5,8 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Meguri.Models {
 
-    [Table("Categories")]
-    public class Category {
+    [Table("Fandoms")]
+    public class Fandom {
         public int Id { get; set; }
         public string Name{ get; set; }
 
