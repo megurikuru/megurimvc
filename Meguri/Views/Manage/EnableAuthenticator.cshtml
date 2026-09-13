@@ -10,18 +10,12 @@
     <ol class="list-group list-group-numbered">
         <li class="list-group-item">
             <p>
-                @SharedLocalizer["Manage_EnableAuthenticator_AppInstruction_Part1"]
-                <a href="https://go.microsoft.com/fwlink/?Linkid=825071">Windows Phone</a>,
-                <a href="https://go.microsoft.com/fwlink/?Linkid=825072">Android</a> and
-                <a href="https://go.microsoft.com/fwlink/?Linkid=825073">iOS</a> @SharedLocalizer["Manage_EnableAuthenticator_AppInstruction_Or"]
-                Google Authenticator @SharedLocalizer["Manage_EnableAuthenticator_AppInstruction_Part2"]
-                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&amp;hl=en">Android</a> @SharedLocalizer["Manage_EnableAuthenticator_AppInstruction_And"]
-                <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>.
+                @SharedLocalizer["Manage_EnableAuthenticator_AppInstruction"]
             </p>
         </li>
         <li class="list-group-item">
             <p>@SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part1"] <kbd>@Model.SharedKey</kbd> @SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part2"]</p>
-            <div class="alert alert-info">@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div>
+            @* <div class="alert alert-info">@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div> *@
             <div id="qrCode"></div>
             <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
         </li>

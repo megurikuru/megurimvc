@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Meguri.Models.ManageViewModels {
     public class EnableAuthenticatorViewModel {
-        [Required]
-        [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Validation_Required")]
+        [StringLength(7, ErrorMessage = "Validation_StringLength", MinimumLength = 6)]
         [DataType(DataType.Text)]
-        [Display(Name = "Verification Code")]
+        [Display(Name = "Manage_EnableAuthenticator_VerificationCode")]
         public string Code { get; set; }
 
         [BindNever]

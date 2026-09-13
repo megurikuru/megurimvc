@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 namespace Meguri.Models.AccountViewModels {
     public class RegisterViewModel {
         [Required(ErrorMessage = "Validation_Required")]
+        [StringLength(256, ErrorMessage = "Validation_StringLength")]
+        [Display(Name = "Account_Field_UserName")]
+        public string UserName { get; set; }
+
+        [Required(ErrorMessage = "Validation_Required")]
         [EmailAddress(ErrorMessage = "Validation_InvalidEmail")]
         [Display(Name = "Account_Field_Email")]
         public string Email { get; set; }

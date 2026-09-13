@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 namespace Meguri.Models.ManageViewModels {
     public class IndexViewModel {
+        [Required(ErrorMessage = "Validation_Required")]
+        [StringLength(256, ErrorMessage = "Validation_StringLength")]
+        [Display(Name = "Manage_Profile_Username")]
         public string Username { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Validation_Required")]
+        [EmailAddress(ErrorMessage = "Validation_InvalidEmail")]
+        [Display(Name = "Manage_Profile_Email")]
         public string Email { get; set; }
 
         [Phone]
-        [Display(Name = "Phone number")]
+        [Display(Name = "Manage_Profile_PhoneNumber")]
         public string PhoneNumber { get; set; }
 
         public string StatusMessage { get; set; }
