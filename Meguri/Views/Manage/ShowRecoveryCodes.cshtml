@@ -1,6 +1,6 @@
 ﻿@model ShowRecoveryCodesViewModel
 @{
-    ViewData["Title"] = "Recovery codes";
+    ViewData["Title"] = SharedLocalizer["Manage_ShowRecoveryCodes_Title"];
     ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
@@ -8,10 +8,10 @@
 <div class="alert alert-warning" role="alert">
     <p>
         <span class="me-2">⚠️</span>
-        <strong>Put these codes in a safe place.</strong>
+        <strong>@SharedLocalizer["Manage_ShowRecoveryCodes_Warning"]</strong>
     </p>
     <p>
-        If you lose your device and don't have the recovery codes you will lose access to your account.
+        @SharedLocalizer["Manage_ShowRecoveryCodes_Description"]
     </p>
 </div>
 <div class="row">

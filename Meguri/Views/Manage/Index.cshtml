@@ -1,6 +1,6 @@
 ﻿@model IndexViewModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = SharedLocalizer["Manage_Profile_Title"];
     ViewData.AddActivePage(ManageNavPages.Index);
 }
 
@@ -11,11 +11,11 @@
         <form method="post">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="mb-3">
-                <label asp-for="Username" class="form-label"></label>
+                <label asp-for="Username" class="form-label">@SharedLocalizer["Manage_Profile_Username"]</label>
                 <input asp-for="Username" class="form-control" disabled />
             </div>
             <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
+                <label asp-for="Email" class="form-label">@SharedLocalizer["Manage_Profile_Email"]</label>
                 @if (Model.IsEmailConfirmed)
                 {
                     <div class="input-group">
@@ -26,16 +26,16 @@
                 else
                 {
                     <input asp-for="Email" class="form-control" />
-                    <button asp-action="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                    <button asp-action="SendVerificationEmail" class="btn btn-link">@SharedLocalizer["Manage_Profile_SendVerificationEmail"]</button>
                 }
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="PhoneNumber" class="form-label"></label>
+                <label asp-for="PhoneNumber" class="form-label">@SharedLocalizer["Manage_Profile_PhoneNumber"]</label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
-            <button type="submit" class="btn btn-secondary">Save</button>
+            <button type="submit" class="btn btn-secondary">@SharedLocalizer["Manage_Profile_Save"]</button>
         </form>
     </div>
 </div>

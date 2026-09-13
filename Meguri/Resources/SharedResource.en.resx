@@ -366,4 +366,220 @@
   <data name="Validation_Compare" xml:space="preserve">
 	<value>The {0} and {1} do not match.</value>
   </data>
+  <data name="Common_Close" xml:space="preserve">
+	<value>Close</value>
+  </data>
+  <data name="Manage_Profile_Title" xml:space="preserve">
+	<value>Profile</value>
+  </data>
+  <data name="Manage_Profile_Username" xml:space="preserve">
+	<value>Username</value>
+  </data>
+  <data name="Manage_Profile_Email" xml:space="preserve">
+	<value>Email</value>
+  </data>
+  <data name="Manage_Profile_PhoneNumber" xml:space="preserve">
+	<value>Phone number</value>
+  </data>
+  <data name="Manage_Profile_SendVerificationEmail" xml:space="preserve">
+	<value>Send verification email</value>
+  </data>
+  <data name="Manage_Profile_Save" xml:space="preserve">
+	<value>Save</value>
+  </data>
+  <data name="Manage_AccountManagement_Title" xml:space="preserve">
+	<value>Manage your account</value>
+  </data>
+  <data name="Manage_AccountManagement_Subtitle" xml:space="preserve">
+	<value>Change your account settings</value>
+  </data>
+  <data name="Manage_Nav_Profile" xml:space="preserve">
+	<value>Profile</value>
+  </data>
+  <data name="Manage_Nav_Password" xml:space="preserve">
+	<value>Password</value>
+  </data>
+  <data name="Manage_Nav_ExternalLogins" xml:space="preserve">
+	<value>External logins</value>
+  </data>
+  <data name="Manage_Nav_TwoFactorAuthentication" xml:space="preserve">
+	<value>Two-factor authentication</value>
+  </data>
+  <data name="Manage_ChangePassword_Title" xml:space="preserve">
+	<value>Change password</value>
+  </data>
+  <data name="Manage_ChangePassword_NewPassword" xml:space="preserve">
+	<value>New password</value>
+  </data>
+  <data name="Manage_ChangePassword_ConfirmPassword" xml:space="preserve">
+	<value>Confirm new password</value>
+  </data>
+  <data name="Manage_ChangePassword_UpdateButton" xml:space="preserve">
+	<value>Update password</value>
+  </data>
+  <data name="Manage_SetPassword_Title" xml:space="preserve">
+	<value>Set password</value>
+  </data>
+  <data name="Manage_SetPassword_Description" xml:space="preserve">
+	<value>You do not have a local username/password for this site. Add a local account so you can log in without an external login.</value>
+  </data>
+  <data name="Manage_SetPassword_NewPassword" xml:space="preserve">
+	<value>New password</value>
+  </data>
+  <data name="Manage_SetPassword_ConfirmPassword" xml:space="preserve">
+	<value>Confirm new password</value>
+  </data>
+  <data name="Manage_SetPassword_Button" xml:space="preserve">
+	<value>Set password</value>
+  </data>
+  <data name="Manage_Disable2fa_Title" xml:space="preserve">
+	<value>Disable two-factor authentication (2FA)</value>
+  </data>
+  <data name="Manage_Disable2fa_Warning" xml:space="preserve">
+	<value>This action only disables 2FA.</value>
+  </data>
+  <data name="Manage_Disable2fa_Description_Part1" xml:space="preserve">
+	<value>Disabling 2FA does not change the keys used in authenticator apps. If you want to change the key,</value>
+  </data>
+  <data name="Manage_Disable2fa_ResetLink" xml:space="preserve">
+	<value>reset your authenticator keys</value>
+  </data>
+  <data name="Manage_Disable2fa_Button" xml:space="preserve">
+	<value>Disable 2FA</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_Title" xml:space="preserve">
+	<value>Generate two-factor authentication (2FA) recovery codes</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_Warning" xml:space="preserve">
+	<value>This action generates new recovery codes.</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_Description" xml:space="preserve">
+	<value>If you lose your device and do not have the recovery codes, you will lose access to your account.</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_DescriptionExtra" xml:space="preserve">
+	<value>Generating new recovery codes does not change the keys used in authenticator apps. If you want to change the key,</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_ResetLink" xml:space="preserve">
+	<value>reset your authenticator keys</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_Button" xml:space="preserve">
+	<value>Generate recovery codes</value>
+  </data>
+  <data name="Manage_ResetAuthenticator_Title" xml:space="preserve">
+	<value>Reset authenticator key</value>
+  </data>
+  <data name="Manage_ResetAuthenticator_Warning" xml:space="preserve">
+	<value>If you reset your authenticator key, your authenticator app will not work until you reconfigure it.</value>
+  </data>
+  <data name="Manage_ResetAuthenticator_Description" xml:space="preserve">
+	<value>This process disables 2FA until you verify your authenticator app and also resets your 2FA recovery codes. If you do not complete authenticator app configuration, you may lose access to your account.</value>
+  </data>
+  <data name="Manage_ResetAuthenticator_Button" xml:space="preserve">
+	<value>Reset authenticator key</value>
+  </data>
+  <data name="Manage_ShowRecoveryCodes_Title" xml:space="preserve">
+	<value>Recovery codes</value>
+  </data>
+  <data name="Manage_ShowRecoveryCodes_Warning" xml:space="preserve">
+	<value>Put these codes in a safe place.</value>
+  </data>
+  <data name="Manage_ShowRecoveryCodes_Description" xml:space="preserve">
+	<value>If you lose your device and do not have the recovery codes, you will lose access to your account.</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_Title" xml:space="preserve">
+	<value>Two-factor authentication</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_NoCodes" xml:space="preserve">
+	<value>You have no recovery codes left.</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_NoCodes_Message" xml:space="preserve">
+	<value>You must generate a new set of recovery codes before you can log in with a recovery code.</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_OneCodeLeft" xml:space="preserve">
+	<value>You have 1 recovery code left.</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_OneCodeLeft_Message" xml:space="preserve">
+	<value>You can generate a new set of recovery codes.</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_CodesLeft" xml:space="preserve">
+	<value>You have {0} recovery codes left.</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_CodesLeft_Message" xml:space="preserve">
+	<value>You should generate a new set of recovery codes.</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_Disable2FA" xml:space="preserve">
+	<value>Disable 2FA</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_ResetRecoveryCodes" xml:space="preserve">
+	<value>Reset recovery codes</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_AuthenticatorApp" xml:space="preserve">
+	<value>Authenticator app</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_AddAuthenticator" xml:space="preserve">
+	<value>Add authenticator app</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_ConfigureAuthenticator" xml:space="preserve">
+	<value>Configure authenticator app</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_ResetAuthenticatorKey" xml:space="preserve">
+	<value>Reset authenticator key</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_Title" xml:space="preserve">
+	<value>Enable authenticator</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_Intro" xml:space="preserve">
+	<value>To use an authenticator app, follow these steps:</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_AppInstruction_Part1" xml:space="preserve">
+	<value>Download a two-factor authenticator app such as Microsoft Authenticator for</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_AppInstruction_Or" xml:space="preserve">
+	<value>or</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_AppInstruction_Part2" xml:space="preserve">
+	<value>for</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_AppInstruction_And" xml:space="preserve">
+	<value>and</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_ScanPrompt_Part1" xml:space="preserve">
+	<value>Scan the QR code or enter this key</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_ScanPrompt_Part2" xml:space="preserve">
+	<value>into your authenticator app. Spaces and casing do not matter.</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_QRHint" xml:space="preserve">
+	<value>To enable QR code generation, please read our</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_Documentation" xml:space="preserve">
+	<value>documentation</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_ConfirmationPrompt" xml:space="preserve">
+	<value>Once you have scanned the QR code or entered the key above, your authenticator app will provide you with a unique code. Enter the code in the confirmation box below.</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_VerificationCode" xml:space="preserve">
+	<value>Verification code</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_VerifyButton" xml:space="preserve">
+	<value>Verify</value>
+  </data>
+  <data name="Manage_ExternalLogins_Title" xml:space="preserve">
+	<value>Manage your external logins</value>
+  </data>
+  <data name="Manage_ExternalLogins_Registered" xml:space="preserve">
+	<value>Registered Logins</value>
+  </data>
+  <data name="Manage_ExternalLogins_Remove" xml:space="preserve">
+	<value>Remove</value>
+  </data>
+  <data name="Manage_ExternalLogins_RemoveButtonTitle" xml:space="preserve">
+	<value>Remove this {0} login from your account</value>
+  </data>
+  <data name="Manage_ExternalLogins_AddService" xml:space="preserve">
+	<value>Add another service to log in.</value>
+  </data>
+  <data name="Manage_ExternalLogins_ProviderButtonTitle" xml:space="preserve">
+	<value>Log in using your {0} account</value>
+  </data>
 </root>

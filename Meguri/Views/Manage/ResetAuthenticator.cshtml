@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Reset authenticator key";
+    ViewData["Title"] = SharedLocalizer["Manage_ResetAuthenticator_Title"];
     ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
@@ -7,15 +7,14 @@
 <div class="alert alert-warning" role="alert">
     <p>
         <span class="me-2">⚠️</span>
-        <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</strong>
+        <strong>@SharedLocalizer["Manage_ResetAuthenticator_Warning"]</strong>
     </p>
     <p>
-        This process disables 2FA until you verify your authenticator app and will also reset your 2FA recovery codes.
-        If you do not complete your authenticator app configuration you may lose access to your account.
+        @SharedLocalizer["Manage_ResetAuthenticator_Description"]
     </p>
 </div>
 <div>
     <form asp-action="ResetAuthenticator" method="post">
-        <button class="btn btn-danger" type="submit">Reset authenticator key</button>
+        <button class="btn btn-danger" type="submit">@SharedLocalizer["Manage_ResetAuthenticator_Button"]</button>
     </form>
 </div>
