@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Disable two-factor authentication (2FA)";
+    ViewData["Title"] = SharedLocalizer["Manage_Disable2fa_Title"];
     ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
@@ -8,17 +8,16 @@
 <div class="alert alert-warning" role="alert">
     <p>
         <span class="me-2">⚠️</span>
-        <strong>This action only disables 2FA.</strong>
+        <strong>@SharedLocalizer["Manage_Disable2fa_Warning"]</strong>
     </p>
     <p>
-        Disabling 2FA does not change the keys used in authenticator apps. If you wish to change the key
-        used in an authenticator app you should <a asp-action="ResetAuthenticatorWarning">reset your
-        authenticator keys.</a>
+        @SharedLocalizer["Manage_Disable2fa_Description_Part1"]
+        <a asp-action="ResetAuthenticatorWarning">@SharedLocalizer["Manage_Disable2fa_ResetLink"]</a>
     </p>
 </div>
 
 <div>
     <form asp-action="Disable2fa" method="post">
-        <button class="btn btn-danger" type="submit">Disable 2FA</button>
+        <button class="btn btn-danger" type="submit">@SharedLocalizer["Manage_Disable2fa_Button"]</button>
     </form>
 </div>

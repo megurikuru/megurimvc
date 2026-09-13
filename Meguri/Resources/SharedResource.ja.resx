@@ -366,4 +366,220 @@
   <data name="Validation_Compare" xml:space="preserve">
 	<value>{0} と {1} が一致しません。</value>
   </data>
+  <data name="Common_Close" xml:space="preserve">
+	<value>閉じる</value>
+  </data>
+  <data name="Manage_Profile_Title" xml:space="preserve">
+	<value>プロフィール</value>
+  </data>
+  <data name="Manage_Profile_Username" xml:space="preserve">
+	<value>ユーザー名</value>
+  </data>
+  <data name="Manage_Profile_Email" xml:space="preserve">
+	<value>メールアドレス</value>
+  </data>
+  <data name="Manage_Profile_PhoneNumber" xml:space="preserve">
+	<value>電話番号</value>
+  </data>
+  <data name="Manage_Profile_SendVerificationEmail" xml:space="preserve">
+	<value>確認メールを送信</value>
+  </data>
+  <data name="Manage_Profile_Save" xml:space="preserve">
+	<value>保存</value>
+  </data>
+  <data name="Manage_AccountManagement_Title" xml:space="preserve">
+	<value>アカウント管理</value>
+  </data>
+  <data name="Manage_AccountManagement_Subtitle" xml:space="preserve">
+	<value>アカウント設定を変更</value>
+  </data>
+  <data name="Manage_Nav_Profile" xml:space="preserve">
+	<value>プロフィール</value>
+  </data>
+  <data name="Manage_Nav_Password" xml:space="preserve">
+	<value>パスワード</value>
+  </data>
+  <data name="Manage_Nav_ExternalLogins" xml:space="preserve">
+	<value>外部ログイン</value>
+  </data>
+  <data name="Manage_Nav_TwoFactorAuthentication" xml:space="preserve">
+	<value>二段階認証</value>
+  </data>
+  <data name="Manage_ChangePassword_Title" xml:space="preserve">
+	<value>パスワード変更</value>
+  </data>
+  <data name="Manage_ChangePassword_NewPassword" xml:space="preserve">
+	<value>新しいパスワード</value>
+  </data>
+  <data name="Manage_ChangePassword_ConfirmPassword" xml:space="preserve">
+	<value>新しいパスワード（確認）</value>
+  </data>
+  <data name="Manage_ChangePassword_UpdateButton" xml:space="preserve">
+	<value>パスワードを更新</value>
+  </data>
+  <data name="Manage_SetPassword_Title" xml:space="preserve">
+	<value>パスワードを設定</value>
+  </data>
+  <data name="Manage_SetPassword_Description" xml:space="preserve">
+	<value>このサイトにはローカルのユーザー名/パスワードがありません。外部ログインなしでログインできるように、ローカルアカウントを追加してください。</value>
+  </data>
+  <data name="Manage_SetPassword_NewPassword" xml:space="preserve">
+	<value>新しいパスワード</value>
+  </data>
+  <data name="Manage_SetPassword_ConfirmPassword" xml:space="preserve">
+	<value>新しいパスワード（確認）</value>
+  </data>
+  <data name="Manage_SetPassword_Button" xml:space="preserve">
+	<value>パスワードを設定</value>
+  </data>
+  <data name="Manage_Disable2fa_Title" xml:space="preserve">
+	<value>二段階認証 (2FA) を無効にする</value>
+  </data>
+  <data name="Manage_Disable2fa_Warning" xml:space="preserve">
+	<value>この操作は 2FA だけを無効化します。</value>
+  </data>
+  <data name="Manage_Disable2fa_Description_Part1" xml:space="preserve">
+	<value>2FA を無効化しても、認証アプリで使われているキーは変更されません。鍵を変更したい場合は</value>
+  </data>
+  <data name="Manage_Disable2fa_ResetLink" xml:space="preserve">
+	<value>認証キーをリセット</value>
+  </data>
+  <data name="Manage_Disable2fa_Button" xml:space="preserve">
+	<value>2FA を無効化</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_Title" xml:space="preserve">
+	<value>二段階認証 (2FA) の回復コードを生成</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_Warning" xml:space="preserve">
+	<value>この操作により、新しい回復コードが生成されます。</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_Description" xml:space="preserve">
+	<value>端末を紛失し、回復コードがない場合は、アカウントへのアクセス権を失います。</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_DescriptionExtra" xml:space="preserve">
+	<value>新しい回復コードを生成しても、認証アプリで使われているキーは変更されません。鍵を変更したい場合は</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_ResetLink" xml:space="preserve">
+	<value>認証キーをリセット</value>
+  </data>
+  <data name="Manage_GenerateRecoveryCodes_Button" xml:space="preserve">
+	<value>回復コードを生成</value>
+  </data>
+  <data name="Manage_ResetAuthenticator_Title" xml:space="preserve">
+	<value>認証キーをリセット</value>
+  </data>
+  <data name="Manage_ResetAuthenticator_Warning" xml:space="preserve">
+	<value>認証キーをリセットすると、認証アプリは再設定を行うまで動作しません。</value>
+  </data>
+  <data name="Manage_ResetAuthenticator_Description" xml:space="preserve">
+	<value>この処理では、認証アプリを確認するまで 2FA が無効化され、2FA の回復コードもリセットされます。認証アプリの設定を完了しないと、アカウントにアクセスできなくなる場合があります。</value>
+  </data>
+  <data name="Manage_ResetAuthenticator_Button" xml:space="preserve">
+	<value>認証キーをリセット</value>
+  </data>
+  <data name="Manage_ShowRecoveryCodes_Title" xml:space="preserve">
+	<value>回復コード</value>
+  </data>
+  <data name="Manage_ShowRecoveryCodes_Warning" xml:space="preserve">
+	<value>これらのコードは安全な場所に保管してください。</value>
+  </data>
+  <data name="Manage_ShowRecoveryCodes_Description" xml:space="preserve">
+	<value>端末を紛失し、回復コードがない場合は、アカウントへのアクセス権を失います。</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_Title" xml:space="preserve">
+	<value>二段階認証</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_NoCodes" xml:space="preserve">
+	<value>回復コードが残っていません。</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_NoCodes_Message" xml:space="preserve">
+	<value>回復コードを使ってログインする前に、新しい回復コードを生成してください。</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_OneCodeLeft" xml:space="preserve">
+	<value>回復コードが 1 件残っています。</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_OneCodeLeft_Message" xml:space="preserve">
+	<value>新しい回復コードを生成できます。</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_CodesLeft" xml:space="preserve">
+	<value>回復コードが {0} 件残っています。</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_CodesLeft_Message" xml:space="preserve">
+	<value>新しい回復コードを生成することをお勧めします。</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_Disable2FA" xml:space="preserve">
+	<value>2FA を無効化</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_ResetRecoveryCodes" xml:space="preserve">
+	<value>回復コードをリセット</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_AuthenticatorApp" xml:space="preserve">
+	<value>認証アプリ</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_AddAuthenticator" xml:space="preserve">
+	<value>認証アプリを追加</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_ConfigureAuthenticator" xml:space="preserve">
+	<value>認証アプリを設定</value>
+  </data>
+  <data name="Manage_TwoFactorAuthentication_ResetAuthenticatorKey" xml:space="preserve">
+	<value>認証キーをリセット</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_Title" xml:space="preserve">
+	<value>認証アプリを有効化</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_Intro" xml:space="preserve">
+	<value>認証アプリを使うには、次の手順に従ってください。</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_AppInstruction_Part1" xml:space="preserve">
+	<value>Microsoft Authenticator などの二段階認証アプリをダウンロードして</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_AppInstruction_Or" xml:space="preserve">
+	<value>または</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_AppInstruction_Part2" xml:space="preserve">
+	<value>を使います。Google Authenticator は</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_AppInstruction_And" xml:space="preserve">
+	<value>と</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_ScanPrompt_Part1" xml:space="preserve">
+	<value>QR コードを読み取るか、このキー</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_ScanPrompt_Part2" xml:space="preserve">
+	<value>を二段階認証アプリに入力してください。スペースや大文字小文字は区別されません。</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_QRHint" xml:space="preserve">
+	<value>QR コード生成を有効にするには、</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_Documentation" xml:space="preserve">
+	<value>ドキュメント</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_ConfirmationPrompt" xml:space="preserve">
+	<value>QR コードを読み取ったり、上記のキーを入力した後、二段階認証アプリが一意のコードを提供します。下の確認ボックスにそのコードを入力してください。</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_VerificationCode" xml:space="preserve">
+	<value>確認コード</value>
+  </data>
+  <data name="Manage_EnableAuthenticator_VerifyButton" xml:space="preserve">
+	<value>確認</value>
+  </data>
+  <data name="Manage_ExternalLogins_Title" xml:space="preserve">
+	<value>外部ログインの管理</value>
+  </data>
+  <data name="Manage_ExternalLogins_Registered" xml:space="preserve">
+	<value>登録済みログイン</value>
+  </data>
+  <data name="Manage_ExternalLogins_Remove" xml:space="preserve">
+	<value>削除</value>
+  </data>
+  <data name="Manage_ExternalLogins_RemoveButtonTitle" xml:space="preserve">
+	<value>この {0} ログインをアカウントから削除</value>
+  </data>
+  <data name="Manage_ExternalLogins_AddService" xml:space="preserve">
+	<value>ログインに別のサービスを追加</value>
+  </data>
+  <data name="Manage_ExternalLogins_ProviderButtonTitle" xml:space="preserve">
+	<value>{0} アカウントを使ってログイン</value>
+  </data>
 </root>
