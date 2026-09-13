@@ -47,5 +47,27 @@
 </div>
 
 @section Scripts {
+    <script src="~/lib/qrcodejs/qrcode.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const qrCodeElement = document.getElementById("qrCode");
+            const qrCodeDataElement = document.getElementById("qrCodeData");
+
+            if (qrCodeElement && qrCodeDataElement) {
+                const url = qrCodeDataElement.dataset.url;
+                if (url) {
+                    new QRCode(qrCodeElement, {
+                        text: url,
+                        width: 220,
+                        height: 220,
+                        colorDark: "#000000",
+                        colorLight: "#ffffff",
+                        correctLevel: QRCode.CorrectLevel.H
+                    });
+                }
+            }
+        });
+    </script>
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
+
