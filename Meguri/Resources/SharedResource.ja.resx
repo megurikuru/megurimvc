@@ -420,6 +420,9 @@
   <data name="Account_SignedOut_Message" xml:space="preserve">
     <value>正常にサインアウトしました。</value>
   </data>
+  <data name="Account_Field_UserName" xml:space="preserve">
+    <value>ユーザー名</value>
+  </data>
   <data name="Account_Field_Email" xml:space="preserve">
     <value>メールアドレス</value>
   </data>
@@ -618,17 +621,8 @@
   <data name="Manage_EnableAuthenticator_Intro" xml:space="preserve">
     <value>認証アプリを使うには、次の手順に従ってください。</value>
   </data>
-  <data name="Manage_EnableAuthenticator_AppInstruction_Part1" xml:space="preserve">
-    <value>Microsoft Authenticator などの二段階認証アプリをダウンロードして</value>
-  </data>
-  <data name="Manage_EnableAuthenticator_AppInstruction_Or" xml:space="preserve">
-    <value>または</value>
-  </data>
-  <data name="Manage_EnableAuthenticator_AppInstruction_Part2" xml:space="preserve">
-    <value>を使います。Google Authenticator は</value>
-  </data>
-  <data name="Manage_EnableAuthenticator_AppInstruction_And" xml:space="preserve">
-    <value>と</value>
+  <data name="Manage_EnableAuthenticator_AppInstruction" xml:space="preserve">
+    <value>スマートフォンにGoogle Authenticator または Microsoft Authenticator などの二段階認証アプリをインストールしてください。</value>
   </data>
   <data name="Manage_EnableAuthenticator_ScanPrompt_Part1" xml:space="preserve">
     <value>QR コードを読み取るか、このキー</value>

@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Meguri.Models.ManageViewModels {
     public class ChangePasswordViewModel {
-        [Required]
+        [Required(ErrorMessage = "Validation_Required")]
         [DataType(DataType.Password)]
-        [Display(Name = "Current password")]
+        [Display(Name = "Account_Field_Password")]
         public string OldPassword { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [Required(ErrorMessage = "Validation_Required")]
+        [StringLength(100, ErrorMessage = "Validation_StringLength", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "New password")]
+        [Display(Name = "Manage_ChangePassword_NewPassword")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm new password")]
-        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        [Display(Name = "Manage_ChangePassword_ConfirmPassword")]
+        [Compare("NewPassword", ErrorMessage = "Validation_Compare")]
         public string ConfirmPassword { get; set; }
 
         public string StatusMessage { get; set; }

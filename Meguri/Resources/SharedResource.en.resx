@@ -420,6 +420,9 @@
   <data name="Account_SignedOut_Message" xml:space="preserve">
     <value>You have successfully signed out.</value>
   </data>
+  <data name="Account_Field_UserName" xml:space="preserve">
+    <value>Username</value>
+  </data>
   <data name="Account_Field_Email" xml:space="preserve">
     <value>Email</value>
   </data>
@@ -618,17 +621,8 @@
   <data name="Manage_EnableAuthenticator_Intro" xml:space="preserve">
     <value>To use an authenticator app, follow these steps:</value>
   </data>
-  <data name="Manage_EnableAuthenticator_AppInstruction_Part1" xml:space="preserve">
-    <value>Download a two-factor authenticator app such as Microsoft Authenticator for</value>
-  </data>
-  <data name="Manage_EnableAuthenticator_AppInstruction_Or" xml:space="preserve">
-    <value>or</value>
-  </data>
-  <data name="Manage_EnableAuthenticator_AppInstruction_Part2" xml:space="preserve">
-    <value>for</value>
-  </data>
-  <data name="Manage_EnableAuthenticator_AppInstruction_And" xml:space="preserve">
-    <value>and</value>
+  <data name="Manage_EnableAuthenticator_AppInstruction" xml:space="preserve">
+    <value>Install a two-factor authentication app, such as Google Authenticator or Microsoft Authenticator, on your smartphone.</value>
   </data>
   <data name="Manage_EnableAuthenticator_ScanPrompt_Part1" xml:space="preserve">
     <value>Scan the QR code or enter this key</value>

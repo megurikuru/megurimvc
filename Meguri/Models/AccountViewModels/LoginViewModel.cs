@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 namespace Meguri.Models.AccountViewModels {
     public class LoginViewModel {
         [Required(ErrorMessage = "Validation_Required")]
-        [EmailAddress(ErrorMessage = "Validation_InvalidEmail")]
-        [Display(Name = "Account_Field_Email")]
-        public string Email { get; set; }
+        [Display(Name = "Account_Field_UserName")]
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Validation_Required")]
         [DataType(DataType.Password)]
