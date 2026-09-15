@@ -106,6 +106,22 @@ namespace Meguri.Data {
                 .HasForeignKey(di => di.ImageId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            builder.Entity<ImageTag>()
+                .HasIndex(it => new { it.ImageId, it.TagId })
+                .IsUnique();
+
+            builder.Entity<ImageTag>()
+                .HasOne(it => it.Image)
+                .WithMany(i => i.ImageTags)
+                .HasForeignKey(it => it.ImageId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<ImageTag>()
+                .HasOne(it => it.Tag)
+                .WithMany()
+                .HasForeignKey(it => it.TagId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             builder.Entity<Fandom>()
                 .HasMany(f => f.Users)
                 .WithMany(u => u.Fandoms)
@@ -125,6 +141,68 @@ namespace Meguri.Data {
                         j.HasKey(fu => new { fu.FandomId, fu.UserId });
                         j.ToTable("FandomUsers");
                     });
+
+            builder.Entity<Comment>(entity =>
+            {
+                entity.HasOne(c => c.User)
+                    .WithMany(u => u.Comments)
+                    .HasForeignKey(c => c.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(c => c.Doc)
+                    .WithMany(d => d.Comments)
+                    .HasForeignKey(c => c.DocId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(c => c.Image)
+                    .WithMany(i => i.Comments)
+                    .HasForeignKey(c => c.ImageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(c => c.Parent)
+                    .WithMany(c => c.Replies)
+                    .HasForeignKey(c => c.ParentId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<ConversationMember>(entity =>
+            {
+                entity.HasOne(cm => cm.Conversation)
+                    .WithMany(c => c.Members)
+                    .HasForeignKey(cm => cm.ConversationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(cm => cm.User)
+                    .WithMany(u => u.ConversationMembers)
+                    .HasForeignKey(cm => cm.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<Message>(entity =>
+            {
+                entity.HasOne(m => m.Conversation)
+                    .WithMany(c => c.Messages)
+                    .HasForeignKey(m => m.ConversationId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(m => m.Sender)
+                    .WithMany(u => u.SentMessages)
+                    .HasForeignKey(m => m.SenderId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<MessageImage>(entity =>
+            {
+                entity.HasOne(mi => mi.Message)
+                    .WithMany(m => m.MessageImages)
+                    .HasForeignKey(mi => mi.MessageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(mi => mi.Image)
+                    .WithMany(i => i.MessageImages)
+                    .HasForeignKey(mi => mi.ImageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
