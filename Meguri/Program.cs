@@ -136,6 +136,12 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// データベースの初期データ登録（シード）
+using (var scope = app.Services.CreateScope()) {
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await DbInitializer.InitializeAsync(dbContext);
+}
+
 // アプリケーションを起動し、HTTPリクエストの待ち受けを開始
 app.Run();
 

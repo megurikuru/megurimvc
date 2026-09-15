@@ -8,7 +8,7 @@ namespace Meguri.Models {
         public int DocId { get; set; }
         public Doc Doc { get; set; } = null!;
 
-        public int TagId { get; set; }
+        public long TagId { get; set; }
         public Tag Tag { get; set; } = null!;
 
         public int DisplayOrder { get; set; }

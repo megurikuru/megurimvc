@@ -24,8 +24,17 @@ namespace Meguri.Models {
         // Imageに付けられたコメント一覧
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
+        // CommentとImageは中間テーブルを介した多対多の関係
+        public ICollection<CommentImage> CommentImages { get; set; } = new List<CommentImage>();
+
         // MessageとImageは中間テーブルを介した多対多の関係
         public ICollection<MessageImage> MessageImages { get; set; } = new List<MessageImage>();
+
+        // ユーザーのアイコン候補として登録されている中間一覧
+        public ICollection<UserImage> UserImages { get; set; } = new List<UserImage>();
+
+        // Imageに付けられたリアクション一覧
+        public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
 
         // 直接のTag一覧が必要な場合は、ImageTagsから取り出す
         [NotMapped]
