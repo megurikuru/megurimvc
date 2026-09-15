@@ -27,6 +27,9 @@ namespace Meguri.Models {
         // --- 順序付き添付画像 ---
         public ICollection<MessageImage> MessageImages { get; set; } = new List<MessageImage>();
 
+        // Messageに付けられたリアクション一覧
+        public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
+
         [NotMapped]
         public ICollection<Image> Images => MessageImages
             .OrderBy(mi => mi.DisplayOrder)

@@ -50,6 +50,14 @@ namespace Meguri.Data {
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
 
+            builder.Entity<Doc>(entity =>
+            {
+                entity.HasOne(d => d.User)
+                    .WithMany(u => u.Docs)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             builder.Entity<DocTag>()
                 .HasIndex(dt => new { dt.DocId, dt.TagId })
                 .IsUnique();
@@ -165,6 +173,19 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+            builder.Entity<CommentImage>(entity =>
+            {
+                entity.HasOne(ci => ci.Comment)
+                    .WithMany(c => c.CommentImages)
+                    .HasForeignKey(ci => ci.CommentId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(ci => ci.Image)
+                    .WithMany(i => i.CommentImages)
+                    .HasForeignKey(ci => ci.ImageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             builder.Entity<ConversationMember>(entity =>
             {
                 entity.HasOne(cm => cm.Conversation)
@@ -203,6 +224,66 @@ namespace Meguri.Data {
                     .HasForeignKey(mi => mi.ImageId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            builder.Entity<Reaction>(entity =>
+            {
+                entity.HasOne(r => r.User)
+                    .WithMany(u => u.Reactions)
+                    .HasForeignKey(r => r.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(r => r.Doc)
+                    .WithMany(d => d.Reactions)
+                    .HasForeignKey(r => r.DocId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(r => r.Comment)
+                    .WithMany(c => c.Reactions)
+                    .HasForeignKey(r => r.CommentId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(r => r.Image)
+                    .WithMany(i => i.Reactions)
+                    .HasForeignKey(r => r.ImageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(r => r.Message)
+                    .WithMany(m => m.Reactions)
+                    .HasForeignKey(r => r.MessageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<UserImage>(entity =>
+            {
+                entity.HasOne(ui => ui.User)
+                    .WithMany(u => u.UserImages)
+                    .HasForeignKey(ui => ui.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(ui => ui.Image)
+                    .WithMany(i => i.UserImages)
+                    .HasForeignKey(ui => ui.ImageId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<ApplicationUser>(entity =>
+            {
+                entity.HasOne(u => u.ActiveAvatarImage)
+                    .WithMany()
+                    .HasForeignKey(u => u.ActiveAvatarImageId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // Fandomマスターの初期シードデータ
+            builder.Entity<Fandom>().HasData(
+                new Fandom { Id = 1, Name = "イラスト" },
+                new Fandom { Id = 2, Name = "漫画" },
+                new Fandom { Id = 3, Name = "小説" },
+                new Fandom { Id = 4, Name = "車" },
+                new Fandom { Id = 5, Name = "プログラミング" },
+                new Fandom { Id = 6, Name = "ゲーム" },
+                new Fandom { Id = 7, Name = "コスプレ" }
+            );
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
