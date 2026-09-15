@@ -22,6 +22,21 @@ namespace Meguri.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("FandomUser", b =>
+                {
+                    b.Property<int>("FandomId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("FandomId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FandomUsers", (string)null);
+                });
+
             modelBuilder.Entity("Meguri.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -400,6 +415,21 @@ namespace Meguri.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("FandomUser", b =>
+                {
+                    b.HasOne("Meguri.Models.Fandom", null)
+                        .WithMany()
+                        .HasForeignKey("FandomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Meguri.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Meguri.Models.Doc", b =>
