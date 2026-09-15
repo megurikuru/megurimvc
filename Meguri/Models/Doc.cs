@@ -34,6 +34,9 @@ namespace Meguri.Models {
         // DocとImageは中間テーブルを介した多対多の関係
         public ICollection<DocImage> DocImages { get; set; } = new List<DocImage>();
 
+        // Docに付けられたコメント一覧
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
         // 直接のTag一覧が必要な場合は、DocTagsから取り出す
         [NotMapped]
         public ICollection<Tag> Tags => DocTags.Select(dt => dt.Tag).ToList();

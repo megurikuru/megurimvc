@@ -9,5 +9,8 @@ namespace Meguri.Models {
     public class ApplicationUser : IdentityUser {
         public ICollection<Fandom> Fandoms { get; set; }
         public ICollection<FandomUser> FandomUsers { get; set; } = new List<FandomUser>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<ConversationMember> ConversationMembers { get; set; } = new List<ConversationMember>();
+        public ICollection<Message> SentMessages { get; set; } = new List<Message>();
     }
 }

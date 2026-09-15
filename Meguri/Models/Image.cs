@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Meguri.Models {
     [Table("Images")]
@@ -16,5 +17,18 @@ namespace Meguri.Models {
 
         // DocとImageは中間テーブルを介した多対多の関係
         public ICollection<DocImage> DocImages { get; set; } = new List<DocImage>();
+
+        // ImageとTagは中間テーブルを介した多対多の関係
+        public ICollection<ImageTag> ImageTags { get; set; } = new List<ImageTag>();
+
+        // Imageに付けられたコメント一覧
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+        // MessageとImageは中間テーブルを介した多対多の関係
+        public ICollection<MessageImage> MessageImages { get; set; } = new List<MessageImage>();
+
+        // 直接のTag一覧が必要な場合は、ImageTagsから取り出す
+        [NotMapped]
+        public ICollection<Tag> Tags => ImageTags.Select(it => it.Tag).ToList();
     }
 }
