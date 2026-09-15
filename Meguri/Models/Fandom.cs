@@ -11,6 +11,8 @@ namespace Meguri.Models {
         public string Name{ get; set; }
 
         public ICollection<Doc> Docs { get; set; }
+        public ICollection<ApplicationUser> Users { get; set; }
+        public ICollection<FandomUser> FandomUsers { get; set; } = new List<FandomUser>();
     }
 
 }

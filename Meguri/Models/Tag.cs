@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -8,19 +9,25 @@ namespace Meguri.Models {
 
     [Table("Tags")]
     public class Tag {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public long TagId { get; set; }
 
-        public int? ParentTagId { get; set; }
-        public Tag? ParentTag { get; set; }
-        public ICollection<Tag> Children { get; set; } = new List<Tag>();
+        /// 表示用名称（例: "PCVバルブ交換", "インプレッサ"）
+        public required string Name { get; set; }
 
-        // DocとTagは中間テーブルを介した多対多の関係
-        public ICollection<DocTag> DocTags { get; set; } = new List<DocTag>();
+        /// 照合・検索用小文字化・正規化名称
+        public required string NormalizedName { get; set; }
 
-        [NotMapped]
-        public ICollection<Doc> Docs => DocTags.Select(dt => dt.Doc).ToList();
+        /// 複数のコンテキストが存在するかどうかの衝突フラグ
+        public bool IsAmbiguous { get; set; } = false;
 
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
+
+        // --- ナビゲーションプロパティ ---
+
+        /// 自身がメインタグとして結合されているBoundTag一覧
+        public ICollection<BoundTag> MainBoundTags { get; set; } = new List<BoundTag>();
+
+        /// 自身がコンテキスト（対象）として結合されているBoundTag一覧
+        public ICollection<BoundTag> ContextBoundTags { get; set; } = new List<BoundTag>();
     }
-} 
+}

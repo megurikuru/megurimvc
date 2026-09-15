@@ -62,19 +62,33 @@ namespace Meguri.Data {
 
             builder.Entity<DocTag>()
                 .HasOne(dt => dt.Tag)
-                .WithMany(t => t.DocTags)
+                .WithMany()
                 .HasForeignKey(dt => dt.TagId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Tag>()
-                .HasOne(t => t.ParentTag)
-                .WithMany(t => t.Children)
-                .HasForeignKey(t => t.ParentTagId)
-                .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Tag>(entity =>
+            {
+                entity.HasKey(t => t.TagId);
+                entity.HasIndex(t => t.NormalizedName);
+            });
 
-            builder.Entity<Tag>()
-                .HasIndex(t => new { t.Name, t.ParentTagId })
-                .IsUnique();
+            builder.Entity<BoundTag>(entity =>
+            {
+                entity.HasKey(bt => bt.BoundId);
+
+                entity.HasOne(bt => bt.MainTag)
+                    .WithMany(t => t.MainBoundTags)
+                    .HasForeignKey(bt => bt.MainTagId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(bt => bt.ContextTag)
+                    .WithMany(t => t.ContextBoundTags)
+                    .HasForeignKey(bt => bt.ContextTagId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasIndex(bt => new { bt.MainTagId, bt.ContextTagId })
+                    .IsUnique();
+            });
 
             builder.Entity<DocImage>()
                 .HasIndex(di => new { di.DocId, di.ImageId })
@@ -91,6 +105,26 @@ namespace Meguri.Data {
                 .WithMany(i => i.DocImages)
                 .HasForeignKey(di => di.ImageId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Fandom>()
+                .HasMany(f => f.Users)
+                .WithMany(u => u.Fandoms)
+                .UsingEntity<FandomUser>(
+                    j => j
+                        .HasOne(fu => fu.User)
+                        .WithMany(u => u.FandomUsers)
+                        .HasForeignKey(fu => fu.UserId)
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j
+                        .HasOne(fu => fu.Fandom)
+                        .WithMany(f => f.FandomUsers)
+                        .HasForeignKey(fu => fu.FandomId)
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j =>
+                    {
+                        j.HasKey(fu => new { fu.FandomId, fu.UserId });
+                        j.ToTable("FandomUsers");
+                    });
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
