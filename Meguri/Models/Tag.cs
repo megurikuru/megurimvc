@@ -4,10 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Meguri.Models {
 
     [Table("Tags")]
+    [Index(nameof(Name))]
+    [Index(nameof(NormalizedName), IsUnique = true)]
     public class Tag {
         public long TagId { get; set; }
 

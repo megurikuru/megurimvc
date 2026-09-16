@@ -77,7 +77,8 @@ namespace Meguri.Data {
             builder.Entity<Tag>(entity =>
             {
                 entity.HasKey(t => t.TagId);
-                entity.HasIndex(t => t.NormalizedName);
+                entity.HasIndex(t => t.NormalizedName)
+                    .IsUnique();
             });
 
             builder.Entity<BoundTag>(entity =>
@@ -130,25 +131,32 @@ namespace Meguri.Data {
                 .HasForeignKey(it => it.TagId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Fandom>()
-                .HasMany(f => f.Users)
-                .WithMany(u => u.Fandoms)
-                .UsingEntity<FandomUser>(
-                    j => j
-                        .HasOne(fu => fu.User)
-                        .WithMany(u => u.FandomUsers)
-                        .HasForeignKey(fu => fu.UserId)
-                        .OnDelete(DeleteBehavior.Cascade),
-                    j => j
-                        .HasOne(fu => fu.Fandom)
-                        .WithMany(f => f.FandomUsers)
-                        .HasForeignKey(fu => fu.FandomId)
-                        .OnDelete(DeleteBehavior.Cascade),
-                    j =>
-                    {
-                        j.HasKey(fu => new { fu.FandomId, fu.UserId });
-                        j.ToTable("FandomUsers");
-                    });
+            builder.Entity<Fandom>(entity =>
+            {
+                entity.HasOne(f => f.ParentFandom)
+                    .WithMany(f => f.ChildFandoms)
+                    .HasForeignKey(f => f.ParentFandomId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(f => f.Users)
+                    .WithMany(u => u.Fandoms)
+                    .UsingEntity<FandomUser>(
+                        j => j
+                            .HasOne(fu => fu.User)
+                            .WithMany(u => u.FandomUsers)
+                            .HasForeignKey(fu => fu.UserId)
+                            .OnDelete(DeleteBehavior.Cascade),
+                        j => j
+                            .HasOne(fu => fu.Fandom)
+                            .WithMany(f => f.FandomUsers)
+                            .HasForeignKey(fu => fu.FandomId)
+                            .OnDelete(DeleteBehavior.Cascade),
+                        j =>
+                        {
+                            j.HasKey(fu => new { fu.FandomId, fu.UserId });
+                            j.ToTable("FandomUsers");
+                        });
+            });
 
             builder.Entity<Comment>(entity =>
             {

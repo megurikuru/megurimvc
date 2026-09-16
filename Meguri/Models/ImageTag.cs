@@ -1,7 +1,9 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace Meguri.Models {
     [Table("ImageTags")]
+    [Index(nameof(TagId))]
     public class ImageTag {
         public int Id { get; set; }
 

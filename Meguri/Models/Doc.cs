@@ -14,6 +14,9 @@ namespace Meguri.Models {
     [Index(nameof(Updated))]
     [Index(nameof(LastCommentedAt))]
     [Index(nameof(IsPinned))]
+    [Index(nameof(IsPublic))]
+    [Index(nameof(FandomId), nameof(LastCommentedAt))]
+    [Index(nameof(FandomId), nameof(Created))]
     public class Doc {
         public int Id { get; set; }
         public string UserId { get; set; }

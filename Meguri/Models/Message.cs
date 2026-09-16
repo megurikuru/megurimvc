@@ -10,6 +10,7 @@ namespace Meguri.Models {
     [Index(nameof(ConversationId))]
     [Index(nameof(SenderId))]
     [Index(nameof(Created))]
+    [Index(nameof(ConversationId), nameof(Created))]
     public class Message {
         public int Id { get; set; }
 

@@ -3,6 +3,7 @@ using System;
 using Meguri.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Meguri.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260916113345_SyncPendingModelChanges")]
+    partial class SyncPendingModelChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,10 +174,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("DocId", "Created");
-
-                    b.HasIndex("DocId", "Number")
-                        .IsUnique();
+                    b.HasIndex("DocId", "Number");
 
                     b.ToTable("Comments");
                 });
@@ -323,17 +323,11 @@ namespace Meguri.Migrations
 
                     b.HasIndex("IsPinned");
 
-                    b.HasIndex("IsPublic");
-
                     b.HasIndex("LastCommentedAt");
 
                     b.HasIndex("Updated");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("FandomId", "Created");
-
-                    b.HasIndex("FandomId", "LastCommentedAt");
 
                     b.ToTable("Docs");
                 });
@@ -408,14 +402,7 @@ namespace Meguri.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ParentFandomId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.HasIndex("ParentFandomId");
 
                     b.ToTable("Fandoms");
 
@@ -503,12 +490,6 @@ namespace Meguri.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Created");
-
-                    b.HasIndex("IsPublic");
-
-                    b.HasIndex("IsPublic", "Created");
-
                     b.ToTable("Images");
                 });
 
@@ -569,8 +550,6 @@ namespace Meguri.Migrations
                     b.HasIndex("Created");
 
                     b.HasIndex("SenderId");
-
-                    b.HasIndex("ConversationId", "Created");
 
                     b.ToTable("Messages");
                 });
@@ -647,22 +626,6 @@ namespace Meguri.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("CommentId", "Type");
-
-                    b.HasIndex("DocId", "Type");
-
-                    b.HasIndex("UserId", "CommentId", "Type")
-                        .IsUnique();
-
-                    b.HasIndex("UserId", "DocId", "Type")
-                        .IsUnique();
-
-                    b.HasIndex("UserId", "ImageId", "Type")
-                        .IsUnique();
-
-                    b.HasIndex("UserId", "MessageId", "Type")
-                        .IsUnique();
-
                     b.ToTable("Reactions");
                 });
 
@@ -690,10 +653,7 @@ namespace Meguri.Migrations
 
                     b.HasKey("TagId");
 
-                    b.HasIndex("Name");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique();
+                    b.HasIndex("NormalizedName");
 
                     b.ToTable("Tags");
                 });
@@ -1015,16 +975,6 @@ namespace Meguri.Migrations
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("Meguri.Models.Fandom", b =>
-                {
-                    b.HasOne("Meguri.Models.Fandom", "ParentFandom")
-                        .WithMany("ChildFandoms")
-                        .HasForeignKey("ParentFandomId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("ParentFandom");
-                });
-
             modelBuilder.Entity("Meguri.Models.FandomUser", b =>
                 {
                     b.HasOne("Meguri.Models.Fandom", "Fandom")
@@ -1258,8 +1208,6 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.Fandom", b =>
                 {
-                    b.Navigation("ChildFandoms");
-
                     b.Navigation("Docs");
 
                     b.Navigation("FandomUsers");
