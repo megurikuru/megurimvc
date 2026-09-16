@@ -17,8 +17,8 @@ namespace Meguri.Models {
     [Index(nameof(IsPublic))]
     [Index(nameof(FandomId), nameof(LastCommentedAt))]
     [Index(nameof(FandomId), nameof(Created))]
-    public class Doc {
-        public int Id { get; set; }
+    public class Post {
+        public long Id { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public string Name { get; set; }
@@ -49,21 +49,21 @@ namespace Meguri.Models {
         // FandomとDocは一対多の関係
         public Fandom Fandom { get; set; }
 
-        // DocとTagは中間テーブルを介した多対多の関係
-        public ICollection<DocTag> DocTags { get; set; } = new List<DocTag>();
+        // PostとTagは中間テーブルを介した多対多の関係
+        public ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
 
-        // DocとImageは中間テーブルを介した多対多の関係
-        public ICollection<DocImage> DocImages { get; set; } = new List<DocImage>();
+        // PostとImageは中間テーブルを介した多対多の関係
+        public ICollection<PostImage> PostImages { get; set; } = new List<PostImage>();
 
-        // Docに付けられたコメント一覧
+        // Postに付けられたコメント一覧
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-        // Docに付けられたリアクション一覧
+        // Postに付けられたリアクション一覧
         public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
 
-        // 直接のTag一覧が必要な場合は、DocTagsから取り出す
+        // 直接のTag一覧が必要な場合は、PostTagsから取り出す
         [NotMapped]
-        public ICollection<Tag> Tags => DocTags.Select(dt => dt.Tag).ToList();
+        public ICollection<Tag> Tags => PostTags.Select(pt => pt.Tag).ToList();
     }
 
 }

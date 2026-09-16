@@ -9,7 +9,7 @@ namespace Meguri.Models {
     [Index(nameof(Created))]
     [Index(nameof(Updated))]
     public class Conversation {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// グループ名（1対1 DMの場合はnull）
         public string? Title { get; set; }

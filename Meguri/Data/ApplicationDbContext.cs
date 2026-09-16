@@ -13,6 +13,24 @@ namespace Meguri.Data {
             : base(options) {
         }
 
+        public DbSet<Post> Posts { get; set; } = null!;
+        public DbSet<Fandom> Fandoms { get; set; } = null!;
+        public DbSet<FandomUser> FandomUsers { get; set; } = null!;
+        public DbSet<Image> Images { get; set; } = null!;
+        public DbSet<Tag> Tags { get; set; } = null!;
+        public DbSet<BoundTag> BoundTags { get; set; } = null!;
+        public DbSet<PostTag> PostTags { get; set; } = null!;
+        public DbSet<PostImage> PostImages { get; set; } = null!;
+        public DbSet<ImageTag> ImageTags { get; set; } = null!;
+        public DbSet<UserImage> UserImages { get; set; } = null!;
+        public DbSet<Comment> Comments { get; set; } = null!;
+        public DbSet<CommentImage> CommentImages { get; set; } = null!;
+        public DbSet<Conversation> Conversations { get; set; } = null!;
+        public DbSet<ConversationMember> ConversationMembers { get; set; } = null!;
+        public DbSet<Message> Messages { get; set; } = null!;
+        public DbSet<MessageImage> MessageImages { get; set; } = null!;
+        public DbSet<Reaction> Reactions { get; set; } = null!;
+
         public override int SaveChanges() {
             ApplyAuditFields();
             return base.SaveChanges();
@@ -50,7 +68,7 @@ namespace Meguri.Data {
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
 
-            builder.Entity<Doc>(entity =>
+            builder.Entity<Post>(entity =>
             {
                 entity.HasOne(d => d.User)
                     .WithMany(u => u.Docs)
@@ -58,17 +76,17 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<DocTag>()
-                .HasIndex(dt => new { dt.DocId, dt.TagId })
+            builder.Entity<PostTag>()
+                .HasIndex(dt => new { dt.PostId, dt.TagId })
                 .IsUnique();
 
-            builder.Entity<DocTag>()
-                .HasOne(dt => dt.Doc)
-                .WithMany(d => d.DocTags)
-                .HasForeignKey(dt => dt.DocId)
+            builder.Entity<PostTag>()
+                .HasOne(dt => dt.Post)
+                .WithMany(d => d.PostTags)
+                .HasForeignKey(dt => dt.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<DocTag>()
+            builder.Entity<PostTag>()
                 .HasOne(dt => dt.Tag)
                 .WithMany()
                 .HasForeignKey(dt => dt.TagId)
@@ -99,20 +117,20 @@ namespace Meguri.Data {
                     .IsUnique();
             });
 
-            builder.Entity<DocImage>()
-                .HasIndex(di => new { di.DocId, di.ImageId })
+            builder.Entity<PostImage>()
+                .HasIndex(pi => new { pi.PostId, pi.ImageId })
                 .IsUnique();
 
-            builder.Entity<DocImage>()
-                .HasOne(di => di.Doc)
-                .WithMany(d => d.DocImages)
-                .HasForeignKey(di => di.DocId)
+            builder.Entity<PostImage>()
+                .HasOne(pi => pi.Post)
+                .WithMany(d => d.PostImages)
+                .HasForeignKey(pi => pi.PostId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<DocImage>()
-                .HasOne(di => di.Image)
-                .WithMany(i => i.DocImages)
-                .HasForeignKey(di => di.ImageId)
+            builder.Entity<PostImage>()
+                .HasOne(pi => pi.Image)
+                .WithMany(i => i.PostImages)
+                .HasForeignKey(pi => pi.ImageId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ImageTag>()
@@ -240,9 +258,9 @@ namespace Meguri.Data {
                     .HasForeignKey(r => r.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(r => r.Doc)
+                entity.HasOne(r => r.Post)
                     .WithMany(d => d.Reactions)
-                    .HasForeignKey(r => r.DocId)
+                    .HasForeignKey(r => r.PostId)
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(r => r.Comment)
@@ -284,13 +302,21 @@ namespace Meguri.Data {
 
             // Fandomマスターの初期シードデータ
             builder.Entity<Fandom>().HasData(
-                new Fandom { Id = 1, Name = "イラスト" },
-                new Fandom { Id = 2, Name = "漫画" },
-                new Fandom { Id = 3, Name = "小説" },
-                new Fandom { Id = 4, Name = "車" },
-                new Fandom { Id = 5, Name = "プログラミング" },
-                new Fandom { Id = 6, Name = "ゲーム" },
-                new Fandom { Id = 7, Name = "コスプレ" }
+                new Fandom { Id = 1, Name = "つぶやき", ParentFandomId = null },
+                new Fandom { Id = 2, Name = "創作", ParentFandomId = null },
+                new Fandom { Id = 3, Name = "イラスト", ParentFandomId = 2 },
+                new Fandom { Id = 4, Name = "漫画", ParentFandomId = 2 },
+                new Fandom { Id = 5, Name = "小説", ParentFandomId = 2 },
+                new Fandom { Id = 6, Name = "コスプレ", ParentFandomId = null },
+                new Fandom { Id = 7, Name = "車", ParentFandomId = null },
+                new Fandom { Id = 8, Name = "国産車", ParentFandomId = 7 },
+                new Fandom { Id = 9, Name = "輸入車", ParentFandomId = 7 },
+                new Fandom { Id = 10, Name = "漫画・アニメ", ParentFandomId = null },
+                new Fandom { Id = 11, Name = "漫画", ParentFandomId = 10 },
+                new Fandom { Id = 12, Name = "アニメ", ParentFandomId = 10 },
+                new Fandom { Id = 13, Name = "ゲーム", ParentFandomId = null },
+                new Fandom { Id = 14, Name = "プログラミング", ParentFandomId = null },
+                new Fandom { Id = 15, Name = "運営", ParentFandomId = null }
             );
 
             // Customize the ASP.NET Identity model and override the defaults if needed.

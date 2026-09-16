@@ -30,8 +30,8 @@ namespace Meguri.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ActiveAvatarImageId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("ActiveAvatarImageId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Bio")
                         .HasColumnType("text");
@@ -121,25 +121,25 @@ namespace Meguri.Migrations
                     b.HasIndex("MainTagId", "ContextTagId")
                         .IsUnique();
 
-                    b.ToTable("BoundTag");
+                    b.ToTable("BoundTags");
                 });
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("DocId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("DocId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("ImageId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -147,8 +147,8 @@ namespace Meguri.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Text")
                         .HasColumnType("text");
@@ -181,20 +181,20 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.CommentImage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("CommentId")
-                        .HasColumnType("integer");
+                    b.Property<long>("CommentId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("integer");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
+                    b.Property<long>("ImageId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -208,11 +208,11 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.Conversation", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -237,14 +237,14 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.ConversationMember", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("ConversationId")
-                        .HasColumnType("integer");
+                    b.Property<long>("ConversationId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("JoinedAt")
                         .HasColumnType("timestamp with time zone");
@@ -265,13 +265,265 @@ namespace Meguri.Migrations
                     b.ToTable("ConversationMembers");
                 });
 
-            modelBuilder.Entity("Meguri.Models.Doc", b =>
+            modelBuilder.Entity("Meguri.Models.Fandom", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ParentFandomId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name");
+
+                    b.HasIndex("ParentFandomId");
+
+                    b.ToTable("Fandoms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "つぶやき"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "創作"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "イラスト",
+                            ParentFandomId = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "漫画",
+                            ParentFandomId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "小説",
+                            ParentFandomId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "コスプレ"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "車"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "国産車",
+                            ParentFandomId = 7
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "輸入車",
+                            ParentFandomId = 7
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "漫画・アニメ"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Name = "漫画",
+                            ParentFandomId = 10
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Name = "アニメ",
+                            ParentFandomId = 10
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Name = "ゲーム"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Name = "プログラミング"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Name = "運営"
+                        });
+                });
+
+            modelBuilder.Entity("Meguri.Models.FandomUser", b =>
+                {
+                    b.Property<int>("FandomId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("FandomId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("FandomUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Meguri.Models.Image", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Caption")
+                        .HasColumnType("text");
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("bytea");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Created");
+
+                    b.HasIndex("IsPublic");
+
+                    b.HasIndex("IsPublic", "Created");
+
+                    b.ToTable("Images");
+                });
+
+            modelBuilder.Entity("Meguri.Models.ImageTag", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("ImageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TagId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TagId");
+
+                    b.HasIndex("ImageId", "TagId")
+                        .IsUnique();
+
+                    b.ToTable("ImageTags");
+                });
+
+            modelBuilder.Entity("Meguri.Models.Message", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ConversationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversationId");
+
+                    b.HasIndex("Created");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("ConversationId", "Created");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("Meguri.Models.MessageImage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("ImageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MessageId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("MessageId", "ImageId")
+                        .IsUnique();
+
+                    b.ToTable("MessageImages");
+                });
+
+            modelBuilder.Entity("Meguri.Models.Post", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<int>("CommentCount")
                         .HasColumnType("integer");
@@ -338,193 +590,46 @@ namespace Meguri.Migrations
                     b.ToTable("Docs");
                 });
 
-            modelBuilder.Entity("Meguri.Models.DocImage", b =>
+            modelBuilder.Entity("Meguri.Models.PostImage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("integer");
 
-                    b.Property<int>("DocId")
-                        .HasColumnType("integer");
+                    b.Property<long>("ImageId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
+                    b.Property<long>("PostId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ImageId");
 
-                    b.HasIndex("DocId", "ImageId")
+                    b.HasIndex("PostId", "ImageId")
                         .IsUnique();
 
-                    b.ToTable("DocImages");
+                    b.ToTable("PostImages");
                 });
 
-            modelBuilder.Entity("Meguri.Models.DocTag", b =>
+            modelBuilder.Entity("Meguri.Models.PostTag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<long?>("BoundTagBoundId")
                         .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("integer");
 
-                    b.Property<int>("DocId")
-                        .HasColumnType("integer");
-
-                    b.Property<long>("TagId")
+                    b.Property<long>("PostId")
                         .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BoundTagBoundId");
-
-                    b.HasIndex("TagId");
-
-                    b.HasIndex("DocId", "TagId")
-                        .IsUnique();
-
-                    b.ToTable("DocTags");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Fandom", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("ParentFandomId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.HasIndex("ParentFandomId");
-
-                    b.ToTable("Fandoms");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "イラスト"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "漫画"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "小説"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "車"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "プログラミング"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "ゲーム"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "コスプレ"
-                        });
-                });
-
-            modelBuilder.Entity("Meguri.Models.FandomUser", b =>
-                {
-                    b.Property<int>("FandomId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("FandomId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("FandomUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Meguri.Models.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Caption")
-                        .HasColumnType("text");
-
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("bytea");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Created");
-
-                    b.HasIndex("IsPublic");
-
-                    b.HasIndex("IsPublic", "Created");
-
-                    b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("Meguri.Models.ImageTag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
 
                     b.Property<long>("TagId")
                         .HasColumnType("bigint");
@@ -533,97 +638,34 @@ namespace Meguri.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.HasIndex("ImageId", "TagId")
+                    b.HasIndex("PostId", "TagId")
                         .IsUnique();
 
-                    b.ToTable("ImageTags");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Message", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ConversationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("SenderId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConversationId");
-
-                    b.HasIndex("Created");
-
-                    b.HasIndex("SenderId");
-
-                    b.HasIndex("ConversationId", "Created");
-
-                    b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("Meguri.Models.MessageImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MessageId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
-
-                    b.HasIndex("MessageId", "ImageId")
-                        .IsUnique();
-
-                    b.ToTable("MessageImages");
+                    b.ToTable("PostTags");
                 });
 
             modelBuilder.Entity("Meguri.Models.Reaction", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int?>("CommentId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("CommentId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("DocId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("ImageId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("ImageId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("MessageId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int?>("MessageId")
-                        .HasColumnType("integer");
+                    b.Property<long?>("PostId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -637,11 +679,11 @@ namespace Meguri.Migrations
 
                     b.HasIndex("Created");
 
-                    b.HasIndex("DocId");
-
                     b.HasIndex("ImageId");
 
                     b.HasIndex("MessageId");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("Type");
 
@@ -649,18 +691,18 @@ namespace Meguri.Migrations
 
                     b.HasIndex("CommentId", "Type");
 
-                    b.HasIndex("DocId", "Type");
+                    b.HasIndex("PostId", "Type");
 
                     b.HasIndex("UserId", "CommentId", "Type")
-                        .IsUnique();
-
-                    b.HasIndex("UserId", "DocId", "Type")
                         .IsUnique();
 
                     b.HasIndex("UserId", "ImageId", "Type")
                         .IsUnique();
 
                     b.HasIndex("UserId", "MessageId", "Type")
+                        .IsUnique();
+
+                    b.HasIndex("UserId", "PostId", "Type")
                         .IsUnique();
 
                     b.ToTable("Reactions");
@@ -700,17 +742,17 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.UserImage", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("integer");
+                    b.Property<long>("ImageId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -889,7 +931,7 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>
                 {
-                    b.HasOne("Meguri.Models.Doc", "Doc")
+                    b.HasOne("Meguri.Models.Post", "Doc")
                         .WithMany("Comments")
                         .HasForeignKey("DocId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -953,66 +995,6 @@ namespace Meguri.Migrations
                     b.Navigation("Conversation");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Doc", b =>
-                {
-                    b.HasOne("Meguri.Models.Fandom", "Fandom")
-                        .WithMany("Docs")
-                        .HasForeignKey("FandomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Meguri.Models.ApplicationUser", "User")
-                        .WithMany("Docs")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Fandom");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Meguri.Models.DocImage", b =>
-                {
-                    b.HasOne("Meguri.Models.Doc", "Doc")
-                        .WithMany("DocImages")
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Meguri.Models.Image", "Image")
-                        .WithMany("DocImages")
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doc");
-
-                    b.Navigation("Image");
-                });
-
-            modelBuilder.Entity("Meguri.Models.DocTag", b =>
-                {
-                    b.HasOne("Meguri.Models.BoundTag", null)
-                        .WithMany("DocTags")
-                        .HasForeignKey("BoundTagBoundId");
-
-                    b.HasOne("Meguri.Models.Doc", "Doc")
-                        .WithMany("DocTags")
-                        .HasForeignKey("DocId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Meguri.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Doc");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Meguri.Models.Fandom", b =>
@@ -1100,16 +1082,67 @@ namespace Meguri.Migrations
                     b.Navigation("Message");
                 });
 
+            modelBuilder.Entity("Meguri.Models.Post", b =>
+                {
+                    b.HasOne("Meguri.Models.Fandom", "Fandom")
+                        .WithMany("Docs")
+                        .HasForeignKey("FandomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Meguri.Models.ApplicationUser", "User")
+                        .WithMany("Docs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Fandom");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Meguri.Models.PostImage", b =>
+                {
+                    b.HasOne("Meguri.Models.Image", "Image")
+                        .WithMany("PostImages")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Meguri.Models.Post", "Post")
+                        .WithMany("PostImages")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("Meguri.Models.PostTag", b =>
+                {
+                    b.HasOne("Meguri.Models.Post", "Post")
+                        .WithMany("PostTags")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Meguri.Models.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("Meguri.Models.Reaction", b =>
                 {
                     b.HasOne("Meguri.Models.Comment", "Comment")
                         .WithMany("Reactions")
                         .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Meguri.Models.Doc", "Doc")
-                        .WithMany("Reactions")
-                        .HasForeignKey("DocId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Meguri.Models.Image", "Image")
@@ -1122,6 +1155,11 @@ namespace Meguri.Migrations
                         .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Meguri.Models.Post", "Post")
+                        .WithMany("Reactions")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Meguri.Models.ApplicationUser", "User")
                         .WithMany("Reactions")
                         .HasForeignKey("UserId")
@@ -1129,11 +1167,11 @@ namespace Meguri.Migrations
 
                     b.Navigation("Comment");
 
-                    b.Navigation("Doc");
-
                     b.Navigation("Image");
 
                     b.Navigation("Message");
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
@@ -1224,11 +1262,6 @@ namespace Meguri.Migrations
                     b.Navigation("UserImages");
                 });
 
-            modelBuilder.Entity("Meguri.Models.BoundTag", b =>
-                {
-                    b.Navigation("DocTags");
-                });
-
             modelBuilder.Entity("Meguri.Models.Comment", b =>
                 {
                     b.Navigation("CommentImages");
@@ -1243,17 +1276,6 @@ namespace Meguri.Migrations
                     b.Navigation("Members");
 
                     b.Navigation("Messages");
-                });
-
-            modelBuilder.Entity("Meguri.Models.Doc", b =>
-                {
-                    b.Navigation("Comments");
-
-                    b.Navigation("DocImages");
-
-                    b.Navigation("DocTags");
-
-                    b.Navigation("Reactions");
                 });
 
             modelBuilder.Entity("Meguri.Models.Fandom", b =>
@@ -1271,11 +1293,11 @@ namespace Meguri.Migrations
 
                     b.Navigation("Comments");
 
-                    b.Navigation("DocImages");
-
                     b.Navigation("ImageTags");
 
                     b.Navigation("MessageImages");
+
+                    b.Navigation("PostImages");
 
                     b.Navigation("Reactions");
 
@@ -1285,6 +1307,17 @@ namespace Meguri.Migrations
             modelBuilder.Entity("Meguri.Models.Message", b =>
                 {
                     b.Navigation("MessageImages");
+
+                    b.Navigation("Reactions");
+                });
+
+            modelBuilder.Entity("Meguri.Models.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("PostImages");
+
+                    b.Navigation("PostTags");
 
                     b.Navigation("Reactions");
                 });

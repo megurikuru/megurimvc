@@ -8,12 +8,12 @@ namespace Meguri.Models {
     [Index(nameof(UserId), nameof(ImageId), IsUnique = true)]
     [Index(nameof(UserId))]
     public class UserImage {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string UserId { get; set; } = null!;
         public ApplicationUser User { get; set; } = null!;
 
-        public int ImageId { get; set; }
+        public long ImageId { get; set; }
         public Image Image { get; set; } = null!;
 
         /// ユーザーが画像を登録した日時

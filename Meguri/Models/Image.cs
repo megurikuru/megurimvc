@@ -10,7 +10,7 @@ namespace Meguri.Models {
     [Index(nameof(IsPublic))]
     [Index(nameof(IsPublic), nameof(Created))]
     public class Image { 
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Caption { get; set; } = string.Empty;
@@ -19,8 +19,8 @@ namespace Meguri.Models {
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
-        // DocとImageは中間テーブルを介した多対多の関係
-        public ICollection<DocImage> DocImages { get; set; } = new List<DocImage>();
+        // PostとImageは中間テーブルを介した多対多の関係
+        public ICollection<PostImage> PostImages { get; set; } = new List<PostImage>();
 
         // ImageとTagは中間テーブルを介した多対多の関係
         public ICollection<ImageTag> ImageTags { get; set; } = new List<ImageTag>();

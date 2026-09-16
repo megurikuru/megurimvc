@@ -12,7 +12,7 @@ namespace Meguri.Models {
         public string? Bio { get; set; }
 
         /// 現在選択中のアバター（アイコン）画像ID
-        public int? ActiveAvatarImageId { get; set; }
+        public long? ActiveAvatarImageId { get; set; }
         public Image? ActiveAvatarImage { get; set; }
 
         /// ユーザーが登録・所持している画像一覧
@@ -22,8 +22,8 @@ namespace Meguri.Models {
         [NotMapped]
         public ICollection<Image> AvatarImages => UserImages.Select(ui => ui.Image).ToList();
 
-        public ICollection<Doc> Docs { get; set; } = new List<Doc>();
-        public ICollection<Fandom> Fandoms { get; set; }
+        public ICollection<Post> Docs { get; set; } = new List<Post>();
+        public ICollection<Fandom> Fandoms { get; set; } = new List<Fandom>();
         public ICollection<FandomUser> FandomUsers { get; set; } = new List<FandomUser>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<ConversationMember> ConversationMembers { get; set; } = new List<ConversationMember>();

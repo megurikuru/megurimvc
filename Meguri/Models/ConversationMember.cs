@@ -8,9 +8,9 @@ namespace Meguri.Models {
     [Index(nameof(ConversationId), nameof(UserId), IsUnique = true)]
     [Index(nameof(UserId))]
     public class ConversationMember {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public int ConversationId { get; set; }
+        public long ConversationId { get; set; }
         public Conversation Conversation { get; set; } = null!;
 
         public string UserId { get; set; } = null!;

@@ -12,9 +12,9 @@ namespace Meguri.Models {
     [Index(nameof(Created))]
     [Index(nameof(ConversationId), nameof(Created))]
     public class Message {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public int ConversationId { get; set; }
+        public long ConversationId { get; set; }
         public Conversation Conversation { get; set; } = null!;
 
         public string SenderId { get; set; } = null!;

@@ -18,8 +18,5 @@ public class BoundTag
     public int PostCount { get; set; } = 0;
 
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
-
-    // --- ナビゲーションプロパティ ---
-    public ICollection<DocTag> DocTags { get; set; } = new List<DocTag>();
 }
 }
