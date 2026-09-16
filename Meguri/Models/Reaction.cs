@@ -12,6 +12,12 @@ namespace Meguri.Models {
     [Index(nameof(MessageId))]
     [Index(nameof(Type))]
     [Index(nameof(Created))]
+    [Index(nameof(UserId), nameof(DocId), nameof(Type), IsUnique = true)]
+    [Index(nameof(UserId), nameof(CommentId), nameof(Type), IsUnique = true)]
+    [Index(nameof(UserId), nameof(ImageId), nameof(Type), IsUnique = true)]
+    [Index(nameof(UserId), nameof(MessageId), nameof(Type), IsUnique = true)]
+    [Index(nameof(DocId), nameof(Type))]
+    [Index(nameof(CommentId), nameof(Type))]
     public class Reaction {
         public int Id { get; set; }
 

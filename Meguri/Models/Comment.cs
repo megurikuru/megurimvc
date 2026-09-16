@@ -7,11 +7,13 @@ using Microsoft.EntityFrameworkCore;
 namespace Meguri.Models {
 
     [Table("Comments")]
+    [Index(nameof(UserId))]
     [Index(nameof(DocId))]
     [Index(nameof(ImageId))]
     [Index(nameof(ParentId))]
     [Index(nameof(Created))]
-    [Index(nameof(DocId), nameof(Number))]
+    [Index(nameof(DocId), nameof(Created))]
+    [Index(nameof(DocId), nameof(Number), IsUnique = true)]
     public class Comment {
         public int Id { get; set; }
 

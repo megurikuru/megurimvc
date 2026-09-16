@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace Meguri.Models {
     [Table("Images")]
+    [Index(nameof(Created))]
+    [Index(nameof(IsPublic))]
+    [Index(nameof(IsPublic), nameof(Created))]
     public class Image { 
         public int Id { get; set; }
         public string Name { get; set; }
