@@ -5,9 +5,9 @@ namespace Meguri.Models {
     [Table("ImageTags")]
     [Index(nameof(TagId))]
     public class ImageTag {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
-        public int ImageId { get; set; }
+        public long ImageId { get; set; }
         public Image Image { get; set; } = null!;
 
         public long TagId { get; set; }

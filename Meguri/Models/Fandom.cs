@@ -23,7 +23,7 @@ namespace Meguri.Models {
         [InverseProperty(nameof(ParentFandom))]
         public ICollection<Fandom> ChildFandoms { get; set; } = new List<Fandom>();
 
-        public ICollection<Doc> Docs { get; set; } = new List<Doc>();
+        public ICollection<Post> Docs { get; set; } = new List<Post>();
         public ICollection<ApplicationUser> Users { get; set; } = new List<ApplicationUser>();
         public ICollection<FandomUser> FandomUsers { get; set; } = new List<FandomUser>();
     }
