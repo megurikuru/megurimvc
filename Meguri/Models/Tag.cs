@@ -6,31 +6,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 
+// 概念に紐づく各言語のタグ文字列を表すクラス
 namespace Meguri.Models {
 
     [Table("Tags")]
-    [Index(nameof(Name))]
-    [Index(nameof(NormalizedName), IsUnique = true)]
     public class Tag {
-        public long TagId { get; set; }
+        public long Id { get; set; }
+        public long TagConceptId { get; set; }
+        public string TagText { get; set; } = string.Empty;
+        public string LanguageCode { get; set; } = "ja";
+        public bool IsCanonical { get; set; }
+        public string NormalizedText { get; set; } = string.Empty;
 
-        /// 表示用名称（例: "PCVバルブ交換", "インプレッサ"）
-        public required string Name { get; set; }
-
-        /// 照合・検索用小文字化・正規化名称
-        public required string NormalizedName { get; set; }
-
-        /// 複数のコンテキストが存在するかどうかの衝突フラグ
-        public bool IsAmbiguous { get; set; } = false;
-
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
-
-        // --- ナビゲーションプロパティ ---
-
-        /// 自身がメインタグとして結合されているBoundTag一覧
-        public ICollection<BoundTag> MainBoundTags { get; set; } = new List<BoundTag>();
-
-        /// 自身がコンテキスト（対象）として結合されているBoundTag一覧
-        public ICollection<BoundTag> ContextBoundTags { get; set; } = new List<BoundTag>();
+        // ナビゲーションプロパティ
+        public virtual TagConcept TagConcept { get; set; } = null!;
     }
 }

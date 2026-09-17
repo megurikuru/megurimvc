@@ -12,7 +12,7 @@ namespace Meguri.Models {
         public long Id { get; set; }
 
         /// グループ名（1対1 DMの場合はnull）
-        public string? Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         /// 1対1 DMかグループチャットかの識別フラグ
         public bool IsGroup { get; set; } = false;

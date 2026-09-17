@@ -30,7 +30,7 @@ namespace Meguri.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<long?>("ActiveAvatarImageId")
+                    b.Property<long>("ActiveAvatarImageId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Bio")
@@ -92,36 +92,6 @@ namespace Meguri.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Meguri.Models.BoundTag", b =>
-                {
-                    b.Property<long>("BoundId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("BoundId"));
-
-                    b.Property<long?>("ContextTagId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("MainTagId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("PostCount")
-                        .HasColumnType("integer");
-
-                    b.HasKey("BoundId");
-
-                    b.HasIndex("ContextTagId");
-
-                    b.HasIndex("MainTagId", "ContextTagId")
-                        .IsUnique();
-
-                    b.ToTable("BoundTags");
                 });
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>
@@ -441,14 +411,14 @@ namespace Meguri.Migrations
                     b.Property<long>("ImageId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("TagId")
+                    b.Property<long>("TagConceptId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("TagConceptId");
 
-                    b.HasIndex("ImageId", "TagId")
+                    b.HasIndex("ImageId", "TagConceptId")
                         .IsUnique();
 
                     b.ToTable("ImageTags");
@@ -631,14 +601,14 @@ namespace Meguri.Migrations
                     b.Property<long>("PostId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("TagId")
+                    b.Property<long>("TagConceptId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("TagConceptId");
 
-                    b.HasIndex("PostId", "TagId")
+                    b.HasIndex("PostId", "TagConceptId")
                         .IsUnique();
 
                     b.ToTable("PostTags");
@@ -658,10 +628,10 @@ namespace Meguri.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long?>("ImageId")
+                    b.Property<long>("ImageId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("MessageId")
+                    b.Property<long>("MessageId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("PostId")
@@ -710,34 +680,84 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.Tag", b =>
                 {
-                    b.Property<long>("TagId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("TagId"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<bool>("IsCanonical")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LanguageCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long>("TagConceptId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TagText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedText")
+                        .IsUnique();
+
+                    b.HasIndex("TagConceptId");
+
+                    b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("Meguri.Models.TagConcept", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Category")
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsAmbiguous")
-                        .HasColumnType("boolean");
+                    b.HasKey("Id");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.ToTable("TagConcepts");
+                });
+
+            modelBuilder.Entity("Meguri.Models.TagRelationship", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ObjectConceptId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Predicate")
                         .HasColumnType("text");
 
-                    b.Property<string>("NormalizedName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("SubjectConceptId")
+                        .HasColumnType("bigint");
 
-                    b.HasKey("TagId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("Name");
+                    b.HasIndex("ObjectConceptId");
 
-                    b.HasIndex("NormalizedName")
+                    b.HasIndex("SubjectConceptId", "ObjectConceptId", "Predicate")
                         .IsUnique();
 
-                    b.ToTable("Tags");
+                    b.ToTable("TagRelationships");
                 });
 
             modelBuilder.Entity("Meguri.Models.UserImage", b =>
@@ -906,27 +926,10 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.Image", "ActiveAvatarImage")
                         .WithMany()
                         .HasForeignKey("ActiveAvatarImageId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("ActiveAvatarImage");
-                });
-
-            modelBuilder.Entity("Meguri.Models.BoundTag", b =>
-                {
-                    b.HasOne("Meguri.Models.Tag", "ContextTag")
-                        .WithMany("ContextBoundTags")
-                        .HasForeignKey("ContextTagId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Meguri.Models.Tag", "MainTag")
-                        .WithMany("MainBoundTags")
-                        .HasForeignKey("MainTagId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
 
-                    b.Navigation("ContextTag");
-
-                    b.Navigation("MainTag");
+                    b.Navigation("ActiveAvatarImage");
                 });
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>
@@ -1034,15 +1037,15 @@ namespace Meguri.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Meguri.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
+                    b.HasOne("Meguri.Models.TagConcept", "TagConcept")
+                        .WithMany("ImageTags")
+                        .HasForeignKey("TagConceptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Image");
 
-                    b.Navigation("Tag");
+                    b.Navigation("TagConcept");
                 });
 
             modelBuilder.Entity("Meguri.Models.Message", b =>
@@ -1127,15 +1130,15 @@ namespace Meguri.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Meguri.Models.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
+                    b.HasOne("Meguri.Models.TagConcept", "TagConcept")
+                        .WithMany("PostTags")
+                        .HasForeignKey("TagConceptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Post");
 
-                    b.Navigation("Tag");
+                    b.Navigation("TagConcept");
                 });
 
             modelBuilder.Entity("Meguri.Models.Reaction", b =>
@@ -1148,12 +1151,14 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.Image", "Image")
                         .WithMany("Reactions")
                         .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Meguri.Models.Message", "Message")
                         .WithMany("Reactions")
                         .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Meguri.Models.Post", "Post")
                         .WithMany("Reactions")
@@ -1174,6 +1179,36 @@ namespace Meguri.Migrations
                     b.Navigation("Post");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Meguri.Models.Tag", b =>
+                {
+                    b.HasOne("Meguri.Models.TagConcept", "TagConcept")
+                        .WithMany("Tags")
+                        .HasForeignKey("TagConceptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TagConcept");
+                });
+
+            modelBuilder.Entity("Meguri.Models.TagRelationship", b =>
+                {
+                    b.HasOne("Meguri.Models.TagConcept", "ObjectConcept")
+                        .WithMany("ObjectRelationships")
+                        .HasForeignKey("ObjectConceptId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Meguri.Models.TagConcept", "SubjectConcept")
+                        .WithMany("SubjectRelationships")
+                        .HasForeignKey("SubjectConceptId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ObjectConcept");
+
+                    b.Navigation("SubjectConcept");
                 });
 
             modelBuilder.Entity("Meguri.Models.UserImage", b =>
@@ -1322,11 +1357,17 @@ namespace Meguri.Migrations
                     b.Navigation("Reactions");
                 });
 
-            modelBuilder.Entity("Meguri.Models.Tag", b =>
+            modelBuilder.Entity("Meguri.Models.TagConcept", b =>
                 {
-                    b.Navigation("ContextBoundTags");
+                    b.Navigation("ImageTags");
 
-                    b.Navigation("MainBoundTags");
+                    b.Navigation("ObjectRelationships");
+
+                    b.Navigation("PostTags");
+
+                    b.Navigation("SubjectRelationships");
+
+                    b.Navigation("Tags");
                 });
 #pragma warning restore 612, 618
         }

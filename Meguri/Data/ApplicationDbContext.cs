@@ -18,7 +18,8 @@ namespace Meguri.Data {
         public DbSet<FandomUser> FandomUsers { get; set; } = null!;
         public DbSet<Image> Images { get; set; } = null!;
         public DbSet<Tag> Tags { get; set; } = null!;
-        public DbSet<BoundTag> BoundTags { get; set; } = null!;
+        public DbSet<TagConcept> TagConcepts { get; set; } = null!;
+        public DbSet<TagRelationship> TagRelationships { get; set; } = null!;
         public DbSet<PostTag> PostTags { get; set; } = null!;
         public DbSet<PostImage> PostImages { get; set; } = null!;
         public DbSet<ImageTag> ImageTags { get; set; } = null!;
@@ -77,7 +78,7 @@ namespace Meguri.Data {
             });
 
             builder.Entity<PostTag>()
-                .HasIndex(dt => new { dt.PostId, dt.TagId })
+                .HasIndex(dt => new { dt.PostId, dt.TagConceptId })
                 .IsUnique();
 
             builder.Entity<PostTag>()
@@ -87,34 +88,39 @@ namespace Meguri.Data {
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<PostTag>()
-                .HasOne(dt => dt.Tag)
-                .WithMany()
-                .HasForeignKey(dt => dt.TagId)
+                .HasOne(dt => dt.TagConcept)
+                .WithMany(tc => tc.PostTags)
+                .HasForeignKey(dt => dt.TagConceptId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Tag>(entity =>
             {
-                entity.HasKey(t => t.TagId);
-                entity.HasIndex(t => t.NormalizedName)
+                entity.HasKey(t => t.Id);
+                entity.HasIndex(t => t.NormalizedText)
                     .IsUnique();
+
+                entity.HasOne(t => t.TagConcept)
+                    .WithMany(tc => tc.Tags)
+                    .HasForeignKey(t => t.TagConceptId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<BoundTag>(entity =>
+            builder.Entity<TagRelationship>(entity =>
             {
-                entity.HasKey(bt => bt.BoundId);
+                entity.HasKey(tr => tr.Id);
 
-                entity.HasOne(bt => bt.MainTag)
-                    .WithMany(t => t.MainBoundTags)
-                    .HasForeignKey(bt => bt.MainTagId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(bt => bt.ContextTag)
-                    .WithMany(t => t.ContextBoundTags)
-                    .HasForeignKey(bt => bt.ContextTagId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasIndex(bt => new { bt.MainTagId, bt.ContextTagId })
+                entity.HasIndex(tr => new { tr.SubjectConceptId, tr.ObjectConceptId, tr.Predicate })
                     .IsUnique();
+
+                entity.HasOne(tr => tr.SubjectConcept)
+                    .WithMany(tc => tc.SubjectRelationships)
+                    .HasForeignKey(tr => tr.SubjectConceptId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(tr => tr.ObjectConcept)
+                    .WithMany(tc => tc.ObjectRelationships)
+                    .HasForeignKey(tr => tr.ObjectConceptId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<PostImage>()
@@ -134,7 +140,7 @@ namespace Meguri.Data {
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ImageTag>()
-                .HasIndex(it => new { it.ImageId, it.TagId })
+                .HasIndex(it => new { it.ImageId, it.TagConceptId })
                 .IsUnique();
 
             builder.Entity<ImageTag>()
@@ -144,9 +150,9 @@ namespace Meguri.Data {
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<ImageTag>()
-                .HasOne(it => it.Tag)
-                .WithMany()
-                .HasForeignKey(it => it.TagId)
+                .HasOne(it => it.TagConcept)
+                .WithMany(tc => tc.ImageTags)
+                .HasForeignKey(it => it.TagConceptId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Fandom>(entity =>
