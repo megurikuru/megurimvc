@@ -1,0 +1,105 @@
+@model Meguri.Models.MessageViewModels.ChatRoomViewModel
+@{
+		ViewData["Title"] = Model.DisplayTitle;
+}
+
+<div class="row justify-content-center">
+		<div class="col-lg-9">
+				<div class="card shadow-sm border-0 mb-3 bg-white">
+						<div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+								<div class="d-flex align-items-center gap-2">
+										<a asp-action="Index" class="btn btn-sm btn-outline-secondary">←</a>
+										<h5 class="fw-bold mb-0">
+												@(Model.Conversation.IsGroup ? "👥" : "👤") @Model.DisplayTitle
+										</h5>
+								</div>
+								<div class="dropdown">
+										<button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown">
+												👥 メンバー (@Model.Conversation.Members.Count)
+										</button>
+										<ul class="dropdown-menu dropdown-menu-end">
+												@foreach (var m in Model.Conversation.Members)
+												{
+														<li class="dropdown-item-text small">👤 @(m.User?.UserName ?? "User")</li>
+												}
+										</ul>
+								</div>
+						</div>
+
+						<!-- チャットメッセージエリア -->
+						<div class="chat-container" id="chatMessageContainer">
+								@if (!Model.Conversation.Messages.Any())
+								{
+										<p class="text-center text-muted my-auto">メッセージを送ってチャットを始めましょう！</p>
+								}
+								else
+								{
+										@foreach (var msg in Model.Conversation.Messages.OrderBy(m => m.Created))
+										{
+												var isMe = msg.SenderId == Model.CurrentUserId;
+												<div class="d-flex flex-column @(isMe ? "align-items-end" : "align-items-start")">
+														@if (!isMe)
+														{
+																<span class="small text-muted ms-1 mb-1">👤 @(msg.Sender?.UserName ?? "User")</span>
+														}
+														<div class="chat-bubble @(isMe ? "chat-bubble-outgoing" : "chat-bubble-incoming") shadow-sm">
+																@if (!string.IsNullOrEmpty(msg.Text))
+																{
+																		<div style="white-space: pre-line;">@msg.Text</div>
+																}
+
+																@if (msg.MessageImages.Any())
+																{
+																		<div class="d-flex flex-wrap gap-2 mt-2">
+																				@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder))
+																				{
+																						<a asp-controller="Image" asp-action="Details" asp-route-id="@mi.ImageId">
+																								<img src="/Image/File/@mi.ImageId" class="rounded" style="max-height: 150px; object-fit: cover;" alt="Attached" />
+																						</a>
+																				}
+																		</div>
+																}
+																<div class="timestamp">@msg.Created.ToString("HH:mm")</div>
+														</div>
+
+														<!-- リアクションバー -->
+														<div class="mt-1">
+																@await Html.PartialAsync("_ReactionButtons", ("Message", msg.Id, msg.Reactions.AsEnumerable()))
+														</div>
+												</div>
+										}
+								}
+						</div>
+
+						<!-- 送信フォーム -->
+						<div class="card-footer bg-white border-top p-3">
+								<form asp-action="SendMessage" method="post" enctype="multipart/form-data">
+										@Html.AntiForgeryToken()
+										<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
+
+										<div class="mb-2">
+												<textarea name="text" rows="2" class="form-control" placeholder="@SharedLocalizer["Message_InputPlaceholder"]" autofocus></textarea>
+										</div>
+
+										<div class="d-flex justify-content-between align-items-center">
+												<input type="file" name="imageFiles" multiple accept="image/*" class="form-control form-control-sm" style="max-width: 250px;" />
+												<button type="submit" class="btn btn-primary btn-sm px-4">
+														🚀 @SharedLocalizer["Message_SendBtn"]
+												</button>
+										</div>
+								</form>
+						</div>
+				</div>
+		</div>
+</div>
+
+@section Scripts {
+		<script>
+				$(document).ready(function () {
+						const container = document.getElementById('chatMessageContainer');
+						if (container) {
+								container.scrollTop = container.scrollHeight;
+						}
+				});
+		</script>
+}

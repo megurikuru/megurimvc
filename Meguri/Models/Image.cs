@@ -11,11 +11,11 @@ namespace Meguri.Models {
     [Index(nameof(IsPublic), nameof(Created))]
     public class Image { 
         public long Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public string Caption { get; set; } = string.Empty;
         public bool IsPublic { get; set; } = false;
-        public byte[] Content { get; set; }
+        public byte[] Content { get; set; } = Array.Empty<byte>();
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 

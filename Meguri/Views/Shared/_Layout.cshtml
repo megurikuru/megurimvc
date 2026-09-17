@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,10 +14,10 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
         <div class="container">
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">meguri</a>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand fw-bold">meguri</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="@SharedLocalizer["Nav_ToggleNavigation"]">
                 <span class="navbar-toggler-icon"></span>
@@ -25,29 +25,61 @@
 
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Nav_Home"]</a></li>
-                    @* <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">@SharedLocalizer["Nav_About"]</a></li> *@
-                    @* <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">@SharedLocalizer["Nav_Contact"]</a></li> *@
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Nav_Fandom"]</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Murmur" asp-action="Index">@SharedLocalizer["Nav_Murmurs"]</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Illustration" asp-action="Index">@SharedLocalizer["Nav_Illustrations"]</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Manga" asp-action="Index">@SharedLocalizer["Nav_Manga"]</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Novels" asp-action="Index">@SharedLocalizer["Nav_Novels"]</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Cosplay" asp-action="Index">@SharedLocalizer["Nav_Cosplay"]</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Nav_Messages"]</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Other" asp-action="Index">@SharedLocalizer["Nav_Others"]</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Nav_Home"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Fandom_Title"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Post" asp-action="Index">@SharedLocalizer["Post_Title"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Image" asp-action="Index">@SharedLocalizer["Image_GalleryTitle"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">@SharedLocalizer["Tag_Title"]</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Message_Title"]</a>
+                    </li>
                 </ul>
-                @await Html.PartialAsync("_LoginPartial")
+                <div class="d-flex align-items-center gap-2">
+                    <!-- 言語切替 -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            🌐 @(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ja" ? "日本語" : "English")
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                            <li>
+                                <form asp-controller="Home" asp-action="SetLanguage" method="post" class="dropdown-item p-0">
+                                    <input type="hidden" name="culture" value="ja" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                    <button type="submit" class="btn btn-link dropdown-item text-start">日本語 (Japanese)</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form asp-controller="Home" asp-action="SetLanguage" method="post" class="dropdown-item p-0">
+                                    <input type="hidden" name="culture" value="en" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                    <button type="submit" class="btn btn-link dropdown-item text-start">English</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+    <main class="container body-content my-4">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>@SharedLocalizer["Footer_Copyright"]</p>
-        </footer>
-    </div>
+    </main>
+    <footer class="footer mt-auto py-3 bg-white border-top text-center text-muted">
+        <div class="container">
+            <p class="mb-0">@SharedLocalizer["Footer_Copyright"]</p>
+        </div>
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

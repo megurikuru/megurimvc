@@ -1,0 +1,132 @@
+@model Meguri.Models.MessageViewModels.ConversationListViewModel
+@{
+		ViewData["Title"] = SharedLocalizer["Message_Title"];
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+		<div>
+				<h2 class="fw-bold mb-1">💬 @SharedLocalizer["Message_Title"]</h2>
+				<p class="text-muted mb-0">1対1のダイレクトメッセージやグループチャットができます。</p>
+		</div>
+		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newConversationModal">
+				➕ @SharedLocalizer["Message_NewConversation"]
+		</button>
+</div>
+
+<!-- 会話一覧 -->
+<div class="card shadow-sm border-0 bg-white">
+		@if (!Model.Conversations.Any())
+		{
+				<div class="card-body p-5 text-center text-muted">
+						<h4>@SharedLocalizer["Message_NoConversations"]</h4>
+						<p>新しいメッセージを作成して他のユーザーと交流してみましょう！</p>
+						<button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#newConversationModal">
+								➕ @SharedLocalizer["Message_NewConversation"]
+						</button>
+				</div>
+		}
+		else
+		{
+				<div class="list-group list-group-flush">
+						@foreach (var c in Model.Conversations)
+						{
+								<a asp-action="Chat" asp-route-id="@c.Id" class="list-group-item list-group-item-action p-3 d-flex justify-content-between align-items-center">
+										<div class="d-flex align-items-center gap-3">
+												<div class="rounded-circle bg-primary bg-opacity-10 text-primary p-3 fs-4">
+														@(c.IsGroup ? "👥" : "👤")
+												</div>
+												<div>
+														<h6 class="fw-bold mb-1">
+																@c.Title
+																@if (c.IsGroup)
+																{
+																		<span class="badge bg-secondary ms-1">グループ</span>
+																}
+														</h6>
+														<p class="text-muted small mb-0 text-truncate" style="max-width: 400px;">
+																@c.LastMessageText
+														</p>
+												</div>
+										</div>
+										<div class="text-end text-muted small">
+												<div>@c.LastMessageTime.ToString("MM/dd HH:mm")</div>
+												<span class="badge bg-light text-dark border">開く →</span>
+										</div>
+								</a>
+						}
+				</div>
+		}
+</div>
+
+<!-- 新規会話作成モーダル -->
+<div class="modal fade" id="newConversationModal" tabindex="-1" aria-labelledby="newConversationModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+				<div class="modal-content border-0 shadow">
+						<div class="modal-header bg-white">
+								<h5 class="modal-title fw-bold" id="newConversationModalLabel">💬 @SharedLocalizer["Message_NewConversation"]</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<form asp-action="Create" method="post" enctype="multipart/form-data">
+								@Html.AntiForgeryToken()
+								<div class="modal-body">
+										<!-- タイプ切替 -->
+										<div class="mb-3">
+												<label class="form-label fw-bold">チャット種別</label>
+												<div class="d-flex gap-3">
+														<div class="form-check">
+																<input class="form-check-input" type="radio" name="IsGroup" id="typeDirect" value="false" checked onchange="$('#groupTitleContainer').addClass('d-none')" />
+																<label class="form-check-label" for="typeDirect">@SharedLocalizer["Message_Direct"]</label>
+														</div>
+														<div class="form-check">
+																<input class="form-check-input" type="radio" name="IsGroup" id="typeGroup" value="true" onchange="$('#groupTitleContainer').removeClass('d-none')" />
+																<label class="form-check-label" for="typeGroup">@SharedLocalizer["Message_Group"]</label>
+														</div>
+												</div>
+										</div>
+
+										<!-- グループ名入力（グループ時のみ） -->
+										<div class="mb-3 d-none" id="groupTitleContainer">
+												<label class="form-label fw-bold">@SharedLocalizer["Message_GroupName"]</label>
+												<input type="text" name="Title" class="form-control" placeholder="例: 漫画制作合宿、イラスト部" />
+										</div>
+
+										<!-- メンバー選択 -->
+										<div class="mb-3">
+												<label class="form-label fw-bold">@SharedLocalizer["Message_SelectRecipient"] <span class="text-danger">*</span></label>
+												<div class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
+														@if (!Model.AvailableUsers.Any())
+														{
+																<p class="text-muted small mb-0">他のユーザーが見つかりません。</p>
+														}
+														@foreach (var user in Model.AvailableUsers)
+														{
+																<div class="form-check">
+																		<input class="form-check-input" type="checkbox" name="SelectedUserIds" value="@user.Id" id="user_@user.Id" />
+																		<label class="form-check-label" for="user_@user.Id">
+																				👤 @user.UserName
+																		</label>
+																</div>
+														}
+												</div>
+										</div>
+
+										<!-- メッセージ入力 -->
+										<div class="mb-3">
+												<label class="form-label fw-bold">@SharedLocalizer["Message_InputPlaceholder"] <span class="text-danger">*</span></label>
+												<textarea name="InitialMessage" rows="3" class="form-control" placeholder="メッセージを入力してください..." required></textarea>
+										</div>
+
+										<!-- 画像添付 -->
+										<div class="mb-3">
+												<label class="form-label fw-bold">🖼️ 画像を添付</label>
+												<input type="file" name="ImageFiles" multiple accept="image/*" class="form-control form-control-sm" />
+										</div>
+								</div>
+								<div class="modal-footer bg-light">
+										<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@SharedLocalizer["Common_Cancel"]</button>
+										<button type="submit" class="btn btn-primary">@SharedLocalizer["Message_SendBtn"]</button>
+								</div>
+						</form>
+				</div>
+		</div>
+</div>

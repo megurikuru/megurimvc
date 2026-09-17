@@ -19,10 +19,10 @@ namespace Meguri.Models {
     [Index(nameof(FandomId), nameof(Created))]
     public class Post {
         public long Id { get; set; }
-        public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
-        public string Name { get; set; }
-        public string Text { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public ApplicationUser? User { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Text { get; set; } = string.Empty;
         public int FandomId { get; set; }
         public bool Sexual  { get; set; } = false;
         public bool Violence  { get; set; } = false;
@@ -47,7 +47,7 @@ namespace Meguri.Models {
         public DateTime Updated { get; set; }
 
         // FandomとDocは一対多の関係
-        public Fandom Fandom { get; set; }
+        public Fandom? Fandom { get; set; }
 
         // PostとTagは中間テーブルを介した多対多の関係
         public ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();

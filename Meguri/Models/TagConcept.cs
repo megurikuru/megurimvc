@@ -8,6 +8,10 @@ namespace Meguri.Models {
         public string Category { get; set; } = "general";
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 
+        // 所有者（作成者）
+        public string? UserId { get; set; }
+        public virtual ApplicationUser? User { get; set; }
+
         // ナビゲーションプロパティ
         public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
         public virtual ICollection<TagRelationship> SubjectRelationships { get; set; } = new List<TagRelationship>();

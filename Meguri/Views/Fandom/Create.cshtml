@@ -1,0 +1,43 @@
+@model Meguri.Models.Fandom
+@{
+		ViewData["Title"] = SharedLocalizer["Fandom_CreateNew"];
+		var parentFandoms = ViewBag.ParentFandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
+}
+
+<div class="row justify-content-center">
+		<div class="col-lg-6">
+				<div class="card shadow-sm border-0">
+						<div class="card-header bg-white py-3">
+								<h4 class="card-title fw-bold mb-0">🏛️ @SharedLocalizer["Fandom_CreateNew"]</h4>
+						</div>
+						<div class="card-body p-4">
+								<form asp-action="Create" method="post">
+										<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+										<div class="mb-3">
+												<label asp-for="Name" class="form-label fw-bold">@SharedLocalizer["Fandom_Name"] <span class="text-danger">*</span></label>
+												<input asp-for="Name" class="form-control" placeholder="例: イラスト、ゲーム、SF小説" required />
+												<span asp-validation-for="Name" class="text-danger"></span>
+										</div>
+
+										<div class="mb-3">
+												<label asp-for="ParentFandomId" class="form-label fw-bold">@SharedLocalizer["Fandom_Parent"]</label>
+												<select asp-for="ParentFandomId" class="form-select">
+														<option value="">-- @SharedLocalizer["Fandom_NoParent"] --</option>
+														@foreach (var p in parentFandoms)
+														{
+																<option value="@p.Id">@p.Name</option>
+														}
+												</select>
+												<div class="form-text">親界隈を指定すると、その親界隈の「子界隈」として階層化されます。</div>
+										</div>
+
+										<div class="d-flex justify-content-between mt-4">
+												<a asp-action="Index" class="btn btn-outline-secondary">@SharedLocalizer["Common_Back"]</a>
+												<button type="submit" class="btn btn-primary px-4">@SharedLocalizer["Common_Create"]</button>
+										</div>
+								</form>
+						</div>
+				</div>
+		</div>
+</div>

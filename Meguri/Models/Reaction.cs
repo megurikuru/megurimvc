@@ -28,19 +28,19 @@ namespace Meguri.Models {
 
         // 対象の Post（Post へのリアクションの場合）
         public long? PostId { get; set; }
-        public Post Post { get; set; } = null!;
+        public Post? Post { get; set; }
 
         // 対象の Comment（Comment へのリアクションの場合）
         public long? CommentId { get; set; }
-        public Comment Comment { get; set; } = null!;
+        public Comment? Comment { get; set; }
 
         // 対象の Image（Image へのリアクションの場合）
-        public long ImageId { get; set; }
-        public Image Image { get; set; } = null!;
+        public long? ImageId { get; set; }
+        public Image? Image { get; set; }
 
         // 対象の Message（Message へのリアクションの場合）
-        public long MessageId { get; set; }
-        public Message Message { get; set; } = null!;
+        public long? MessageId { get; set; }
+        public Message? Message { get; set; }
 
         public DateTime Created { get; set; }
     }

@@ -1,0 +1,141 @@
+@model Meguri.Models.Post
+@using System.Security.Claims
+
+@{
+		ViewData["Title"] = Model.Name;
+		var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		var isAuthor = Model.UserId == currentUserId || User.IsInRole("Admin");
+}
+
+<div class="row justify-content-center">
+		<div class="col-lg-9">
+				<div class="card shadow-sm border-0 mb-4 bg-white">
+						<div class="card-body p-4">
+								<!-- ヘッダー情報 -->
+								<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+										<div class="d-flex align-items-center gap-2">
+												<a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.FandomId" class="badge bg-secondary text-decoration-none">
+														🏛️ @(Model.Fandom?.Name ?? "界隈")
+												</a>
+												@if (Model.IsPinned)
+												{
+														<span class="badge bg-warning text-dark">📌 固定</span>
+												}
+												@if (Model.Sexual)
+												{
+														<span class="badge bg-danger">R-18</span>
+												}
+												@if (Model.Violence)
+												{
+														<span class="badge bg-dark">R-18G</span>
+												}
+										</div>
+
+										@if (isAuthor)
+										{
+												<div class="d-flex gap-2">
+														<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">
+																✏️ @SharedLocalizer["Common_Edit"]
+														</a>
+														<form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
+																@Html.AntiForgeryToken()
+																<button type="submit" class="btn btn-sm btn-outline-danger">
+																		🗑️ @SharedLocalizer["Common_Delete"]
+																</button>
+														</form>
+												</div>
+										}
+								</div>
+
+								<h2 class="fw-bold mb-2">@Model.Name</h2>
+
+								<div class="d-flex justify-content-between align-items-center text-muted small mb-4 pb-3 border-bottom">
+										<div>
+												<span>👤 @(Model.User?.UserName ?? "User")</span>
+												<span class="ms-3">🕒 @Model.Created.ToString("yyyy/MM/dd HH:mm")</span>
+										</div>
+										<div>
+												<span>👁️ @Model.ViewCount 閲覧</span>
+										</div>
+								</div>
+
+								<!-- 本文 -->
+								<div class="post-content fs-5 mb-4" style="white-space: pre-line; line-height: 1.8;">
+										@Model.Text
+								</div>
+
+								<!-- 添付画像（順序付き） -->
+								@if (Model.PostImages.Any())
+								{
+										<div class="mb-4">
+												<h5 class="fw-bold mb-3">🖼️ @SharedLocalizer["Post_AttachImages"] (@Model.PostImages.Count)</h5>
+												<div class="image-grid">
+														@foreach (var pi in Model.PostImages.OrderBy(x => x.DisplayOrder))
+														{
+																<div class="card border-0 shadow-sm image-card position-relative">
+																		<a asp-controller="Image" asp-action="Details" asp-route-id="@pi.ImageId">
+																				<img src="/Image/File/@pi.ImageId" alt="@pi.Image.Name" loading="lazy" />
+																		</a>
+																		<span class="position-absolute top-0 start-0 badge bg-dark bg-opacity-75 m-1">
+																				#@(pi.DisplayOrder + 1)
+																		</span>
+																</div>
+														}
+												</div>
+										</div>
+								}
+
+								<!-- タグ一覧 & あいまいさ回避 -->
+								<div class="my-4 pt-3 border-top">
+										<div class="d-flex flex-wrap align-items-center gap-2">
+												<span class="fw-bold small text-muted">🏷️ @SharedLocalizer["Post_Tags"]:</span>
+												@if (!Model.PostTags.Any())
+												{
+														<span class="text-muted small">なし</span>
+												}
+												else
+												{
+														@foreach (var pt in Model.PostTags)
+														{
+																var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText ?? "tag";
+																<div class="btn-group btn-group-sm">
+																		<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="btn btn-outline-primary">
+																				#@tagText
+																		</a>
+																		<a asp-controller="Tag" asp-action="Disambiguation" asp-route-id="@pt.TagConceptId" class="btn btn-outline-secondary" title="@SharedLocalizer["Tag_DisambiguationBtn"]">
+																				⚖️
+																		</a>
+																</div>
+														}
+												}
+										</div>
+								</div>
+
+								<!-- リアクションボタン -->
+								<div class="pt-3 border-top">
+										<div class="fw-bold small text-muted mb-2">@SharedLocalizer["Reaction_React"]</div>
+										@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
+								</div>
+						</div>
+				</div>
+
+				<!-- スレッド式コメント一覧 & 投稿フォーム -->
+				<div class="card shadow-sm border-0 mb-4 bg-white">
+						<div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+								<h5 class="fw-bold mb-0">💬 @SharedLocalizer["Post_ThreadTitle"] (@Model.CommentCount)</h5>
+								@if (Model.IsLocked)
+								{
+										<span class="badge bg-secondary">🔒 @SharedLocalizer["Post_Locked"]</span>
+								}
+						</div>
+						<div class="card-body p-4">
+								@if (Model.IsLocked)
+								{
+										<div class="alert alert-warning py-2 mb-3">この投稿のスレッドはロックされており、新しいコメントは投稿できません。</div>
+								}
+
+								@await Html.PartialAsync("_CommentThread", (Model.Comments.Where(c => c.ParentId == null).OrderBy(c => c.Created).ToList(), "Post", Model.Id))
+						</div>
+				</div>
+		</div>
+</div>

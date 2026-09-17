@@ -1,0 +1,50 @@
+@model IEnumerable<Meguri.Models.Image>
+@{
+		ViewData["Title"] = SharedLocalizer["Image_GalleryTitle"];
+		var currentTag = ViewBag.CurrentTag as string;
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+		<div>
+				<h2 class="fw-bold mb-1">🖼️ @SharedLocalizer["Image_GalleryTitle"]</h2>
+				<p class="text-muted mb-0">@SharedLocalizer["Image_SingleOrMultiple"]</p>
+		</div>
+		<a asp-action="Upload" class="btn btn-primary">
+				➕ @SharedLocalizer["Image_UploadTitle"]
+		</a>
+</div>
+
+@if (!string.IsNullOrEmpty(currentTag))
+{
+		<div class="alert alert-info d-flex justify-content-between align-items-center py-2 mb-4">
+				<span>#@currentTag の画像を表示中</span>
+				<a asp-action="Index" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_All"]</a>
+		</div>
+}
+
+@if (!Model.Any())
+{
+		<div class="card p-5 text-center text-muted">
+				<h4>@SharedLocalizer["Image_NoImages"]</h4>
+				<div class="mt-3">
+						<a asp-action="Upload" class="btn btn-primary">@SharedLocalizer["Image_UploadTitle"]</a>
+				</div>
+		</div>
+}
+else
+{
+		<div class="image-grid">
+				@foreach (var item in Model)
+				{
+						<div class="card border-0 shadow-sm image-card position-relative">
+								<a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+										<img src="/Image/File/@item.Id" alt="@item.Name" loading="lazy" />
+								</a>
+								<div class="position-absolute bottom-0 start-0 w-100 p-2 bg-dark bg-opacity-75 text-white small d-flex justify-content-between align-items-center">
+										<span class="text-truncate me-1">@(string.IsNullOrEmpty(item.Caption) ? item.Name : item.Caption)</span>
+										<span class="badge bg-primary">❤️ @item.Reactions.Count</span>
+								</div>
+						</div>
+				}
+		</div>
+}

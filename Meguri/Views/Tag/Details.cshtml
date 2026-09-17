@@ -1,0 +1,155 @@
+@model Meguri.Models.TagConcept
+@{
+		var primaryTag = Model.Tags.FirstOrDefault(t => t.IsCanonical)?.TagText
+				?? Model.Tags.FirstOrDefault()?.TagText ?? $"Tag#{Model.Id}";
+		ViewData["Title"] = $"#{primaryTag}";
+		bool canEdit = ViewBag.CanEdit is true;
+}
+
+<div class="card shadow-sm border-0 mb-4 bg-white">
+		<div class="card-body p-4">
+				<div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+						<div>
+								<h2 class="fw-bold mb-1">🏷️ #@primaryTag</h2>
+								<div class="text-muted small">
+										作成者: @(Model.User?.UserName ?? "System") | 投稿: @Model.PostTags.Count 件 | 画像: @Model.ImageTags.Count 件
+								</div>
+						</div>
+
+						<div class="d-flex gap-2">
+								<a asp-action="Disambiguation" asp-route-id="@Model.Id" class="btn btn-warning">
+										⚖️ @SharedLocalizer["Tag_DisambiguationBtn"]
+								</a>
+								<a asp-controller="Post" asp-action="Index" asp-route-tag="@primaryTag" class="btn btn-outline-primary">
+										📝 投稿一覧
+								</a>
+								<a asp-controller="Image" asp-action="Index" asp-route-tag="@primaryTag" class="btn btn-outline-secondary">
+										🖼️ 画像一覧
+								</a>
+						</div>
+				</div>
+
+				<!-- シソーラス情報（上位語・下位語・関連語・同義語） -->
+				<div class="row g-3 mt-3 pt-3 border-top">
+						<!-- 同義語 -->
+						@if (Model.Tags.Count > 1)
+						{
+								<div class="col-md-6">
+										<h6 class="fw-bold small text-muted">🔄 @SharedLocalizer["Tag_SynonymTerms"]</h6>
+										<div class="d-flex flex-wrap gap-1">
+												@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag))
+												{
+														<span class="badge bg-light text-dark border">#@t.TagText</span>
+												}
+										</div>
+								</div>
+						}
+
+						<!-- 上位語 -->
+						@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader"))
+						{
+								<div class="col-md-6">
+										<h6 class="fw-bold small text-muted">⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h6>
+										<div class="d-flex flex-wrap gap-1">
+												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader"))
+												{
+														var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
+														<a asp-action="Details" asp-route-conceptId="@r.ObjectConceptId" class="badge bg-secondary text-decoration-none">
+																#@text
+														</a>
+												}
+										</div>
+								</div>
+						}
+
+						<!-- 下位語 -->
+						@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader"))
+						{
+								<div class="col-md-6">
+										<h6 class="fw-bold small text-muted">⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h6>
+										<div class="d-flex flex-wrap gap-1">
+												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader"))
+												{
+														var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
+														<a asp-action="Details" asp-route-conceptId="@r.SubjectConceptId" class="badge bg-secondary text-decoration-none">
+																#@text
+														</a>
+												}
+										</div>
+								</div>
+						}
+
+						<!-- 関連語 -->
+						@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related"))
+						{
+								<div class="col-md-6">
+										<h6 class="fw-bold small text-muted">🔗 @SharedLocalizer["Tag_RelatedTerms"]</h6>
+										<div class="d-flex flex-wrap gap-1">
+												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related"))
+												{
+														var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
+														<a asp-action="Details" asp-route-conceptId="@r.ObjectConceptId" class="badge bg-info text-dark text-decoration-none">
+																#@text
+														</a>
+												}
+												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related"))
+												{
+														var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
+														<a asp-action="Details" asp-route-conceptId="@r.SubjectConceptId" class="badge bg-info text-dark text-decoration-none">
+																#@text
+														</a>
+												}
+										</div>
+								</div>
+						}
+				</div>
+		</div>
+</div>
+
+<!-- 投稿 & 画像一覧 -->
+<div class="row g-4">
+		<div class="col-lg-6">
+				<h4 class="fw-bold mb-3">📝 関連する投稿 (@Model.PostTags.Count)</h4>
+				@if (!Model.PostTags.Any())
+				{
+						<p class="text-muted">投稿はありません。</p>
+				}
+				else
+				{
+						<div class="d-flex flex-column gap-2">
+								@foreach (var pt in Model.PostTags)
+								{
+										<div class="card border-0 shadow-sm p-3">
+												<h6 class="fw-bold mb-1">
+														<a asp-controller="Post" asp-action="Details" asp-route-id="@pt.PostId" class="text-decoration-none text-dark">
+																@pt.Post.Name
+														</a>
+												</h6>
+												<small class="text-muted">👤 @(pt.Post.User?.UserName ?? "User") | @pt.Post.Created.ToString("yyyy/MM/dd")</small>
+										</div>
+								}
+						</div>
+				}
+		</div>
+
+		<div class="col-lg-6">
+				<h4 class="fw-bold mb-3">🖼️ 関連する画像 (@Model.ImageTags.Count)</h4>
+				@if (!Model.ImageTags.Any())
+				{
+						<p class="text-muted">画像はありません。</p>
+				}
+				else
+				{
+						<div class="image-grid">
+								@foreach (var it in Model.ImageTags)
+								{
+										<div class="card border-0 shadow-sm image-card">
+												<a asp-controller="Image" asp-action="Details" asp-route-id="@it.ImageId">
+														<img src="/Image/File/@it.ImageId" alt="@it.Image.Name" />
+												</a>
+										</div>
+								}
+						</div>
+				}
+		</div>
+</div>
