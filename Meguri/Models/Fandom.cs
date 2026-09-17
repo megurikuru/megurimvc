@@ -17,7 +17,7 @@ namespace Meguri.Models {
 
         /// eFandom
         [ForeignKey(nameof(ParentFandomId))]
-        public Fandom? ParentFandom { get; set; }
+        public Fandom ParentFandom { get; set; } = null!;
 
         /// qFandomˆê——
         [InverseProperty(nameof(ParentFandom))]

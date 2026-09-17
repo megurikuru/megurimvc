@@ -84,19 +84,17 @@ namespace Meguri.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tags",
+                name: "TagConcepts",
                 columns: table => new
                 {
-                    TagId = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    NormalizedName = table.Column<string>(type: "text", nullable: false),
-                    IsAmbiguous = table.Column<bool>(type: "boolean", nullable: false),
+                    Category = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tags", x => x.TagId);
+                    table.PrimaryKey("PK_TagConcepts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,7 +124,7 @@ namespace Meguri.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Bio = table.Column<string>(type: "text", nullable: true),
-                    ActiveAvatarImageId = table.Column<long>(type: "bigint", nullable: true),
+                    ActiveAvatarImageId = table.Column<long>(type: "bigint", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -154,41 +152,13 @@ namespace Meguri.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BoundTags",
-                columns: table => new
-                {
-                    BoundId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    MainTagId = table.Column<long>(type: "bigint", nullable: false),
-                    ContextTagId = table.Column<long>(type: "bigint", nullable: true),
-                    PostCount = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BoundTags", x => x.BoundId);
-                    table.ForeignKey(
-                        name: "FK_BoundTags_Tags_ContextTagId",
-                        column: x => x.ContextTagId,
-                        principalTable: "Tags",
-                        principalColumn: "TagId",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_BoundTags_Tags_MainTagId",
-                        column: x => x.MainTagId,
-                        principalTable: "Tags",
-                        principalColumn: "TagId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ImageTags",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ImageId = table.Column<long>(type: "bigint", nullable: false),
-                    TagId = table.Column<long>(type: "bigint", nullable: false),
+                    TagConceptId = table.Column<long>(type: "bigint", nullable: false),
                     DisplayOrder = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -201,10 +171,60 @@ namespace Meguri.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ImageTags_Tags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tags",
-                        principalColumn: "TagId",
+                        name: "FK_ImageTags_TagConcepts_TagConceptId",
+                        column: x => x.TagConceptId,
+                        principalTable: "TagConcepts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TagRelationships",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SubjectConceptId = table.Column<long>(type: "bigint", nullable: false),
+                    Predicate = table.Column<string>(type: "text", nullable: true),
+                    ObjectConceptId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TagRelationships", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TagRelationships_TagConcepts_ObjectConceptId",
+                        column: x => x.ObjectConceptId,
+                        principalTable: "TagConcepts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_TagRelationships_TagConcepts_SubjectConceptId",
+                        column: x => x.SubjectConceptId,
+                        principalTable: "TagConcepts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    TagConceptId = table.Column<long>(type: "bigint", nullable: false),
+                    TagText = table.Column<string>(type: "text", nullable: false),
+                    LanguageCode = table.Column<string>(type: "text", nullable: false),
+                    IsCanonical = table.Column<bool>(type: "boolean", nullable: false),
+                    NormalizedText = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tags_TagConcepts_TagConceptId",
+                        column: x => x.TagConceptId,
+                        principalTable: "TagConcepts",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -518,7 +538,7 @@ namespace Meguri.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PostId = table.Column<long>(type: "bigint", nullable: false),
-                    TagId = table.Column<long>(type: "bigint", nullable: false),
+                    TagConceptId = table.Column<long>(type: "bigint", nullable: false),
                     DisplayOrder = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -531,10 +551,10 @@ namespace Meguri.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PostTags_Tags_TagId",
-                        column: x => x.TagId,
-                        principalTable: "Tags",
-                        principalColumn: "TagId",
+                        name: "FK_PostTags_TagConcepts_TagConceptId",
+                        column: x => x.TagConceptId,
+                        principalTable: "TagConcepts",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -602,8 +622,8 @@ namespace Meguri.Migrations
                     Type = table.Column<int>(type: "integer", nullable: false),
                     PostId = table.Column<long>(type: "bigint", nullable: true),
                     CommentId = table.Column<long>(type: "bigint", nullable: true),
-                    ImageId = table.Column<long>(type: "bigint", nullable: true),
-                    MessageId = table.Column<long>(type: "bigint", nullable: true),
+                    ImageId = table.Column<long>(type: "bigint", nullable: false),
+                    MessageId = table.Column<long>(type: "bigint", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -703,17 +723,6 @@ namespace Meguri.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BoundTags_ContextTagId",
-                table: "BoundTags",
-                column: "ContextTagId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BoundTags_MainTagId_ContextTagId",
-                table: "BoundTags",
-                columns: new[] { "MainTagId", "ContextTagId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -860,15 +869,15 @@ namespace Meguri.Migrations
                 columns: new[] { "IsPublic", "Created" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageTags_ImageId_TagId",
+                name: "IX_ImageTags_ImageId_TagConceptId",
                 table: "ImageTags",
-                columns: new[] { "ImageId", "TagId" },
+                columns: new[] { "ImageId", "TagConceptId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageTags_TagId",
+                name: "IX_ImageTags_TagConceptId",
                 table: "ImageTags",
-                column: "TagId");
+                column: "TagConceptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MessageImages_ImageId",
@@ -913,15 +922,15 @@ namespace Meguri.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostTags_PostId_TagId",
+                name: "IX_PostTags_PostId_TagConceptId",
                 table: "PostTags",
-                columns: new[] { "PostId", "TagId" },
+                columns: new[] { "PostId", "TagConceptId" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PostTags_TagId",
+                name: "IX_PostTags_TagConceptId",
                 table: "PostTags",
-                column: "TagId");
+                column: "TagConceptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reactions_CommentId",
@@ -993,15 +1002,26 @@ namespace Meguri.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tags_Name",
-                table: "Tags",
-                column: "Name");
+                name: "IX_TagRelationships_ObjectConceptId",
+                table: "TagRelationships",
+                column: "ObjectConceptId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tags_NormalizedName",
-                table: "Tags",
-                column: "NormalizedName",
+                name: "IX_TagRelationships_SubjectConceptId_ObjectConceptId_Predicate",
+                table: "TagRelationships",
+                columns: new[] { "SubjectConceptId", "ObjectConceptId", "Predicate" },
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_NormalizedText",
+                table: "Tags",
+                column: "NormalizedText",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_TagConceptId",
+                table: "Tags",
+                column: "TagConceptId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserImages_ImageId",
@@ -1039,9 +1059,6 @@ namespace Meguri.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BoundTags");
-
-            migrationBuilder.DropTable(
                 name: "CommentImages");
 
             migrationBuilder.DropTable(
@@ -1066,19 +1083,25 @@ namespace Meguri.Migrations
                 name: "Reactions");
 
             migrationBuilder.DropTable(
+                name: "TagRelationships");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
+
+            migrationBuilder.DropTable(
                 name: "UserImages");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Tags");
-
-            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "TagConcepts");
 
             migrationBuilder.DropTable(
                 name: "Docs");

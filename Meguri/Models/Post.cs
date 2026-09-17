@@ -63,7 +63,7 @@ namespace Meguri.Models {
 
         // 直接のTag一覧が必要な場合は、PostTagsから取り出す
         [NotMapped]
-        public ICollection<Tag> Tags => PostTags.Select(pt => pt.Tag).ToList();
+        public ICollection<TagConcept> Tags => PostTags.Select(pt => pt.TagConcept).ToList();
     }
 
 }

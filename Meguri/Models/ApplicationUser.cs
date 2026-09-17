@@ -9,11 +9,11 @@ namespace Meguri.Models {
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser {
         /// 自己紹介文（Bio / Profile description）
-        public string? Bio { get; set; }
+        public string Bio { get; set; }= string.Empty;
 
         /// 現在選択中のアバター（アイコン）画像ID
-        public long? ActiveAvatarImageId { get; set; }
-        public Image? ActiveAvatarImage { get; set; }
+        public long ActiveAvatarImageId { get; set; }
+        public Image ActiveAvatarImage { get; set; }
 
         /// ユーザーが登録・所持している画像一覧
         public ICollection<UserImage> UserImages { get; set; } = new List<UserImage>();

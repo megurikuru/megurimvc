@@ -42,6 +42,6 @@ namespace Meguri.Models {
 
         // 直接のTag一覧が必要な場合は、ImageTagsから取り出す
         [NotMapped]
-        public ICollection<Tag> Tags => ImageTags.Select(it => it.Tag).ToList();
+        public ICollection<TagConcept> Tags => ImageTags.Select(it => it.TagConcept).ToList();
     }
 }
