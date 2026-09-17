@@ -663,4 +663,115 @@
   <data name="Manage_ExternalLogins_ProviderButtonTitle" xml:space="preserve">
     <value>{0} アカウントを使ってログイン</value>
   </data>
+  <!-- Common -->
+  <data name="Common_Save" xml:space="preserve"><value>保存</value></data>
+  <data name="Common_Cancel" xml:space="preserve"><value>キャンセル</value></data>
+  <data name="Common_Edit" xml:space="preserve"><value>編集</value></data>
+  <data name="Common_Delete" xml:space="preserve"><value>削除</value></data>
+  <data name="Common_Create" xml:space="preserve"><value>作成</value></data>
+  <data name="Common_Back" xml:space="preserve"><value>戻る</value></data>
+  <data name="Common_Submit" xml:space="preserve"><value>送信</value></data>
+  <data name="Common_Search" xml:space="preserve"><value>検索</value></data>
+  <data name="Common_Details" xml:space="preserve"><value>詳細</value></data>
+  <data name="Common_Actions" xml:space="preserve"><value>操作</value></data>
+  <data name="Common_Close" xml:space="preserve"><value>閉じる</value></data>
+  <data name="Common_MoveUp" xml:space="preserve"><value>上へ</value></data>
+  <data name="Common_MoveDown" xml:space="preserve"><value>下へ</value></data>
+  <data name="Common_Remove" xml:space="preserve"><value>解除</value></data>
+  <data name="Common_Add" xml:space="preserve"><value>追加</value></data>
+  <data name="Common_Preview" xml:space="preserve"><value>プレビュー</value></data>
+  <data name="Common_ConfirmDelete" xml:space="preserve"><value>本当に削除しますか？</value></data>
+  <data name="Common_NoItems" xml:space="preserve"><value>データがありません。</value></data>
+  <data name="Common_All" xml:space="preserve"><value>すべて</value></data>
+  <data name="Common_Filter" xml:space="preserve"><value>絞り込み</value></data>
+  <!-- Language -->
+  <data name="Lang_Japanese" xml:space="preserve"><value>日本語</value></data>
+  <data name="Lang_English" xml:space="preserve"><value>English</value></data>
+  <data name="Lang_Change" xml:space="preserve"><value>言語</value></data>
+  <!-- Fandom -->
+  <data name="Fandom_Title" xml:space="preserve"><value>界隈</value></data>
+  <data name="Fandom_SubTitle" xml:space="preserve"><value>趣味や創作活動でつながるコミュニティ</value></data>
+  <data name="Fandom_Name" xml:space="preserve"><value>界隈名</value></data>
+  <data name="Fandom_Parent" xml:space="preserve"><value>親界隈</value></data>
+  <data name="Fandom_NoParent" xml:space="preserve"><value>なし（最上位）</value></data>
+  <data name="Fandom_ChildFandoms" xml:space="preserve"><value>子界隈</value></data>
+  <data name="Fandom_Join" xml:space="preserve"><value>参加する</value></data>
+  <data name="Fandom_Joined" xml:space="preserve"><value>参加中</value></data>
+  <data name="Fandom_Leave" xml:space="preserve"><value>脱退する</value></data>
+  <data name="Fandom_MembersCount" xml:space="preserve"><value>メンバー: {0}人</value></data>
+  <data name="Fandom_PostsCount" xml:space="preserve"><value>投稿: {0}件</value></data>
+  <data name="Fandom_CascadeNote" xml:space="preserve"><value>※親の界隈に参加すると、配下の子界隈にも自動的に参加します。</value></data>
+  <data name="Fandom_CreateNew" xml:space="preserve"><value>新しい界隈を作成</value></data>
+  <data name="Fandom_Explore" xml:space="preserve"><value>界隈を探す</value></data>
+  <data name="Fandom_MyFandoms" xml:space="preserve"><value>参加中の界隈</value></data>
+  <!-- Post -->
+  <data name="Post_Title" xml:space="preserve"><value>投稿</value></data>
+  <data name="Post_CreateNew" xml:space="preserve"><value>新規投稿</value></data>
+  <data name="Post_EditTitle" xml:space="preserve"><value>投稿の編集</value></data>
+  <data name="Post_PostName" xml:space="preserve"><value>タイトル</value></data>
+  <data name="Post_PostText" xml:space="preserve"><value>本文</value></data>
+  <data name="Post_SelectFandom" xml:space="preserve"><value>投稿先の界隈</value></data>
+  <data name="Post_AttachImages" xml:space="preserve"><value>添付画像</value></data>
+  <data name="Post_ImageOrderHint" xml:space="preserve"><value>矢印ボタンで画像の表示順序を並び替えできます。</value></data>
+  <data name="Post_Tags" xml:space="preserve"><value>タグ</value></data>
+  <data name="Post_TagsHint" xml:space="preserve"><value>最大10個まで指定できます。入力すると候補が表示されます。</value></data>
+  <data name="Post_NSFW_Sexual" xml:space="preserve"><value>性的コンテンツ（R-18）を含む</value></data>
+  <data name="Post_NSFW_Violence" xml:space="preserve"><value>暴力表現・グロテスクを含む</value></data>
+  <data name="Post_Public" xml:space="preserve"><value>全体に公開する</value></data>
+  <data name="Post_Pinned" xml:space="preserve"><value>ピン留め固定</value></data>
+  <data name="Post_Locked" xml:space="preserve"><value>スレッドロック（返信停止）</value></data>
+  <data name="Post_PostedBy" xml:space="preserve"><value>投稿者: {0}</value></data>
+  <data name="Post_CreatedAt" xml:space="preserve"><value>投稿日時: {0}</value></data>
+  <data name="Post_RepliesCount" xml:space="preserve"><value>コメント: {0}件</value></data>
+  <data name="Post_ViewsCount" xml:space="preserve"><value>閲覧数: {0}</value></data>
+  <data name="Post_ThreadTitle" xml:space="preserve"><value>スレッド</value></data>
+  <!-- Image -->
+  <data name="Image_GalleryTitle" xml:space="preserve"><value>画像一覧</value></data>
+  <data name="Image_UploadTitle" xml:space="preserve"><value>画像を投稿</value></data>
+  <data name="Image_EditTitle" xml:space="preserve"><value>画像の編集</value></data>
+  <data name="Image_SelectFiles" xml:space="preserve"><value>画像ファイル（1枚または複数枚）</value></data>
+  <data name="Image_Order" xml:space="preserve"><value>表示順</value></data>
+  <data name="Image_Caption" xml:space="preserve"><value>キャプション</value></data>
+  <data name="Image_Description" xml:space="preserve"><value>説明・解説</value></data>
+  <data name="Image_SingleOrMultiple" xml:space="preserve"><value>画像単体・複数枚の投稿</value></data>
+  <data name="Image_NoImages" xml:space="preserve"><value>画像はまだありません。</value></data>
+  <data name="Image_Reorder" xml:space="preserve"><value>並び順を変更</value></data>
+  <!-- Comment -->
+  <data name="Comment_Header" xml:space="preserve"><value>コメント</value></data>
+  <data name="Comment_WritePlaceholder" xml:space="preserve"><value>コメントを入力してください...</value></data>
+  <data name="Comment_ReplyTo" xml:space="preserve"><value>>> {0} に返信</value></data>
+  <data name="Comment_DeletedText" xml:space="preserve"><value>このコメントは削除されました。</value></data>
+  <data name="Comment_Submit" xml:space="preserve"><value>コメントを送信</value></data>
+  <!-- Tag & Thesaurus -->
+  <data name="Tag_Title" xml:space="preserve"><value>タグ</value></data>
+  <data name="Tag_Thesaurus" xml:space="preserve"><value>シソーラス</value></data>
+  <data name="Tag_DisambiguationBtn" xml:space="preserve"><value>あいまいさ回避</value></data>
+  <data name="Tag_DisambiguationTitle" xml:space="preserve"><value>タグ「{0}」のあいまいさ回避（シソーラス設定）</value></data>
+  <data name="Tag_BroaderTerms" xml:space="preserve"><value>上位語（より広義の概念）</value></data>
+  <data name="Tag_NarrowerTerms" xml:space="preserve"><value>下位語（より狭義の概念・具体例）</value></data>
+  <data name="Tag_SynonymTerms" xml:space="preserve"><value>同義語・別名・表記揺れ</value></data>
+  <data name="Tag_RelatedTerms" xml:space="preserve"><value>関連語（関連する概念）</value></data>
+  <data name="Tag_AddBroader" xml:space="preserve"><value>上位語を追加</value></data>
+  <data name="Tag_AddNarrower" xml:space="preserve"><value>下位語を追加</value></data>
+  <data name="Tag_AddSynonym" xml:space="preserve"><value>同義語を追加</value></data>
+  <data name="Tag_AddRelated" xml:space="preserve"><value>関連語を追加</value></data>
+  <data name="Tag_ExistingTags" xml:space="preserve"><value>タグ一覧</value></data>
+  <data name="Tag_SearchPlaceholder" xml:space="preserve"><value>タグを検索または新規登録...</value></data>
+  <data name="Tag_OnlyOwnerCanEdit" xml:space="preserve"><value>※自分が作成したタグのみ、あいまいさ回避（シソーラス）の関係性を編集できます。</value></data>
+  <data name="Tag_SuccessUpdated" xml:space="preserve"><value>シソーラスの関係性を更新しました。</value></data>
+  <!-- Message -->
+  <data name="Message_Title" xml:space="preserve"><value>メッセージ</value></data>
+  <data name="Message_NewConversation" xml:space="preserve"><value>新しいメッセージ</value></data>
+  <data name="Message_Direct" xml:space="preserve"><value>ダイレクトメッセージ</value></data>
+  <data name="Message_Group" xml:space="preserve"><value>グループチャット</value></data>
+  <data name="Message_SelectRecipient" xml:space="preserve"><value>宛先を選択</value></data>
+  <data name="Message_GroupMembers" xml:space="preserve"><value>メンバー</value></data>
+  <data name="Message_GroupName" xml:space="preserve"><value>グループ名</value></data>
+  <data name="Message_InputPlaceholder" xml:space="preserve"><value>メッセージを入力...</value></data>
+  <data name="Message_SendBtn" xml:space="preserve"><value>送信</value></data>
+  <data name="Message_NoConversations" xml:space="preserve"><value>メッセージはまだありません。</value></data>
+  <data name="Message_ChatWith" xml:space="preserve"><value>{0} との会話</value></data>
+  <!-- Reaction -->
+  <data name="Reaction_React" xml:space="preserve"><value>リアクション</value></data>
+  <data name="Reaction_Add" xml:space="preserve"><value>リアクションを追加</value></data>
 </root>

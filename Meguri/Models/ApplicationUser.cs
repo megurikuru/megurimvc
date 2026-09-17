@@ -12,8 +12,8 @@ namespace Meguri.Models {
         public string Bio { get; set; }= string.Empty;
 
         /// 現在選択中のアバター（アイコン）画像ID
-        public long ActiveAvatarImageId { get; set; }
-        public Image ActiveAvatarImage { get; set; }
+        public long? ActiveAvatarImageId { get; set; }
+        public Image? ActiveAvatarImage { get; set; }
 
         /// ユーザーが登録・所持している画像一覧
         public ICollection<UserImage> UserImages { get; set; } = new List<UserImage>();
@@ -29,5 +29,6 @@ namespace Meguri.Models {
         public ICollection<ConversationMember> ConversationMembers { get; set; } = new List<ConversationMember>();
         public ICollection<Message> SentMessages { get; set; } = new List<Message>();
         public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
+        public ICollection<TagConcept> TagConcepts { get; set; } = new List<TagConcept>();
     }
 }

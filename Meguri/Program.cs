@@ -46,6 +46,9 @@ var smtpServerConf = builder.Configuration.GetSection("SMTPServerConf");        
 builder.Services.AddTransient<Microsoft.AspNetCore.Identity.IEmailSender<ApplicationUser>, EmailSender>();  // Identity用メール送信サービスをDIコンテナに登録(使用時に毎回新しいインスタンスを生成)
 builder.Services.Configure<SMTPServerConf>(smtpServerConf);                                                 // SMTPサーバー設定をオプションパターンで利用可能にする
 
+// タグ・シソーラスサービス
+builder.Services.AddScoped<ITagService, TagService>();
+
 
 // MVC機能を有効化(コントローラーとビューのサポートを追加)
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");

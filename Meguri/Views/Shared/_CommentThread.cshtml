@@ -1,0 +1,58 @@
+@model (List<Meguri.Models.Comment> Comments, string TargetType, long TargetId)
+@using System.Security.Claims
+
+@{
+		var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+<div class="comment-thread-container">
+		@if (!Model.Comments.Any())
+		{
+				<p class="text-muted text-center py-3">コメントはまだありません。最初のコメントを投稿してみましょう！</p>
+		}
+		else
+		{
+				<div class="d-flex flex-column gap-3 mb-4">
+						@foreach (var comment in Model.Comments)
+						{
+								@await Html.PartialAsync("_CommentItem", (comment, Model.TargetType, Model.TargetId, 0))
+						}
+				</div>
+		}
+
+		<!-- コメント投稿フォーム -->
+		<div class="card bg-light border-0 p-3 mt-4" id="commentForm">
+				<h6 class="fw-bold mb-2">💬 コメントを投稿する</h6>
+
+				<!-- 返信先インジケーター -->
+				<div id="replyNotice" class="alert alert-info py-1 px-2 small mb-2 d-none d-flex justify-content-between align-items-center"></div>
+
+				<form asp-controller="Comment" asp-action="Create" method="post" enctype="multipart/form-data">
+						@Html.AntiForgeryToken()
+						<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+						<input type="hidden" id="replyParentId" name="parentId" value="" />
+
+						@if (Model.TargetType == "Post")
+						{
+								<input type="hidden" name="docId" value="@Model.TargetId" />
+						}
+						else if (Model.TargetType == "Image")
+						{
+								<input type="hidden" name="imageId" value="@Model.TargetId" />
+						}
+
+						<div class="mb-2">
+								<textarea name="text" id="commentTextInput" rows="3" class="form-control" placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
+						</div>
+
+						<div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+								<div class="d-flex align-items-center gap-2">
+										<input type="file" name="commentImage" accept="image/*" class="form-control form-control-sm" style="max-width: 250px;" />
+								</div>
+								<button type="submit" class="btn btn-primary btn-sm px-3">
+										@SharedLocalizer["Comment_Submit"]
+								</button>
+						</div>
+				</form>
+		</div>
+</div>

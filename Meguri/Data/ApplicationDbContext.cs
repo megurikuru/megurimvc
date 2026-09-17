@@ -105,6 +105,14 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            builder.Entity<TagConcept>(entity =>
+            {
+                entity.HasOne(tc => tc.User)
+                    .WithMany(u => u.TagConcepts)
+                    .HasForeignKey(tc => tc.UserId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
             builder.Entity<TagRelationship>(entity =>
             {
                 entity.HasKey(tr => tr.Id);

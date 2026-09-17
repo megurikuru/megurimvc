@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Meguri.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260917115112_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260917135627_MakeActiveAvatarImageIdNullable")]
+    partial class MakeActiveAvatarImageIdNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace Meguri.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
-                    b.Property<long>("ActiveAvatarImageId")
+                    b.Property<long?>("ActiveAvatarImageId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Bio")
@@ -631,10 +631,10 @@ namespace Meguri.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("ImageId")
+                    b.Property<long?>("ImageId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("MessageId")
+                    b.Property<long?>("MessageId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("PostId")
@@ -731,7 +731,12 @@ namespace Meguri.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("TagConcepts");
                 });
@@ -929,8 +934,7 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.Image", "ActiveAvatarImage")
                         .WithMany()
                         .HasForeignKey("ActiveAvatarImageId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("ActiveAvatarImage");
                 });
@@ -1154,14 +1158,12 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.Image", "Image")
                         .WithMany("Reactions")
                         .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Meguri.Models.Message", "Message")
                         .WithMany("Reactions")
                         .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Meguri.Models.Post", "Post")
                         .WithMany("Reactions")
@@ -1193,6 +1195,16 @@ namespace Meguri.Migrations
                         .IsRequired();
 
                     b.Navigation("TagConcept");
+                });
+
+            modelBuilder.Entity("Meguri.Models.TagConcept", b =>
+                {
+                    b.HasOne("Meguri.Models.ApplicationUser", "User")
+                        .WithMany("TagConcepts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Meguri.Models.TagRelationship", b =>
@@ -1296,6 +1308,8 @@ namespace Meguri.Migrations
                     b.Navigation("Reactions");
 
                     b.Navigation("SentMessages");
+
+                    b.Navigation("TagConcepts");
 
                     b.Navigation("UserImages");
                 });

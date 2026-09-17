@@ -1,0 +1,91 @@
+@model Meguri.Models.ImageViewModels.ImageUploadViewModel
+@{
+		ViewData["Title"] = SharedLocalizer["Image_UploadTitle"];
+		var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
+}
+
+<div class="row justify-content-center">
+		<div class="col-lg-8">
+				<div class="card shadow-sm border-0">
+						<div class="card-header bg-white py-3">
+								<h4 class="card-title fw-bold mb-0">📤 @SharedLocalizer["Image_UploadTitle"]</h4>
+						</div>
+						<div class="card-body p-4">
+								<form asp-action="Upload" method="post" enctype="multipart/form-data">
+										<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+										<!-- ファイル選択 -->
+										<div class="mb-3">
+												<label asp-for="Files" class="form-label fw-bold">@SharedLocalizer["Image_SelectFiles"] <span class="text-danger">*</span></label>
+												<input asp-for="Files" type="file" multiple class="form-control" accept="image/*" required id="imageFileInput" />
+												<span asp-validation-for="Files" class="text-danger"></span>
+												<div class="form-text">複数枚選択すると、ひとつの投稿としてまとめることもできます。</div>
+										</div>
+
+										<!-- 投稿先界隈 -->
+										<div class="mb-3">
+												<label asp-for="FandomId" class="form-label fw-bold">@SharedLocalizer["Post_SelectFandom"]</label>
+												<select asp-for="FandomId" class="form-select">
+														<option value="">-- @SharedLocalizer["Fandom_Title"] を選択 (任意) --</option>
+														@foreach (var f in fandoms)
+														{
+																<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
+														}
+												</select>
+										</div>
+
+										<!-- キャプション・タイトル -->
+										<div class="mb-3">
+												<label asp-for="Caption" class="form-label fw-bold">@SharedLocalizer["Image_Caption"]</label>
+												<input asp-for="Caption" class="form-control" placeholder="作品のタイトルやキャプション" />
+												<span asp-validation-for="Caption" class="text-danger"></span>
+										</div>
+
+										<!-- 説明・解説 -->
+										<div class="mb-3">
+												<label asp-for="Description" class="form-label fw-bold">@SharedLocalizer["Image_Description"]</label>
+												<textarea asp-for="Description" rows="4" class="form-control" placeholder="使用画材、コンセプト、制作意図など"></textarea>
+												<span asp-validation-for="Description" class="text-danger"></span>
+										</div>
+
+										<!-- タグ入力コンポーネント (最大10個) -->
+										<div class="mb-3">
+												<div class="d-flex justify-content-between align-items-center mb-1">
+														<label class="form-label fw-bold mb-0">🏷️ @SharedLocalizer["Post_Tags"]</label>
+														<span class="small text-muted" id="tagCountDisplay">0/10</span>
+												</div>
+												<div class="input-group">
+														<input type="text" id="tagInput" class="form-control" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
+														<button type="button" class="btn btn-outline-secondary" onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
+												</div>
+												<div id="tagSuggestions" class="list-group position-absolute shadow-sm" style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
+
+												<!-- 選択中タグ表示領域 -->
+												<div id="selectedTagsContainer" class="d-flex flex-wrap gap-1 mt-2"></div>
+												<div id="hiddenTagsInputs"></div>
+												<div class="form-text">@SharedLocalizer["Post_TagsHint"]</div>
+										</div>
+
+										<!-- 公開設定 -->
+										<div class="form-check form-switch mb-4">
+												<input asp-for="IsPublic" class="form-check-input" type="checkbox" role="switch" checked />
+												<label asp-for="IsPublic" class="form-check-label">@SharedLocalizer["Post_Public"]</label>
+										</div>
+
+										<div class="d-flex justify-content-between">
+												<a asp-action="Index" class="btn btn-outline-secondary">@SharedLocalizer["Common_Back"]</a>
+												<button type="submit" class="btn btn-primary px-4">@SharedLocalizer["Common_Submit"]</button>
+										</div>
+								</form>
+						</div>
+				</div>
+		</div>
+</div>
+
+@section Scripts {
+		<script>
+				$(document).ready(function () {
+						TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
+				});
+		</script>
+}

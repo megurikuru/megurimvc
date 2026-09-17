@@ -1,103 +1,133 @@
-﻿@{
+﻿@using Meguri.Extensions
+@{
     ViewData["Title"] = SharedLocalizer["Home_Title"];
+    var recentPosts = ViewBag.RecentPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
+    var topFandoms = ViewBag.TopFandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
 }
 
-<div id="myCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-    </div>
-    <div class="carousel-inner" role="listbox">
-        <div class="carousel-item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-fluid w-100" />
-            <div class="carousel-caption d-none d-md-block" role="option">
-                <p>
-                    @SharedLocalizer["Home_Banner1_Text"]
-                    <a class="btn btn-secondary" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        @SharedLocalizer["Home_LearnMore"]
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-fluid w-100" />
-            <div class="carousel-caption d-none d-md-block" role="option">
-                <p>
-                    @SharedLocalizer["Home_Banner2_Text"]
-                    <a class="btn btn-secondary" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        @SharedLocalizer["Home_LearnMore"]
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="~/images/banner3.svg" alt="Package Management" class="img-fluid w-100" />
-            <div class="carousel-caption d-none d-md-block" role="option">
-                <p>
-                    @SharedLocalizer["Home_Banner3_Text"]
-                    <a class="btn btn-secondary" href="https://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                        @SharedLocalizer["Home_LearnMore"]
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="carousel-item">
-            <img src="~/images/banner4.svg" alt="Microsoft Azure" class="img-fluid w-100" />
-            <div class="carousel-caption d-none d-md-block" role="option">
-                <p>
-                    @SharedLocalizer["Home_Banner4_Text"]
-                    <a class="btn btn-secondary" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        @SharedLocalizer["Home_LearnMore"]
-                    </a>
-                </p>
-            </div>
+<div class="p-4 p-md-5 mb-4 rounded-3 text-white bg-dark shadow-sm">
+    <div class="col-md-8 px-0">
+        <h1 class="display-5 fw-bold">meguri</h1>
+        <p class="lead my-3">@SharedLocalizer["Fandom_SubTitle"]</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-controller="Post" asp-action="Create" class="btn btn-primary btn-lg">@SharedLocalizer["Post_CreateNew"]</a>
+            <a asp-controller="Image" asp-action="Upload" class="btn btn-outline-light btn-lg">@SharedLocalizer["Image_UploadTitle"]</a>
+            <a asp-controller="Fandom" asp-action="Index" class="btn btn-secondary btn-lg">@SharedLocalizer["Fandom_Explore"]</a>
         </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">@SharedLocalizer["Home_Carousel_Previous"]</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">@SharedLocalizer["Home_Carousel_Next"]</span>
-    </button>
 </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>@SharedLocalizer["Home_Section_Uses"]</h2>
-        <ul>
-            <li>@SharedLocalizer["Home_Uses_Item1"]</li>
-            <li>@SharedLocalizer["Home_Uses_Item2"]</li>
-        </ul>
+<div class="row g-4">
+    <!-- メイン：新着投稿 -->
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="h4 mb-0 fw-bold">@SharedLocalizer["Post_Title"]</h3>
+            <a asp-controller="Post" asp-action="Index" class="btn btn-sm btn-outline-primary">@SharedLocalizer["Common_All"]</a>
+        </div>
+
+        @if (!recentPosts.Any())
+        {
+            <div class="card p-4 text-center text-muted">
+                <p class="mb-0">@SharedLocalizer["Common_NoItems"]</p>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex flex-column gap-3">
+                @foreach (var post in recentPosts)
+                {
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="badge bg-secondary">@(post.Fandom?.Name ?? "界隈")</span>
+                                <small class="text-muted">@post.Created.ToString("yyyy/MM/dd HH:mm")</small>
+                            </div>
+                            <h5 class="card-title">
+                                <a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-dark fw-bold">
+                                    @post.Name
+                                </a>
+                            </h5>
+                            <p class="card-text text-secondary mb-2" style="white-space: pre-line;">
+                                @(post.Text.Length > 120 ? post.Text.Substring(0, 120) + "..." : post.Text)
+                            </p>
+
+                            @if (post.PostImages.Any())
+                            {
+                                <div class="d-flex gap-2 overflow-auto mb-2 py-1">
+                                    @foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(4))
+                                    {
+                                        <a asp-controller="Image" asp-action="Details" asp-route-id="@pi.ImageId">
+                                            <img src="/Image/File/@pi.ImageId" class="rounded" style="width: 80px; height: 80px; object-fit: cover;" alt="@pi.Image.Name" />
+                                        </a>
+                                    }
+                                </div>
+                            }
+
+                            <!-- タグ -->
+                            @if (post.PostTags.Any())
+                            {
+                                <div class="mb-2">
+                                    @foreach (var pt in post.PostTags)
+                                    {
+                                        var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
+                                        if (!string.IsNullOrEmpty(tagText))
+                                        {
+                                            <a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="tag-badge">#@tagText</a>
+                                        }
+                                    }
+                                </div>
+                            }
+
+                            <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top small text-muted">
+                                <div>
+                                    <span>👤 @(post.User?.UserName ?? "User")</span>
+                                </div>
+                                <div class="d-flex gap-3">
+                                    <span>💬 @post.CommentCount</span>
+                                    <span>❤️ @post.Reactions.Count</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
     </div>
-    <div class="col-md-3">
-        <h2>@SharedLocalizer["Home_Section_HowTo"]</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">@SharedLocalizer["Home_HowTo_Item1"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">@SharedLocalizer["Home_HowTo_Item2"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">@SharedLocalizer["Home_HowTo_Item3"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">@SharedLocalizer["Home_HowTo_Item4"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">@SharedLocalizer["Home_HowTo_Item5"]</a></li>
-        </ul>
+
+    <!-- サイドバー：界隈（Fandom）一覧 -->
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+                <span>🏛️ @SharedLocalizer["Fandom_Title"]</span>
+                <a asp-controller="Fandom" asp-action="Index" class="btn btn-sm btn-link p-0">@SharedLocalizer["Common_All"]</a>
+            </div>
+            <div class="list-group list-group-flush">
+                @foreach (var f in topFandoms)
+                {
+                    <a asp-controller="Fandom" asp-action="Details" asp-route-id="@f.Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="fw-semibold">@f.Name</span>
+                            @if (f.ChildFandoms.Any())
+                            {
+                                <div class="small text-muted">
+                                    @string.Join(", ", f.ChildFandoms.Select(c => c.Name))
+                                </div>
+                            }
+                        </div>
+                        <span class="badge bg-light text-dark border">詳細</span>
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 bg-light">
+            <div class="card-body">
+                <h6 class="fw-bold">ℹ️ @SharedLocalizer["Fandom_Title"]の仕組み</h6>
+                <p class="small text-muted mb-0">@SharedLocalizer["Fandom_CascadeNote"]</p>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
-        <h2>@SharedLocalizer["Home_Section_Overview"]</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">@SharedLocalizer["Home_Overview_Item1"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">@SharedLocalizer["Home_Overview_Item2"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">@SharedLocalizer["Home_Overview_Item3"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">@SharedLocalizer["Home_Overview_Item4"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">@SharedLocalizer["Home_Overview_Item5"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">@SharedLocalizer["Home_Overview_Item6"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">@SharedLocalizer["Home_Overview_Item7"]</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>@SharedLocalizer["Home_Section_RunDeploy"]</h2>
-        <ul>
+</div>
             <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">@SharedLocalizer["Home_RunDeploy_Item1"]</a></li>
             <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">@SharedLocalizer["Home_RunDeploy_Item2"]</a></li>
             <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">@SharedLocalizer["Home_RunDeploy_Item3"]</a></li>

@@ -1,0 +1,140 @@
+@model IEnumerable<Meguri.Models.Post>
+@{
+		ViewData["Title"] = SharedLocalizer["Post_Title"];
+		var currentFandom = ViewBag.CurrentFandom as Meguri.Models.Fandom;
+		var currentTag = ViewBag.CurrentTag as string;
+		var currentSearch = ViewBag.CurrentSearch as string;
+		var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+		<div>
+				<h2 class="fw-bold mb-1">📝 @SharedLocalizer["Post_Title"]</h2>
+				<p class="text-muted mb-0">界隈のメンバーによる投稿・作品一覧</p>
+		</div>
+		<a asp-action="Create" asp-route-fandomId="@currentFandom?.Id" class="btn btn-primary">
+				✏️ @SharedLocalizer["Post_CreateNew"]
+		</a>
+</div>
+
+<!-- フィルタ / 検索バー -->
+<div class="card shadow-sm border-0 mb-4 bg-white">
+		<div class="card-body p-3">
+				<form asp-action="Index" method="get" class="row g-2 align-items-center">
+						<div class="col-md-4">
+								<select name="fandomId" class="form-select" onchange="this.form.submit()">
+										<option value="">-- すべての界隈 --</option>
+										@foreach (var f in fandoms)
+										{
+												<!option value="@f.Id" @(currentFandom?.Id == f.Id ? "selected" : "")>@f.Name</!option>
+										}
+								</select>
+						</div>
+						<div class="col-md-6">
+								<input type="text" name="search" value="@currentSearch" class="form-control" placeholder="タイトルや本文で検索..." />
+						</div>
+						<div class="col-md-2 d-grid">
+								<button type="submit" class="btn btn-outline-primary">@SharedLocalizer["Common_Search"]</button>
+						</div>
+				</form>
+		</div>
+</div>
+
+@if (!string.IsNullOrEmpty(currentTag))
+{
+		<div class="alert alert-info d-flex justify-content-between align-items-center py-2 mb-4">
+				<span>タグ: <strong>#@currentTag</strong> の投稿を表示中</span>
+				<a asp-action="Index" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_All"]</a>
+		</div>
+}
+
+@if (!Model.Any())
+{
+		<div class="card p-5 text-center text-muted">
+				<h4>@SharedLocalizer["Common_NoItems"]</h4>
+				<div class="mt-3">
+						<a asp-action="Create" class="btn btn-primary">@SharedLocalizer["Post_CreateNew"]</a>
+				</div>
+		</div>
+}
+else
+{
+		<div class="d-flex flex-column gap-3">
+				@foreach (var post in Model)
+				{
+						<div class="card shadow-sm border-0">
+								<div class="card-body p-4">
+										<div class="d-flex justify-content-between align-items-center mb-2">
+												<div class="d-flex align-items-center gap-2">
+														<a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId" class="badge bg-secondary text-decoration-none">
+																@(post.Fandom?.Name ?? "界隈")
+														</a>
+														@if (post.IsPinned)
+														{
+																<span class="badge bg-warning text-dark">📌 固定</span>
+														}
+														@if (post.Sexual)
+														{
+																<span class="badge bg-danger">R-18</span>
+														}
+														@if (post.Violence)
+														{
+																<span class="badge bg-dark">R-18G</span>
+														}
+												</div>
+												<small class="text-muted">@post.Created.ToString("yyyy/MM/dd HH:mm")</small>
+										</div>
+
+										<h4 class="card-title fw-bold">
+												<a asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-dark">
+														@post.Name
+												</a>
+										</h4>
+
+										<p class="card-text text-secondary mb-3" style="white-space: pre-line;">
+												@(post.Text.Length > 150 ? post.Text.Substring(0, 150) + "..." : post.Text)
+										</p>
+
+										<!-- 添付画像（順序付き）プレビュー -->
+										@if (post.PostImages.Any())
+										{
+												<div class="d-flex gap-2 overflow-auto mb-3 py-1">
+														@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder))
+														{
+																<a asp-controller="Image" asp-action="Details" asp-route-id="@pi.ImageId">
+																		<img src="/Image/File/@pi.ImageId" class="rounded shadow-sm" style="width: 100px; height: 100px; object-fit: cover;" alt="@pi.Image.Name" />
+																</a>
+														}
+												</div>
+										}
+
+										<!-- タグ -->
+										@if (post.PostTags.Any())
+										{
+												<div class="mb-3">
+														@foreach (var pt in post.PostTags)
+														{
+																var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
+																if (!string.IsNullOrEmpty(tagText))
+																{
+																		<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="tag-badge">#@tagText</a>
+																}
+														}
+												</div>
+										}
+
+										<div class="d-flex justify-content-between align-items-center pt-2 border-top small text-muted">
+												<div>
+														<span>👤 @(post.User?.UserName ?? "User")</span>
+												</div>
+												<div class="d-flex gap-3">
+														<span>💬 @post.CommentCount コメント</span>
+														<span>👁️ @post.ViewCount 閲覧</span>
+														<span>❤️ @post.Reactions.Count リアクション</span>
+												</div>
+										</div>
+								</div>
+						</div>
+				}
+		</div>
+}

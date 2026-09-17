@@ -1,0 +1,37 @@
+@using Meguri.Extensions
+@using Meguri.Models
+@using System.Security.Claims
+
+@model (string TargetType, long TargetId, IEnumerable<Reaction> Reactions)
+
+@{
+		var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		var mainTypes = new[] {
+				ReactionType.Like,
+				ReactionType.Precious,
+				ReactionType.Heartstruck,
+				ReactionType.Emotional,
+				ReactionType.WantMore,
+				ReactionType.Bravo,
+				ReactionType.Insight,
+				ReactionType.Lol
+		};
+}
+
+<div class="reaction-bar my-2">
+		@Html.AntiForgeryToken()
+		@foreach (var type in mainTypes)
+		{
+				var count = Model.Reactions.Count(r => r.Type == type);
+				var hasReacted = currentUserId != null && Model.Reactions.Any(r => r.Type == type && r.UserId == currentUserId);
+
+				<button type="button"
+								class="reaction-btn @(hasReacted ? "reacted" : "")"
+								title="@type.GetDescription()"
+								onclick="toggleReaction('@Model.TargetType', @Model.TargetId, @((int)type), this)">
+						<span>@type.GetEmoji()</span>
+						<span class="small">@type.GetLabel()</span>
+						<span class="badge rounded-pill bg-light text-dark reaction-count ms-1">@count</span>
+				</button>
+		}
+</div>
