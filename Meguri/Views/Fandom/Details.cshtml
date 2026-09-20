@@ -21,7 +21,7 @@
 				<div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
 						<div>
 								<h2 class="fw-bold mb-1">🏛️ @Model.Name</h2>
-								<div class="text-muted small">
+								<div class="text-body-secondary small">
 										👥 @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
 										&nbsp;|&nbsp;
 										📝 @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, Model.Docs.Count)
@@ -58,7 +58,7 @@
 				@if (Model.ChildFandoms.Any())
 				{
 						<div class="mt-4 pt-3 border-top">
-								<h6 class="text-muted fw-bold mb-2">📂 @SharedLocalizer["Fandom_ChildFandoms"]</h6>
+								<h6 class="text-body-secondary fw-bold mb-2">📂 @SharedLocalizer["Fandom_ChildFandoms"]</h6>
 								<div class="d-flex flex-wrap gap-2">
 										@foreach (var child in Model.ChildFandoms)
 										{
@@ -84,7 +84,7 @@
 
 				@if (!Model.Docs.Any())
 				{
-						<div class="card p-4 text-center text-muted">
+						<div class="card p-4 text-center text-body-secondary">
 								<p class="mb-0">この界隈にはまだ投稿がありません。</p>
 						</div>
 				}
@@ -97,7 +97,7 @@
 												<div class="card-body">
 														<div class="d-flex justify-content-between align-items-center mb-2">
 																<span class="badge bg-secondary">👤 @(post.User?.UserName ?? "User")</span>
-																<small class="text-muted">@post.Created.ToString("yyyy/MM/dd HH:mm")</small>
+																<small class="text-body-secondary">@post.Created.ToString("yyyy/MM/dd HH:mm")</small>
 														</div>
 														<h5 class="card-title">
 																<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-dark fw-bold">
@@ -135,7 +135,7 @@
 																</div>
 														}
 
-														<div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top small text-muted">
+														<div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top small text-body-secondary">
 																<span>💬 @post.CommentCount コメント</span>
 																<span>❤️ @post.Reactions.Count リアクション</span>
 														</div>
@@ -155,7 +155,7 @@
 						<div class="card-body">
 								@if (!Model.FandomUsers.Any())
 								{
-										<p class="text-muted small mb-0">まだ参加メンバーはいません。</p>
+										<p class="text-body-secondary small mb-0">まだ参加メンバーはいません。</p>
 								}
 								else
 								{

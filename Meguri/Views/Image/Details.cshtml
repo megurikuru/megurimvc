@@ -17,10 +17,10 @@
 										<div>
 												<h3 class="card-title fw-bold mb-1">@(string.IsNullOrEmpty(Model.Caption) ? Model.Name : Model.Caption)</h3>
 												<div class="d-flex flex-wrap align-items-center gap-2 mt-2">
-													<span class="text-muted small">@Model.Created.ToString("yyyy/MM/dd HH:mm")</span>
+													<span class="text-body-secondary small">@Model.Created.ToString("yyyy/MM/dd HH:mm")</span>
 													@if (Model.User != null)
 													{
-														<span class="text-muted small">by <strong>@Model.User.UserName</strong></span>
+														<span class="text-body-secondary small">by <strong>@Model.User.UserName</strong></span>
 													}
 													@if (Model.FileSize > 0)
 													{
@@ -64,10 +64,10 @@
 								<!-- タグ一覧 & あいまいさ回避ボタン -->
 								<div class="my-3 pt-2 border-top">
 										<div class="d-flex flex-wrap align-items-center gap-1">
-												<span class="fw-bold me-2 small text-muted">🏷️ @SharedLocalizer["Post_Tags"]:</span>
+												<span class="fw-bold me-2 small text-body-secondary">🏷️ @SharedLocalizer["Post_Tags"]:</span>
 												@if (!Model.ImageTags.Any())
 												{
-														<span class="text-muted small">なし</span>
+														<span class="text-body-secondary small">なし</span>
 												}
 												else
 												{
@@ -90,7 +90,7 @@
 
 								<!-- リアクションボタン -->
 								<div class="pt-2 border-top">
-										<div class="fw-bold small text-muted mb-1">@SharedLocalizer["Reaction_React"]</div>
+										<div class="fw-bold small text-body-secondary mb-1">@SharedLocalizer["Reaction_React"]</div>
 										@await Html.PartialAsync("_ReactionButtons", ("Image", Model.Id, Model.Reactions.AsEnumerable()))
 								</div>
 						</div>

@@ -11,7 +11,7 @@
 				<div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
 						<div>
 								<h2 class="fw-bold mb-1">🏷️ #@primaryTag</h2>
-								<div class="text-muted small">
+								<div class="text-body-secondary small">
 										作成者: @(Model.User?.UserName ?? "System") | 投稿: @Model.PostTags.Count 件 | 画像: @Model.ImageTags.Count 件
 								</div>
 						</div>
@@ -35,7 +35,7 @@
 						@if (Model.Tags.Count > 1)
 						{
 								<div class="col-md-6">
-										<h6 class="fw-bold small text-muted">🔄 @SharedLocalizer["Tag_SynonymTerms"]</h6>
+										<h6 class="fw-bold small text-body-secondary">🔄 @SharedLocalizer["Tag_SynonymTerms"]</h6>
 										<div class="d-flex flex-wrap gap-1">
 												@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag))
 												{
@@ -49,7 +49,7 @@
 						@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader"))
 						{
 								<div class="col-md-6">
-										<h6 class="fw-bold small text-muted">⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h6>
+										<h6 class="fw-bold small text-body-secondary">⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h6>
 										<div class="d-flex flex-wrap gap-1">
 												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader"))
 												{
@@ -66,7 +66,7 @@
 						@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader"))
 						{
 								<div class="col-md-6">
-										<h6 class="fw-bold small text-muted">⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h6>
+										<h6 class="fw-bold small text-body-secondary">⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h6>
 										<div class="d-flex flex-wrap gap-1">
 												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader"))
 												{
@@ -83,7 +83,7 @@
 						@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related"))
 						{
 								<div class="col-md-6">
-										<h6 class="fw-bold small text-muted">🔗 @SharedLocalizer["Tag_RelatedTerms"]</h6>
+										<h6 class="fw-bold small text-body-secondary">🔗 @SharedLocalizer["Tag_RelatedTerms"]</h6>
 										<div class="d-flex flex-wrap gap-1">
 												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related"))
 												{
@@ -112,7 +112,7 @@
 				<h4 class="fw-bold mb-3">📝 関連する投稿 (@Model.PostTags.Count)</h4>
 				@if (!Model.PostTags.Any())
 				{
-						<p class="text-muted">投稿はありません。</p>
+						<p class="text-body-secondary">投稿はありません。</p>
 				}
 				else
 				{
@@ -125,7 +125,7 @@
 																@pt.Post.Name
 														</a>
 												</h6>
-												<small class="text-muted">👤 @(pt.Post.User?.UserName ?? "User") | @pt.Post.Created.ToString("yyyy/MM/dd")</small>
+												<small class="text-body-secondary">👤 @(pt.Post.User?.UserName ?? "User") | @pt.Post.Created.ToString("yyyy/MM/dd")</small>
 										</div>
 								}
 						</div>
@@ -136,7 +136,7 @@
 				<h4 class="fw-bold mb-3">🖼️ 関連する画像 (@Model.ImageTags.Count)</h4>
 				@if (!Model.ImageTags.Any())
 				{
-						<p class="text-muted">画像はありません。</p>
+						<p class="text-body-secondary">画像はありません。</p>
 				}
 				else
 				{
