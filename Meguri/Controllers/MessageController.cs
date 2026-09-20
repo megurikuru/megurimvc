@@ -12,16 +12,25 @@ using Microsoft.EntityFrameworkCore;
 using Meguri.Data;
 using Meguri.Models;
 using Meguri.Models.MessageViewModels;
+using Meguri.Services;
 
 namespace Meguri.Controllers {
     [Authorize]
     public class MessageController : Controller {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IR2StorageService _r2StorageService;
+        private readonly IImageProcessingService _imageProcessingService;
 
-        public MessageController(ApplicationDbContext context, UserManager<ApplicationUser> userManager) {
+        public MessageController(
+            ApplicationDbContext context,
+            UserManager<ApplicationUser> userManager,
+            IR2StorageService r2StorageService,
+            IImageProcessingService imageProcessingService) {
             _context = context;
             _userManager = userManager;
+            _r2StorageService = r2StorageService;
+            _imageProcessingService = imageProcessingService;
         }
 
         // GET: /Message
@@ -186,23 +195,39 @@ namespace Meguri.Controllers {
                 int order = 0;
                 foreach (var file in imageFiles) {
                     if (file.Length > 0) {
-                        using var ms = new MemoryStream();
-                        await file.CopyToAsync(ms);
+                        try {
+                            var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
+                            var storageKey = $"{senderId}/{Guid.NewGuid():N}.webp";
 
-                        var img = new Image {
-                            Name = Path.GetFileName(file.FileName),
-                            Description = "Message Attachment",
-                            Caption = string.Empty,
-                            IsPublic = false,
-                            Content = ms.ToArray()
-                        };
-                        _context.Images.Add(img);
-                        await _context.SaveChangesAsync();
+                            using var uploadStream = new MemoryStream(processed.Data);
+                            await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
 
-                        message.MessageImages.Add(new MessageImage {
-                            ImageId = img.Id,
-                            DisplayOrder = order++
-                        });
+                            var img = new Image {
+                                UserId = senderId,
+                                Name = Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
+                                StorageKey = storageKey,
+                                ContentType = processed.ContentType,
+                                FileSize = processed.FileSize,
+                                Width = processed.Width,
+                                Height = processed.Height,
+                                Description = "Message Attachment",
+                                Caption = string.Empty,
+                                IsPublic = false
+                            };
+                            img.UserImages.Add(new UserImage {
+                                UserId = senderId,
+                                Image = img
+                            });
+                            _context.Images.Add(img);
+                            await _context.SaveChangesAsync();
+
+                            message.MessageImages.Add(new MessageImage {
+                                ImageId = img.Id,
+                                DisplayOrder = order++
+                            });
+                        } catch {
+                            // 画像処理失敗時はスキップ
+                        }
                     }
                 }
             }
@@ -213,8 +238,6 @@ namespace Meguri.Controllers {
             if (conv != null) {
                 conv.Updated = DateTime.UtcNow;
             }
-
-            await _context.SaveChangesAsync();
         }
     }
 }

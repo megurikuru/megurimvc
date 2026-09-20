@@ -75,7 +75,8 @@
 										<!-- 新規画像追加 -->
 										<div class="mb-3">
 												<label asp-for="NewImageFiles" class="form-label fw-bold">➕ 画像を追加添付</label>
-												<input asp-for="NewImageFiles" type="file" multiple class="form-control" accept="image/*" />
+												<input asp-for="NewImageFiles" type="file" multiple class="form-control" accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+												<div class="form-text">PNG/JPEG形式（最大5MB/枚）、WebPに自動変換され250KB以下に最適化されます。</div>
 										</div>
 
 										<!-- タグ編集コンポーネント (最大10個) -->

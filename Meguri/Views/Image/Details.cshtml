@@ -16,8 +16,24 @@
 								<div class="d-flex justify-content-between align-items-start mb-2 gap-2">
 										<div>
 												<h3 class="card-title fw-bold mb-1">@(string.IsNullOrEmpty(Model.Caption) ? Model.Name : Model.Caption)</h3>
-												<div class="d-flex flex-wrap gap-2 mt-2">
+												<div class="d-flex flex-wrap align-items-center gap-2 mt-2">
 													<span class="text-muted small">@Model.Created.ToString("yyyy/MM/dd HH:mm")</span>
+													@if (Model.User != null)
+													{
+														<span class="text-muted small">by <strong>@Model.User.UserName</strong></span>
+													}
+													@if (Model.FileSize > 0)
+													{
+														<span class="badge bg-secondary">@(Model.FileSize / 1024) KB (WebP)</span>
+													}
+													@if (Model.Width.HasValue && Model.Height.HasValue)
+													{
+														<span class="badge bg-light text-dark border">@Model.Width.Value × @Model.Height.Value</span>
+													}
+													@if (!Model.IsPublic)
+													{
+														<span class="badge bg-warning text-dark">会員限定</span>
+													}
 													@if (Model.IsSexual)
 													{
 														<span class="badge bg-danger">R-18</span>
@@ -28,13 +44,16 @@
 													}
 												</div>
 										</div>
-										<div class="d-flex gap-2">
-												<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Edit"]</a>
-												<form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
-														@Html.AntiForgeryToken()
-														<button type="submit" class="btn btn-sm btn-outline-danger">@SharedLocalizer["Common_Delete"]</button>
-												</form>
-										</div>
+										@if (Model.UserId == currentUserId || User.IsInRole("Admin"))
+										{
+											<div class="d-flex gap-2">
+													<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Edit"]</a>
+													<form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
+															@Html.AntiForgeryToken()
+															<button type="submit" class="btn btn-sm btn-outline-danger">@SharedLocalizer["Common_Delete"]</button>
+													</form>
+											</div>
+										}
 								</div>
 
 								@if (!string.IsNullOrEmpty(Model.Description))

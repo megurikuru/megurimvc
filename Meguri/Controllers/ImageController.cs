@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Meguri.Data;
@@ -16,10 +17,67 @@ namespace Meguri.Controllers {
     public class ImageController : Controller {
         private readonly ApplicationDbContext _context;
         private readonly ITagService _tagService;
+        private readonly IR2StorageService _r2StorageService;
+        private readonly IImageProcessingService _imageProcessingService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ImageController(ApplicationDbContext context, ITagService tagService) {
+        public ImageController(
+            ApplicationDbContext context,
+            ITagService tagService,
+            IR2StorageService r2StorageService,
+            IImageProcessingService imageProcessingService,
+            UserManager<ApplicationUser> userManager) {
             _context = context;
             _tagService = tagService;
+            _r2StorageService = r2StorageService;
+            _imageProcessingService = imageProcessingService;
+            _userManager = userManager;
+        }
+
+        /// <summary>
+        /// 画像閲覧権限の判定
+        /// 1. 非公開画像: 会員（認証済み）のみ閲覧可能
+        /// 2. R18画像またはグロテスク画像: 会員かつ18歳以上のみ閲覧可能
+        /// 3. 公開かつ一般画像: 全ユーザー閲覧可能
+        /// </summary>
+        private async Task<bool> CanViewImageAsync(Image image) {
+            // 非公開画像はログイン会員のみ
+            if (!image.IsPublic) {
+                if (User.Identity?.IsAuthenticated != true) {
+                    return false;
+                }
+            }
+
+            // R18 / グロテスク画像は会員かつ18歳以上のみ
+            if (image.IsSexual || image.IsViolence) {
+                if (User.Identity?.IsAuthenticated != true) {
+                    return false;
+                }
+
+                var isAdult = await IsUserAdultAsync();
+                if (!isAdult) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// ログイン中のユーザーが18歳以上かどうか判定
+        /// </summary>
+        private async Task<bool> IsUserAdultAsync() {
+            if (User.Identity?.IsAuthenticated != true) {
+                return false;
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null || !user.DateOfBirth.HasValue) {
+                return false;
+            }
+
+            var today = DateOnly.FromDateTime(DateTime.UtcNow);
+            return user.DateOfBirth.Value.AddYears(18) <= today;
         }
 
         // GET: /Image
@@ -29,7 +87,19 @@ namespace Meguri.Controllers {
                 .Include(i => i.PostImages).ThenInclude(pi => pi.Post)
                 .Include(i => i.Reactions)
                 .Include(i => i.Comments)
-                .Where(i => i.IsPublic);
+                .AsQueryable();
+
+            var isAuthenticated = User.Identity?.IsAuthenticated == true;
+            var isAdult = isAuthenticated && await IsUserAdultAsync();
+
+            if (!isAuthenticated) {
+                // 未ログインユーザー: 公開画像かつ一般（非NSFW）のみ
+                query = query.Where(i => i.IsPublic && !i.IsSexual && !i.IsViolence);
+            } else if (!isAdult) {
+                // 18歳未満または生年月日未登録の会員: 一般画像のみ (公開 + 会員用)
+                query = query.Where(i => !i.IsSexual && !i.IsViolence);
+            }
+            // 18歳以上の会員: 全て閲覧可能
 
             if (!string.IsNullOrEmpty(tag)) {
                 var normalized = tag.Trim().ToLowerInvariant();
@@ -51,6 +121,7 @@ namespace Meguri.Controllers {
             if (id == null) return NotFound();
 
             var image = await _context.Images
+                .Include(i => i.User)
                 .Include(i => i.ImageTags).ThenInclude(it => it.TagConcept).ThenInclude(tc => tc.Tags)
                 .Include(i => i.ImageTags).ThenInclude(it => it.TagConcept).ThenInclude(tc => tc.User)
                 .Include(i => i.PostImages).ThenInclude(pi => pi.Post).ThenInclude(p => p.User)
@@ -61,17 +132,44 @@ namespace Meguri.Controllers {
 
             if (image == null) return NotFound();
 
+            if (!await CanViewImageAsync(image)) {
+                if (User.Identity?.IsAuthenticated != true) {
+                    return Challenge();
+                }
+                return Forbid();
+            }
+
             return View(image);
         }
 
         // GET: /Image/File/5
-        [ResponseCache(Duration = 86400, Location = ResponseCacheLocation.Any)]
         public async Task<IActionResult> File(long id) {
             var image = await _context.Images.FindAsync(id);
-            if (image == null || image.Content == null) {
+            if (image == null || string.IsNullOrEmpty(image.StorageKey)) {
                 return NotFound();
             }
-            return File(image.Content, "image/jpeg");
+
+            // 認証・認可チェック (R18/グロ/非公開)
+            if (!await CanViewImageAsync(image)) {
+                if (User.Identity?.IsAuthenticated != true) {
+                    return Unauthorized();
+                }
+                return Forbid();
+            }
+
+            var fileResult = await _r2StorageService.GetFileAsync(image.StorageKey);
+            if (fileResult == null) {
+                return NotFound();
+            }
+
+            // キャッシュ制御ヘッダー
+            if (image.IsPublic && !image.IsSexual && !image.IsViolence) {
+                Response.Headers["Cache-Control"] = "public, max-age=86400";
+            } else {
+                Response.Headers["Cache-Control"] = "private, no-cache";
+            }
+
+            return File(fileResult.Value.Stream, fileResult.Value.ContentType);
         }
 
         // GET: /Image/Upload
@@ -91,12 +189,18 @@ namespace Meguri.Controllers {
                 ModelState.AddModelError("Files", "画像ファイルを1枚以上選択してください。");
             }
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            var isAdult = await IsUserAdultAsync();
+
+            if ((model.IsSexual || model.IsViolence) && !isAdult) {
+                ModelState.AddModelError(string.Empty, "18歳未満または生年月日未登録のアカウントは、R-18/R-18G画像の投稿はできません。");
+            }
+
             if (!ModelState.IsValid) {
                 ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
                 return View(model);
             }
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var tagConcepts = await _tagService.GetOrCreateTagConceptsAsync(model.Tags, userId);
 
             // 単体または複数枚のImageエンティティを作成
@@ -105,25 +209,48 @@ namespace Meguri.Controllers {
             for (int i = 0; i < model.Files.Count; i++) {
                 var file = model.Files[i];
                 if (file.Length > 0) {
-                    using var memoryStream = new MemoryStream();
-                    await file.CopyToAsync(memoryStream);
+                    try {
+                        // サーバー側画像検証・セキュリティチェック・WebP変換・250KB以下への圧縮
+                        var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
 
-                    var image = new Image {
-                        Name = Path.GetFileName(file.FileName),
-                        Description = model.Description ?? string.Empty,
-                        Caption = model.Caption ?? string.Empty,
-                        IsPublic = model.IsPublic,
-                        IsSexual = model.IsSexual,
-                        IsViolence = model.IsViolence,
-                        Content = memoryStream.ToArray()
-                    };
+                        // R2保存用キー: {userId}/{uuid}.webp
+                        var storageKey = $"{userId}/{Guid.NewGuid():N}.webp";
 
-                    foreach (var tc in tagConcepts) {
-                        image.ImageTags.Add(new ImageTag { TagConceptId = tc.Id });
+                        // R2へアップロード
+                        using var uploadStream = new MemoryStream(processed.Data);
+                        await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
+
+                        var image = new Image {
+                            UserId = userId,
+                            Name = Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
+                            StorageKey = storageKey,
+                            ContentType = processed.ContentType,
+                            FileSize = processed.FileSize,
+                            Width = processed.Width,
+                            Height = processed.Height,
+                            Description = model.Description ?? string.Empty,
+                            Caption = model.Caption ?? string.Empty,
+                            IsPublic = model.IsPublic,
+                            IsSexual = model.IsSexual,
+                            IsViolence = model.IsViolence
+                        };
+
+                        image.UserImages.Add(new UserImage {
+                            UserId = userId,
+                            Image = image
+                        });
+
+                        foreach (var tc in tagConcepts) {
+                            image.ImageTags.Add(new ImageTag { TagConceptId = tc.Id });
+                        }
+
+                        _context.Images.Add(image);
+                        createdImages.Add(image);
+                    } catch (Exception ex) {
+                        ModelState.AddModelError("Files", $"{file.FileName}: {ex.Message}");
+                        ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+                        return View(model);
                     }
-
-                    _context.Images.Add(image);
-                    createdImages.Add(image);
                 }
             }
 
@@ -135,7 +262,7 @@ namespace Meguri.Controllers {
                 if (fandomId == 0) fandomId = 1;
 
                 var post = new Post {
-                    UserId = userId ?? string.Empty,
+                    UserId = userId,
                     Name = !string.IsNullOrWhiteSpace(model.Caption) ? model.Caption : (createdImages.Count > 1 ? $"画像ギャラリー ({createdImages.Count}枚)" : createdImages.First().Name),
                     Text = model.Description ?? string.Empty,
                     FandomId = fandomId,
@@ -177,6 +304,11 @@ namespace Meguri.Controllers {
 
             if (image == null) return NotFound();
 
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (image.UserId != currentUserId && !User.IsInRole("Admin")) {
+                return Forbid();
+            }
+
             var vm = new ImageEditViewModel {
                 Id = image.Id,
                 Caption = image.Caption,
@@ -201,13 +333,23 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Edit(long id, ImageEditViewModel model) {
             if (id != model.Id) return NotFound();
 
-            if (!ModelState.IsValid) return View(model);
-
             var image = await _context.Images
                 .Include(i => i.ImageTags)
                 .FirstOrDefaultAsync(i => i.Id == id);
 
             if (image == null) return NotFound();
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (image.UserId != currentUserId && !User.IsInRole("Admin")) {
+                return Forbid();
+            }
+
+            var isAdult = await IsUserAdultAsync();
+            if ((model.IsSexual || model.IsViolence) && !isAdult) {
+                ModelState.AddModelError(string.Empty, "18歳未満または生年月日未登録のアカウントは、R-18/R-18G画像の設定はできません。");
+            }
+
+            if (!ModelState.IsValid) return View(model);
 
             image.Caption = model.Caption ?? string.Empty;
             image.Description = model.Description ?? string.Empty;
@@ -215,8 +357,7 @@ namespace Meguri.Controllers {
             image.IsSexual = model.IsSexual;
             image.IsViolence = model.IsViolence;
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var tagConcepts = await _tagService.GetOrCreateTagConceptsAsync(model.Tags, userId);
+            var tagConcepts = await _tagService.GetOrCreateTagConceptsAsync(model.Tags, currentUserId);
 
             image.ImageTags.Clear();
             foreach (var tc in tagConcepts) {
@@ -234,6 +375,16 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Delete(long id) {
             var image = await _context.Images.FindAsync(id);
             if (image != null) {
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (image.UserId != currentUserId && !User.IsInRole("Admin")) {
+                    return Forbid();
+                }
+
+                // R2から画像ファイルを削除
+                if (!string.IsNullOrEmpty(image.StorageKey)) {
+                    await _r2StorageService.DeleteFileAsync(image.StorageKey);
+                }
+
                 _context.Images.Remove(image);
                 await _context.SaveChangesAsync();
             }

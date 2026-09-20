@@ -306,6 +306,18 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            builder.Entity<Image>(entity =>
+            {
+                entity.HasOne(i => i.User)
+                    .WithMany()
+                    .HasForeignKey(i => i.UserId)
+                    .IsRequired(false)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasIndex(i => i.UserId)
+                    .IsUnique(false);
+            });
+
             builder.Entity<ApplicationUser>(entity =>
             {
                 entity.HasOne(u => u.ActiveAvatarImage)

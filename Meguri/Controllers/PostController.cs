@@ -16,10 +16,18 @@ namespace Meguri.Controllers {
     public class PostController : Controller {
         private readonly ApplicationDbContext _context;
         private readonly ITagService _tagService;
+        private readonly IR2StorageService _r2StorageService;
+        private readonly IImageProcessingService _imageProcessingService;
 
-        public PostController(ApplicationDbContext context, ITagService tagService) {
+        public PostController(
+            ApplicationDbContext context,
+            ITagService tagService,
+            IR2StorageService r2StorageService,
+            IImageProcessingService imageProcessingService) {
             _context = context;
             _tagService = tagService;
+            _r2StorageService = r2StorageService;
+            _imageProcessingService = imageProcessingService;
         }
 
         // GET: /Post
@@ -121,23 +129,43 @@ namespace Meguri.Controllers {
                 int order = 0;
                 foreach (var file in model.ImageFiles) {
                     if (file.Length > 0) {
-                        using var ms = new MemoryStream();
-                        await file.CopyToAsync(ms);
+                        try {
+                            var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
+                            var storageKey = $"{userId}/{Guid.NewGuid():N}.webp";
 
-                        var image = new Image {
-                            Name = Path.GetFileName(file.FileName),
-                            Description = model.Name,
-                            Caption = string.Empty,
-                            IsPublic = model.IsPublic,
-                            Content = ms.ToArray()
-                        };
-                        _context.Images.Add(image);
-                        await _context.SaveChangesAsync();
+                            using var uploadStream = new MemoryStream(processed.Data);
+                            await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
 
-                        post.PostImages.Add(new PostImage {
-                            ImageId = image.Id,
-                            DisplayOrder = order++
-                        });
+                            var image = new Image {
+                                UserId = userId,
+                                Name = Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
+                                StorageKey = storageKey,
+                                ContentType = processed.ContentType,
+                                FileSize = processed.FileSize,
+                                Width = processed.Width,
+                                Height = processed.Height,
+                                Description = model.Name,
+                                Caption = string.Empty,
+                                IsPublic = model.IsPublic,
+                                IsSexual = model.IsSexual,
+                                IsViolence = model.IsViolence
+                            };
+                            image.UserImages.Add(new UserImage {
+                                UserId = userId,
+                                Image = image
+                            });
+                            _context.Images.Add(image);
+                            await _context.SaveChangesAsync();
+
+                            post.PostImages.Add(new PostImage {
+                                ImageId = image.Id,
+                                DisplayOrder = order++
+                            });
+                        } catch (Exception ex) {
+                            ModelState.AddModelError("ImageFiles", $"{file.FileName}: {ex.Message}");
+                            ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+                            return View(model);
+                        }
                     }
                 }
             }
@@ -253,23 +281,43 @@ namespace Meguri.Controllers {
                 int nextOrder = post.PostImages.Any() ? post.PostImages.Max(pi => pi.DisplayOrder) + 1 : 0;
                 foreach (var file in model.NewImageFiles) {
                     if (file.Length > 0) {
-                        using var ms = new MemoryStream();
-                        await file.CopyToAsync(ms);
+                        try {
+                            var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
+                            var storageKey = $"{userId}/{Guid.NewGuid():N}.webp";
 
-                        var image = new Image {
-                            Name = Path.GetFileName(file.FileName),
-                            Description = model.Name,
-                            Caption = string.Empty,
-                            IsPublic = model.IsPublic,
-                            Content = ms.ToArray()
-                        };
-                        _context.Images.Add(image);
-                        await _context.SaveChangesAsync();
+                            using var uploadStream = new MemoryStream(processed.Data);
+                            await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
 
-                        post.PostImages.Add(new PostImage {
-                            ImageId = image.Id,
-                            DisplayOrder = nextOrder++
-                        });
+                            var image = new Image {
+                                UserId = userId,
+                                Name = Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
+                                StorageKey = storageKey,
+                                ContentType = processed.ContentType,
+                                FileSize = processed.FileSize,
+                                Width = processed.Width,
+                                Height = processed.Height,
+                                Description = model.Name,
+                                Caption = string.Empty,
+                                IsPublic = model.IsPublic,
+                                IsSexual = model.IsSexual,
+                                IsViolence = model.IsViolence
+                            };
+                            image.UserImages.Add(new UserImage {
+                                UserId = userId,
+                                Image = image
+                            });
+                            _context.Images.Add(image);
+                            await _context.SaveChangesAsync();
+
+                            post.PostImages.Add(new PostImage {
+                                ImageId = image.Id,
+                                DisplayOrder = nextOrder++
+                            });
+                        } catch (Exception ex) {
+                            ModelState.AddModelError("NewImageFiles", $"{file.FileName}: {ex.Message}");
+                            ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+                            return View(model);
+                        }
                     }
                 }
             }
@@ -290,10 +338,19 @@ namespace Meguri.Controllers {
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(long id) {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts
+                .Include(p => p.PostImages)
+                .ThenInclude(pi => pi.Image)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (post != null) {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (post.UserId == userId || User.IsInRole("Admin")) {
+                    foreach (var pi in post.PostImages) {
+                        if (pi.Image != null && !string.IsNullOrEmpty(pi.Image.StorageKey)) {
+                            await _r2StorageService.DeleteFileAsync(pi.Image.StorageKey);
+                        }
+                    }
                     _context.Posts.Remove(post);
                     await _context.SaveChangesAsync();
                 }
