@@ -378,9 +378,9 @@ namespace Meguri.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Content")
+                    b.Property<string>("ContentType")
                         .IsRequired()
-                        .HasColumnType("bytea");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -388,6 +388,12 @@ namespace Meguri.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("Height")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
@@ -402,14 +408,26 @@ namespace Meguri.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("StorageKey")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Width")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Created");
 
                     b.HasIndex("IsPublic");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("IsPublic", "Created");
 
@@ -1059,6 +1077,16 @@ namespace Meguri.Migrations
                         .IsRequired();
 
                     b.Navigation("Fandom");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Meguri.Models.Image", b =>
+                {
+                    b.HasOne("Meguri.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("User");
                 });

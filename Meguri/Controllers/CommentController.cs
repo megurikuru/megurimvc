@@ -9,13 +9,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Meguri.Data;
 using Meguri.Models;
+using Meguri.Services;
 
 namespace Meguri.Controllers {
     public class CommentController : Controller {
         private readonly ApplicationDbContext _context;
+        private readonly IR2StorageService _r2StorageService;
+        private readonly IImageProcessingService _imageProcessingService;
 
-        public CommentController(ApplicationDbContext context) {
+        public CommentController(
+            ApplicationDbContext context,
+            IR2StorageService r2StorageService,
+            IImageProcessingService imageProcessingService) {
             _context = context;
+            _r2StorageService = r2StorageService;
+            _imageProcessingService = imageProcessingService;
         }
 
         // POST: /Comment/Create
@@ -60,23 +68,39 @@ namespace Meguri.Controllers {
 
             // 画像の添付
             if (commentImage != null && commentImage.Length > 0) {
-                using var ms = new MemoryStream();
-                await commentImage.CopyToAsync(ms);
+                try {
+                    var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(commentImage);
+                    var storageKey = $"{userId}/{Guid.NewGuid():N}.webp";
 
-                var img = new Image {
-                    Name = Path.GetFileName(commentImage.FileName),
-                    Description = $"Comment >>{nextNumber} attachment",
-                    Caption = string.Empty,
-                    IsPublic = true,
-                    Content = ms.ToArray()
-                };
-                _context.Images.Add(img);
-                await _context.SaveChangesAsync();
+                    using var uploadStream = new MemoryStream(processed.Data);
+                    await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
 
-                comment.CommentImages.Add(new CommentImage {
-                    ImageId = img.Id,
-                    DisplayOrder = 0
-                });
+                    var img = new Image {
+                        UserId = userId,
+                        Name = Path.GetFileNameWithoutExtension(commentImage.FileName) + ".webp",
+                        StorageKey = storageKey,
+                        ContentType = processed.ContentType,
+                        FileSize = processed.FileSize,
+                        Width = processed.Width,
+                        Height = processed.Height,
+                        Description = $"Comment >>{nextNumber} attachment",
+                        Caption = string.Empty,
+                        IsPublic = true
+                    };
+                    img.UserImages.Add(new UserImage {
+                        UserId = userId,
+                        Image = img
+                    });
+                    _context.Images.Add(img);
+                    await _context.SaveChangesAsync();
+
+                    comment.CommentImages.Add(new CommentImage {
+                        ImageId = img.Id,
+                        DisplayOrder = 0
+                    });
+                } catch {
+                    // 画像処理失敗時はコメントのみ保存、またはエラー
+                }
             }
 
             _context.Comments.Add(comment);

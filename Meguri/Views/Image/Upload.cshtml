@@ -17,9 +17,13 @@
 										<!-- ファイル選択 -->
 										<div class="mb-3">
 												<label asp-for="Files" class="form-label fw-bold">@SharedLocalizer["Image_SelectFiles"] <span class="text-danger">*</span></label>
-												<input asp-for="Files" type="file" multiple class="form-control" accept="image/*" required id="imageFileInput" />
+												<input asp-for="Files" type="file" multiple class="form-control" accept=".jpg,.jpeg,.png,image/jpeg,image/png" required id="imageFileInput" />
 												<span asp-validation-for="Files" class="text-danger"></span>
-												<div class="form-text">複数枚選択すると、ひとつの投稿としてまとめることもできます。</div>
+												<div class="form-text">
+													・対応形式: <strong>PNG, JPEG</strong> のみ（1枚あたり最大 <strong>5MB</strong>）<br />
+													・サーバー側で <strong>WebP形式に変換</strong> し、<strong>250KB以下に最適化</strong> して保存されます。<br />
+													・複数枚選択すると、ひとつの投稿としてまとめることもできます。
+												</div>
 										</div>
 
 										<!-- 投稿先界隈 -->
@@ -102,6 +106,17 @@
 		<script>
 				$(document).ready(function () {
 						TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
+
+						$('#imageFileInput').on('change', function () {
+								const maxBytes = 5 * 1024 * 1024;
+								for (let i = 0; i < this.files.length; i++) {
+										if (this.files[i].size > maxBytes) {
+												alert('ファイル「' + this.files[i].name + '」が5MBを超えています。5MB以下のファイルを選択してください。');
+												this.value = '';
+												break;
+										}
+								}
+						});
 				});
 		</script>
 }

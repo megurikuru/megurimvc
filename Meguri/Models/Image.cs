@@ -9,15 +9,22 @@ namespace Meguri.Models {
     [Index(nameof(Created))]
     [Index(nameof(IsPublic))]
     [Index(nameof(IsPublic), nameof(Created))]
+    [Index(nameof(UserId))]
     public class Image { 
         public long Id { get; set; }
+        public string? UserId { get; set; }
+        public ApplicationUser? User { get; set; }
         public string Name { get; set; } = string.Empty;
+        public string StorageKey { get; set; } = string.Empty;
+        public string ContentType { get; set; } = "image/webp";
+        public long FileSize { get; set; } = 0;
+        public int? Width { get; set; }
+        public int? Height { get; set; }
         public string Description { get; set; } = string.Empty;
         public string Caption { get; set; } = string.Empty;
         public bool IsPublic { get; set; } = false;
         public bool IsSexual  { get; set; } = false;
         public bool IsViolence  { get; set; } = false;
-        public byte[] Content { get; set; } = Array.Empty<byte>();
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
