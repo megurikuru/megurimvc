@@ -30,7 +30,7 @@
 						<div class="chat-container" id="chatMessageContainer">
 								@if (!Model.Conversation.Messages.Any())
 								{
-										<p class="text-center text-muted my-auto">メッセージを送ってチャットを始めましょう！</p>
+										<p class="text-center text-body-secondary my-auto">メッセージを送ってチャットを始めましょう！</p>
 								}
 								else
 								{
@@ -40,7 +40,7 @@
 												<div class="d-flex flex-column @(isMe ? "align-items-end" : "align-items-start")">
 														@if (!isMe)
 														{
-																<span class="small text-muted ms-1 mb-1">👤 @(msg.Sender?.UserName ?? "User")</span>
+																<span class="small text-body-secondary ms-1 mb-1">👤 @(msg.Sender?.UserName ?? "User")</span>
 														}
 														<div class="chat-bubble @(isMe ? "chat-bubble-outgoing" : "chat-bubble-incoming") shadow-sm">
 																@if (!string.IsNullOrEmpty(msg.Text))

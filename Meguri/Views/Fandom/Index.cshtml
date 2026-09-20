@@ -8,7 +8,7 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
 		<div>
 				<h2 class="fw-bold mb-1">🏛️ @SharedLocalizer["Fandom_Title"]</h2>
-				<p class="text-muted mb-0">@SharedLocalizer["Fandom_SubTitle"]</p>
+				<p class="text-body-secondary mb-0">@SharedLocalizer["Fandom_SubTitle"]</p>
 		</div>
 		<a asp-action="Create" class="btn btn-primary">
 				➕ @SharedLocalizer["Fandom_CreateNew"]
@@ -36,7 +36,7 @@
 																		@parent.Name
 																</a>
 														</h4>
-														<div class="small text-muted">
+														<div class="small text-body-secondary">
 																👥 @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, parent.FandomUsers.Count)
 																&nbsp;|&nbsp;
 																📝 @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, parent.Docs.Count)
@@ -71,7 +71,7 @@
 										@if (childFandoms.Any())
 										{
 												<div class="mt-3 pt-3 border-top">
-														<h6 class="text-muted small fw-bold mb-2">📂 @SharedLocalizer["Fandom_ChildFandoms"]</h6>
+														<h6 class="text-body-secondary small fw-bold mb-2">📂 @SharedLocalizer["Fandom_ChildFandoms"]</h6>
 														<div class="d-flex flex-wrap gap-2">
 																@foreach (var child in childFandoms)
 																{

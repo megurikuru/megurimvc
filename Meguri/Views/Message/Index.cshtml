@@ -6,7 +6,7 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
 		<div>
 				<h2 class="fw-bold mb-1">💬 @SharedLocalizer["Message_Title"]</h2>
-				<p class="text-muted mb-0">1対1のダイレクトメッセージやグループチャットができます。</p>
+				<p class="text-body-secondary mb-0">1対1のダイレクトメッセージやグループチャットができます。</p>
 		</div>
 		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newConversationModal">
 				➕ @SharedLocalizer["Message_NewConversation"]
@@ -17,7 +17,7 @@
 <div class="card shadow-sm border-0 bg-white">
 		@if (!Model.Conversations.Any())
 		{
-				<div class="card-body p-5 text-center text-muted">
+				<div class="card-body p-5 text-center text-body-secondary">
 						<h4>@SharedLocalizer["Message_NoConversations"]</h4>
 						<p>新しいメッセージを作成して他のユーザーと交流してみましょう！</p>
 						<button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#newConversationModal">
@@ -43,12 +43,12 @@
 																		<span class="badge bg-secondary ms-1">グループ</span>
 																}
 														</h6>
-														<p class="text-muted small mb-0 text-truncate" style="max-width: 400px;">
+														<p class="text-body-secondary small mb-0 text-truncate" style="max-width: 400px;">
 																@c.LastMessageText
 														</p>
 												</div>
 										</div>
-										<div class="text-end text-muted small">
+										<div class="text-end text-body-secondary small">
 												<div>@c.LastMessageTime.ToString("MM/dd HH:mm")</div>
 												<span class="badge bg-light text-dark border">開く →</span>
 										</div>
@@ -96,7 +96,7 @@
 												<div class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
 														@if (!Model.AvailableUsers.Any())
 														{
-																<p class="text-muted small mb-0">他のユーザーが見つかりません。</p>
+																<p class="text-body-secondary small mb-0">他のユーザーが見つかりません。</p>
 														}
 														@foreach (var user in Model.AvailableUsers)
 														{

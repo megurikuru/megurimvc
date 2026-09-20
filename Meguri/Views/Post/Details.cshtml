@@ -49,7 +49,7 @@
 
 								<h2 class="fw-bold mb-2">@Model.Name</h2>
 
-								<div class="d-flex justify-content-between align-items-center text-muted small mb-4 pb-3 border-bottom">
+								<div class="d-flex justify-content-between align-items-center text-body-secondary small mb-4 pb-3 border-bottom">
 										<div>
 												<span>👤 @(Model.User?.UserName ?? "User")</span>
 												<span class="ms-3">🕒 @Model.Created.ToString("yyyy/MM/dd HH:mm")</span>
@@ -88,10 +88,10 @@
 								<!-- タグ一覧 & あいまいさ回避 -->
 								<div class="my-4 pt-3 border-top">
 										<div class="d-flex flex-wrap align-items-center gap-2">
-												<span class="fw-bold small text-muted">🏷️ @SharedLocalizer["Post_Tags"]:</span>
+												<span class="fw-bold small text-body-secondary">🏷️ @SharedLocalizer["Post_Tags"]:</span>
 												@if (!Model.PostTags.Any())
 												{
-														<span class="text-muted small">なし</span>
+														<span class="text-body-secondary small">なし</span>
 												}
 												else
 												{
@@ -113,7 +113,7 @@
 
 								<!-- リアクションボタン -->
 								<div class="pt-3 border-top">
-										<div class="fw-bold small text-muted mb-2">@SharedLocalizer["Reaction_React"]</div>
+										<div class="fw-bold small text-body-secondary mb-2">@SharedLocalizer["Reaction_React"]</div>
 										@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
 								</div>
 						</div>

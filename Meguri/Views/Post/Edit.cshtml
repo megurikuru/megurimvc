@@ -46,7 +46,7 @@
 										{
 												<div class="mb-3">
 														<label class="form-label fw-bold mb-1">🖼️ @SharedLocalizer["Post_AttachImages"] の並び順・管理</label>
-														<p class="text-muted small mb-2">@SharedLocalizer["Post_ImageOrderHint"]</p>
+														<p class="text-body-secondary small mb-2">@SharedLocalizer["Post_ImageOrderHint"]</p>
 														<div id="imageOrderContainer" class="d-flex flex-column gap-2">
 																@for (int i = 0; i < Model.ExistingImages.Count; i++)
 																{
@@ -83,7 +83,7 @@
 										<div class="mb-3 position-relative">
 												<div class="d-flex justify-content-between align-items-center mb-1">
 														<label class="form-label fw-bold mb-0">🏷️ @SharedLocalizer["Post_Tags"]</label>
-														<span class="small text-muted" id="tagCountDisplay">0/10</span>
+														<span class="small text-body-secondary" id="tagCountDisplay">0/10</span>
 												</div>
 												<div class="input-group">
 														<input type="text" id="tagInput" class="form-control" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
