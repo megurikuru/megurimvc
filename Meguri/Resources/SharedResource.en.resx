@@ -156,9 +156,6 @@
   <data name="Nav_Cosplay" xml:space="preserve">
     <value>Cosplay</value>
   </data>
-  <data name="Nav_Fandom" xml:space="preserve">
-    <value>Fandom</value>
-  </data>
   <data name="Footer_Copyright" xml:space="preserve">
     <value>&amp;copy; 2026 - meguri</value>
   </data>
@@ -666,115 +663,310 @@
   <data name="Manage_ExternalLogins_ProviderButtonTitle" xml:space="preserve">
     <value>Log in using your {0} account</value>
   </data>
-  <!-- Common -->
-  <data name="Common_Save" xml:space="preserve"><value>Save</value></data>
-  <data name="Common_Cancel" xml:space="preserve"><value>Cancel</value></data>
-  <data name="Common_Edit" xml:space="preserve"><value>Edit</value></data>
-  <data name="Common_Delete" xml:space="preserve"><value>Delete</value></data>
-  <data name="Common_Create" xml:space="preserve"><value>Create</value></data>
-  <data name="Common_Back" xml:space="preserve"><value>Back</value></data>
-  <data name="Common_Submit" xml:space="preserve"><value>Submit</value></data>
-  <data name="Common_Search" xml:space="preserve"><value>Search</value></data>
-  <data name="Common_Details" xml:space="preserve"><value>Details</value></data>
-  <data name="Common_Actions" xml:space="preserve"><value>Actions</value></data>
-  <data name="Common_Close" xml:space="preserve"><value>Close</value></data>
-  <data name="Common_MoveUp" xml:space="preserve"><value>Move Up</value></data>
-  <data name="Common_MoveDown" xml:space="preserve"><value>Move Down</value></data>
-  <data name="Common_Remove" xml:space="preserve"><value>Remove</value></data>
-  <data name="Common_Add" xml:space="preserve"><value>Add</value></data>
-  <data name="Common_Preview" xml:space="preserve"><value>Preview</value></data>
-  <data name="Common_ConfirmDelete" xml:space="preserve"><value>Are you sure you want to delete this?</value></data>
-  <data name="Common_NoItems" xml:space="preserve"><value>No items found.</value></data>
-  <data name="Common_All" xml:space="preserve"><value>All</value></data>
-  <data name="Common_Filter" xml:space="preserve"><value>Filter</value></data>
-  <!-- Language -->
-  <data name="Lang_Japanese" xml:space="preserve"><value>日本語</value></data>
-  <data name="Lang_English" xml:space="preserve"><value>English</value></data>
-  <data name="Lang_Change" xml:space="preserve"><value>Language</value></data>
-  <!-- Fandom -->
-  <data name="Fandom_Title" xml:space="preserve"><value>Fandoms</value></data>
-  <data name="Fandom_SubTitle" xml:space="preserve"><value>Communities connected by creativity and hobbies</value></data>
-  <data name="Fandom_Name" xml:space="preserve"><value>Fandom Name</value></data>
-  <data name="Fandom_Parent" xml:space="preserve"><value>Parent Fandom</value></data>
-  <data name="Fandom_NoParent" xml:space="preserve"><value>None (Top Level)</value></data>
-  <data name="Fandom_ChildFandoms" xml:space="preserve"><value>Sub-Fandoms</value></data>
-  <data name="Fandom_Join" xml:space="preserve"><value>Join</value></data>
-  <data name="Fandom_Joined" xml:space="preserve"><value>Joined</value></data>
-  <data name="Fandom_Leave" xml:space="preserve"><value>Leave</value></data>
-  <data name="Fandom_MembersCount" xml:space="preserve"><value>Members: {0}</value></data>
-  <data name="Fandom_PostsCount" xml:space="preserve"><value>Posts: {0}</value></data>
-  <data name="Fandom_CascadeNote" xml:space="preserve"><value>*Joining a parent fandom will automatically join all of its sub-fandoms.</value></data>
-  <data name="Fandom_CreateNew" xml:space="preserve"><value>Create New Fandom</value></data>
-  <data name="Fandom_Explore" xml:space="preserve"><value>Explore Fandoms</value></data>
-  <data name="Fandom_MyFandoms" xml:space="preserve"><value>My Fandoms</value></data>
-  <!-- Post -->
-  <data name="Post_Title" xml:space="preserve"><value>Posts</value></data>
-  <data name="Post_CreateNew" xml:space="preserve"><value>New Post</value></data>
-  <data name="Post_EditTitle" xml:space="preserve"><value>Edit Post</value></data>
-  <data name="Post_PostName" xml:space="preserve"><value>Title</value></data>
-  <data name="Post_PostText" xml:space="preserve"><value>Content</value></data>
-  <data name="Post_SelectFandom" xml:space="preserve"><value>Target Fandom</value></data>
-  <data name="Post_AttachImages" xml:space="preserve"><value>Attach Images</value></data>
-  <data name="Post_ImageOrderHint" xml:space="preserve"><value>Use arrow buttons to adjust the display order of images.</value></data>
-  <data name="Post_Tags" xml:space="preserve"><value>Tags</value></data>
-  <data name="Post_TagsHint" xml:space="preserve"><value>Up to 10 tags. Autocomplete suggestions will appear as you type.</value></data>
-  <data name="Post_NSFW_Sexual" xml:space="preserve"><value>Contains adult (NSFW) content</value></data>
-  <data name="Post_NSFW_Violence" xml:space="preserve"><value>Contains violence or gore</value></data>
-  <data name="Post_Public" xml:space="preserve"><value>Public</value></data>
-  <data name="Post_Pinned" xml:space="preserve"><value>Pinned Thread</value></data>
-  <data name="Post_Locked" xml:space="preserve"><value>Locked Thread</value></data>
-  <data name="Post_PostedBy" xml:space="preserve"><value>Posted by: {0}</value></data>
-  <data name="Post_CreatedAt" xml:space="preserve"><value>Posted at: {0}</value></data>
-  <data name="Post_RepliesCount" xml:space="preserve"><value>Comments: {0}</value></data>
-  <data name="Post_ViewsCount" xml:space="preserve"><value>Views: {0}</value></data>
-  <data name="Post_ThreadTitle" xml:space="preserve"><value>Discussion Thread</value></data>
-  <!-- Image -->
-  <data name="Image_GalleryTitle" xml:space="preserve"><value>Images</value></data>
-  <data name="Image_UploadTitle" xml:space="preserve"><value>Upload Images</value></data>
-  <data name="Image_EditTitle" xml:space="preserve"><value>Edit Image</value></data>
-  <data name="Image_SelectFiles" xml:space="preserve"><value>Image Files (Single or Multiple)</value></data>
-  <data name="Image_Order" xml:space="preserve"><value>Display Order</value></data>
-  <data name="Image_Caption" xml:space="preserve"><value>Caption</value></data>
-  <data name="Image_Description" xml:space="preserve"><value>Description</value></data>
-  <data name="Image_SingleOrMultiple" xml:space="preserve"><value>Post Single or Multiple Images</value></data>
-  <data name="Image_NoImages" xml:space="preserve"><value>No images yet.</value></data>
-  <data name="Image_Reorder" xml:space="preserve"><value>Reorder Images</value></data>
-  <!-- Comment -->
-  <data name="Comment_Header" xml:space="preserve"><value>Comments</value></data>
-  <data name="Comment_WritePlaceholder" xml:space="preserve"><value>Write a comment...</value></data>
-  <data name="Comment_ReplyTo" xml:space="preserve"><value>Reply to >>{0}</value></data>
-  <data name="Comment_DeletedText" xml:space="preserve"><value>This comment has been deleted.</value></data>
-  <data name="Comment_Submit" xml:space="preserve"><value>Post Comment</value></data>
-  <!-- Tag & Thesaurus -->
-  <data name="Tag_Title" xml:space="preserve"><value>Tags</value></data>
-  <data name="Tag_Thesaurus" xml:space="preserve"><value>Thesaurus</value></data>
-  <data name="Tag_DisambiguationBtn" xml:space="preserve"><value>Disambiguation</value></data>
-  <data name="Tag_DisambiguationTitle" xml:space="preserve"><value>Tag Disambiguation &amp; Thesaurus: {0}</value></data>
-  <data name="Tag_BroaderTerms" xml:space="preserve"><value>Broader Concepts</value></data>
-  <data name="Tag_NarrowerTerms" xml:space="preserve"><value>Narrower Concepts</value></data>
-  <data name="Tag_SynonymTerms" xml:space="preserve"><value>Synonyms &amp; Aliases</value></data>
-  <data name="Tag_RelatedTerms" xml:space="preserve"><value>Related Concepts</value></data>
-  <data name="Tag_AddBroader" xml:space="preserve"><value>Add Broader Concept</value></data>
-  <data name="Tag_AddNarrower" xml:space="preserve"><value>Add Narrower Concept</value></data>
-  <data name="Tag_AddSynonym" xml:space="preserve"><value>Add Synonym</value></data>
-  <data name="Tag_AddRelated" xml:space="preserve"><value>Add Related Concept</value></data>
-  <data name="Tag_ExistingTags" xml:space="preserve"><value>Tag List</value></data>
-  <data name="Tag_SearchPlaceholder" xml:space="preserve"><value>Search or add tags...</value></data>
-  <data name="Tag_OnlyOwnerCanEdit" xml:space="preserve"><value>*Only the creator of this tag concept can edit relationships.</value></data>
-  <data name="Tag_SuccessUpdated" xml:space="preserve"><value>Thesaurus relationships updated successfully.</value></data>
-  <!-- Message -->
-  <data name="Message_Title" xml:space="preserve"><value>Messages</value></data>
-  <data name="Message_NewConversation" xml:space="preserve"><value>New Message</value></data>
-  <data name="Message_Direct" xml:space="preserve"><value>Direct Message</value></data>
-  <data name="Message_Group" xml:space="preserve"><value>Group Chat</value></data>
-  <data name="Message_SelectRecipient" xml:space="preserve"><value>Select Recipient</value></data>
-  <data name="Message_GroupMembers" xml:space="preserve"><value>Members</value></data>
-  <data name="Message_GroupName" xml:space="preserve"><value>Group Name</value></data>
-  <data name="Message_InputPlaceholder" xml:space="preserve"><value>Type a message...</value></data>
-  <data name="Message_SendBtn" xml:space="preserve"><value>Send</value></data>
-  <data name="Message_NoConversations" xml:space="preserve"><value>No messages yet.</value></data>
-  <data name="Message_ChatWith" xml:space="preserve"><value>Conversation with {0}</value></data>
-  <!-- Reaction -->
-  <data name="Reaction_React" xml:space="preserve"><value>Reaction</value></data>
-  <data name="Reaction_Add" xml:space="preserve"><value>Add Reaction</value></data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Common_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Common_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Common_Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Common_Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Common_Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="Common_Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Common_Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Common_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Common_MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="Common_MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="Common_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Common_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Common_Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="Common_ConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete this?</value>
+  </data>
+  <data name="Common_NoItems" xml:space="preserve">
+    <value>No items found.</value>
+  </data>
+  <data name="Common_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Common_Filter" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="Lang_Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="Lang_English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Lang_Change" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Fandom_Title" xml:space="preserve">
+    <value>Fandoms</value>
+  </data>
+  <data name="Fandom_SubTitle" xml:space="preserve">
+    <value>Fandom love circulates.</value>
+  </data>
+  <data name="Fandom_Name" xml:space="preserve">
+    <value>Fandom Name</value>
+  </data>
+  <data name="Fandom_Parent" xml:space="preserve">
+    <value>Parent Fandom</value>
+  </data>
+  <data name="Fandom_NoParent" xml:space="preserve">
+    <value>None (Top Level)</value>
+  </data>
+  <data name="Fandom_ChildFandoms" xml:space="preserve">
+    <value>Sub-Fandoms</value>
+  </data>
+  <data name="Fandom_Join" xml:space="preserve">
+    <value>Join</value>
+  </data>
+  <data name="Fandom_Joined" xml:space="preserve">
+    <value>Joined</value>
+  </data>
+  <data name="Fandom_Leave" xml:space="preserve">
+    <value>Leave</value>
+  </data>
+  <data name="Fandom_MembersCount" xml:space="preserve">
+    <value>Members: {0}</value>
+  </data>
+  <data name="Fandom_PostsCount" xml:space="preserve">
+    <value>Posts: {0}</value>
+  </data>
+  <data name="Fandom_CascadeNote" xml:space="preserve">
+    <value>*Joining a parent fandom will automatically join all of its sub-fandoms.</value>
+  </data>
+  <data name="Fandom_CreateNew" xml:space="preserve">
+    <value>Create New Fandom</value>
+  </data>
+  <data name="Fandom_Explore" xml:space="preserve">
+    <value>Explore Fandoms</value>
+  </data>
+  <data name="Fandom_MyFandoms" xml:space="preserve">
+    <value>My Fandoms</value>
+  </data>
+  <data name="Post_Title" xml:space="preserve">
+    <value>Posts</value>
+  </data>
+  <data name="Post_CreateNew" xml:space="preserve">
+    <value>New Post</value>
+  </data>
+  <data name="Post_EditTitle" xml:space="preserve">
+    <value>Edit Post</value>
+  </data>
+  <data name="Post_PostName" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Post_PostText" xml:space="preserve">
+    <value>Content</value>
+  </data>
+  <data name="Post_SelectFandom" xml:space="preserve">
+    <value>Target Fandom</value>
+  </data>
+  <data name="Post_AttachImages" xml:space="preserve">
+    <value>Attach Images</value>
+  </data>
+  <data name="Post_ImageOrderHint" xml:space="preserve">
+    <value>Use arrow buttons to adjust the display order of images.</value>
+  </data>
+  <data name="Post_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Post_TagsHint" xml:space="preserve">
+    <value>Up to 10 tags. Autocomplete suggestions will appear as you type.</value>
+  </data>
+  <data name="Post_NSFW_Sexual" xml:space="preserve">
+    <value>Contains adult (NSFW) content</value>
+  </data>
+  <data name="Post_NSFW_Violence" xml:space="preserve">
+    <value>Contains violence or gore</value>
+  </data>
+  <data name="Post_Public" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Post_Pinned" xml:space="preserve">
+    <value>Pinned Thread</value>
+  </data>
+  <data name="Post_Locked" xml:space="preserve">
+    <value>Locked Thread</value>
+  </data>
+  <data name="Post_PostedBy" xml:space="preserve">
+    <value>Posted by: {0}</value>
+  </data>
+  <data name="Post_CreatedAt" xml:space="preserve">
+    <value>Posted at: {0}</value>
+  </data>
+  <data name="Post_RepliesCount" xml:space="preserve">
+    <value>Comments: {0}</value>
+  </data>
+  <data name="Post_ViewsCount" xml:space="preserve">
+    <value>Views: {0}</value>
+  </data>
+  <data name="Post_ThreadTitle" xml:space="preserve">
+    <value>Discussion Thread</value>
+  </data>
+  <data name="Image_GalleryTitle" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="Image_UploadTitle" xml:space="preserve">
+    <value>Upload Images</value>
+  </data>
+  <data name="Image_EditTitle" xml:space="preserve">
+    <value>Edit Image</value>
+  </data>
+  <data name="Image_SelectFiles" xml:space="preserve">
+    <value>Image Files (Single or Multiple)</value>
+  </data>
+  <data name="Image_Order" xml:space="preserve">
+    <value>Display Order</value>
+  </data>
+  <data name="Image_Caption" xml:space="preserve">
+    <value>Caption</value>
+  </data>
+  <data name="Image_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Image_SingleOrMultiple" xml:space="preserve">
+    <value>Post Single or Multiple Images</value>
+  </data>
+  <data name="Image_NoImages" xml:space="preserve">
+    <value>No images yet.</value>
+  </data>
+  <data name="Image_Reorder" xml:space="preserve">
+    <value>Reorder Images</value>
+  </data>
+  <data name="Comment_Header" xml:space="preserve">
+    <value>Comments</value>
+  </data>
+  <data name="Comment_WritePlaceholder" xml:space="preserve">
+    <value>Write a comment...</value>
+  </data>
+  <data name="Comment_ReplyTo" xml:space="preserve">
+    <value>Reply to &gt;&gt;{0}</value>
+  </data>
+  <data name="Comment_DeletedText" xml:space="preserve">
+    <value>This comment has been deleted.</value>
+  </data>
+  <data name="Comment_Submit" xml:space="preserve">
+    <value>Post Comment</value>
+  </data>
+  <data name="Tag_Title" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Tag_Thesaurus" xml:space="preserve">
+    <value>Thesaurus</value>
+  </data>
+  <data name="Tag_DisambiguationBtn" xml:space="preserve">
+    <value>Disambiguation</value>
+  </data>
+  <data name="Tag_DisambiguationTitle" xml:space="preserve">
+    <value>Tag Disambiguation &amp; Thesaurus: {0}</value>
+  </data>
+  <data name="Tag_BroaderTerms" xml:space="preserve">
+    <value>Broader Concepts</value>
+  </data>
+  <data name="Tag_NarrowerTerms" xml:space="preserve">
+    <value>Narrower Concepts</value>
+  </data>
+  <data name="Tag_SynonymTerms" xml:space="preserve">
+    <value>Synonyms &amp; Aliases</value>
+  </data>
+  <data name="Tag_RelatedTerms" xml:space="preserve">
+    <value>Related Concepts</value>
+  </data>
+  <data name="Tag_AddBroader" xml:space="preserve">
+    <value>Add Broader Concept</value>
+  </data>
+  <data name="Tag_AddNarrower" xml:space="preserve">
+    <value>Add Narrower Concept</value>
+  </data>
+  <data name="Tag_AddSynonym" xml:space="preserve">
+    <value>Add Synonym</value>
+  </data>
+  <data name="Tag_AddRelated" xml:space="preserve">
+    <value>Add Related Concept</value>
+  </data>
+  <data name="Tag_ExistingTags" xml:space="preserve">
+    <value>Tag List</value>
+  </data>
+  <data name="Tag_SearchPlaceholder" xml:space="preserve">
+    <value>Search or add tags...</value>
+  </data>
+  <data name="Tag_OnlyOwnerCanEdit" xml:space="preserve">
+    <value>*Only the creator of this tag concept can edit relationships.</value>
+  </data>
+  <data name="Tag_SuccessUpdated" xml:space="preserve">
+    <value>Thesaurus relationships updated successfully.</value>
+  </data>
+  <data name="Message_Title" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="Message_NewConversation" xml:space="preserve">
+    <value>New Message</value>
+  </data>
+  <data name="Message_Direct" xml:space="preserve">
+    <value>Direct Message</value>
+  </data>
+  <data name="Message_Group" xml:space="preserve">
+    <value>Group Chat</value>
+  </data>
+  <data name="Message_SelectRecipient" xml:space="preserve">
+    <value>Select Recipient</value>
+  </data>
+  <data name="Message_GroupMembers" xml:space="preserve">
+    <value>Members</value>
+  </data>
+  <data name="Message_GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="Message_InputPlaceholder" xml:space="preserve">
+    <value>Type a message...</value>
+  </data>
+  <data name="Message_SendBtn" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="Message_NoConversations" xml:space="preserve">
+    <value>No messages yet.</value>
+  </data>
+  <data name="Message_ChatWith" xml:space="preserve">
+    <value>Conversation with {0}</value>
+  </data>
+  <data name="Reaction_React" xml:space="preserve">
+    <value>Reaction</value>
+  </data>
+  <data name="Reaction_Add" xml:space="preserve">
+    <value>Add Reaction</value>
+  </data>
 </root>

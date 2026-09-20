@@ -3,7 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - meguri</title>
+    @if (ViewData["IsHomePage"] as bool? == true) {
+        <title>meguri - 『好き』がめぐるSNS</title>
+    } else if (!string.IsNullOrEmpty(ViewData["Title"] as string)) {
+        <title>@ViewData["Title"] - meguri</title>
+    } else {
+        <title>meguri</title>
+    }
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
