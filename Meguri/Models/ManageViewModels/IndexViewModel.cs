@@ -22,6 +22,14 @@ namespace Meguri.Models.ManageViewModels {
         [Display(Name = "Manage_Profile_PhoneNumber")]
         public string PhoneNumber { get; set; }
 
+        [Display(Name = "Manage_Profile_DateOfBirth")]
+        [DataType(DataType.Date)]
+        public DateOnly? DateOfBirth { get; set; }
+
+        [Display(Name = "Manage_Profile_Bio")]
+        [StringLength(1000, ErrorMessage = "Validation_StringLength")]
+        public string Bio { get; set; } = string.Empty;
+
         public string StatusMessage { get; set; }
     }
 }

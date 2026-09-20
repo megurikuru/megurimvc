@@ -109,8 +109,8 @@ namespace Meguri.Controllers {
                 Name = model.Name,
                 Text = model.Text,
                 FandomId = model.FandomId,
-                Sexual = model.Sexual,
-                Violence = model.Violence,
+                IsSexual = model.IsSexual,
+                IsViolence = model.IsViolence,
                 IsPublic = model.IsPublic,
                 Created = DateTime.UtcNow,
                 Updated = DateTime.UtcNow
@@ -176,8 +176,8 @@ namespace Meguri.Controllers {
                 Name = post.Name,
                 Text = post.Text,
                 FandomId = post.FandomId,
-                Sexual = post.Sexual,
-                Violence = post.Violence,
+                IsSexual = post.IsSexual,
+                IsViolence = post.IsViolence,
                 IsPublic = post.IsPublic,
                 IsPinned = post.IsPinned,
                 IsLocked = post.IsLocked,
@@ -228,8 +228,8 @@ namespace Meguri.Controllers {
             post.Name = model.Name;
             post.Text = model.Text;
             post.FandomId = model.FandomId;
-            post.Sexual = model.Sexual;
-            post.Violence = model.Violence;
+            post.IsSexual = model.IsSexual;
+            post.IsViolence = model.IsViolence;
             post.IsPublic = model.IsPublic;
             post.IsPinned = model.IsPinned;
             post.IsLocked = model.IsLocked;

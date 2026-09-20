@@ -18,10 +18,10 @@ namespace Meguri.Models.PostViewModels {
         public int FandomId { get; set; }
 
         [Display(Name = "Post_NSFW_Sexual")]
-        public bool Sexual { get; set; } = false;
+        public bool IsSexual { get; set; } = false;
 
         [Display(Name = "Post_NSFW_Violence")]
-        public bool Violence { get; set; } = false;
+        public bool IsViolence { get; set; } = false;
 
         [Display(Name = "Post_Public")]
         public bool IsPublic { get; set; } = true;
@@ -50,10 +50,10 @@ namespace Meguri.Models.PostViewModels {
         public int FandomId { get; set; }
 
         [Display(Name = "Post_NSFW_Sexual")]
-        public bool Sexual { get; set; } = false;
+        public bool IsSexual { get; set; } = false;
 
         [Display(Name = "Post_NSFW_Violence")]
-        public bool Violence { get; set; } = false;
+        public bool IsViolence { get; set; } = false;
 
         [Display(Name = "Post_Public")]
         public bool IsPublic { get; set; } = true;

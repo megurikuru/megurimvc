@@ -13,10 +13,20 @@
 								<img src="/Image/File/@Model.Id" alt="@Model.Name" class="img-fluid" style="max-height: 70vh; object-fit: contain;" />
 						</div>
 						<div class="card-body p-4">
-								<div class="d-flex justify-content-between align-items-start mb-2">
+								<div class="d-flex justify-content-between align-items-start mb-2 gap-2">
 										<div>
 												<h3 class="card-title fw-bold mb-1">@(string.IsNullOrEmpty(Model.Caption) ? Model.Name : Model.Caption)</h3>
-												<div class="text-muted small">@Model.Created.ToString("yyyy/MM/dd HH:mm")</div>
+												<div class="d-flex flex-wrap gap-2 mt-2">
+													<span class="text-muted small">@Model.Created.ToString("yyyy/MM/dd HH:mm")</span>
+													@if (Model.IsSexual)
+													{
+														<span class="badge bg-danger">R-18</span>
+													}
+													@if (Model.IsViolence)
+													{
+														<span class="badge bg-dark">R-18G</span>
+													}
+												</div>
 										</div>
 										<div class="d-flex gap-2">
 												<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Edit"]</a>

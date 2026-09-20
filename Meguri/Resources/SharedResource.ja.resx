@@ -456,9 +456,6 @@
   <data name="Validation_Compare" xml:space="preserve">
     <value>{0} と {1} が一致しません。</value>
   </data>
-  <data name="Common_Close" xml:space="preserve">
-    <value>閉じる</value>
-  </data>
   <data name="Manage_Profile_Title" xml:space="preserve">
     <value>プロフィール</value>
   </data>
@@ -470,6 +467,12 @@
   </data>
   <data name="Manage_Profile_PhoneNumber" xml:space="preserve">
     <value>電話番号</value>
+  </data>
+  <data name="Manage_Profile_DateOfBirth" xml:space="preserve">
+    <value>生年月日</value>
+  </data>
+  <data name="Manage_Profile_Bio" xml:space="preserve">
+    <value>自己紹介</value>
   </data>
   <data name="Manage_Profile_SendVerificationEmail" xml:space="preserve">
     <value>確認メールを送信</value>
