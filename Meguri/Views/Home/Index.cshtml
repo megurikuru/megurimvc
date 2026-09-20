@@ -1,6 +1,6 @@
 ﻿@using Meguri.Extensions
 @{
-    ViewData["Title"] = SharedLocalizer["Home_Title"];
+    ViewData["IsHomePage"] = true;
     var recentPosts = ViewBag.RecentPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
     var topFandoms = ViewBag.TopFandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
 }
@@ -126,11 +126,5 @@
                 <p class="small text-muted mb-0">@SharedLocalizer["Fandom_CascadeNote"]</p>
             </div>
         </div>
-    </div>
-</div>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">@SharedLocalizer["Home_RunDeploy_Item1"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">@SharedLocalizer["Home_RunDeploy_Item2"]</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">@SharedLocalizer["Home_RunDeploy_Item3"]</a></li>
-        </ul>
     </div>
 </div>
