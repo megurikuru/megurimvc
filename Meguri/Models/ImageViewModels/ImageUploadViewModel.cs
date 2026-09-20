@@ -17,6 +17,12 @@ namespace Meguri.Models.ImageViewModels {
         [Display(Name = "Post_Public")]
         public bool IsPublic { get; set; } = true;
 
+        [Display(Name = "Post_NSFW_Sexual")]
+        public bool IsSexual { get; set; } = false;
+
+        [Display(Name = "Post_NSFW_Violence")]
+        public bool IsViolence { get; set; } = false;
+
         [Required(ErrorMessage = "画像ファイルを選択してください。")]
         [Display(Name = "Image_SelectFiles")]
         public List<IFormFile> Files { get; set; } = new List<IFormFile>();
@@ -37,6 +43,12 @@ namespace Meguri.Models.ImageViewModels {
 
         [Display(Name = "Post_Public")]
         public bool IsPublic { get; set; } = true;
+
+        [Display(Name = "Post_NSFW_Sexual")]
+        public bool IsSexual { get; set; } = false;
+
+        [Display(Name = "Post_NSFW_Violence")]
+        public bool IsViolence { get; set; } = false;
 
         [Display(Name = "Post_Tags")]
         public List<string> Tags { get; set; } = new List<string>();

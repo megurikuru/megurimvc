@@ -15,6 +15,8 @@ namespace Meguri.Models {
         public string Description { get; set; } = string.Empty;
         public string Caption { get; set; } = string.Empty;
         public bool IsPublic { get; set; } = false;
+        public bool IsSexual  { get; set; } = false;
+        public bool IsViolence  { get; set; } = false;
         public byte[] Content { get; set; } = Array.Empty<byte>();
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }

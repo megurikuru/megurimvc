@@ -8,8 +8,11 @@ using Microsoft.AspNetCore.Identity;
 namespace Meguri.Models {
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser {
+        // 18歳以上判定用の生年月日
+        public DateOnly? DateOfBirth { get; set; }
+
         /// 自己紹介文（Bio / Profile description）
-        public string Bio { get; set; }= string.Empty;
+        public string Bio { get; set; } = string.Empty;
 
         /// 現在選択中のアバター（アイコン）画像ID
         public long? ActiveAvatarImageId { get; set; }

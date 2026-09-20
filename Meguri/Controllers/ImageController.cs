@@ -113,6 +113,8 @@ namespace Meguri.Controllers {
                         Description = model.Description ?? string.Empty,
                         Caption = model.Caption ?? string.Empty,
                         IsPublic = model.IsPublic,
+                        IsSexual = model.IsSexual,
+                        IsViolence = model.IsViolence,
                         Content = memoryStream.ToArray()
                     };
 
@@ -180,6 +182,8 @@ namespace Meguri.Controllers {
                 Caption = image.Caption,
                 Description = image.Description,
                 IsPublic = image.IsPublic,
+                IsSexual = image.IsSexual,
+                IsViolence = image.IsViolence,
                 Tags = image.ImageTags
                     .Select(it => it.TagConcept.Tags.FirstOrDefault()?.TagText)
                     .Where(t => !string.IsNullOrEmpty(t))
@@ -208,6 +212,8 @@ namespace Meguri.Controllers {
             image.Caption = model.Caption ?? string.Empty;
             image.Description = model.Description ?? string.Empty;
             image.IsPublic = model.IsPublic;
+            image.IsSexual = model.IsSexual;
+            image.IsViolence = model.IsViolence;
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var tagConcepts = await _tagService.GetOrCreateTagConceptsAsync(model.Tags, userId);

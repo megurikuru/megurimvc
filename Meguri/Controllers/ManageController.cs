@@ -53,6 +53,8 @@ namespace Meguri.Controllers {
                 Username = user.UserName,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
+                DateOfBirth = user.DateOfBirth,
+                Bio = user.Bio,
                 IsEmailConfirmed = user.EmailConfirmed,
                 StatusMessage = StatusMessage
             };
@@ -93,6 +95,24 @@ namespace Meguri.Controllers {
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
                 if (!setPhoneResult.Succeeded) {
                     throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
+                }
+            }
+
+            bool isUserModified = false;
+            if (model.DateOfBirth != user.DateOfBirth) {
+                user.DateOfBirth = model.DateOfBirth;
+                isUserModified = true;
+            }
+
+            if ((model.Bio ?? string.Empty) != user.Bio) {
+                user.Bio = model.Bio ?? string.Empty;
+                isUserModified = true;
+            }
+
+            if (isUserModified) {
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded) {
+                    throw new ApplicationException($"Unexpected error occurred updating profile for user with ID '{user.Id}'.");
                 }
             }
 

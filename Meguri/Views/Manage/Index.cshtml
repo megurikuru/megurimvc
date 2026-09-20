@@ -36,6 +36,16 @@
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
+            <div class="mb-3">
+                <label asp-for="DateOfBirth" class="form-label">@SharedLocalizer["Manage_Profile_DateOfBirth"]</label>
+                <input asp-for="DateOfBirth" class="form-control" type="date" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Bio" class="form-label">@SharedLocalizer["Manage_Profile_Bio"]</label>
+                <textarea asp-for="Bio" class="form-control" rows="4" placeholder="自己紹介を入力"></textarea>
+                <span asp-validation-for="Bio" class="text-danger"></span>
+            </div>
             <button type="submit" class="btn btn-secondary">@SharedLocalizer["Manage_Profile_Save"]</button>
         </form>
     </div>

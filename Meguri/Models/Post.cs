@@ -24,8 +24,8 @@ namespace Meguri.Models {
         public string Name { get; set; } = string.Empty;
         public string Text { get; set; } = string.Empty;
         public int FandomId { get; set; }
-        public bool Sexual  { get; set; } = false;
-        public bool Violence  { get; set; } = false;
+        public bool IsSexual  { get; set; } = false;
+        public bool IsViolence  { get; set; } = false;
         public bool IsPublic { get; set; } = false;
 
         /// スレッドの固定表示フラグ
