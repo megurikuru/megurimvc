@@ -31,6 +31,11 @@
                 <input asp-for="ConfirmPassword" class="form-control" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
+            <div class="mb-3">
+                <label asp-for="DateOfBirth" class="form-label">@SharedLocalizer["Account_Field_DateOfBirth"]</label>
+                <input asp-for="DateOfBirth" class="form-control" type="date" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
             <button type="submit" class="btn btn-secondary">@SharedLocalizer["Account_Register_Button"]</button>
         </form>
     </div>

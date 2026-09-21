@@ -105,11 +105,6 @@ namespace Meguri.Controllers {
             }
 
             bool isUserModified = false;
-            if (model.DateOfBirth != user.DateOfBirth) {
-                user.DateOfBirth = model.DateOfBirth;
-                isUserModified = true;
-            }
-
             if ((model.Bio ?? string.Empty) != user.Bio) {
                 user.Bio = model.Bio ?? string.Empty;
                 isUserModified = true;

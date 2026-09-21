@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +10,8 @@ namespace Meguri.Models {
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser {
         // 18歳以上判定用の生年月日
-        public DateOnly? DateOfBirth { get; set; }
+        [Required]
+        public DateOnly DateOfBirth { get; set; }
 
         /// 自己紹介文（Bio / Profile description）
         public string Bio { get; set; } = string.Empty;
