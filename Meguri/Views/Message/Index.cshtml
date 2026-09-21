@@ -45,7 +45,7 @@
 												</div>
 										</div>
 										<div class="text-end text-body-secondary small">
-												<div>@c.LastMessageTime.ToString("MM/dd HH:mm")</div>
+												<div class="message-time" data-utc="@c.LastMessageTime.ToString("o")">@c.LastMessageTime.ToString("MM/dd HH:mm")</div>
 												<span class="badge bg-body-secondary border">開く →</span>
 										</div>
 								</a>
@@ -126,18 +126,32 @@
 										</div>
 
 										@section Scripts {
-												<script>
-														$(document).ready(function () {
-																function updateNewConversationButtonState() {
-																		var hasRecipient = $('.recipient-checkbox:checked').length > 0;
-																		var hasMessage = $('#initialMessageInput').val().trim().length > 0;
-																		$('#newConversationSubmitBtn').prop('disabled', !(hasRecipient && hasMessage));
-																}
+											<script>
+												$(document).ready(function () {
+													function updateNewConversationButtonState() {
+														var hasRecipient = $('.recipient-checkbox:checked').length > 0;
+														var hasMessage = $('#initialMessageInput').val().trim().length > 0;
+														$('#newConversationSubmitBtn').prop('disabled', !(hasRecipient && hasMessage));
+													}
 
-																$(document).on('change', '.recipient-checkbox', updateNewConversationButtonState);
-																$(document).on('input', '#initialMessageInput', updateNewConversationButtonState);
+													$('.message-time[data-utc]').each(function () {
+														var raw = $(this).data('utc');
+														if (!raw) return;
+														var dt = new Date(raw);
+														if (isNaN(dt.getTime())) return;
+														$(this).text(dt.toLocaleString('ja-JP', {
+															month: '2-digit',
+															day: '2-digit',
+															hour: '2-digit',
+															minute: '2-digit',
+															hour12: false
+														}).replace(/\//g, '/'));
+													});
 
-																updateNewConversationButtonState();
-														});
-												</script>
+													$(document).on('change', '.recipient-checkbox', updateNewConversationButtonState);
+													$(document).on('input', '#initialMessageInput', updateNewConversationButtonState);
+
+													updateNewConversationButtonState();
+												});
+											</script>
 										}
