@@ -1,4 +1,4 @@
-@model (List<Meguri.Models.Comment> Comments, string TargetType, long TargetId)
+﻿@model (List<Meguri.Models.Comment> Comments, string TargetType, long TargetId)
 @using System.Security.Claims
 
 @{
@@ -6,15 +6,12 @@
 }
 
 <div class="comment-thread-container">
-		@if (!Model.Comments.Any())
-		{
+		@if (!Model.Comments.Any()) {
 				<p class="text-body-secondary text-center py-3">コメントはまだありません。最初のコメントを投稿してみましょう！</p>
 		}
-		else
-		{
+		else {
 				<div class="d-flex flex-column gap-3 mb-4">
-						@foreach (var comment in Model.Comments)
-						{
+						@foreach (var comment in Model.Comments) {
 								@await Html.PartialAsync("_CommentItem", (comment, Model.TargetType, Model.TargetId, 0))
 						}
 				</div>
@@ -32,12 +29,10 @@
 						<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
 						<input type="hidden" id="replyParentId" name="parentId" value="" />
 
-						@if (Model.TargetType == "Post")
-						{
+						@if (Model.TargetType == "Post") {
 								<input type="hidden" name="docId" value="@Model.TargetId" />
 						}
-						else if (Model.TargetType == "Image")
-						{
+						else if (Model.TargetType == "Image") {
 								<input type="hidden" name="imageId" value="@Model.TargetId" />
 						}
 

@@ -1,4 +1,4 @@
-@model Meguri.Models.TagConcept
+﻿@model Meguri.Models.TagConcept
 @{
 		var primaryTag = Model.Tags.FirstOrDefault(t => t.IsCanonical)?.TagText
 				?? Model.Tags.FirstOrDefault()?.TagText ?? $"Tag#{Model.Id}";
@@ -32,13 +32,11 @@
 				<!-- シソーラス情報（上位語・下位語・関連語・同義語） -->
 				<div class="row g-3 mt-3 pt-3 border-top">
 						<!-- 同義語 -->
-						@if (Model.Tags.Count > 1)
-						{
+						@if (Model.Tags.Count > 1) {
 								<div class="col-md-6">
 										<h6 class="fw-bold small text-body-secondary">🔄 @SharedLocalizer["Tag_SynonymTerms"]</h6>
 										<div class="d-flex flex-wrap gap-1">
-												@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag))
-												{
+												@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag)) {
 														<span class="badge bg-body-secondary border">#@t.TagText</span>
 												}
 										</div>
@@ -46,13 +44,11 @@
 						}
 
 						<!-- 上位語 -->
-						@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader"))
-						{
+						@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader")) {
 								<div class="col-md-6">
 										<h6 class="fw-bold small text-body-secondary">⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h6>
 										<div class="d-flex flex-wrap gap-1">
-												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader"))
-												{
+												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader")) {
 														var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
 														<a asp-action="Details" asp-route-conceptId="@r.ObjectConceptId" class="badge bg-secondary text-decoration-none">
 																#@text
@@ -63,13 +59,11 @@
 						}
 
 						<!-- 下位語 -->
-						@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader"))
-						{
+						@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader")) {
 								<div class="col-md-6">
 										<h6 class="fw-bold small text-body-secondary">⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h6>
 										<div class="d-flex flex-wrap gap-1">
-												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader"))
-												{
+												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader")) {
 														var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
 														<a asp-action="Details" asp-route-conceptId="@r.SubjectConceptId" class="badge bg-secondary text-decoration-none">
 																#@text
@@ -80,20 +74,17 @@
 						}
 
 						<!-- 関連語 -->
-						@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related"))
-						{
+						@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related")) {
 								<div class="col-md-6">
 										<h6 class="fw-bold small text-body-secondary">🔗 @SharedLocalizer["Tag_RelatedTerms"]</h6>
 										<div class="d-flex flex-wrap gap-1">
-												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related"))
-												{
+												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related")) {
 														var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
 														<a asp-action="Details" asp-route-conceptId="@r.ObjectConceptId" class="badge bg-info text-dark text-decoration-none">
 																#@text
 														</a>
 												}
-												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related"))
-												{
+												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related")) {
 														var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
 														<a asp-action="Details" asp-route-conceptId="@r.SubjectConceptId" class="badge bg-info text-dark text-decoration-none">
 																#@text
@@ -110,15 +101,12 @@
 <div class="row g-4">
 		<div class="col-lg-6">
 				<h4 class="fw-bold mb-3">📝 関連する投稿 (@Model.PostTags.Count)</h4>
-				@if (!Model.PostTags.Any())
-				{
+				@if (!Model.PostTags.Any()) {
 						<p class="text-body-secondary">投稿はありません。</p>
 				}
-				else
-				{
+				else {
 						<div class="d-flex flex-column gap-2">
-								@foreach (var pt in Model.PostTags)
-								{
+								@foreach (var pt in Model.PostTags) {
 										<div class="card border-0 shadow-sm p-3">
 												<h6 class="fw-bold mb-1">
 														<a asp-controller="Post" asp-action="Details" asp-route-id="@pt.PostId" class="text-decoration-none text-body">
@@ -134,15 +122,12 @@
 
 		<div class="col-lg-6">
 				<h4 class="fw-bold mb-3">🖼️ 関連する画像 (@Model.ImageTags.Count)</h4>
-				@if (!Model.ImageTags.Any())
-				{
+				@if (!Model.ImageTags.Any()) {
 						<p class="text-body-secondary">画像はありません。</p>
 				}
-				else
-				{
+				else {
 						<div class="image-grid">
-								@foreach (var it in Model.ImageTags)
-								{
+								@foreach (var it in Model.ImageTags) {
 										<div class="card border-0 shadow-sm image-card">
 												<a asp-controller="Image" asp-action="Details" asp-route-id="@it.ImageId">
 														<img src="/Image/File/@it.ImageId" alt="@it.Image.Name" />

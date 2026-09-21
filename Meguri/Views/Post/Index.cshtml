@@ -1,4 +1,4 @@
-@model IEnumerable<Meguri.Models.Post>
+﻿@model IEnumerable<Meguri.Models.Post>
 @{
 		ViewData["Title"] = SharedLocalizer["Post_Title"];
 		var currentFandom = ViewBag.CurrentFandom as Meguri.Models.Fandom;
@@ -24,8 +24,7 @@
 						<div class="col-md-4">
 								<select name="fandomId" class="form-select" onchange="this.form.submit()">
 										<option value="">-- すべての界隈 --</option>
-										@foreach (var f in fandoms)
-										{
+										@foreach (var f in fandoms) {
 												<!option value="@f.Id" @(currentFandom?.Id == f.Id ? "selected" : "")>@f.Name</!option>
 										}
 								</select>
@@ -40,16 +39,14 @@
 		</div>
 </div>
 
-@if (!string.IsNullOrEmpty(currentTag))
-{
+@if (!string.IsNullOrEmpty(currentTag)) {
 		<div class="alert alert-info d-flex justify-content-between align-items-center py-2 mb-4">
 				<span>タグ: <strong>#@currentTag</strong> の投稿を表示中</span>
 				<a asp-action="Index" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_All"]</a>
 		</div>
 }
 
-@if (!Model.Any())
-{
+@if (!Model.Any()) {
 		<div class="card p-5 text-center text-body-secondary">
 				<h4>@SharedLocalizer["Common_NoItems"]</h4>
 				<div class="mt-3">
@@ -57,11 +54,9 @@
 				</div>
 		</div>
 }
-else
-{
+else {
 		<div class="d-flex flex-column gap-3">
-				@foreach (var post in Model)
-				{
+				@foreach (var post in Model) {
 						<div class="card shadow-sm border-0">
 								<div class="card-body p-4">
 										<div class="d-flex justify-content-between align-items-center mb-2">
@@ -69,16 +64,13 @@ else
 														<a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId" class="badge bg-secondary text-decoration-none">
 																@(post.Fandom?.Name ?? "界隈")
 														</a>
-														@if (post.IsPinned)
-														{
+														@if (post.IsPinned) {
 																<span class="badge bg-warning text-dark">📌 固定</span>
 														}
-														@if (post.IsSexual)
-														{
+														@if (post.IsSexual) {
 																<span class="badge bg-danger">R-18</span>
 														}
-														@if (post.IsViolence)
-														{
+														@if (post.IsViolence) {
 																<span class="badge bg-dark">R-18G</span>
 														}
 												</div>
@@ -96,11 +88,9 @@ else
 										</p>
 
 										<!-- 添付画像（順序付き）プレビュー -->
-										@if (post.PostImages.Any())
-										{
+										@if (post.PostImages.Any()) {
 												<div class="d-flex gap-2 overflow-auto mb-3 py-1">
-														@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder))
-														{
+														@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder)) {
 																<a asp-controller="Image" asp-action="Details" asp-route-id="@pi.ImageId">
 																		<img src="/Image/File/@pi.ImageId" class="rounded shadow-sm" style="width: 100px; height: 100px; object-fit: cover;" alt="@pi.Image.Name" />
 																</a>
@@ -109,14 +99,11 @@ else
 										}
 
 										<!-- タグ -->
-										@if (post.PostTags.Any())
-										{
+										@if (post.PostTags.Any()) {
 												<div class="mb-3">
-														@foreach (var pt in post.PostTags)
-														{
+														@foreach (var pt in post.PostTags) {
 																var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
-																if (!string.IsNullOrEmpty(tagText))
-																{
+																if (!string.IsNullOrEmpty(tagText)) {
 																		<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="tag-badge">#@tagText</a>
 																}
 														}

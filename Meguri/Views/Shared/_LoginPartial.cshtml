@@ -1,4 +1,4 @@
-@using Meguri
+﻿@using Meguri
 @using Meguri.Models
 @using Meguri.Models.AccountViewModels
 @using Meguri.Models.ManageViewModels
@@ -19,8 +19,7 @@
 				</ul>
 		</form>
 }
-else
-{
+else {
 		<ul class="navbar-nav mb-2 mb-lg-0">
 				<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">@SharedLocalizer["Auth_Register"]</a></li>
 				<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">@SharedLocalizer["Auth_Login"]</a></li>

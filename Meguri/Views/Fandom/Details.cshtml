@@ -1,4 +1,4 @@
-@model Meguri.Models.Fandom
+﻿@model Meguri.Models.Fandom
 @{
 		ViewData["Title"] = Model.Name;
 		bool isJoined = ViewBag.IsJoined is true;
@@ -7,8 +7,7 @@
 <div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
 		<div class="card-body p-4">
 				<!-- パンくず / 親界隈 -->
-				@if (Model.ParentFandom != null)
-				{
+				@if (Model.ParentFandom != null) {
 						<nav aria-label="breadcrumb" class="mb-2">
 								<ol class="breadcrumb mb-0">
 										<li class="breadcrumb-item"><a asp-action="Index">@SharedLocalizer["Fandom_Title"]</a></li>
@@ -29,8 +28,7 @@
 						</div>
 
 						<div class="d-flex gap-2">
-								@if (isJoined)
-								{
+								@if (isJoined) {
 										<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
 												@Html.AntiForgeryToken()
 												<button type="submit" class="btn btn-outline-danger">
@@ -38,8 +36,7 @@
 												</button>
 										</form>
 								}
-								else
-								{
+								else {
 										<form asp-action="Join" asp-route-id="@Model.Id" method="post">
 												@Html.AntiForgeryToken()
 												<button type="submit" class="btn btn-primary">
@@ -55,13 +52,11 @@
 				</div>
 
 				<!-- 子界隈一覧 -->
-				@if (Model.ChildFandoms.Any())
-				{
+				@if (Model.ChildFandoms.Any()) {
 						<div class="mt-4 pt-3 border-top">
 								<h6 class="text-body-secondary fw-bold mb-2">📂 @SharedLocalizer["Fandom_ChildFandoms"]</h6>
 								<div class="d-flex flex-wrap gap-2">
-										@foreach (var child in Model.ChildFandoms)
-										{
+										@foreach (var child in Model.ChildFandoms) {
 												<a asp-action="Details" asp-route-id="@child.Id" class="btn btn-outline-secondary btn-sm rounded-pill">
 														@child.Name (@child.Docs.Count)
 												</a>
@@ -82,17 +77,14 @@
 						</a>
 				</div>
 
-				@if (!Model.Docs.Any())
-				{
+				@if (!Model.Docs.Any()) {
 						<div class="card p-4 text-center text-body-secondary">
 								<p class="mb-0">この界隈にはまだ投稿がありません。</p>
 						</div>
 				}
-				else
-				{
+				else {
 						<div class="d-flex flex-column gap-3">
-								@foreach (var post in Model.Docs.OrderByDescending(p => p.Created))
-								{
+								@foreach (var post in Model.Docs.OrderByDescending(p => p.Created)) {
 										<div class="card shadow-sm border-0">
 												<div class="card-body">
 														<div class="d-flex justify-content-between align-items-center mb-2">
@@ -108,11 +100,9 @@
 																@(post.Text.Length > 100 ? post.Text.Substring(0, 100) + "..." : post.Text)
 														</p>
 
-														@if (post.PostImages.Any())
-														{
+														@if (post.PostImages.Any()) {
 																<div class="d-flex gap-2 overflow-auto mb-2 py-1">
-																		@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(3))
-																		{
+																		@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(3)) {
 																				<a asp-controller="Image" asp-action="Details" asp-route-id="@pi.ImageId">
 																						<img src="/Image/File/@pi.ImageId" class="rounded" style="width: 70px; height: 70px; object-fit: cover;" alt="@pi.Image.Name" />
 																				</a>
@@ -121,14 +111,11 @@
 														}
 
 														<!-- タグ -->
-														@if (post.PostTags.Any())
-														{
+														@if (post.PostTags.Any()) {
 																<div class="mb-2">
-																		@foreach (var pt in post.PostTags)
-																		{
+																		@foreach (var pt in post.PostTags) {
 																				var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
-																				if (!string.IsNullOrEmpty(tagText))
-																				{
+																				if (!string.IsNullOrEmpty(tagText)) {
 																						<span class="tag-badge">#@tagText</span>
 																				}
 																		}
@@ -153,15 +140,12 @@
 								👥 参加メンバー (@Model.FandomUsers.Count)
 						</div>
 						<div class="card-body">
-								@if (!Model.FandomUsers.Any())
-								{
+								@if (!Model.FandomUsers.Any()) {
 										<p class="text-body-secondary small mb-0">まだ参加メンバーはいません。</p>
 								}
-								else
-								{
+								else {
 										<div class="d-flex flex-wrap gap-2">
-												@foreach (var fu in Model.FandomUsers.Take(20))
-												{
+												@foreach (var fu in Model.FandomUsers.Take(20)) {
 														<span class="badge bg-body-secondary border p-2">
 																👤 @(fu.User?.UserName ?? "User")
 														</span>

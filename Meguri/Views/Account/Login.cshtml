@@ -56,8 +56,7 @@
             <hr />
             @{
                 var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                if (loginProviders.Count == 0)
-                {
+                if (loginProviders.Count == 0) {
                     <div>
                         <p>
                             @SharedLocalizer["Account_Login_NoExternalServices"] <a href="https://go.microsoft.com/fwlink/?LinkID=532715">@SharedLocalizer["Account_Login_ThisArticle"]</a>
@@ -65,13 +64,11 @@
                         </p>
                     </div>
                 }
-                else
-                {
+                else {
                     <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
                         <div>
                             <p>
-                                @foreach (var provider in loginProviders)
-                                {
+                                @foreach (var provider in loginProviders) {
                                     <button type="submit" class="btn btn-secondary" name="provider" value="@provider.Name" title="@SharedLocalizer["Account_Login_ExternalProviderButtonTitle", provider.DisplayName]">@provider.Name</button>
                                 }
                             </p>

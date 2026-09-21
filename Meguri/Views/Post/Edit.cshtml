@@ -1,4 +1,4 @@
-@model Meguri.Models.PostViewModels.PostEditViewModel
+﻿@model Meguri.Models.PostViewModels.PostEditViewModel
 @{
 		ViewData["Title"] = SharedLocalizer["Post_EditTitle"];
 		var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
@@ -19,8 +19,7 @@
 										<div class="mb-3">
 												<label asp-for="FandomId" class="form-label fw-bold">@SharedLocalizer["Post_SelectFandom"] <span class="text-danger">*</span></label>
 												<select asp-for="FandomId" class="form-select" required>
-														@foreach (var f in fandoms)
-														{
+														@foreach (var f in fandoms) {
 																<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
 														}
 												</select>
@@ -42,14 +41,12 @@
 										</div>
 
 										<!-- 既存の添付画像の並び替え & 削除 -->
-										@if (Model.ExistingImages != null && Model.ExistingImages.Any())
-										{
+										@if (Model.ExistingImages != null && Model.ExistingImages.Any()) {
 												<div class="mb-3">
 														<label class="form-label fw-bold mb-1">🖼️ @SharedLocalizer["Post_AttachImages"] の並び順・管理</label>
 														<p class="text-body-secondary small mb-2">@SharedLocalizer["Post_ImageOrderHint"]</p>
 														<div id="imageOrderContainer" class="d-flex flex-column gap-2">
-																@for (int i = 0; i < Model.ExistingImages.Count; i++)
-																{
+																@for (int i = 0; i < Model.ExistingImages.Count; i++) {
 																		<div class="image-order-item d-flex align-items-center justify-content-between p-2">
 																				<div class="d-flex align-items-center gap-2">
 																						<span class="badge bg-secondary order-number">@(i + 1)</span>

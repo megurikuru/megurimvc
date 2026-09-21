@@ -1,4 +1,4 @@
-@model IEnumerable<Meguri.Models.Image>
+﻿@model IEnumerable<Meguri.Models.Image>
 @{
 		ViewData["Title"] = SharedLocalizer["Image_GalleryTitle"];
 		var currentTag = ViewBag.CurrentTag as string;
@@ -14,16 +14,14 @@
 		</a>
 </div>
 
-@if (!string.IsNullOrEmpty(currentTag))
-{
+@if (!string.IsNullOrEmpty(currentTag)) {
 		<div class="alert alert-info d-flex justify-content-between align-items-center py-2 mb-4">
 				<span>#@currentTag の画像を表示中</span>
 				<a asp-action="Index" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_All"]</a>
 		</div>
 }
 
-@if (!Model.Any())
-{
+@if (!Model.Any()) {
 		<div class="card p-5 text-center text-body-secondary">
 				<h4>@SharedLocalizer["Image_NoImages"]</h4>
 				<div class="mt-3">
@@ -31,11 +29,9 @@
 				</div>
 		</div>
 }
-else
-{
+else {
 		<div class="image-grid">
-				@foreach (var item in Model)
-				{
+				@foreach (var item in Model) {
 						<div class="card border-0 shadow-sm image-card position-relative">
 								<a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
 										<img src="/Image/File/@item.Id" alt="@item.Name" loading="lazy" />
@@ -43,16 +39,13 @@ else
 								<div class="position-absolute bottom-0 start-0 w-100 p-2 bg-dark bg-opacity-75 text-white small d-flex justify-content-between align-items-center gap-2">
 										<span class="text-truncate me-1">@(string.IsNullOrEmpty(item.Caption) ? item.Name : item.Caption)</span>
 										<div class="d-flex align-items-center gap-1 flex-shrink-0">
-											@if (!item.IsPublic)
-											{
+											@if (!item.IsPublic) {
 												<span class="badge bg-warning text-dark">会員限定</span>
 											}
-											@if (item.IsSexual)
-											{
+											@if (item.IsSexual) {
 												<span class="badge bg-danger">R-18</span>
 											}
-											@if (item.IsViolence)
-											{
+											@if (item.IsViolence) {
 												<span class="badge bg-dark">R-18G</span>
 											}
 											<span class="badge bg-primary">❤️ @item.Reactions.Count</span>

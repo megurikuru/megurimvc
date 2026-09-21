@@ -1,4 +1,4 @@
-@model Meguri.Models.Image
+﻿@model Meguri.Models.Image
 @using System.Security.Claims
 
 @{
@@ -18,34 +18,27 @@
 												<h3 class="card-title fw-bold mb-1">@(string.IsNullOrEmpty(Model.Caption) ? Model.Name : Model.Caption)</h3>
 												<div class="d-flex flex-wrap align-items-center gap-2 mt-2">
 													<span class="text-body-secondary small">@Model.Created.ToString("yyyy/MM/dd HH:mm")</span>
-													@if (Model.User != null)
-													{
+													@if (Model.User != null) {
 														<span class="text-body-secondary small">by <strong>@Model.User.UserName</strong></span>
 													}
-													@if (Model.FileSize > 0)
-													{
+													@if (Model.FileSize > 0) {
 														<span class="badge bg-secondary">@(Model.FileSize / 1024) KB (WebP)</span>
 													}
-													@if (Model.Width.HasValue && Model.Height.HasValue)
-													{
+													@if (Model.Width.HasValue && Model.Height.HasValue) {
 														<span class="badge bg-body-secondary border">@Model.Width.Value × @Model.Height.Value</span>
 													}
-													@if (!Model.IsPublic)
-													{
+													@if (!Model.IsPublic) {
 														<span class="badge bg-warning text-dark">会員限定</span>
 													}
-													@if (Model.IsSexual)
-													{
+													@if (Model.IsSexual) {
 														<span class="badge bg-danger">R-18</span>
 													}
-													@if (Model.IsViolence)
-													{
+													@if (Model.IsViolence) {
 														<span class="badge bg-dark">R-18G</span>
 													}
 												</div>
 										</div>
-										@if (Model.UserId == currentUserId || User.IsInRole("Admin"))
-										{
+										@if (Model.UserId == currentUserId || User.IsInRole("Admin")) {
 											<div class="d-flex gap-2">
 													<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Edit"]</a>
 													<form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
@@ -56,8 +49,7 @@
 										}
 								</div>
 
-								@if (!string.IsNullOrEmpty(Model.Description))
-								{
+								@if (!string.IsNullOrEmpty(Model.Description)) {
 										<p class="card-text text-secondary mt-3" style="white-space: pre-line;">@Model.Description</p>
 								}
 
@@ -65,14 +57,11 @@
 								<div class="my-3 pt-2 border-top">
 										<div class="d-flex flex-wrap align-items-center gap-1">
 												<span class="fw-bold me-2 small text-body-secondary">🏷️ @SharedLocalizer["Post_Tags"]:</span>
-												@if (!Model.ImageTags.Any())
-												{
+												@if (!Model.ImageTags.Any()) {
 														<span class="text-body-secondary small">なし</span>
 												}
-												else
-												{
-														@foreach (var it in Model.ImageTags)
-														{
+												else {
+														@foreach (var it in Model.ImageTags) {
 																var tagText = it.TagConcept?.Tags?.FirstOrDefault()?.TagText ?? "tag";
 																var isOwner = it.TagConcept?.UserId == currentUserId;
 																<div class="btn-group btn-group-sm me-1 mb-1">
