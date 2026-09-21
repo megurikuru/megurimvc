@@ -35,7 +35,7 @@ namespace Meguri.Data {
             };
 
             foreach (var fandom in initialFandoms) {
-                var existing = await context.Set<Fandom>().FirstOrDefaultAsync(f => f.Id == fandom.Id || f.Name == fandom.Name);
+                var existing = await context.Set<Fandom>().FirstOrDefaultAsync(f => f.Id == fandom.Id || (f.Name == fandom.Name && f.ParentFandomId == fandom.ParentFandomId));
                 if (existing == null) {
                     await context.Set<Fandom>().AddAsync(fandom);
                 } else {
