@@ -15,7 +15,7 @@ namespace Meguri.Models.ImageViewModels {
         public string? Description { get; set; }
 
         [Display(Name = "Post_Public")]
-        public bool IsPublic { get; set; } = true;
+        public bool IsPublic { get; set; } = false;
 
         [Display(Name = "Post_NSFW_Sexual")]
         public bool IsSexual { get; set; } = false;
@@ -42,7 +42,7 @@ namespace Meguri.Models.ImageViewModels {
         public string? Description { get; set; }
 
         [Display(Name = "Post_Public")]
-        public bool IsPublic { get; set; } = true;
+        public bool IsPublic { get; set; } = false;
 
         [Display(Name = "Post_NSFW_Sexual")]
         public bool IsSexual { get; set; } = false;

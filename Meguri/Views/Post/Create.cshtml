@@ -18,8 +18,7 @@
 										<div class="mb-3">
 												<label asp-for="FandomId" class="form-label fw-bold">@SharedLocalizer["Post_SelectFandom"] <span class="text-danger">*</span></label>
 												<select asp-for="FandomId" class="form-select" required>
-														@foreach (var f in fandoms)
-														{
+														@foreach (var f in fandoms){
 																<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
 														}
 												</select>
@@ -69,14 +68,14 @@
 										<div class="row mb-4">
 												<div class="col-md-4 mb-2">
 														<div class="form-check form-switch">
-																<input asp-for="IsPublic" class="form-check-input" type="checkbox" role="switch" checked />
+																<input asp-for="IsPublic" class="form-check-input" type="checkbox" role="switch" />
 																<label asp-for="IsPublic" class="form-check-label small">@SharedLocalizer["Post_Public"]</label>
 														</div>
 												</div>
 												<div class="col-md-4 mb-2">
 														<div class="form-check form-switch">
 																<input asp-for="IsSexual" class="form-check-input" type="checkbox" role="switch" />
-																<label asp-for="IsSexual" class="form-check-label small text-danger">@SharedLocalizer["Post_NSFW_Sexual"]</label>
+																<label asp-for="IsSexual" class="form-check-label small">@SharedLocalizer["Post_NSFW_Sexual"]</label>
 														</div>
 												</div>
 												<div class="col-md-4 mb-2">

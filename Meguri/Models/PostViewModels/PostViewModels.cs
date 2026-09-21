@@ -24,7 +24,7 @@ namespace Meguri.Models.PostViewModels {
         public bool IsViolence { get; set; } = false;
 
         [Display(Name = "Post_Public")]
-        public bool IsPublic { get; set; } = true;
+        public bool IsPublic { get; set; } = false;
 
         [Display(Name = "Post_AttachImages")]
         public List<IFormFile> ImageFiles { get; set; } = new List<IFormFile>();
@@ -56,7 +56,7 @@ namespace Meguri.Models.PostViewModels {
         public bool IsViolence { get; set; } = false;
 
         [Display(Name = "Post_Public")]
-        public bool IsPublic { get; set; } = true;
+        public bool IsPublic { get; set; } = false;
 
         [Display(Name = "Post_Pinned")]
         public bool IsPinned { get; set; } = false;
