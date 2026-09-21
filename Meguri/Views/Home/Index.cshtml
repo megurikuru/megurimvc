@@ -5,18 +5,6 @@
     var topFandoms = ViewBag.TopFandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
 }
 
-<div class="p-4 p-md-5 mb-4 rounded-3 text-body-emphasis bg-body-tertiary shadow-sm">
-    <div class="col-md-8 px-0">
-        <h1 class="display-5 fw-bold">meguri</h1>
-        <p class="lead my-3">@SharedLocalizer["Fandom_SubTitle"]</p>
-        <div class="d-flex flex-wrap gap-2">
-            <a asp-controller="Post" asp-action="Create" class="btn btn-primary btn-lg">@SharedLocalizer["Post_CreateNew"]</a>
-            <a asp-controller="Image" asp-action="Upload" class="btn btn-outline-secondary btn-lg">@SharedLocalizer["Image_UploadTitle"]</a>
-            <a asp-controller="Fandom" asp-action="Index" class="btn btn-secondary btn-lg">@SharedLocalizer["Fandom_Explore"]</a>
-        </div>
-    </div>
-</div>
-
 <div class="row g-4">
     <!-- メイン：新着投稿 -->
     <div class="col-lg-8">
