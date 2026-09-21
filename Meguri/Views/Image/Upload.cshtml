@@ -1,4 +1,4 @@
-@model Meguri.Models.ImageViewModels.ImageUploadViewModel
+﻿@model Meguri.Models.ImageViewModels.ImageUploadViewModel
 @{
 		ViewData["Title"] = SharedLocalizer["Image_UploadTitle"];
 		var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
@@ -31,8 +31,7 @@
 												<label asp-for="FandomId" class="form-label fw-bold">@SharedLocalizer["Post_SelectFandom"]</label>
 												<select asp-for="FandomId" class="form-select">
 														<option value="">-- @SharedLocalizer["Fandom_Title"] を選択 (任意) --</option>
-														@foreach (var f in fandoms)
-														{
+														@foreach (var f in fandoms) {
 																<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
 														}
 												</select>

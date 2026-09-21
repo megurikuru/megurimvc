@@ -1,4 +1,4 @@
-@model Meguri.Models.MessageViewModels.ChatRoomViewModel
+﻿@model Meguri.Models.MessageViewModels.ChatRoomViewModel
 @{
 		ViewData["Title"] = Model.DisplayTitle;
 }
@@ -18,8 +18,7 @@
 												👥 メンバー (@Model.Conversation.Members.Count)
 										</button>
 										<ul class="dropdown-menu dropdown-menu-end">
-												@foreach (var m in Model.Conversation.Members)
-												{
+												@foreach (var m in Model.Conversation.Members) {
 														<li class="dropdown-item-text small">👤 @(m.User?.UserName ?? "User")</li>
 												}
 										</ul>
@@ -28,31 +27,24 @@
 
 						<!-- チャットメッセージエリア -->
 						<div class="chat-container" id="chatMessageContainer">
-								@if (!Model.Conversation.Messages.Any())
-								{
+								@if (!Model.Conversation.Messages.Any()) {
 										<p class="text-center text-body-secondary my-auto">メッセージを送ってチャットを始めましょう！</p>
 								}
-								else
-								{
-										@foreach (var msg in Model.Conversation.Messages.OrderBy(m => m.Created))
-										{
+								else {
+										@foreach (var msg in Model.Conversation.Messages.OrderBy(m => m.Created)) {
 												var isMe = msg.SenderId == Model.CurrentUserId;
 												<div class="d-flex flex-column @(isMe ? "align-items-end" : "align-items-start")">
-														@if (!isMe)
-														{
+														@if (!isMe) {
 																<span class="small text-body-secondary ms-1 mb-1">👤 @(msg.Sender?.UserName ?? "User")</span>
 														}
 														<div class="chat-bubble @(isMe ? "chat-bubble-outgoing" : "chat-bubble-incoming") shadow-sm">
-																@if (!string.IsNullOrEmpty(msg.Text))
-																{
+																@if (!string.IsNullOrEmpty(msg.Text)) {
 																		<div style="white-space: pre-line;">@msg.Text</div>
 																}
 
-																@if (msg.MessageImages.Any())
-																{
+																@if (msg.MessageImages.Any()) {
 																		<div class="d-flex flex-wrap gap-2 mt-2">
-																				@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder))
-																				{
+																				@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder)) {
 																						<a asp-controller="Image" asp-action="Details" asp-route-id="@mi.ImageId">
 																								<img src="/Image/File/@mi.ImageId" class="rounded" style="max-height: 150px; object-fit: cover;" alt="Attached" />
 																						</a>

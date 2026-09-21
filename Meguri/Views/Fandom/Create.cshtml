@@ -1,4 +1,4 @@
-@model Meguri.Models.Fandom
+﻿@model Meguri.Models.Fandom
 @{
 		ViewData["Title"] = SharedLocalizer["Fandom_CreateNew"];
 		var parentFandoms = ViewBag.ParentFandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
@@ -24,8 +24,7 @@
 												<label asp-for="ParentFandomId" class="form-label fw-bold">@SharedLocalizer["Fandom_Parent"]</label>
 												<select asp-for="ParentFandomId" class="form-select">
 														<option value="">-- @SharedLocalizer["Fandom_NoParent"] --</option>
-														@foreach (var p in parentFandoms)
-														{
+														@foreach (var p in parentFandoms) {
 																<option value="@p.Id">@p.Name</option>
 														}
 												</select>

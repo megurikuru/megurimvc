@@ -1,4 +1,4 @@
-@model Meguri.Models.TagViewModels.DisambiguationViewModel
+﻿@model Meguri.Models.TagViewModels.DisambiguationViewModel
 @{
 		ViewData["Title"] = string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText);
 }
@@ -11,8 +11,7 @@
 								<a asp-action="Details" asp-route-conceptId="@Model.TagConceptId" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Back"]</a>
 						</div>
 						<div class="card-body p-4">
-								@if (!Model.CanEdit)
-								{
+								@if (!Model.CanEdit) {
 										<div class="alert alert-warning">
 												@SharedLocalizer["Tag_OnlyOwnerCanEdit"]
 										</div>
@@ -31,14 +30,12 @@
 
 														<div class="d-flex flex-wrap gap-2 mb-3">
 																<span class="badge bg-primary fs-6 p-2">#@Model.PrimaryTagText (標準)</span>
-																@foreach (var syn in Model.Synonyms)
-																{
+																@foreach (var syn in Model.Synonyms) {
 																		<span class="badge bg-secondary fs-6 p-2">#@syn</span>
 																}
 														</div>
 
-														@if (Model.CanEdit)
-														{
+														@if (Model.CanEdit) {
 																<form asp-action="AddSynonym" method="post" class="mt-auto">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
@@ -58,16 +55,13 @@
 														<p class="small text-body-secondary mb-3">このタグが含まれるより広い概念（例: 「国産車」の上位語は「車」）</p>
 
 														<div class="d-flex flex-wrap gap-2 mb-3">
-																@if (!Model.BroaderConcepts.Any())
-																{
+																@if (!Model.BroaderConcepts.Any()) {
 																		<span class="text-body-secondary small">未設定</span>
 																}
-																@foreach (var b in Model.BroaderConcepts)
-																{
+																@foreach (var b in Model.BroaderConcepts) {
 																		<div class="btn-group btn-group-sm">
 																				<a asp-action="Details" asp-route-conceptId="@b.ConceptId" class="btn btn-secondary">#@b.Text</a>
-																				@if (Model.CanEdit)
-																				{
+																				@if (Model.CanEdit) {
 																						<form asp-action="RemoveRelationship" method="post" class="d-inline">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@b.RelationshipId" />
@@ -79,8 +73,7 @@
 																}
 														</div>
 
-														@if (Model.CanEdit)
-														{
+														@if (Model.CanEdit) {
 																<form asp-action="AddRelationship" method="post" class="mt-auto">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
@@ -101,16 +94,13 @@
 														<p class="small text-body-secondary mb-3">このタグに含まれる具体的な概念（例: 「創作」の下位語は「イラスト」「漫画」）</p>
 
 														<div class="d-flex flex-wrap gap-2 mb-3">
-																@if (!Model.NarrowerConcepts.Any())
-																{
+																@if (!Model.NarrowerConcepts.Any()) {
 																		<span class="text-body-secondary small">未設定</span>
 																}
-																@foreach (var n in Model.NarrowerConcepts)
-																{
+																@foreach (var n in Model.NarrowerConcepts) {
 																		<div class="btn-group btn-group-sm">
 																				<a asp-action="Details" asp-route-conceptId="@n.ConceptId" class="btn btn-secondary">#@n.Text</a>
-																				@if (Model.CanEdit)
-																				{
+																				@if (Model.CanEdit) {
 																						<form asp-action="RemoveRelationship" method="post" class="d-inline">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@n.RelationshipId" />
@@ -122,8 +112,7 @@
 																}
 														</div>
 
-														@if (Model.CanEdit)
-														{
+														@if (Model.CanEdit) {
 																<form asp-action="AddRelationship" method="post" class="mt-auto">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
@@ -144,16 +133,13 @@
 														<p class="small text-body-secondary mb-3">上下関係ではないが関連する概念（例: 「漫画」と「アニメ」）</p>
 
 														<div class="d-flex flex-wrap gap-2 mb-3">
-																@if (!Model.RelatedConcepts.Any())
-																{
+																@if (!Model.RelatedConcepts.Any()) {
 																		<span class="text-body-secondary small">未設定</span>
 																}
-																@foreach (var r in Model.RelatedConcepts)
-																{
+																@foreach (var r in Model.RelatedConcepts) {
 																		<div class="btn-group btn-group-sm">
 																				<a asp-action="Details" asp-route-conceptId="@r.ConceptId" class="btn btn-info text-dark">#@r.Text</a>
-																				@if (Model.CanEdit)
-																				{
+																				@if (Model.CanEdit) {
 																						<form asp-action="RemoveRelationship" method="post" class="d-inline">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@r.RelationshipId" />
@@ -165,8 +151,7 @@
 																}
 														</div>
 
-														@if (Model.CanEdit)
-														{
+														@if (Model.CanEdit) {
 																<form asp-action="AddRelationship" method="post" class="mt-auto">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />

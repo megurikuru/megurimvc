@@ -25,17 +25,14 @@
             <a asp-controller="Post" asp-action="Index" class="btn btn-sm btn-outline-primary">@SharedLocalizer["Common_All"]</a>
         </div>
 
-        @if (!recentPosts.Any())
-        {
+        @if (!recentPosts.Any()) {
             <div class="card p-4 text-center text-body-secondary">
                 <p class="mb-0">@SharedLocalizer["Common_NoItems"]</p>
             </div>
         }
-        else
-        {
+        else {
             <div class="d-flex flex-column gap-3">
-                @foreach (var post in recentPosts)
-                {
+                @foreach (var post in recentPosts) {
                     <div class="card shadow-sm border-0">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -51,11 +48,9 @@
                                 @(post.Text.Length > 120 ? post.Text.Substring(0, 120) + "..." : post.Text)
                             </p>
 
-                            @if (post.PostImages.Any())
-                            {
+                            @if (post.PostImages.Any()) {
                                 <div class="d-flex gap-2 overflow-auto mb-2 py-1">
-                                    @foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(4))
-                                    {
+                                    @foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(4)) {
                                         <a asp-controller="Image" asp-action="Details" asp-route-id="@pi.ImageId">
                                             <img src="/Image/File/@pi.ImageId" class="rounded" style="width: 80px; height: 80px; object-fit: cover;" alt="@pi.Image.Name" />
                                         </a>
@@ -64,14 +59,11 @@
                             }
 
                             <!-- タグ -->
-                            @if (post.PostTags.Any())
-                            {
+                            @if (post.PostTags.Any()) {
                                 <div class="mb-2">
-                                    @foreach (var pt in post.PostTags)
-                                    {
+                                    @foreach (var pt in post.PostTags) {
                                         var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
-                                        if (!string.IsNullOrEmpty(tagText))
-                                        {
+                                        if (!string.IsNullOrEmpty(tagText)) {
                                             <a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="tag-badge">#@tagText</a>
                                         }
                                     }
@@ -102,13 +94,11 @@
                 <a asp-controller="Fandom" asp-action="Index" class="btn btn-sm btn-link p-0">@SharedLocalizer["Common_All"]</a>
             </div>
             <div class="list-group list-group-flush">
-                @foreach (var f in topFandoms)
-                {
+                @foreach (var f in topFandoms) {
                     <a asp-controller="Fandom" asp-action="Details" asp-route-id="@f.Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                         <div>
                             <span class="fw-semibold">@f.Name</span>
-                            @if (f.ChildFandoms.Any())
-                            {
+                            @if (f.ChildFandoms.Any()) {
                                 <div class="small text-body-secondary">
                                     @string.Join(", ", f.ChildFandoms.Select(c => c.Name))
                                 </div>

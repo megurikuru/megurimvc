@@ -1,4 +1,4 @@
-@model IEnumerable<Meguri.Models.TagConcept>
+﻿@model IEnumerable<Meguri.Models.TagConcept>
 @{
 		ViewData["Title"] = SharedLocalizer["Tag_Title"];
 }
@@ -13,8 +13,7 @@
 <div class="card shadow-sm border-0 bg-body-tertiary">
 		<div class="card-body p-4">
 				<div class="d-flex flex-wrap gap-2">
-						@foreach (var concept in Model)
-						{
+						@foreach (var concept in Model) {
 								var tagText = concept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{concept.Id}";
 								var count = concept.PostTags.Count + concept.ImageTags.Count;
 								<div class="btn-group mb-2">

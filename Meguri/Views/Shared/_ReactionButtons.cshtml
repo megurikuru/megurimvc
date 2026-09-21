@@ -1,4 +1,4 @@
-@using Meguri.Extensions
+﻿@using Meguri.Extensions
 @using Meguri.Models
 @using System.Security.Claims
 
@@ -20,8 +20,7 @@
 
 <div class="reaction-bar my-2">
 		@Html.AntiForgeryToken()
-		@foreach (var type in mainTypes)
-		{
+		@foreach (var type in mainTypes) {
 				var count = Model.Reactions.Count(r => r.Type == type);
 				var hasReacted = currentUserId != null && Model.Reactions.Any(r => r.Type == type && r.UserId == currentUserId);
 

@@ -1,4 +1,4 @@
-@model IEnumerable<Meguri.Models.Fandom>
+﻿@model IEnumerable<Meguri.Models.Fandom>
 @{
 		ViewData["Title"] = SharedLocalizer["Fandom_Title"];
 		var joinedFandomIds = ViewBag.JoinedFandomIds as HashSet<int> ?? new HashSet<int>();
@@ -21,8 +21,7 @@
 </div>
 
 <div class="row g-4">
-		@foreach (var parent in topLevelFandoms)
-		{
+		@foreach (var parent in topLevelFandoms) {
 				var isParentJoined = joinedFandomIds.Contains(parent.Id);
 				var childFandoms = Model.Where(f => f.ParentFandomId == parent.Id).ToList();
 
@@ -44,8 +43,7 @@
 												</div>
 
 												<div>
-														@if (isParentJoined)
-														{
+														@if (isParentJoined) {
 																<form asp-action="Leave" asp-route-id="@parent.Id" method="post" class="d-inline">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
@@ -54,8 +52,7 @@
 																		</button>
 																</form>
 														}
-														else
-														{
+														else {
 																<form asp-action="Join" asp-route-id="@parent.Id" method="post" class="d-inline">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
@@ -68,24 +65,20 @@
 										</div>
 
 										<!-- 子界隈リスト -->
-										@if (childFandoms.Any())
-										{
+										@if (childFandoms.Any()) {
 												<div class="mt-3 pt-3 border-top">
 														<h6 class="text-body-secondary small fw-bold mb-2">📂 @SharedLocalizer["Fandom_ChildFandoms"]</h6>
 														<div class="d-flex flex-wrap gap-2">
-																@foreach (var child in childFandoms)
-																{
+																@foreach (var child in childFandoms) {
 																		var isChildJoined = joinedFandomIds.Contains(child.Id);
 																		<div class="border rounded-pill px-3 py-1 bg-body-secondary d-flex align-items-center gap-2 small">
 																				<a asp-action="Details" asp-route-id="@child.Id" class="text-decoration-none text-body fw-semibold">
 																						@child.Name
 																				</a>
-																				@if (isChildJoined)
-																				{
+																				@if (isChildJoined) {
 																						<span class="badge bg-success" style="font-size: 0.65rem;">参加中</span>
 																				}
-																				else
-																				{
+																				else {
 																						<form asp-action="Join" asp-route-id="@child.Id" method="post" class="d-inline">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
