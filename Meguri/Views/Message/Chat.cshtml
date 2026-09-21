@@ -29,10 +29,9 @@
 						<div class="chat-container" id="chatMessageContainer">
 								@if (!Model.Conversation.Messages.Any()) {
 										<p class="text-center text-body-secondary my-auto">メッセージを送ってチャットを始めましょう！</p>
-								}
-								else {
+								} else {
 										@foreach (var msg in Model.Conversation.Messages.OrderBy(m => m.Created)) {
-												var isMe = msg.SenderId == Model.CurrentUserId;
+											var isMe = msg.SenderId == Model.CurrentUserId;
 												<div class="d-flex flex-column @(isMe ? "align-items-end" : "align-items-start")">
 														@if (!isMe) {
 																<span class="small text-body-secondary ms-1 mb-1">👤 @(msg.Sender?.UserName ?? "User")</span>
@@ -51,7 +50,7 @@
 																				}
 																		</div>
 																}
-																<div class="timestamp">@msg.Created.ToString("HH:mm")</div>
+																<div class="timestamp" data-utc="@msg.Created.ToString("o")">@msg.Created.ToString("HH:mm")</div>
 														</div>
 
 														<!-- リアクションバー -->
@@ -88,21 +87,33 @@
 @section Scripts {
 		<script>
 				$(document).ready(function () {
-						const container = document.getElementById('chatMessageContainer');
-						if (container) {
-								container.scrollTop = container.scrollHeight;
-						}
+					const container = document.getElementById('chatMessageContainer');
+					if (container) {
+						container.scrollTop = container.scrollHeight;
+					}
 
-						function updateSendButtonState() {
-								var hasText = $('#messageTextInput').val().trim().length > 0;
-								var hasFiles = $('#messageImageInput')[0] && $('#messageImageInput')[0].files.length > 0;
-								$('#sendMessageBtn').prop('disabled', !(hasText || hasFiles));
-						}
+					$('.timestamp[data-utc]').each(function () {
+						var raw = $(this).data('utc');
+						if (!raw) return;
+						var dt = new Date(raw);
+						if (isNaN(dt.getTime())) return;
+						$(this).text(dt.toLocaleTimeString('ja-JP', {
+							hour: '2-digit',
+							minute: '2-digit',
+							hour12: false
+						}));
+					});
 
-						$(document).on('input', '#messageTextInput', updateSendButtonState);
-						$(document).on('change', '#messageImageInput', updateSendButtonState);
+					function updateSendButtonState() {
+						var hasText = $('#messageTextInput').val().trim().length > 0;
+						var hasFiles = $('#messageImageInput')[0] && $('#messageImageInput')[0].files.length > 0;
+						$('#sendMessageBtn').prop('disabled', !(hasText || hasFiles));
+					}
 
-						updateSendButtonState();
+					$(document).on('input', '#messageTextInput', updateSendButtonState);
+					$(document).on('change', '#messageImageInput', updateSendButtonState);
+
+					updateSendButtonState();
 				});
 		</script>
 }
