@@ -808,10 +808,10 @@
     <value>Up to 10 tags. Autocomplete suggestions will appear as you type.</value>
   </data>
   <data name="Post_NSFW_Sexual" xml:space="preserve">
-    <value>Contains adult (NSFW) content</value>
+    <value>Adult (NSFW) content</value>
   </data>
   <data name="Post_NSFW_Violence" xml:space="preserve">
-    <value>Contains violence or gore</value>
+    <value>Violence &amp; Gore</value>
   </data>
   <data name="Post_Public" xml:space="preserve">
     <value>Public</value>
