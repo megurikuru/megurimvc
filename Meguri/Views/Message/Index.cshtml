@@ -90,25 +90,25 @@
 										<div class="mb-3">
 												<label class="form-label fw-bold">@SharedLocalizer["Message_SelectRecipient"] <span class="text-danger">*</span></label>
 												<div class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
-														@if (!Model.AvailableUsers.Any()) {
-																<p class="text-body-secondary small mb-0">他のユーザーが見つかりません。</p>
-														}
-														@foreach (var user in Model.AvailableUsers) {
-																<div class="form-check">
-																		<input class="form-check-input" type="checkbox" name="SelectedUserIds" value="@user.Id" id="user_@user.Id" />
-																		<label class="form-check-label" for="user_@user.Id">
-																				👤 @user.UserName
-																		</label>
+																@if (!Model.AvailableUsers.Any()) {
+																			<p class="text-body-secondary small mb-0">他のユーザーが見つかりません。</p>
+																		}
+																		@foreach (var user in Model.AvailableUsers) {
+																				<div class="form-check">
+																					<input class="form-check-input recipient-checkbox" type="checkbox" name="SelectedUserIds" value="@user.Id" id="user_@user.Id" />
+																					<label class="form-check-label" for="user_@user.Id">
+																						👤 @user.UserName
+																					</label>
+																				</div>
+																		}
 																</div>
-														}
-												</div>
-										</div>
+														</div>
 
-										<!-- メッセージ入力 -->
-										<div class="mb-3">
-												<label class="form-label fw-bold">@SharedLocalizer["Message_InputPlaceholder"] <span class="text-danger">*</span></label>
-												<textarea name="InitialMessage" rows="3" class="form-control" placeholder="メッセージを入力してください..." required></textarea>
-										</div>
+														<!-- メッセージ入力 -->
+														<div class="mb-3">
+																<label class="form-label fw-bold">@SharedLocalizer["Message_InputPlaceholder"] <span class="text-danger">*</span></label>
+																<textarea name="InitialMessage" id="initialMessageInput" rows="3" class="form-control" placeholder="メッセージを入力してください..." required></textarea>
+														</div>
 
 										<!-- 画像添付 -->
 										<div class="mb-3">
@@ -117,10 +117,27 @@
 										</div>
 								</div>
 								<div class="modal-footer bg-body-tertiary">
-										<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@SharedLocalizer["Common_Cancel"]</button>
-										<button type="submit" class="btn btn-primary">@SharedLocalizer["Message_SendBtn"]</button>
-								</div>
-						</form>
-				</div>
-		</div>
-</div>
+															<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">@SharedLocalizer["Common_Cancel"]</button>
+															<button type="submit" id="newConversationSubmitBtn" class="btn btn-primary" disabled>@SharedLocalizer["Message_SendBtn"]</button>
+														</div>
+														</form>
+													</div>
+												</div>
+										</div>
+
+										@section Scripts {
+												<script>
+														$(document).ready(function () {
+																function updateNewConversationButtonState() {
+																		var hasRecipient = $('.recipient-checkbox:checked').length > 0;
+																		var hasMessage = $('#initialMessageInput').val().trim().length > 0;
+																		$('#newConversationSubmitBtn').prop('disabled', !(hasRecipient && hasMessage));
+																}
+
+																$(document).on('change', '.recipient-checkbox', updateNewConversationButtonState);
+																$(document).on('input', '#initialMessageInput', updateNewConversationButtonState);
+
+																updateNewConversationButtonState();
+														});
+												</script>
+										}
