@@ -599,7 +599,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("FandomId", "LastCommentedAt");
 
-                    b.ToTable("Docs");
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Meguri.Models.PostImage", b =>
@@ -984,7 +984,7 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>
                 {
-                    b.HasOne("Meguri.Models.Post", "Doc")
+                    b.HasOne("Meguri.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("DocId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -1005,11 +1005,11 @@ namespace Meguri.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Doc");
-
                     b.Navigation("Image");
 
                     b.Navigation("Parent");
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
@@ -1151,13 +1151,13 @@ namespace Meguri.Migrations
             modelBuilder.Entity("Meguri.Models.Post", b =>
                 {
                     b.HasOne("Meguri.Models.Fandom", "Fandom")
-                        .WithMany("Docs")
+                        .WithMany("Posts")
                         .HasForeignKey("FandomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Meguri.Models.ApplicationUser", "User")
-                        .WithMany("Docs")
+                        .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1360,9 +1360,9 @@ namespace Meguri.Migrations
 
                     b.Navigation("ConversationMembers");
 
-                    b.Navigation("Docs");
-
                     b.Navigation("FandomUsers");
+
+                    b.Navigation("Posts");
 
                     b.Navigation("Reactions");
 
@@ -1393,9 +1393,9 @@ namespace Meguri.Migrations
                 {
                     b.Navigation("ChildFandoms");
 
-                    b.Navigation("Docs");
-
                     b.Navigation("FandomUsers");
+
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Meguri.Models.Image", b =>

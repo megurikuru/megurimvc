@@ -2,6 +2,7 @@
 @{
 		ViewData["Title"] = Model.Name;
 		bool isJoined = ViewBag.IsJoined is true;
+		var fandomPosts = ViewBag.FandomPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
 }
 
 <div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
@@ -23,7 +24,7 @@
 								<div class="text-body-secondary small">
 										👥 @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
 										&nbsp;|&nbsp;
-										📝 @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, Model.Docs.Count)
+										📝 @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
 								</div>
 						</div>
 
@@ -58,7 +59,7 @@
 								<div class="d-flex flex-wrap gap-2">
 										@foreach (var child in Model.ChildFandoms) {
 												<a asp-action="Details" asp-route-id="@child.Id" class="btn btn-outline-secondary btn-sm rounded-pill">
-														@child.Name (@child.Docs.Count)
+														@child.Name (@child.Posts.Count)
 												</a>
 										}
 								</div>
@@ -77,14 +78,14 @@
 						</a>
 				</div>
 
-				@if (!Model.Docs.Any()) {
+				@if (!fandomPosts.Any()) {
 						<div class="card p-4 text-center text-body-secondary">
 								<p class="mb-0">この界隈にはまだ投稿がありません。</p>
 						</div>
 				}
 				else {
 						<div class="d-flex flex-column gap-3">
-								@foreach (var post in Model.Docs.OrderByDescending(p => p.Created)) {
+								@foreach (var post in fandomPosts) {
 										<div class="card shadow-sm border-0">
 												<div class="card-body">
 														<div class="d-flex justify-content-between align-items-center mb-2">
@@ -133,8 +134,34 @@
 				}
 		</div>
 
-		<!-- サイドバー：参加ユーザー -->
-		<div class="col-lg-4">
+		@{
+			var fpHasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false;
+			var fpHasNext = ViewBag.FandomPostsHasNext as bool? ?? false;
+			var fpTotalCount = ViewBag.FandomPostsTotalCount as int? ?? 0;
+			var fpSkip = ViewBag.FandomPostsSkip as int? ?? 0;
+			var fpPreviousSkip = ViewBag.FandomPostsPreviousSkip as int? ?? 0;
+			var fpNextSkip = ViewBag.FandomPostsNextSkip as int? ?? 0;
+			var fpCount = fandomPosts.Count;
+		}
+		@if (fpTotalCount > 0) {
+			<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+				@if (fpHasPrevious) {
+					<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpPreviousSkip">← 前の40件</a>
+				} else {
+					<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+				}
+				<span class="small text-body-secondary">@(fpSkip + 1) - @(fpSkip + fpCount) / @fpTotalCount 件</span>
+				@if (fpHasNext) {
+					<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpNextSkip">次の40件 →</a>
+				} else {
+					<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+				}
+			</nav>
+		}
+	</div>
+
+	<!-- サイドバー：参加ユーザー -->
+	<div class="col-lg-4">
 				<div class="card shadow-sm border-0">
 						<div class="card-header bg-body-tertiary fw-bold">
 								👥 参加メンバー (@Model.FandomUsers.Count)

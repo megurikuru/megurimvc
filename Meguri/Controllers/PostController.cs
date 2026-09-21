@@ -31,7 +31,9 @@ namespace Meguri.Controllers {
         }
 
         // GET: /Post
-        public async Task<IActionResult> Index(int? fandomId, string? tag, string? search) {
+        public async Task<IActionResult> Index(int? fandomId, string? tag, string? search, int? skip) {
+            const int pageSize = 40;
+
             var query = _context.Posts
                 .Include(p => p.User)
                 .Include(p => p.Fandom)
@@ -56,13 +58,27 @@ namespace Meguri.Controllers {
                 ViewBag.CurrentSearch = search;
             }
 
+            var totalCount = await query.CountAsync();
+            var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
+            if (resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
+
             var posts = await query
                 .OrderByDescending(p => p.IsPinned)
                 .ThenByDescending(p => p.LastCommentedAt ?? p.Created)
-                .Take(50)
+                .Skip(resolvedSkip)
+                .Take(pageSize)
                 .ToListAsync();
 
             ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.Skip = resolvedSkip;
+            ViewBag.HasPrevious = resolvedSkip > 0;
+            ViewBag.HasNext = resolvedSkip + posts.Count < totalCount;
+            ViewBag.PreviousSkip = Math.Max(0, resolvedSkip - pageSize);
+            ViewBag.NextSkip = resolvedSkip + pageSize;
             return View(posts);
         }
 

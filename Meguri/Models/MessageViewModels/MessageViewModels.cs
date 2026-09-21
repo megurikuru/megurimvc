@@ -7,6 +7,15 @@ namespace Meguri.Models.MessageViewModels {
     public class ConversationListViewModel {
         public List<ConversationItemViewModel> Conversations { get; set; } = new List<ConversationItemViewModel>();
         public List<ApplicationUser> AvailableUsers { get; set; } = new List<ApplicationUser>();
+
+        public int PageSize { get; set; } = 20;
+        public int TotalCount { get; set; }
+        public int Skip { get; set; }
+        public System.DateTime? FilterDate { get; set; }
+        public bool HasPrevious { get; set; }
+        public bool HasNext { get; set; }
+        public int PreviousSkip { get; set; }
+        public int NextSkip { get; set; }
     }
 
     public class ConversationItemViewModel {
@@ -39,5 +48,15 @@ namespace Meguri.Models.MessageViewModels {
         public Conversation Conversation { get; set; } = null!;
         public string CurrentUserId { get; set; } = string.Empty;
         public string DisplayTitle { get; set; } = string.Empty;
+
+        public List<Message> Messages { get; set; } = new List<Message>();
+        public int PageSize { get; set; } = 80;
+        public int TotalCount { get; set; }
+        public int Skip { get; set; }
+        public System.DateTime? FilterDate { get; set; }
+        public bool HasPrevious { get; set; }
+        public bool HasNext { get; set; }
+        public int PreviousSkip { get; set; }
+        public int NextSkip { get; set; }
     }
 }

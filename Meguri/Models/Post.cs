@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Meguri.Models {
 
-    [Table("Docs")]
+    [Table("Posts")]
     [Index(nameof(UserId))]
     [Index(nameof(FandomId))]
     [Index(nameof(Created))]
@@ -46,7 +46,7 @@ namespace Meguri.Models {
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
-        // FandomとDocは一対多の関係
+        // FandomとPostは一対多の関係
         public Fandom? Fandom { get; set; }
 
         // PostとTagは中間テーブルを介した多対多の関係

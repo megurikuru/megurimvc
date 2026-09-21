@@ -121,7 +121,32 @@ else {
 												</div>
 										</div>
 								</div>
+										</div>
+								}
 						</div>
-				}
-		</div>
-}
+						}
+
+						@{
+							var postHasPrevious = ViewBag.HasPrevious as bool? ?? false;
+							var postHasNext = ViewBag.HasNext as bool? ?? false;
+							var postTotalCount = ViewBag.TotalCount as int? ?? 0;
+							var postSkip = ViewBag.Skip as int? ?? 0;
+							var postPreviousSkip = ViewBag.PreviousSkip as int? ?? 0;
+							var postNextSkip = ViewBag.NextSkip as int? ?? 0;
+							var postCount = Model.Count();
+						}
+						@if (postTotalCount > 0) {
+							<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+								@if (postHasPrevious) {
+									<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postPreviousSkip" asp-route-fandomId="@currentFandom?.Id" asp-route-tag="@currentTag" asp-route-search="@currentSearch">← 前の40件</a>
+								} else {
+									<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+								}
+								<span class="small text-body-secondary">@(postSkip + 1) - @(postSkip + postCount) / @postTotalCount 件</span>
+								@if (postHasNext) {
+									<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postNextSkip" asp-route-fandomId="@currentFandom?.Id" asp-route-tag="@currentTag" asp-route-search="@currentSearch">次の40件 →</a>
+								} else {
+									<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+								}
+							</nav>
+						}

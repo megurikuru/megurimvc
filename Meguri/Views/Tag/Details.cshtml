@@ -4,6 +4,10 @@
 				?? Model.Tags.FirstOrDefault()?.TagText ?? $"Tag#{Model.Id}";
 		ViewData["Title"] = $"#{primaryTag}";
 		bool canEdit = ViewBag.CanEdit is true;
+		var postTags = ViewBag.PostTags as List<Meguri.Models.PostTag> ?? new List<Meguri.Models.PostTag>();
+		var imageTags = ViewBag.ImageTags as List<Meguri.Models.ImageTag> ?? new List<Meguri.Models.ImageTag>();
+		var postTagsTotalCount = ViewBag.PostTagsTotalCount as int? ?? 0;
+		var imageTagsTotalCount = ViewBag.ImageTagsTotalCount as int? ?? 0;
 }
 
 <div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
@@ -12,7 +16,7 @@
 						<div>
 								<h2 class="fw-bold mb-1">🏷️ #@primaryTag</h2>
 								<div class="text-body-secondary small">
-										作成者: @(Model.User?.UserName ?? "System") | 投稿: @Model.PostTags.Count 件 | 画像: @Model.ImageTags.Count 件
+										作成者: @(Model.User?.UserName ?? "System") | 投稿: @postTagsTotalCount 件 | 画像: @imageTagsTotalCount 件
 								</div>
 						</div>
 
@@ -100,13 +104,13 @@
 <!-- 投稿 & 画像一覧 -->
 <div class="row g-4">
 		<div class="col-lg-6">
-				<h4 class="fw-bold mb-3">📝 関連する投稿 (@Model.PostTags.Count)</h4>
-				@if (!Model.PostTags.Any()) {
+				<h4 class="fw-bold mb-3">📝 関連する投稿 (@postTagsTotalCount)</h4>
+				@if (!postTags.Any()) {
 						<p class="text-body-secondary">投稿はありません。</p>
 				}
 				else {
 						<div class="d-flex flex-column gap-2">
-								@foreach (var pt in Model.PostTags) {
+								@foreach (var pt in postTags) {
 										<div class="card border-0 shadow-sm p-3">
 												<h6 class="fw-bold mb-1">
 														<a asp-controller="Post" asp-action="Details" asp-route-id="@pt.PostId" class="text-decoration-none text-body">
@@ -118,16 +122,39 @@
 								}
 						</div>
 				}
+
+				@{
+					var ptHasPrevious = ViewBag.PostTagsHasPrevious as bool? ?? false;
+					var ptHasNext = ViewBag.PostTagsHasNext as bool? ?? false;
+					var ptSkip = ViewBag.PostTagsSkip as int? ?? 0;
+					var ptPreviousSkip = ViewBag.PostTagsPreviousSkip as int? ?? 0;
+					var ptNextSkip = ViewBag.PostTagsNextSkip as int? ?? 0;
+				}
+				@if (postTagsTotalCount > 0) {
+					<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+						@if (ptHasPrevious) {
+							<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptPreviousSkip">← 前の40件</a>
+						} else {
+							<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+						}
+						<span class="small text-body-secondary">@(ptSkip + 1) - @(ptSkip + postTags.Count) / @postTagsTotalCount 件</span>
+						@if (ptHasNext) {
+							<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptNextSkip">次の40件 →</a>
+						} else {
+							<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+						}
+					</nav>
+				}
 		</div>
 
 		<div class="col-lg-6">
-				<h4 class="fw-bold mb-3">🖼️ 関連する画像 (@Model.ImageTags.Count)</h4>
-				@if (!Model.ImageTags.Any()) {
+				<h4 class="fw-bold mb-3">🖼️ 関連する画像 (@imageTagsTotalCount)</h4>
+				@if (!imageTags.Any()) {
 						<p class="text-body-secondary">画像はありません。</p>
 				}
 				else {
 						<div class="image-grid">
-								@foreach (var it in Model.ImageTags) {
+								@foreach (var it in imageTags) {
 										<div class="card border-0 shadow-sm image-card">
 												<a asp-controller="Image" asp-action="Details" asp-route-id="@it.ImageId">
 														<img src="/Image/File/@it.ImageId" alt="@it.Image.Name" />
@@ -136,5 +163,29 @@
 								}
 						</div>
 				}
+
+				@{
+					var itHasPrevious = ViewBag.ImageTagsHasPrevious as bool? ?? false;
+					var itHasNext = ViewBag.ImageTagsHasNext as bool? ?? false;
+					var itSkip = ViewBag.ImageTagsSkip as int? ?? 0;
+					var itPreviousSkip = ViewBag.ImageTagsPreviousSkip as int? ?? 0;
+					var itNextSkip = ViewBag.ImageTagsNextSkip as int? ?? 0;
+				}
+				@if (imageTagsTotalCount > 0) {
+					<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+						@if (itHasPrevious) {
+							<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itPreviousSkip">← 前の40件</a>
+						} else {
+							<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+						}
+						<span class="small text-body-secondary">@(itSkip + 1) - @(itSkip + imageTags.Count) / @imageTagsTotalCount 件</span>
+						@if (itHasNext) {
+							<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itNextSkip">次の40件 →</a>
+						} else {
+							<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+						}
+					</nav>
+				}
+
 		</div>
 </div>

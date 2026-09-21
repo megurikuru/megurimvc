@@ -18,14 +18,24 @@ namespace Meguri.Controllers {
         }
 
         // GET: /Fandom
-        public async Task<IActionResult> Index() {
+        public async Task<IActionResult> Index(int? skip) {
+            const int pageSize = 40;
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var totalCount = await _context.Fandoms.CountAsync();
+            var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
+            if (resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
 
             var fandoms = await _context.Fandoms
                 .Include(f => f.ParentFandom)
                 .Include(f => f.ChildFandoms)
                 .Include(f => f.FandomUsers)
-                .Include(f => f.Docs)
+                .Include(f => f.Posts)
+                .OrderBy(f => f.Id)
+                .Skip(resolvedSkip)
+                .Take(pageSize)
                 .ToListAsync();
 
             var joinedFandomIds = new HashSet<int>();
@@ -37,21 +47,26 @@ namespace Meguri.Controllers {
             }
 
             ViewBag.JoinedFandomIds = joinedFandomIds;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.Skip = resolvedSkip;
+            ViewBag.HasPrevious = resolvedSkip > 0;
+            ViewBag.HasNext = resolvedSkip + fandoms.Count < totalCount;
+            ViewBag.PreviousSkip = Math.Max(0, resolvedSkip - pageSize);
+            ViewBag.NextSkip = resolvedSkip + pageSize;
             return View(fandoms);
         }
 
         // GET: /Fandom/Details/5
-        public async Task<IActionResult> Details(int? id) {
+        public async Task<IActionResult> Details(int? id, int? skip) {
             if (id == null) return NotFound();
+
+            const int pageSize = 40;
 
             var fandom = await _context.Fandoms
                 .Include(f => f.ParentFandom)
-                .Include(f => f.ChildFandoms)
+                .Include(f => f.ChildFandoms).ThenInclude(c => c.Posts)
                 .Include(f => f.FandomUsers).ThenInclude(fu => fu.User)
-                .Include(f => f.Docs).ThenInclude(d => d.User)
-                .Include(f => f.Docs).ThenInclude(d => d.PostImages).ThenInclude(pi => pi.Image)
-                .Include(f => f.Docs).ThenInclude(d => d.PostTags).ThenInclude(pt => pt.TagConcept).ThenInclude(tc => tc.Tags)
-                .Include(f => f.Docs).ThenInclude(d => d.Reactions)
                 .FirstOrDefaultAsync(f => f.Id == id);
 
             if (fandom == null) return NotFound();
@@ -59,7 +74,34 @@ namespace Meguri.Controllers {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var isJoined = userId != null && await _context.FandomUsers.AnyAsync(fu => fu.FandomId == fandom.Id && fu.UserId == userId);
 
+            var postsQuery = _context.Posts
+                .Where(p => p.FandomId == fandom.Id)
+                .Include(p => p.User)
+                .Include(p => p.PostImages).ThenInclude(pi => pi.Image)
+                .Include(p => p.PostTags).ThenInclude(pt => pt.TagConcept).ThenInclude(tc => tc.Tags)
+                .Include(p => p.Reactions);
+
+            var totalCount = await postsQuery.CountAsync();
+            var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
+            if (resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
+
+            var posts = await postsQuery
+                .OrderByDescending(p => p.Created)
+                .Skip(resolvedSkip)
+                .Take(pageSize)
+                .ToListAsync();
+
             ViewBag.IsJoined = isJoined;
+            ViewBag.FandomPosts = posts;
+            ViewBag.FandomPostsPageSize = pageSize;
+            ViewBag.FandomPostsTotalCount = totalCount;
+            ViewBag.FandomPostsSkip = resolvedSkip;
+            ViewBag.FandomPostsHasPrevious = resolvedSkip > 0;
+            ViewBag.FandomPostsHasNext = resolvedSkip + posts.Count < totalCount;
+            ViewBag.FandomPostsPreviousSkip = Math.Max(0, resolvedSkip - pageSize);
+            ViewBag.FandomPostsNextSkip = resolvedSkip + pageSize;
             return View(fandom);
         }
 

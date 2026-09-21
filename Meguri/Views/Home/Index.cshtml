@@ -72,6 +72,30 @@
                 }
             </div>
         }
+
+        @{
+            var postsHasPrevious = ViewBag.PostsHasPrevious as bool? ?? false;
+            var postsHasNext = ViewBag.PostsHasNext as bool? ?? false;
+            var postsTotalCount = ViewBag.PostsTotalCount as int? ?? 0;
+            var postsSkip = ViewBag.PostsSkip as int? ?? 0;
+            var postsPreviousSkip = ViewBag.PostsPreviousSkip as int? ?? 0;
+            var postsNextSkip = ViewBag.PostsNextSkip as int? ?? 0;
+        }
+        @if (postsTotalCount > 0) {
+            <nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+                @if (postsHasPrevious) {
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postsPreviousSkip">← 前の40件</a>
+                } else {
+                    <button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+                }
+                <span class="small text-body-secondary">@(postsSkip + 1) - @(postsSkip + recentPosts.Count) / @postsTotalCount 件</span>
+                @if (postsHasNext) {
+                    <a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postsNextSkip">次の40件 →</a>
+                } else {
+                    <button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+                }
+            </nav>
+        }
     </div>
 
     <!-- サイドバー：界隈（Fandom）一覧 -->

@@ -81,7 +81,9 @@ namespace Meguri.Controllers {
         }
 
         // GET: /Image
-        public async Task<IActionResult> Index(int? fandomId, string? tag) {
+        public async Task<IActionResult> Index(int? fandomId, string? tag, int? skip) {
+            const int pageSize = 40;
+
             var query = _context.Images
                 .Include(i => i.ImageTags).ThenInclude(it => it.TagConcept).ThenInclude(tc => tc.Tags)
                 .Include(i => i.PostImages).ThenInclude(pi => pi.Post)
@@ -107,12 +109,26 @@ namespace Meguri.Controllers {
                 ViewBag.CurrentTag = tag;
             }
 
+            var totalCount = await query.CountAsync();
+            var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
+            if (resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
+
             var images = await query
                 .OrderByDescending(i => i.Created)
-                .Take(50)
+                .Skip(resolvedSkip)
+                .Take(pageSize)
                 .ToListAsync();
 
             ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.Skip = resolvedSkip;
+            ViewBag.HasPrevious = resolvedSkip > 0;
+            ViewBag.HasNext = resolvedSkip + images.Count < totalCount;
+            ViewBag.PreviousSkip = Math.Max(0, resolvedSkip - pageSize);
+            ViewBag.NextSkip = resolvedSkip + pageSize;
             return View(images);
         }
 

@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Meguri.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260917135627_MakeActiveAvatarImageIdNullable")]
-    partial class MakeActiveAvatarImageIdNullable
+    [Migration("20260921124419_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,11 +37,15 @@ namespace Meguri.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Bio")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -124,12 +128,14 @@ namespace Meguri.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -194,6 +200,7 @@ namespace Meguri.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Updated")
@@ -226,6 +233,7 @@ namespace Meguri.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -247,6 +255,7 @@ namespace Meguri.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("ParentFandomId")
@@ -369,31 +378,59 @@ namespace Meguri.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Caption")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("bytea");
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("Height")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsSexual")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsViolence")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("StorageKey")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Width")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Created");
 
                     b.HasIndex("IsPublic");
+
+                    b.HasIndex("UserId");
 
                     b.HasIndex("IsPublic", "Created");
 
@@ -442,9 +479,11 @@ namespace Meguri.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SenderId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Updated")
@@ -516,29 +555,32 @@ namespace Meguri.Migrations
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsSexual")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsViolence")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime?>("LastCommentedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("Sexual")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Updated")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("ViewCount")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("Violence")
-                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -560,7 +602,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("FandomId", "LastCommentedAt");
 
-                    b.ToTable("Docs");
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Meguri.Models.PostImage", b =>
@@ -644,6 +686,7 @@ namespace Meguri.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -726,6 +769,7 @@ namespace Meguri.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Category")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -753,6 +797,7 @@ namespace Meguri.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Predicate")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<long>("SubjectConceptId")
@@ -783,6 +828,7 @@ namespace Meguri.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -941,7 +987,7 @@ namespace Meguri.Migrations
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>
                 {
-                    b.HasOne("Meguri.Models.Post", "Doc")
+                    b.HasOne("Meguri.Models.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("DocId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -959,13 +1005,14 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.ApplicationUser", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Doc");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Image");
 
                     b.Navigation("Parent");
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
@@ -1000,7 +1047,8 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.ApplicationUser", "User")
                         .WithMany("ConversationMembers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Conversation");
 
@@ -1036,6 +1084,16 @@ namespace Meguri.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Meguri.Models.Image", b =>
+                {
+                    b.HasOne("Meguri.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Meguri.Models.ImageTag", b =>
                 {
                     b.HasOne("Meguri.Models.Image", "Image")
@@ -1066,7 +1124,8 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.ApplicationUser", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Conversation");
 
@@ -1095,15 +1154,16 @@ namespace Meguri.Migrations
             modelBuilder.Entity("Meguri.Models.Post", b =>
                 {
                     b.HasOne("Meguri.Models.Fandom", "Fandom")
-                        .WithMany("Docs")
+                        .WithMany("Posts")
                         .HasForeignKey("FandomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Meguri.Models.ApplicationUser", "User")
-                        .WithMany("Docs")
+                        .WithMany("Posts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Fandom");
 
@@ -1173,7 +1233,8 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.ApplicationUser", "User")
                         .WithMany("Reactions")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Comment");
 
@@ -1237,7 +1298,8 @@ namespace Meguri.Migrations
                     b.HasOne("Meguri.Models.ApplicationUser", "User")
                         .WithMany("UserImages")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Image");
 
@@ -1301,9 +1363,9 @@ namespace Meguri.Migrations
 
                     b.Navigation("ConversationMembers");
 
-                    b.Navigation("Docs");
-
                     b.Navigation("FandomUsers");
+
+                    b.Navigation("Posts");
 
                     b.Navigation("Reactions");
 
@@ -1334,9 +1396,9 @@ namespace Meguri.Migrations
                 {
                     b.Navigation("ChildFandoms");
 
-                    b.Navigation("Docs");
-
                     b.Navigation("FandomUsers");
+
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Meguri.Models.Image", b =>
