@@ -70,14 +70,14 @@
 										<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
 
 										<div class="mb-2">
-												<textarea name="text" rows="2" class="form-control" placeholder="@SharedLocalizer["Message_InputPlaceholder"]" autofocus></textarea>
+											<textarea name="text" id="messageTextInput" rows="2" class="form-control" placeholder="@SharedLocalizer["Message_InputPlaceholder"]" autofocus></textarea>
 										</div>
 
 										<div class="d-flex justify-content-between align-items-center">
-												<input type="file" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="form-control form-control-sm" style="max-width: 250px;" />
-												<button type="submit" class="btn btn-primary btn-sm px-4">
-														🚀 @SharedLocalizer["Message_SendBtn"]
-												</button>
+											<input type="file" name="imageFiles" id="messageImageInput" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="form-control form-control-sm" style="max-width: 250px;" />
+											<button type="submit" id="sendMessageBtn" class="btn btn-primary btn-sm px-4" disabled>
+												🚀 @SharedLocalizer["Message_SendBtn"]
+											</button>
 										</div>
 								</form>
 						</div>
@@ -92,6 +92,17 @@
 						if (container) {
 								container.scrollTop = container.scrollHeight;
 						}
+
+						function updateSendButtonState() {
+								var hasText = $('#messageTextInput').val().trim().length > 0;
+								var hasFiles = $('#messageImageInput')[0] && $('#messageImageInput')[0].files.length > 0;
+								$('#sendMessageBtn').prop('disabled', !(hasText || hasFiles));
+						}
+
+						$(document).on('input', '#messageTextInput', updateSendButtonState);
+						$(document).on('change', '#messageImageInput', updateSendButtonState);
+
+						updateSendButtonState();
 				});
 		</script>
 }

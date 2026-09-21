@@ -238,6 +238,8 @@ namespace Meguri.Controllers {
             if (conv != null) {
                 conv.Updated = DateTime.UtcNow;
             }
+
+            await _context.SaveChangesAsync();
         }
     }
 }
