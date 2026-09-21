@@ -808,13 +808,13 @@
     <value>最大10個まで指定できます。入力すると候補が表示されます。</value>
   </data>
   <data name="Post_NSFW_Sexual" xml:space="preserve">
-    <value>性的コンテンツ（R-18）を含む</value>
+    <value>性的コンテンツ（R-18）</value>
   </data>
   <data name="Post_NSFW_Violence" xml:space="preserve">
-    <value>暴力表現・グロテスクを含む</value>
+    <value>暴力表現・グロテスク</value>
   </data>
   <data name="Post_Public" xml:space="preserve">
-    <value>全体に公開する</value>
+    <value>インターネット公開</value>
   </data>
   <data name="Post_Pinned" xml:space="preserve">
     <value>ピン留め固定</value>
