@@ -32,8 +32,8 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg bg-dark fixed-top shadow-sm" data-bs-theme="dark">
+<body class="bg-body">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
         <div class="container">
             <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand fw-bold">meguri</a>
 
@@ -71,7 +71,7 @@
     <main class="container body-content my-4">
         @RenderBody()
     </main>
-    <footer class="footer mt-auto py-3 bg-white border-top text-center text-body-secondary">
+    <footer class="footer mt-auto py-3 bg-body-tertiary border-top text-center text-body-secondary">
         <div class="container">
             <p class="mb-0">@SharedLocalizer["Footer_Copyright"]</p>
         </div>

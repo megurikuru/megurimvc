@@ -9,9 +9,9 @@
 
 <div class="row justify-content-center">
 		<div class="col-lg-9">
-				<div class="card shadow-sm border-0 mb-4 bg-white">
-						<div class="card-body p-4">
-								<!-- ヘッダー情報 -->
+				<div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
+					<div class="card-body p-4">
+						<!-- ヘッダー情報 -->
 								<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
 										<div class="d-flex align-items-center gap-2">
 												<a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.FandomId" class="badge bg-secondary text-decoration-none">
@@ -120,8 +120,8 @@
 				</div>
 
 				<!-- スレッド式コメント一覧 & 投稿フォーム -->
-				<div class="card shadow-sm border-0 mb-4 bg-white">
-						<div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+				<div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
+					<div class="card-header bg-body-tertiary py-3 d-flex justify-content-between align-items-center">
 								<h5 class="fw-bold mb-0">💬 @SharedLocalizer["Post_ThreadTitle"] (@Model.CommentCount)</h5>
 								@if (Model.IsLocked)
 								{

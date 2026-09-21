@@ -17,8 +17,8 @@
 		</a>
 </div>
 
-<!-- フィルタ / 検索バー -->
-<div class="card shadow-sm border-0 mb-4 bg-white">
+
+<div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
 		<div class="card-body p-3">
 				<form asp-action="Index" method="get" class="row g-2 align-items-center">
 						<div class="col-md-4">
@@ -86,7 +86,7 @@ else
 										</div>
 
 										<h4 class="card-title fw-bold">
-												<a asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-dark">
+												<a asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-body">
 														@post.Name
 												</a>
 										</h4>
