@@ -72,12 +72,12 @@ namespace Meguri.Controllers {
             }
 
             var user = await _userManager.GetUserAsync(User);
-            if (user == null || !user.DateOfBirth.HasValue) {
+            if (user == null) {
                 return false;
             }
 
             var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            return user.DateOfBirth.Value.AddYears(18) <= today;
+            return user.DateOfBirth.AddYears(18) <= today;
         }
 
         // GET: /Image

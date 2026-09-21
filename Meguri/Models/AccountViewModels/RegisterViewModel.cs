@@ -26,5 +26,10 @@ namespace Meguri.Models.AccountViewModels {
         [Display(Name = "Account_Field_ConfirmPassword")]
         [Compare("Password", ErrorMessage = "Validation_Compare")]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Validation_Required")]
+        [DataType(DataType.Date)]
+        [Display(Name = "Account_Field_DateOfBirth")]
+        public DateOnly DateOfBirth { get; set; }
     }
 }

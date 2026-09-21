@@ -24,7 +24,7 @@ namespace Meguri.Models.ManageViewModels {
 
         [Display(Name = "Manage_Profile_DateOfBirth")]
         [DataType(DataType.Date)]
-        public DateOnly? DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
 
         [Display(Name = "Manage_Profile_Bio")]
         [StringLength(1000, ErrorMessage = "Validation_StringLength")]

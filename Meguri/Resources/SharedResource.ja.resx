@@ -429,6 +429,9 @@
   <data name="Account_Field_ConfirmPassword" xml:space="preserve">
     <value>パスワード（確認）</value>
   </data>
+  <data name="Account_Field_DateOfBirth" xml:space="preserve">
+    <value>生年月日</value>
+  </data>
   <data name="Account_Field_RememberMe" xml:space="preserve">
     <value>ログイン状態を保持する</value>
   </data>
