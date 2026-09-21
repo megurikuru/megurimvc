@@ -169,3 +169,23 @@ function cancelReply() {
     $('#replyParentId').val('');
     $('#replyNotice').addClass('d-none').empty();
 }
+
+// カラーモード切替
+function applyTheme(theme) {
+    if (theme === 'auto') {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
+    } else {
+        document.documentElement.setAttribute('data-bs-theme', theme);
+    }
+}
+window.applyTheme = applyTheme;
+
+// OSのダークモード変更監視
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    const themeCookie = document.cookie.split('; ').find(row => row.startsWith('meguri_theme='));
+    const theme = themeCookie ? themeCookie.split('=')[1] : 'auto';
+    if (theme === 'auto') {
+        applyTheme('auto');
+    }
+});

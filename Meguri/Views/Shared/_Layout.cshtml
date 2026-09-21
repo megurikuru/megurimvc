@@ -1,8 +1,20 @@
 ﻿<!DOCTYPE html>
-<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+@{
+    var themeCookie = Context.Request.Cookies["meguri_theme"] ?? "auto";
+}
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" data-bs-theme="@themeCookie">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+        (function() {
+            var theme = '@themeCookie';
+            if (theme === 'auto') {
+                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    </script>
     @if (ViewData["IsHomePage"] as bool? == true) {
         <title>meguri - 『好き』がめぐるSNS</title>
     } else if (!string.IsNullOrEmpty(ViewData["Title"] as string)) {
@@ -51,28 +63,6 @@
                     </li>
                 </ul>
                 <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2">
-                    <!-- 言語切替 -->
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            🌐 @(System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "ja" ? "日本語" : "English")
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
-                            <li>
-                                <form asp-controller="Home" asp-action="SetLanguage" method="post" class="dropdown-item p-0">
-                                    <input type="hidden" name="culture" value="ja" />
-                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
-                                    <button type="submit" class="btn btn-link dropdown-item text-start">日本語 (Japanese)</button>
-                                </form>
-                            </li>
-                            <li>
-                                <form asp-controller="Home" asp-action="SetLanguage" method="post" class="dropdown-item p-0">
-                                    <input type="hidden" name="culture" value="en" />
-                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
-                                    <button type="submit" class="btn btn-link dropdown-item text-start">English</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>

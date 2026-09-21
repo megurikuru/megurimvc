@@ -1,0 +1,65 @@
+@model OptionsViewModel
+@{
+		ViewData["Title"] = SharedLocalizer["Manage_Options_Title"];
+		ViewData.AddActivePage(ManageNavPages.Options);
+}
+
+<h4>@ViewData["Title"]</h4>
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+<div class="row">
+		<div class="col-md-6">
+				<form method="post" id="optionsForm">
+						<div asp-validation-summary="All" class="text-danger"></div>
+						<div class="mb-3">
+								<label asp-for="Culture" class="form-label fw-bold">@SharedLocalizer["Manage_Options_Language"]</label>
+								<div class="form-check">
+										<input class="form-check-input" type="radio" asp-for="Culture" id="cultureJa" value="ja">
+										<label class="form-check-label" for="cultureJa">
+												@SharedLocalizer["Manage_Options_Language_Ja"]
+										</label>
+								</div>
+								<div class="form-check">
+										<input class="form-check-input" type="radio" asp-for="Culture" id="cultureEn" value="en">
+										<label class="form-check-label" for="cultureEn">
+												@SharedLocalizer["Manage_Options_Language_En"]
+										</label>
+								</div>
+						</div>
+						<div class="mb-4">
+								<label asp-for="ColorMode" class="form-label fw-bold">@SharedLocalizer["Manage_Options_ColorMode"]</label>
+								<div class="form-check">
+										<input class="form-check-input theme-option" type="radio" asp-for="ColorMode" id="colorModeAuto" value="auto">
+										<label class="form-check-label" for="colorModeAuto">
+												@SharedLocalizer["Manage_Options_ColorMode_Auto"]
+										</label>
+								</div>
+								<div class="form-check">
+										<input class="form-check-input theme-option" type="radio" asp-for="ColorMode" id="colorModeLight" value="light">
+										<label class="form-check-label" for="colorModeLight">
+												@SharedLocalizer["Manage_Options_ColorMode_Light"]
+										</label>
+								</div>
+								<div class="form-check">
+										<input class="form-check-input theme-option" type="radio" asp-for="ColorMode" id="colorModeDark" value="dark">
+										<label class="form-check-label" for="colorModeDark">
+												@SharedLocalizer["Manage_Options_ColorMode_Dark"]
+										</label>
+								</div>
+						</div>
+						<button type="submit" class="btn btn-primary">@SharedLocalizer["Manage_Options_Save"]</button>
+				</form>
+		</div>
+</div>
+
+@section Scripts {
+		@await Html.PartialAsync("_ValidationScriptsPartial")
+		<script>
+				document.querySelectorAll('.theme-option').forEach(radio => {
+						radio.addEventListener('change', function () {
+								if (window.applyTheme) {
+										window.applyTheme(this.value);
+								}
+						});
+				});
+		</script>
+}

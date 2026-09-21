@@ -6,8 +6,11 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Meguri.Models;
@@ -22,6 +25,7 @@ namespace Meguri.Controllers {
         private readonly IEmailSender<ApplicationUser> _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
@@ -31,12 +35,14 @@ namespace Meguri.Controllers {
           SignInManager<ApplicationUser> signInManager,
           IEmailSender<ApplicationUser> emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder) {
+          UrlEncoder urlEncoder,
+          IStringLocalizer<SharedResource> localizer) {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _localizer = localizer;
         }
 
         [TempData]
@@ -450,6 +456,59 @@ namespace Meguri.Controllers {
             var model = new ShowRecoveryCodesViewModel { RecoveryCodes = recoveryCodes.ToArray() };
 
             return View(nameof(ShowRecoveryCodes), model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Options() {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var currentCulture = HttpContext.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ja";
+            if (!currentCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase)) {
+                currentCulture = "ja";
+            } else {
+                currentCulture = "en";
+            }
+
+            var colorMode = Request.Cookies["meguri_theme"] ?? "auto";
+
+            var model = new OptionsViewModel {
+                Culture = currentCulture,
+                ColorMode = colorMode,
+                StatusMessage = StatusMessage
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Options(OptionsViewModel model) {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            if (!string.IsNullOrEmpty(model.Culture)) {
+                Response.Cookies.Append(
+                    CookieRequestCultureProvider.DefaultCookieName,
+                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(model.Culture)),
+                    new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1), IsEssential = true, SameSite = SameSiteMode.Lax }
+                );
+            }
+
+            if (!string.IsNullOrEmpty(model.ColorMode)) {
+                Response.Cookies.Append(
+                    "meguri_theme",
+                    model.ColorMode,
+                    new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1), IsEssential = true, SameSite = SameSiteMode.Lax }
+                );
+            }
+
+            StatusMessage = _localizer["Manage_Options_Updated"];
+            return RedirectToAction(nameof(Options));
         }
 
         #region Helpers

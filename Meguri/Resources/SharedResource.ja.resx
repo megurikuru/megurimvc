@@ -969,4 +969,37 @@
   <data name="Reaction_Add" xml:space="preserve">
     <value>リアクションを追加</value>
   </data>
+  <data name="Manage_Nav_Options" xml:space="preserve">
+    <value>オプション</value>
+  </data>
+  <data name="Manage_Options_Title" xml:space="preserve">
+    <value>オプション設定</value>
+  </data>
+  <data name="Manage_Options_Language" xml:space="preserve">
+    <value>言語設定</value>
+  </data>
+  <data name="Manage_Options_Language_Ja" xml:space="preserve">
+    <value>日本語 (Japanese)</value>
+  </data>
+  <data name="Manage_Options_Language_En" xml:space="preserve">
+    <value>English (英語)</value>
+  </data>
+  <data name="Manage_Options_ColorMode" xml:space="preserve">
+    <value>カラーモード</value>
+  </data>
+  <data name="Manage_Options_ColorMode_Auto" xml:space="preserve">
+    <value>自動 (OSの設定に従う)</value>
+  </data>
+  <data name="Manage_Options_ColorMode_Light" xml:space="preserve">
+    <value>ライトモード</value>
+  </data>
+  <data name="Manage_Options_ColorMode_Dark" xml:space="preserve">
+    <value>ダークモード</value>
+  </data>
+  <data name="Manage_Options_Save" xml:space="preserve">
+    <value>変更を保存</value>
+  </data>
+  <data name="Manage_Options_Updated" xml:space="preserve">
+    <value>オプション設定を更新しました。</value>
+  </data>
 </root>
