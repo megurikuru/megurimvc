@@ -106,7 +106,7 @@ namespace Meguri.Controllers {
         }
 
         // POST: /Fandom/Join/5
-        // 親のFandomに参加したら、子のFandomにも自動的に参加する
+        // 親のFandomに参加したら子のFandomにも、子のFandomに参加したら親のFandomにも自動的に参加する
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -118,9 +118,10 @@ namespace Meguri.Controllers {
             var targetFandom = allFandoms.FirstOrDefault(f => f.Id == id);
             if (targetFandom == null) return NotFound();
 
-            // 対象界隈とその全子孫界隈のIDを収集
+            // 対象界隈とその全子孫界隈、および全祖先界隈のIDを収集
             var fandomIdsToJoin = new HashSet<int> { id };
             CollectDescendantFandomIds(id, allFandoms, fandomIdsToJoin);
+            CollectAncestorFandomIds(id, allFandoms, fandomIdsToJoin);
 
             var existingJoinedIds = (await _context.FandomUsers
                 .Where(fu => fu.UserId == userId && fandomIdsToJoin.Contains(fu.FandomId))
@@ -145,6 +146,7 @@ namespace Meguri.Controllers {
         }
 
         // POST: /Fandom/Leave/5
+        // 親のFandomから脱退したら、子のFandomからも自動的に脱退する
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -152,11 +154,18 @@ namespace Meguri.Controllers {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId)) return Challenge();
 
-            var membership = await _context.FandomUsers
-                .FirstOrDefaultAsync(fu => fu.FandomId == id && fu.UserId == userId);
+            var allFandoms = await _context.Fandoms.ToListAsync();
 
-            if (membership != null) {
-                _context.FandomUsers.Remove(membership);
+            // 脱退対象界隈とその全子孫界隈のIDを収集
+            var fandomIdsToLeave = new HashSet<int> { id };
+            CollectDescendantFandomIds(id, allFandoms, fandomIdsToLeave);
+
+            var memberships = await _context.FandomUsers
+                .Where(fu => fu.UserId == userId && fandomIdsToLeave.Contains(fu.FandomId))
+                .ToListAsync();
+
+            if (memberships.Count > 0) {
+                _context.FandomUsers.RemoveRange(memberships);
                 await _context.SaveChangesAsync();
             }
 
@@ -207,6 +216,16 @@ namespace Meguri.Controllers {
                 if (result.Add(child.Id)) {
                     CollectDescendantFandomIds(child.Id, allFandoms, result);
                 }
+            }
+        }
+
+        // 再帰的に全祖先界隈IDを取得するヘルパー
+        private void CollectAncestorFandomIds(int childId, List<Fandom> allFandoms, HashSet<int> result) {
+            var child = allFandoms.FirstOrDefault(f => f.Id == childId);
+            if (child?.ParentFandomId == null) return;
+
+            if (result.Add(child.ParentFandomId.Value)) {
+                CollectAncestorFandomIds(child.ParentFandomId.Value, allFandoms, result);
             }
         }
     }
