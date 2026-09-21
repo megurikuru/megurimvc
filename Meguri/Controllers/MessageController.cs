@@ -34,16 +34,43 @@ namespace Meguri.Controllers {
         }
 
         // GET: /Message
-        public async Task<IActionResult> Index() {
+        public async Task<IActionResult> Index(DateTime? date, int? skip) {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
-            var conversations = await _context.ConversationMembers
-                .Where(cm => cm.UserId == currentUserId)
-                .Include(cm => cm.Conversation).ThenInclude(c => c.Members).ThenInclude(m => m.User)
-                .Include(cm => cm.Conversation).ThenInclude(c => c.Messages).ThenInclude(m => m.Sender)
-                .Select(cm => cm.Conversation)
+            const int pageSize = 20;
+            const int halfWindow = pageSize / 2;
+
+            var baseQuery = _context.Conversations
+                .Where(c => c.Members.Any(m => m.UserId == currentUserId));
+
+            var totalCount = await baseQuery.CountAsync();
+
+            int resolvedSkip;
+            if (skip.HasValue) {
+                resolvedSkip = skip.Value;
+            } else if (date.HasValue) {
+                var anchorStart = DateTime.SpecifyKind(date.Value.Date, DateTimeKind.Utc);
+                var anchorEnd = anchorStart.AddDays(1);
+                // 指定日より新しい会話の件数（一覧では上側に表示される）
+                var moreRecentCount = await baseQuery.CountAsync(c => c.Updated >= anchorEnd);
+                resolvedSkip = Math.Max(0, moreRecentCount - halfWindow);
+            } else {
+                resolvedSkip = 0;
+            }
+
+            if (totalCount == 0) {
+                resolvedSkip = 0;
+            } else if (resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
+
+            var conversations = await baseQuery
+                .Include(c => c.Members).ThenInclude(m => m.User)
+                .Include(c => c.Messages).ThenInclude(m => m.Sender)
                 .OrderByDescending(c => c.Updated)
+                .Skip(resolvedSkip)
+                .Take(pageSize)
                 .ToListAsync();
 
             var vmList = new List<ConversationItemViewModel>();
@@ -70,16 +97,27 @@ namespace Meguri.Controllers {
                 .Take(50)
                 .ToListAsync();
 
+            var hasPrevious = resolvedSkip > 0;
+            var hasNext = resolvedSkip + conversations.Count < totalCount;
+
             var vm = new ConversationListViewModel {
                 Conversations = vmList,
-                AvailableUsers = availableUsers
+                AvailableUsers = availableUsers,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                Skip = resolvedSkip,
+                FilterDate = date,
+                HasPrevious = hasPrevious,
+                HasNext = hasNext,
+                PreviousSkip = Math.Max(0, resolvedSkip - pageSize),
+                NextSkip = resolvedSkip + pageSize
             };
 
             return View(vm);
         }
 
         // GET: /Message/Chat/5
-        public async Task<IActionResult> Chat(long id) {
+        public async Task<IActionResult> Chat(long id, DateTime? date, int? skip) {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
@@ -90,9 +128,6 @@ namespace Meguri.Controllers {
 
             var conversation = await _context.Conversations
                 .Include(c => c.Members).ThenInclude(m => m.User)
-                .Include(c => c.Messages).ThenInclude(m => m.Sender)
-                .Include(c => c.Messages).ThenInclude(m => m.MessageImages).ThenInclude(mi => mi.Image)
-                .Include(c => c.Messages).ThenInclude(m => m.Reactions).ThenInclude(r => r.User)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             if (conversation == null) return NotFound();
@@ -103,14 +138,59 @@ namespace Meguri.Controllers {
                 displayTitle = otherMember?.User?.UserName ?? "ダイレクトメッセージ";
             }
 
+            const int pageSize = 80;
+            const int halfWindow = pageSize / 2;
+
+            var baseQuery = _context.Messages.Where(m => m.ConversationId == id);
+            var totalCount = await baseQuery.CountAsync();
+
+            int resolvedSkip;
+            if (skip.HasValue) {
+                resolvedSkip = skip.Value;
+            } else if (date.HasValue) {
+                var anchorUtc = DateTime.SpecifyKind(date.Value.Date, DateTimeKind.Utc);
+                var beforeCount = await baseQuery.CountAsync(m => m.Created < anchorUtc);
+                resolvedSkip = Math.Max(0, beforeCount - halfWindow);
+            } else {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
+
+            if (totalCount == 0) {
+                resolvedSkip = 0;
+            } else if (resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
+
+            var messages = await baseQuery
+                .Include(m => m.Sender)
+                .Include(m => m.MessageImages).ThenInclude(mi => mi.Image)
+                .Include(m => m.Reactions).ThenInclude(r => r.User)
+                .OrderBy(m => m.Created)
+                .Skip(resolvedSkip)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var hasPrevious = resolvedSkip > 0;
+            var hasNext = resolvedSkip + messages.Count < totalCount;
+
             var vm = new ChatRoomViewModel {
                 Conversation = conversation,
                 CurrentUserId = currentUserId,
-                DisplayTitle = displayTitle
+                DisplayTitle = displayTitle,
+                Messages = messages,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                Skip = resolvedSkip,
+                FilterDate = date,
+                HasPrevious = hasPrevious,
+                HasNext = hasNext,
+                PreviousSkip = Math.Max(0, resolvedSkip - pageSize),
+                NextSkip = resolvedSkip + pageSize
             };
 
             return View(vm);
         }
+
 
         // POST: /Message/Create
         [HttpPost]

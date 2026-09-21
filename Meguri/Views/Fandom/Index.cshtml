@@ -38,7 +38,7 @@
 														<div class="small text-body-secondary">
 																👥 @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, parent.FandomUsers.Count)
 																&nbsp;|&nbsp;
-																📝 @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, parent.Docs.Count)
+																📝 @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, parent.Posts.Count)
 														</div>
 												</div>
 
@@ -102,3 +102,28 @@
 				</div>
 		}
 </div>
+
+@{
+	var fHasPrevious = ViewBag.HasPrevious as bool? ?? false;
+	var fHasNext = ViewBag.HasNext as bool? ?? false;
+	var fTotalCount = ViewBag.TotalCount as int? ?? 0;
+	var fSkip = ViewBag.Skip as int? ?? 0;
+	var fPreviousSkip = ViewBag.PreviousSkip as int? ?? 0;
+	var fNextSkip = ViewBag.NextSkip as int? ?? 0;
+	var fCount = Model.Count();
+}
+@if (fTotalCount > 0) {
+	<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+		@if (fHasPrevious) {
+			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@fPreviousSkip">← 前の40件</a>
+		} else {
+			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+		}
+		<span class="small text-body-secondary">@(fSkip + 1) - @(fSkip + fCount) / @fTotalCount 件</span>
+		@if (fHasNext) {
+			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@fNextSkip">次の40件 →</a>
+		} else {
+			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+		}
+	</nav>
+}

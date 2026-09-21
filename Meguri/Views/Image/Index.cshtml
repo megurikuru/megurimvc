@@ -55,3 +55,28 @@ else {
 				}
 		</div>
 }
+
+@{
+	var imgHasPrevious = ViewBag.HasPrevious as bool? ?? false;
+	var imgHasNext = ViewBag.HasNext as bool? ?? false;
+	var imgTotalCount = ViewBag.TotalCount as int? ?? 0;
+	var imgSkip = ViewBag.Skip as int? ?? 0;
+	var imgPreviousSkip = ViewBag.PreviousSkip as int? ?? 0;
+	var imgNextSkip = ViewBag.NextSkip as int? ?? 0;
+	var imgCount = Model.Count();
+}
+@if (imgTotalCount > 0) {
+	<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+		@if (imgHasPrevious) {
+			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@imgPreviousSkip" asp-route-tag="@currentTag">← 前の40件</a>
+		} else {
+			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+		}
+		<span class="small text-body-secondary">@(imgSkip + 1) - @(imgSkip + imgCount) / @imgTotalCount 件</span>
+		@if (imgHasNext) {
+			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@imgNextSkip" asp-route-tag="@currentTag">次の40件 →</a>
+		} else {
+			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+		}
+	</nav>
+}

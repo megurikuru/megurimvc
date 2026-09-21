@@ -22,27 +22,52 @@ namespace Meguri.Controllers {
         }
 
         // GET: /Tag
-        public async Task<IActionResult> Index() {
-            var concepts = await _context.TagConcepts
+        public async Task<IActionResult> Index(string? q, int? skip) {
+            const int pageSize = 40;
+
+            var query = _context.TagConcepts
                 .Include(tc => tc.Tags)
                 .Include(tc => tc.PostTags)
                 .Include(tc => tc.ImageTags)
                 .Include(tc => tc.User)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q)) {
+                var keyword = q.Trim();
+                query = query.Where(tc => tc.Tags.Any(t => t.TagText.Contains(keyword)));
+            }
+
+            var totalCount = await query.CountAsync();
+            var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
+            if (resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
+
+            var concepts = await query
                 .OrderByDescending(tc => tc.PostTags.Count + tc.ImageTags.Count)
-                .Take(100)
+                .Skip(resolvedSkip)
+                .Take(pageSize)
                 .ToListAsync();
+
+            ViewBag.SearchQuery = q;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalCount = totalCount;
+            ViewBag.Skip = resolvedSkip;
+            ViewBag.HasPrevious = resolvedSkip > 0;
+            ViewBag.HasNext = resolvedSkip + concepts.Count < totalCount;
+            ViewBag.PreviousSkip = Math.Max(0, resolvedSkip - pageSize);
+            ViewBag.NextSkip = resolvedSkip + pageSize;
 
             return View(concepts);
         }
 
         // GET: /Tag/Details/5
-        public async Task<IActionResult> Details(long conceptId) {
+        public async Task<IActionResult> Details(long conceptId, int? postSkip, int? imageSkip) {
+            const int pageSize = 40;
+
             var concept = await _context.TagConcepts
                 .Include(tc => tc.Tags)
                 .Include(tc => tc.User)
-                .Include(tc => tc.PostTags).ThenInclude(pt => pt.Post).ThenInclude(p => p.User)
-                .Include(tc => tc.PostTags).ThenInclude(pt => pt.Post).ThenInclude(p => p.PostImages)
-                .Include(tc => tc.ImageTags).ThenInclude(it => it.Image)
                 .Include(tc => tc.SubjectRelationships).ThenInclude(sr => sr.ObjectConcept).ThenInclude(oc => oc.Tags)
                 .Include(tc => tc.ObjectRelationships).ThenInclude(or => or.SubjectConcept).ThenInclude(sc => sc.Tags)
                 .FirstOrDefaultAsync(tc => tc.Id == conceptId);
@@ -51,6 +76,49 @@ namespace Meguri.Controllers {
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ViewBag.CanEdit = concept.UserId == currentUserId || User.IsInRole("Admin");
+
+            var postTagsQuery = _context.PostTags
+                .Where(pt => pt.TagConceptId == conceptId)
+                .Include(pt => pt.Post).ThenInclude(p => p.User)
+                .Include(pt => pt.Post).ThenInclude(p => p.PostImages)
+                .OrderByDescending(pt => pt.Post.Created);
+
+            var postTagsTotalCount = await postTagsQuery.CountAsync();
+            var resolvedPostSkip = postSkip.HasValue && postSkip.Value > 0 ? postSkip.Value : 0;
+            if (resolvedPostSkip >= postTagsTotalCount) {
+                resolvedPostSkip = Math.Max(0, postTagsTotalCount - pageSize);
+            }
+            var postTags = await postTagsQuery.Skip(resolvedPostSkip).Take(pageSize).ToListAsync();
+
+            var imageTagsQuery = _context.ImageTags
+                .Where(it => it.TagConceptId == conceptId)
+                .Include(it => it.Image)
+                .OrderByDescending(it => it.Image.Created);
+
+            var imageTagsTotalCount = await imageTagsQuery.CountAsync();
+            var resolvedImageSkip = imageSkip.HasValue && imageSkip.Value > 0 ? imageSkip.Value : 0;
+            if (resolvedImageSkip >= imageTagsTotalCount) {
+                resolvedImageSkip = Math.Max(0, imageTagsTotalCount - pageSize);
+            }
+            var imageTags = await imageTagsQuery.Skip(resolvedImageSkip).Take(pageSize).ToListAsync();
+
+            ViewBag.PostTags = postTags;
+            ViewBag.PostTagsPageSize = pageSize;
+            ViewBag.PostTagsTotalCount = postTagsTotalCount;
+            ViewBag.PostTagsSkip = resolvedPostSkip;
+            ViewBag.PostTagsHasPrevious = resolvedPostSkip > 0;
+            ViewBag.PostTagsHasNext = resolvedPostSkip + postTags.Count < postTagsTotalCount;
+            ViewBag.PostTagsPreviousSkip = Math.Max(0, resolvedPostSkip - pageSize);
+            ViewBag.PostTagsNextSkip = resolvedPostSkip + pageSize;
+
+            ViewBag.ImageTags = imageTags;
+            ViewBag.ImageTagsPageSize = pageSize;
+            ViewBag.ImageTagsTotalCount = imageTagsTotalCount;
+            ViewBag.ImageTagsSkip = resolvedImageSkip;
+            ViewBag.ImageTagsHasPrevious = resolvedImageSkip > 0;
+            ViewBag.ImageTagsHasNext = resolvedImageSkip + imageTags.Count < imageTagsTotalCount;
+            ViewBag.ImageTagsPreviousSkip = Math.Max(0, resolvedImageSkip - pageSize);
+            ViewBag.ImageTagsNextSkip = resolvedImageSkip + pageSize;
 
             return View(concept);
         }

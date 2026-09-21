@@ -25,7 +25,7 @@ namespace Meguri.Models {
         [NotMapped]
         public ICollection<Image> AvatarImages => UserImages.Select(ui => ui.Image).ToList();
 
-        public ICollection<Post> Docs { get; set; } = new List<Post>();
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
         public ICollection<Fandom> Fandoms { get; set; } = new List<Fandom>();
         public ICollection<FandomUser> FandomUsers { get; set; } = new List<FandomUser>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();

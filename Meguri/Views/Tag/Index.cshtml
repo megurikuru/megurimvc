@@ -1,12 +1,25 @@
 ﻿@model IEnumerable<Meguri.Models.TagConcept>
 @{
 		ViewData["Title"] = SharedLocalizer["Tag_Title"];
+		var searchQuery = ViewBag.SearchQuery as string;
 }
 
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
 		<div>
 				<h2 class="fw-bold mb-1">🏷️ @SharedLocalizer["Tag_Title"] & @SharedLocalizer["Tag_Thesaurus"]</h2>
 				<p class="text-body-secondary mb-0">投稿や画像に付与されているタグとシソーラス概念の一覧です。</p>
+		</div>
+</div>
+
+<div class="card shadow-sm border-0 mb-4">
+		<div class="card-body p-3">
+				<form asp-action="Index" method="get" class="d-flex gap-2">
+						<input type="text" name="q" value="@searchQuery" class="form-control" placeholder="タグを検索..." />
+						<button type="submit" class="btn btn-primary">🔍 検索</button>
+						@if (!string.IsNullOrWhiteSpace(searchQuery)) {
+								<a asp-action="Index" class="btn btn-outline-secondary">クリア</a>
+						}
+				</form>
 		</div>
 </div>
 
@@ -25,7 +38,33 @@
 												⚖️
 										</a>
 								</div>
+										}
+										</div>
+										@if (!Model.Any()) {
+												<p class="text-body-secondary mb-0">該当するタグが見つかりませんでした。</p>
+										}
+								</div>
+
+								@{
+									var tHasPrevious = ViewBag.HasPrevious as bool? ?? false;
+							var tHasNext = ViewBag.HasNext as bool? ?? false;
+							var tTotalCount = ViewBag.TotalCount as int? ?? 0;
+							var tSkip = ViewBag.Skip as int? ?? 0;
+							var tPreviousSkip = ViewBag.PreviousSkip as int? ?? 0;
+							var tNextSkip = ViewBag.NextSkip as int? ?? 0;
+							var tCount = Model.Count();
 						}
-				</div>
-		</div>
-</div>
+						<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+										@if (tHasPrevious) {
+											<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@tPreviousSkip" asp-route-q="@searchQuery">← 前の40件</a>
+										} else {
+											<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+										}
+										<span class="small text-body-secondary">@(tTotalCount == 0 ? "0 件" : $"{tSkip + 1} - {tSkip + tCount} / {tTotalCount} 件")</span>
+										@if (tHasNext) {
+											<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@tNextSkip" asp-route-q="@searchQuery">次の40件 →</a>
+										} else {
+											<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+										}
+									</nav>
+							</div>

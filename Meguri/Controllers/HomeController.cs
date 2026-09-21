@@ -21,7 +21,15 @@ namespace Meguri.Controllers {
             _context = context;
         }
 
-        public async Task<IActionResult> Index() {
+        public async Task<IActionResult> Index(int? skip) {
+            const int pageSize = 40;
+            var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
+
+            var totalCount = await _context.Posts.CountAsync();
+            if (resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, totalCount - pageSize);
+            }
+
             var recentPosts = await _context.Posts
                 .Include(p => p.User)
                 .Include(p => p.Fandom)
@@ -29,7 +37,8 @@ namespace Meguri.Controllers {
                 .Include(p => p.PostTags).ThenInclude(pt => pt.TagConcept).ThenInclude(tc => tc.Tags)
                 .Include(p => p.Reactions)
                 .OrderByDescending(p => p.Created)
-                .Take(10)
+                .Skip(resolvedSkip)
+                .Take(pageSize)
                 .ToListAsync();
 
             var fandoms = await _context.Fandoms
@@ -39,6 +48,13 @@ namespace Meguri.Controllers {
 
             ViewBag.RecentPosts = recentPosts;
             ViewBag.TopFandoms = fandoms;
+            ViewBag.PostsPageSize = pageSize;
+            ViewBag.PostsTotalCount = totalCount;
+            ViewBag.PostsSkip = resolvedSkip;
+            ViewBag.PostsHasPrevious = resolvedSkip > 0;
+            ViewBag.PostsHasNext = resolvedSkip + recentPosts.Count < totalCount;
+            ViewBag.PostsPreviousSkip = Math.Max(0, resolvedSkip - pageSize);
+            ViewBag.PostsNextSkip = resolvedSkip + pageSize;
             return View();
         }
 

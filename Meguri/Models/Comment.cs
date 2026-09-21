@@ -30,7 +30,7 @@ namespace Meguri.Models {
 
         // 対象の Post（Post へのコメントの場合）
         public long? DocId { get; set; }
-        public Post? Doc { get; set; }
+        public Post? Post { get; set; }
 
         // 対象の Image（Image へのコメントの場合）
         public long? ImageId { get; set; }

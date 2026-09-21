@@ -72,7 +72,7 @@ namespace Meguri.Data {
             builder.Entity<Post>(entity =>
             {
                 entity.HasOne(d => d.User)
-                    .WithMany(u => u.Docs)
+                    .WithMany(u => u.Posts)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
@@ -197,7 +197,7 @@ namespace Meguri.Data {
                     .HasForeignKey(c => c.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasOne(c => c.Doc)
+                entity.HasOne(c => c.Post)
                     .WithMany(d => d.Comments)
                     .HasForeignKey(c => c.DocId)
                     .OnDelete(DeleteBehavior.Cascade);
