@@ -4,7 +4,7 @@
 		bool isJoined = ViewBag.IsJoined is true;
 }
 
-<div class="card shadow-sm border-0 mb-4 bg-white">
+<div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
 		<div class="card-body p-4">
 				<!-- パンくず / 親界隈 -->
 				@if (Model.ParentFandom != null)
@@ -100,7 +100,7 @@
 																<small class="text-body-secondary">@post.Created.ToString("yyyy/MM/dd HH:mm")</small>
 														</div>
 														<h5 class="card-title">
-																<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-dark fw-bold">
+																<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-body fw-bold">
 																		@post.Name
 																</a>
 														</h5>
@@ -149,7 +149,7 @@
 		<!-- サイドバー：参加ユーザー -->
 		<div class="col-lg-4">
 				<div class="card shadow-sm border-0">
-						<div class="card-header bg-white fw-bold">
+						<div class="card-header bg-body-tertiary fw-bold">
 								👥 参加メンバー (@Model.FandomUsers.Count)
 						</div>
 						<div class="card-body">
@@ -162,7 +162,7 @@
 										<div class="d-flex flex-wrap gap-2">
 												@foreach (var fu in Model.FandomUsers.Take(20))
 												{
-														<span class="badge bg-light text-dark border p-2">
+														<span class="badge bg-body-secondary border p-2">
 																👤 @(fu.User?.UserName ?? "User")
 														</span>
 												}

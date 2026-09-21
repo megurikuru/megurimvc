@@ -6,7 +6,7 @@
 <div class="row justify-content-center">
 		<div class="col-lg-10">
 				<div class="card shadow-sm border-0 mb-4">
-						<div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+						<div class="card-header bg-body-tertiary py-3 d-flex justify-content-between align-items-center">
 								<h4 class="card-title fw-bold mb-0">⚖️ @string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h4>
 								<a asp-action="Details" asp-route-conceptId="@Model.TagConceptId" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Back"]</a>
 						</div>
@@ -25,7 +25,7 @@
 								<div class="row g-4 mt-2">
 										<!-- 同義語 (Synonyms) -->
 										<div class="col-md-6">
-												<div class="card h-100 bg-light border-0 p-3">
+												<div class="card h-100 bg-body-tertiary border-0 p-3">
 														<h5 class="fw-bold mb-2">🔄 @SharedLocalizer["Tag_SynonymTerms"]</h5>
 														<p class="small text-body-secondary mb-3">同じ意味を持つ別の表記（例: 「イラスト」と「絵」）</p>
 
@@ -53,7 +53,7 @@
 
 										<!-- 上位語 (Broader) -->
 										<div class="col-md-6">
-												<div class="card h-100 bg-light border-0 p-3">
+												<div class="card h-100 bg-body-tertiary border-0 p-3">
 														<h5 class="fw-bold mb-2">⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h5>
 														<p class="small text-body-secondary mb-3">このタグが含まれるより広い概念（例: 「国産車」の上位語は「車」）</p>
 
@@ -96,7 +96,7 @@
 
 										<!-- 下位語 (Narrower) -->
 										<div class="col-md-6">
-												<div class="card h-100 bg-light border-0 p-3">
+												<div class="card h-100 bg-body-tertiary border-0 p-3">
 														<h5 class="fw-bold mb-2">⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h5>
 														<p class="small text-body-secondary mb-3">このタグに含まれる具体的な概念（例: 「創作」の下位語は「イラスト」「漫画」）</p>
 
@@ -139,7 +139,7 @@
 
 										<!-- 関連語 (Related) -->
 										<div class="col-md-6">
-												<div class="card h-100 bg-light border-0 p-3">
+												<div class="card h-100 bg-body-tertiary border-0 p-3">
 														<h5 class="fw-bold mb-2">🔗 @SharedLocalizer["Tag_RelatedTerms"]</h5>
 														<p class="small text-body-secondary mb-3">上下関係ではないが関連する概念（例: 「漫画」と「アニメ」）</p>
 

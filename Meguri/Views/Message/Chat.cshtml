@@ -5,8 +5,8 @@
 
 <div class="row justify-content-center">
 		<div class="col-lg-9">
-				<div class="card shadow-sm border-0 mb-3 bg-white">
-						<div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+				<div class="card shadow-sm border-0 mb-3 bg-body-tertiary">
+						<div class="card-header bg-body-tertiary py-3 d-flex justify-content-between align-items-center">
 								<div class="d-flex align-items-center gap-2">
 										<a asp-action="Index" class="btn btn-sm btn-outline-secondary">←</a>
 										<h5 class="fw-bold mb-0">
@@ -72,7 +72,7 @@
 						</div>
 
 						<!-- 送信フォーム -->
-						<div class="card-footer bg-white border-top p-3">
+						<div class="card-footer bg-body-tertiary border-top p-3">
 								<form asp-action="SendMessage" method="post" enctype="multipart/form-data">
 										@Html.AntiForgeryToken()
 										<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
