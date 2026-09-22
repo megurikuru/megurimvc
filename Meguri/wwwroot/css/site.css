@@ -1,8 +1,89 @@
 ﻿body {
-    padding-top: 72px;
     padding-bottom: 20px;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Hiragino Sans", "Noto Sans CJK JP", sans-serif;
     color: var(--bs-body-color);
+}
+
+/* ナビゲーション：デスクトップでは画面上部に固定 */
+@media (min-width: 992px) {
+    body {
+        padding-top: 72px;
+    }
+
+    .site-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+    }
+
+    .site-navbar-collapse {
+        display: flex;
+        flex-basis: auto;
+        flex-grow: 1;
+        align-items: center;
+    }
+}
+
+/* ナビゲーション：スマホではタイル状メニューを常時表示（ハンバーガーメニューにしない） */
+@media (max-width: 991.98px) {
+    .site-navbar {
+        position: static;
+    }
+
+    .site-navbar-collapse {
+        width: 100%;
+    }
+
+    .tile-nav {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .tile-nav .nav-item {
+        display: flex;
+        margin: 0 !important;
+    }
+
+    .tile-nav .nav-item form.d-inline {
+        display: flex;
+        width: 100%;
+    }
+
+    .tile-nav .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 64px;
+        padding: 0.5rem 0.35rem;
+        border-radius: 0.5rem;
+        background-color: var(--bs-tertiary-bg);
+        color: var(--bs-body-color);
+        font-size: 0.8rem;
+        line-height: 1.2;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-decoration: none;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    .tile-nav .nav-link:hover,
+    .tile-nav .nav-link:active {
+        background-color: var(--bs-secondary-bg);
+    }
+
+    .tile-nav .nav-link.btn {
+        border: none;
+    }
 }
 
 .body-content {
@@ -174,9 +255,6 @@
 
 /* モバイル向けレスポンシブ微調整 */
 @media screen and (max-width: 768px) {
-    body {
-        padding-top: 64px;
-    }
     .image-grid {
         grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
         gap: 0.5rem;
