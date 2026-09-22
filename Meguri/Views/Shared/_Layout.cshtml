@@ -33,16 +33,12 @@
 	</environment>
 </head>
 <body class="bg-body">
-	<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top shadow-sm">
+	<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm site-navbar">
 		<div class="container">
 			<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand fw-bold">meguri</a>
 
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="@SharedLocalizer["Nav_ToggleNavigation"]">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-
-			<div class="collapse navbar-collapse" id="mainNavbar">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+			<div class="site-navbar-collapse" id="mainNavbar">
+				<ul class="navbar-nav tile-nav me-auto mb-2 mb-lg-0">
 					@* ホーム *@
 					<li class="nav-item">
 						<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Nav_Home"]</a>
@@ -63,15 +59,13 @@
 					<li class="nav-item">
 						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="1">@SharedLocalizer["Nav_Public"]</a>
 					</li>
-					@* メッセージ *@
-					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Message_Title"]</a>
-					</li>
-				</ul>
-				<div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2">
-					@await Html.PartialAsync("_LoginPartial")
-				</div>
-			</div>
+						@* メッセージ *@
+							<li class="nav-item">
+								<a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Message_Title"]</a>
+							</li>
+							@await Html.PartialAsync("_LoginPartial")
+						</ul>
+					</div>
 		</div>
 	</nav>
 	<main class="container body-content my-4">
