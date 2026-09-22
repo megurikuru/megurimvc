@@ -429,9 +429,6 @@
   <data name="Account_Field_ConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>
   </data>
-  <data name="Account_Field_DateOfBirth" xml:space="preserve">
-    <value>Date of birth</value>
-  </data>
   <data name="Account_Field_RememberMe" xml:space="preserve">
     <value>Remember me?</value>
   </data>
@@ -1005,7 +1002,10 @@
   <data name="Manage_Options_Updated" xml:space="preserve">
     <value>Your options have been updated.</value>
   </data>
-  <data name="Public_Title" xml:space="preserve">
+  <data name="Account_Field_DateOfBirth" xml:space="preserve">
+    <value>Date of birth</value>
+  </data>
+  <data name="Nav_Public" xml:space="preserve">
     <value>Public</value>
   </data>
 </root>
