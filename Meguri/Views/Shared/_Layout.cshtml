@@ -43,21 +43,27 @@
 
 			<div class="collapse navbar-collapse" id="mainNavbar">
 				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					@* ホーム *@
 					<li class="nav-item">
 						<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Nav_Home"]</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="1">@SharedLocalizer["Public_Title"]</a>
-					</li>
+					@* 界隈一覧 *@
 					<li class="nav-item">
 						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Fandom_Title"]</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="4">@SharedLocalizer["Nav_Illustrations"]</a>
-					</li>
+					@* タグ一覧 *@
 					<li class="nav-item">
 						<a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">@SharedLocalizer["Tag_ExistingTags"]</a>
 					</li>
+					@* イラスト界隈 *@
+					<li class="nav-item">
+						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="4">@SharedLocalizer["Nav_Illustrations"]</a>
+					</li>
+					@* 公開界隈 *@
+					<li class="nav-item">
+						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="1">@SharedLocalizer["Nav_Public"]</a>
+					</li>
+					@* メッセージ *@
 					<li class="nav-item">
 						<a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Message_Title"]</a>
 					</li>
