@@ -21,16 +21,28 @@ namespace Meguri.Controllers {
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int? skip) {
+        public async Task<IActionResult> Index(int? fandomId, string? search, int? skip) {
             const int pageSize = 40;
             var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
 
-            var totalCount = await _context.Posts.CountAsync();
+            var query = _context.Posts.AsQueryable();
+
+            if (fandomId.HasValue) {
+                query = query.Where(p => p.FandomId == fandomId.Value);
+                ViewBag.CurrentFandom = await _context.Fandoms.FindAsync(fandomId.Value);
+            }
+
+            if (!string.IsNullOrEmpty(search)) {
+                query = query.Where(p => p.Name.Contains(search) || p.Text.Contains(search));
+                ViewBag.CurrentSearch = search;
+            }
+
+            var totalCount = await query.CountAsync();
             if (resolvedSkip >= totalCount) {
                 resolvedSkip = Math.Max(0, totalCount - pageSize);
             }
 
-            var recentPosts = await _context.Posts
+            var recentPosts = await query
                 .Include(p => p.User)
                 .Include(p => p.Fandom)
                 .Include(p => p.PostImages).ThenInclude(pi => pi.Image)
@@ -48,6 +60,7 @@ namespace Meguri.Controllers {
 
             ViewBag.RecentPosts = recentPosts;
             ViewBag.TopFandoms = fandoms;
+            ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
             ViewBag.PostsPageSize = pageSize;
             ViewBag.PostsTotalCount = totalCount;
             ViewBag.PostsSkip = resolvedSkip;
