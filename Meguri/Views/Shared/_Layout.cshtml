@@ -46,11 +46,7 @@
 					</li>
 					@* 界隈一覧 *@
 					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Fandom_Title"]</a>
-					</li>
-					@* タグ一覧 *@
-					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">@SharedLocalizer["Tag_ExistingTags"]</a>
+						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Nav_Fandom"]</a>
 					</li>
 					@* イラスト界隈 *@
 					<li class="nav-item">
@@ -60,13 +56,18 @@
 					<li class="nav-item">
 						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="1">@SharedLocalizer["Nav_Public"]</a>
 					</li>
-						@* メッセージ *@
-							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Message_Title"]</a>
-							</li>
-							@await Html.PartialAsync("_LoginPartial")
-						</ul>
-					</div>
+					@* タグ一覧 *@
+					<li class="nav-item">
+						<a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">@SharedLocalizer["Nav_Tags"]</a>
+					</li>
+					@* メッセージ *@
+					<li class="nav-item">
+						<a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Nav_Messages"]</a>
+					</li>
+					@* ログイン *@
+					@await Html.PartialAsync("_LoginPartial")
+				</ul>
+			</div>
 		</div>
 	</nav>
 	<main class="container body-content my-4">

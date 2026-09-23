@@ -918,9 +918,6 @@
   <data name="Tag_AddRelated" xml:space="preserve">
     <value>Add Related Concept</value>
   </data>
-  <data name="Tag_ExistingTags" xml:space="preserve">
-    <value>Tag List</value>
-  </data>
   <data name="Tag_SearchPlaceholder" xml:space="preserve">
     <value>Search or add tags...</value>
   </data>
@@ -1007,5 +1004,21 @@
   </data>
   <data name="Nav_Public" xml:space="preserve">
     <value>Public</value>
+  </data>
+  <data name="Nav_Fandom" xml:space="preserve">
+    <value>Fandoms</value>
+    <comment>界隈一覧</comment>
+  </data>
+  <data name="Nav_Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="Nav_Illustrations_LG" xml:space="preserve">
+    <value>Illustrations</value>
+  </data>
+  <data name="Nav_Public_LG" xml:space="preserve">
+    <value>Public</value>
+  </data>
+  <data name="Nav_Tags_LG" xml:space="preserve">
+    <value>Tags</value>
   </data>
 </root>
