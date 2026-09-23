@@ -766,7 +766,7 @@
     <value>投稿: {0}件</value>
   </data>
   <data name="Fandom_CascadeNote" xml:space="preserve">
-    <value>※親の界隈に参加すると、配下の子界隈にも自動的に参加します。</value>
+    <value>※親の界隈に参加すると、子供の界隈にも自動的に参加します。</value>
   </data>
   <data name="Fandom_CreateNew" xml:space="preserve">
     <value>新しい界隈を作成</value>
@@ -1017,5 +1017,8 @@
   </data>
   <data name="Nav_Public_LG" xml:space="preserve">
     <value>公開界隈</value>
+  </data>
+  <data name="Fandom_Posts" xml:space="preserve">
+    <value>界隈の投稿</value>
   </data>
 </root>
