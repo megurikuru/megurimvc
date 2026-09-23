@@ -1018,4 +1018,7 @@
   <data name="Nav_Public_LG" xml:space="preserve">
     <value>Public</value>
   </data>
+  <data name="Fandom_Posts" xml:space="preserve">
+    <value>Fandom posts</value>
+  </data>
 </root>
