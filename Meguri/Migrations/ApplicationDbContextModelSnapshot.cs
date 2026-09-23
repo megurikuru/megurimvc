@@ -754,6 +754,8 @@ namespace Meguri.Migrations
 
                     b.HasIndex("TagConceptId");
 
+                    b.HasIndex("TagText");
+
                     b.ToTable("Tags");
                 });
 

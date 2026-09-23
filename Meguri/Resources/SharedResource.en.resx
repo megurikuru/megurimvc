@@ -717,6 +717,15 @@
   <data name="Common_NoItems" xml:space="preserve">
     <value>No items found.</value>
   </data>
+  <data name="Post_NoPostsFound" xml:space="preserve">
+    <value>No matching posts found.</value>
+  </data>
+  <data name="Image_NoImagesFound" xml:space="preserve">
+    <value>No matching images found.</value>
+  </data>
+  <data name="Common_NothingFound" xml:space="preserve">
+    <value>Nothing found.</value>
+  </data>
   <data name="Common_All" xml:space="preserve">
     <value>All</value>
   </data>
@@ -1020,5 +1029,8 @@
   </data>
   <data name="Fandom_Posts" xml:space="preserve">
     <value>Fandom posts</value>
+  </data>
+  <data name="Common_Reset" xml:space="preserve">
+    <value>Reset</value>
   </data>
 </root>
