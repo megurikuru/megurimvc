@@ -8,16 +8,19 @@
 <div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
 		<div class="card-body p-4">
 				<!-- パンくず / 親界隈 -->
-				@if (Model.ParentFandom != null) {
-						<nav aria-label="breadcrumb" class="mb-2">
-								<ol class="breadcrumb mb-0">
-										<li class="breadcrumb-item"><a asp-action="Index">@SharedLocalizer["Fandom_Title"]</a></li>
+				<nav aria-label="breadcrumb" class="mb-2">
+						<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item"><a asp-action="Index">@SharedLocalizer["Fandom_Title"]</a></li>
+								@if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
+										@foreach (var ancestor in ancestors) {
+												<li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@ancestor.Id">@ancestor.Name</a></li>
+										}
+								} else if (Model.ParentFandom != null) {
 										<li class="breadcrumb-item"><a asp-action="Details" asp-route-id="@Model.ParentFandom.Id">@Model.ParentFandom.Name</a></li>
-										<li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
-								</ol>
-						</nav>
-				}
-
+								}
+								<li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+						</ol>
+				</nav>
 				<div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
 						<div>
 								<h2 class="fw-bold mb-1">🏛️ @Model.Name</h2>
@@ -36,8 +39,7 @@
 														@SharedLocalizer["Fandom_Leave"]
 												</button>
 										</form>
-								}
-								else {
+								} else {
 										<form asp-action="Join" asp-route-id="@Model.Id" method="post">
 												@Html.AntiForgeryToken()
 												<button type="submit" class="btn btn-primary">
@@ -169,8 +171,7 @@
 						<div class="card-body">
 								@if (!Model.FandomUsers.Any()) {
 										<p class="text-body-secondary small mb-0">まだ参加メンバーはいません。</p>
-								}
-								else {
+								} else {
 										<div class="d-flex flex-wrap gap-2">
 												@foreach (var fu in Model.FandomUsers.Take(20)) {
 														<span class="badge bg-body-secondary border p-2">

@@ -27,13 +27,19 @@ namespace Meguri.Data {
                 new Fandom { Id = 7, Name = "コスプレ", ParentFandomId = null },
                 new Fandom { Id = 8, Name = "車", ParentFandomId = null },
                 new Fandom { Id = 9, Name = "国産車", ParentFandomId = 8 },
-                new Fandom { Id = 10, Name = "輸入車", ParentFandomId = 8 },
-                new Fandom { Id = 11, Name = "漫画・アニメ", ParentFandomId = null },
-                new Fandom { Id = 12, Name = "漫画", ParentFandomId = 11 },
-                new Fandom { Id = 13, Name = "アニメ", ParentFandomId = 11 },
-                new Fandom { Id = 14, Name = "ゲーム", ParentFandomId = null },
-                new Fandom { Id = 15, Name = "プログラミング", ParentFandomId = null },
-                new Fandom { Id = 16, Name = "運営", ParentFandomId = null }
+                new Fandom { Id = 10, Name = "トヨタ", ParentFandomId = 9 },
+                new Fandom { Id = 11, Name = "ホンダ", ParentFandomId = 9 },
+                new Fandom { Id = 12, Name = "スバル", ParentFandomId = 9 },
+                new Fandom { Id = 13, Name = "日産", ParentFandomId = 9 },
+                new Fandom { Id = 14, Name = "スズキ", ParentFandomId = 9 },
+                new Fandom { Id = 15, Name = "ダイハツ", ParentFandomId = 9 },
+                new Fandom { Id = 16, Name = "輸入車", ParentFandomId = 8 },
+                new Fandom { Id = 17, Name = "漫画・アニメ", ParentFandomId = null },
+                new Fandom { Id = 18, Name = "漫画", ParentFandomId = 17 },
+                new Fandom { Id = 19, Name = "アニメ", ParentFandomId = 17 },
+                new Fandom { Id = 20, Name = "ゲーム", ParentFandomId = null },
+                new Fandom { Id = 21, Name = "プログラミング", ParentFandomId = null },
+                new Fandom { Id = 22, Name = "運営", ParentFandomId = null }
             };
 
             foreach (var fandom in initialFandoms) {

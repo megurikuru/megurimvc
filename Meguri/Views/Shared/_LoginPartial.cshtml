@@ -9,15 +9,14 @@
 
 @if (SignInManager.IsSignedIn(User)) {
 		<li class="nav-item ms-lg-auto">
-				<a class="nav-link" asp-area="" asp-controller="Manage" asp-action="Index" title="@SharedLocalizer["Auth_ManageTitle"]">@SharedLocalizer["Auth_ManageTitle"]</a>
+				<a class="nav-link ps-lg-5" asp-area="" asp-controller="Manage" asp-action="Index" title="@SharedLocalizer["Auth_ManageTitle"]">@SharedLocalizer["Auth_ManageTitle"]</a>
 		</li>
 		<li class="nav-item">
 				<form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="d-inline">
-						<button type="submit" class="btn btn-link nav-link">@SharedLocalizer["Auth_Logout"]</button>
+						<button type="submit" class="btn btn-link nav-link px-lg-4">@SharedLocalizer["Auth_Logout"]</button>
 				</form>
 		</li>
-}
-else {
-		<li class="nav-item ms-lg-auto"><a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">@SharedLocalizer["Auth_Register"]</a></li>
-		<li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">@SharedLocalizer["Auth_Login"]</a></li>
+} else {
+		<li class="nav-item ms-lg-auto"><a class="nav-link ps-lg-5" asp-area="" asp-controller="Account" asp-action="Register">@SharedLocalizer["Auth_Register"]</a></li>
+		<li class="nav-item"><a class="nav-link px-lg-4" asp-area="" asp-controller="Account" asp-action="Login">@SharedLocalizer["Auth_Login"]</a></li>
 }
