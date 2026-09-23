@@ -93,6 +93,20 @@ namespace Meguri.Controllers {
                 .Take(pageSize)
                 .ToListAsync();
 
+            // 多階層パンくず用：最上位から直近の親までの祖先リストを取得
+            var ancestors = new List<Fandom>();
+            var current = fandom.ParentFandom;
+            var visited = new HashSet<int> { fandom.Id };
+
+            while (current != null && visited.Add(current.Id)) {
+                ancestors.Insert(0, current);
+                if (current.ParentFandomId == null) break;
+                current = await _context.Fandoms
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(f => f.Id == current.ParentFandomId.Value);
+            }
+
+            ViewBag.Ancestors = ancestors;
             ViewBag.IsJoined = isJoined;
             ViewBag.FandomPosts = posts;
             ViewBag.FandomPostsPageSize = pageSize;

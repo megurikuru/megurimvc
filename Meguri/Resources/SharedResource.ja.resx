@@ -1010,15 +1010,12 @@
     <comment>界隈一覧</comment>
   </data>
   <data name="Nav_Tags" xml:space="preserve">
-    <value>タグ</value>
+    <value>タグ一覧</value>
   </data>
   <data name="Nav_Illustrations_LG" xml:space="preserve">
     <value>イラスト界隈</value>
   </data>
   <data name="Nav_Public_LG" xml:space="preserve">
     <value>公開界隈</value>
-  </data>
-  <data name="Nav_Tags_LG" xml:space="preserve">
-    <value>タグ一覧</value>
   </data>
 </root>

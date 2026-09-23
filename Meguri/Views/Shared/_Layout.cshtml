@@ -35,34 +35,32 @@
 <body class="bg-body">
 	<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm site-navbar">
 		<div class="container">
-			<div>
-				<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand fw-bold">meguri</a>
-			</div>
+			<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand fw-bold mx-auto ms-lg-0 me-lg-3">meguri</a>
 			<div class="site-navbar-collapse" id="mainNavbar">
-				<ul class="navbar-nav tile-nav me-auto mb-2 mb-lg-0">
+				<ul class="navbar-nav tile-nav mx-auto mb-2 mb-lg-0">
 					@* ホーム *@
 					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Nav_Home"]</a>
+						<a class="nav-link px-lg-4" asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Nav_Home"]</a>
 					</li>
 					@* 界隈一覧 *@
 					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Nav_Fandom"]</a>
+						<a class="nav-link px-lg-4" asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Nav_Fandom"]</a>
 					</li>
 					@* イラスト界隈 *@
 					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="4">@SharedLocalizer["Nav_Illustrations"]</a>
+						<a class="nav-link px-lg-4" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="4">@SharedLocalizer["Nav_Illustrations"]</a>
 					</li>
-					@* 公開界隈 *@
+					@* つぶやき *@
 					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="1">@SharedLocalizer["Nav_Public"]</a>
+						<a class="nav-link px-lg-4" asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="2">@SharedLocalizer["Nav_Murmurs"]</a>
 					</li>
 					@* タグ一覧 *@
 					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Tag" asp-action="Index">@SharedLocalizer["Nav_Tags"]</a>
+						<a class="nav-link px-lg-4" asp-area="" asp-controller="Tag" asp-action="Index">@SharedLocalizer["Nav_Tags"]</a>
 					</li>
 					@* メッセージ *@
 					<li class="nav-item">
-						<a class="nav-link" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Nav_Messages"]</a>
+						<a class="nav-link px-lg-4" asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Nav_Messages"]</a>
 					</li>
 					@* ログイン *@
 					@await Html.PartialAsync("_LoginPartial")
