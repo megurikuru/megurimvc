@@ -142,7 +142,7 @@
     <value>メッセージ</value>
   </data>
   <data name="Nav_Illustrations" xml:space="preserve">
-    <value>イラスト界隈</value>
+    <value>イラスト</value>
   </data>
   <data name="Nav_Manga" xml:space="preserve">
     <value>漫画</value>
@@ -163,7 +163,7 @@
     <value>{0} さん、こんにちは！</value>
   </data>
   <data name="Auth_ManageTitle" xml:space="preserve">
-    <value>アカウント管理</value>
+    <value>アカウント</value>
   </data>
   <data name="Auth_Logout" xml:space="preserve">
     <value>ログアウト</value>
@@ -918,9 +918,6 @@
   <data name="Tag_AddRelated" xml:space="preserve">
     <value>関連語を追加</value>
   </data>
-  <data name="Tag_ExistingTags" xml:space="preserve">
-    <value>タグ一覧</value>
-  </data>
   <data name="Tag_SearchPlaceholder" xml:space="preserve">
     <value>タグを検索または新規登録...</value>
   </data>
@@ -1006,6 +1003,22 @@
     <value>生年月日</value>
   </data>
   <data name="Nav_Public" xml:space="preserve">
+    <value>公開</value>
+  </data>
+  <data name="Nav_Fandom" xml:space="preserve">
+    <value>界隈一覧</value>
+    <comment>界隈一覧</comment>
+  </data>
+  <data name="Nav_Tags" xml:space="preserve">
+    <value>タグ</value>
+  </data>
+  <data name="Nav_Illustrations_LG" xml:space="preserve">
+    <value>イラスト界隈</value>
+  </data>
+  <data name="Nav_Public_LG" xml:space="preserve">
     <value>公開界隈</value>
+  </data>
+  <data name="Nav_Tags_LG" xml:space="preserve">
+    <value>タグ一覧</value>
   </data>
 </root>
