@@ -717,6 +717,15 @@
   <data name="Common_NoItems" xml:space="preserve">
     <value>データがありません。</value>
   </data>
+  <data name="Post_NoPostsFound" xml:space="preserve">
+    <value>該当する投稿はありません。</value>
+  </data>
+  <data name="Image_NoImagesFound" xml:space="preserve">
+    <value>該当する画像はありません。</value>
+  </data>
+  <data name="Common_NothingFound" xml:space="preserve">
+    <value>何も見つかりませんでした。</value>
+  </data>
   <data name="Common_All" xml:space="preserve">
     <value>すべて</value>
   </data>
@@ -1020,5 +1029,8 @@
   </data>
   <data name="Fandom_Posts" xml:space="preserve">
     <value>界隈の投稿</value>
+  </data>
+  <data name="Common_Reset" xml:space="preserve">
+    <value>リセット</value>
   </data>
 </root>

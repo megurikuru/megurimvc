@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Meguri.Models {
 
     [Table("Tags")]
+    [Index(nameof(TagText))]
     public class Tag {
         public long Id { get; set; }
         public long TagConceptId { get; set; }
