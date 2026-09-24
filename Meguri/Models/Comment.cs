@@ -11,8 +11,8 @@ namespace Meguri.Models {
     [Index(nameof(DocId))]
     [Index(nameof(ImageId))]
     [Index(nameof(ParentId))]
-    [Index(nameof(Created))]
-    [Index(nameof(DocId), nameof(Created))]
+    [Index(nameof(CreatedAt))]
+    [Index(nameof(DocId), nameof(CreatedAt))]
     [Index(nameof(DocId), nameof(Number), IsUnique = true)]
     public class Comment {
         public long Id { get; set; }
@@ -41,8 +41,8 @@ namespace Meguri.Models {
         public Comment? Parent { get; set; }
         public ICollection<Comment> Replies { get; set; } = new List<Comment>();
 
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         // --- 順序付き添付画像 ---
         public ICollection<CommentImage> CommentImages { get; set; } = new List<CommentImage>();

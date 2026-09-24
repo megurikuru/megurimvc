@@ -55,7 +55,7 @@ namespace Meguri.Controllers {
                 var reaction = new Reaction {
                     UserId = userId,
                     Type = type,
-                    Created = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow,
                     PostId = targetType == "Post" ? targetId : null,
                     ImageId = targetType == "Image" ? targetId : null,
                     CommentId = targetType == "Comment" ? targetId : null,

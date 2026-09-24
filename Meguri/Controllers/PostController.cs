@@ -66,7 +66,7 @@ namespace Meguri.Controllers {
 
             var posts = await query
                 .OrderByDescending(p => p.IsPinned)
-                .ThenByDescending(p => p.LastCommentedAt ?? p.Created)
+                .ThenByDescending(p => p.LastCommentedAt ?? p.CreatedAt)
                 .Skip(resolvedSkip)
                 .Take(pageSize)
                 .ToListAsync();
@@ -136,8 +136,8 @@ namespace Meguri.Controllers {
                 IsSexual = model.IsSexual,
                 IsViolence = model.IsViolence,
                 IsPublic = model.IsPublic,
-                Created = DateTime.UtcNow,
-                Updated = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             // 画像の保存と添付

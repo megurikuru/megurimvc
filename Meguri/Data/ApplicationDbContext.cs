@@ -51,8 +51,8 @@ namespace Meguri.Data {
                 }
 
                 var entityType = entry.Entity.GetType();
-                var createdProperty = entityType.GetProperty("Created");
-                var updatedProperty = entityType.GetProperty("Updated");
+                var createdProperty = entityType.GetProperty("CreatedAt");
+                var updatedProperty = entityType.GetProperty("UpdatedAt");
 
                 if (entry.State == EntityState.Added) {
                     if (createdProperty != null && createdProperty.PropertyType == typeof(DateTime)) {

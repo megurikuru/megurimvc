@@ -43,6 +43,15 @@ namespace Meguri.Data {
             };
 
             foreach (var fandom in initialFandoms) {
+                // 親側を先に確定させてから子を処理する必要があるため、1件ごとに保存する
+                if (fandom.ParentFandomId.HasValue) {
+                    var parentExists = await context.Set<Fandom>().AnyAsync(f => f.Id == fandom.ParentFandomId.Value);
+                    if (!parentExists) {
+                        // 親がまだ存在しない場合はデータ不整合なのでスキップする
+                        continue;
+                    }
+                }
+
                 var existing = await context.Set<Fandom>().FirstOrDefaultAsync(f => f.Id == fandom.Id || (f.Name == fandom.Name && f.ParentFandomId == fandom.ParentFandomId));
                 if (existing == null) {
                     await context.Set<Fandom>().AddAsync(fandom);
@@ -50,6 +59,8 @@ namespace Meguri.Data {
                     existing.Name = fandom.Name;
                     existing.ParentFandomId = fandom.ParentFandomId;
                 }
+
+                await context.SaveChangesAsync();
             }
 
             // 初期登録するTag一覧

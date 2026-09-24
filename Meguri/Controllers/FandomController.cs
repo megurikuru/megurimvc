@@ -88,7 +88,7 @@ namespace Meguri.Controllers {
             }
 
             var posts = await postsQuery
-                .OrderByDescending(p => p.Created)
+                .OrderByDescending(p => p.CreatedAt)
                 .Skip(resolvedSkip)
                 .Take(pageSize)
                 .ToListAsync();
@@ -203,6 +203,11 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Create([Bind("Name,ParentFandomId")] Fandom fandom) {
             if (string.IsNullOrWhiteSpace(fandom.Name)) {
                 ModelState.AddModelError("Name", "界隈名を入力してください。");
+            }
+
+            if (fandom.ParentFandomId.HasValue &&
+                !await _context.Fandoms.AnyAsync(f => f.Id == fandom.ParentFandomId.Value)) {
+                ModelState.AddModelError("ParentFandomId", "指定された親界隈が存在しません。");
             }
 
             if (ModelState.IsValid) {

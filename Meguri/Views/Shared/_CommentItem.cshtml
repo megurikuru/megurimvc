@@ -13,7 +13,7 @@
 						<div>
 								<span class="fw-bold text-primary small">>>@Model.Comment.Number</span>
 								<span class="fw-semibold small ms-1">👤 @(Model.Comment.User?.UserName ?? "User")</span>
-								<span class="text-body-secondary small ms-2">@Model.Comment.Created.ToString("yyyy/MM/dd HH:mm")</span>
+								<span class="text-body-secondary small ms-2">@Model.Comment.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
 						</div>
 
 						<div class="d-flex align-items-center gap-1">
@@ -61,7 +61,7 @@
 <!-- 子返信（Replies）の再帰表示 -->
 @if (Model.Comment.Replies != null && Model.Comment.Replies.Any()) {
 		<div class="d-flex flex-column gap-2 mt-2">
-				@foreach (var reply in Model.Comment.Replies.OrderBy(r => r.Created)) {
+				@foreach (var reply in Model.Comment.Replies.OrderBy(r => r.CreatedAt)) {
 						@await Html.PartialAsync("_CommentItem", (reply, Model.TargetType, Model.TargetId, Model.Depth + 1))
 				}
 		</div>
