@@ -106,7 +106,7 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long?>("DocId")
@@ -128,7 +128,7 @@ namespace Meguri.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Updated")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
@@ -137,7 +137,7 @@ namespace Meguri.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("DocId");
 
@@ -147,7 +147,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("DocId", "Created");
+                    b.HasIndex("DocId", "CreatedAt");
 
                     b.HasIndex("DocId", "Number")
                         .IsUnique();
@@ -190,7 +190,7 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsGroup")
@@ -200,14 +200,14 @@ namespace Meguri.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Updated")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("CreatedAt");
 
-                    b.HasIndex("Updated");
+                    b.HasIndex("UpdatedAt");
 
                     b.ToTable("Conversations");
                 });
@@ -382,7 +382,7 @@ namespace Meguri.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -412,7 +412,7 @@ namespace Meguri.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Updated")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
@@ -423,13 +423,13 @@ namespace Meguri.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("IsPublic");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("IsPublic", "Created");
+                    b.HasIndex("IsPublic", "CreatedAt");
 
                     b.ToTable("Images");
                 });
@@ -472,7 +472,7 @@ namespace Meguri.Migrations
                     b.Property<long>("ConversationId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SenderId")
@@ -483,18 +483,18 @@ namespace Meguri.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Updated")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ConversationId");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("SenderId");
 
-                    b.HasIndex("ConversationId", "Created");
+                    b.HasIndex("ConversationId", "CreatedAt");
 
                     b.ToTable("Messages");
                 });
@@ -537,7 +537,7 @@ namespace Meguri.Migrations
                     b.Property<int>("CommentCount")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("FandomId")
@@ -569,7 +569,7 @@ namespace Meguri.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Updated")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserId")
@@ -581,7 +581,7 @@ namespace Meguri.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("FandomId");
 
@@ -591,11 +591,11 @@ namespace Meguri.Migrations
 
                     b.HasIndex("LastCommentedAt");
 
-                    b.HasIndex("Updated");
+                    b.HasIndex("UpdatedAt");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("FandomId", "Created");
+                    b.HasIndex("FandomId", "CreatedAt");
 
                     b.HasIndex("FandomId", "LastCommentedAt");
 
@@ -667,7 +667,7 @@ namespace Meguri.Migrations
                     b.Property<long?>("CommentId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long?>("ImageId")
@@ -690,7 +690,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("CommentId");
 
-                    b.HasIndex("Created");
+                    b.HasIndex("CreatedAt");
 
                     b.HasIndex("ImageId");
 
@@ -820,7 +820,7 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("ImageId")

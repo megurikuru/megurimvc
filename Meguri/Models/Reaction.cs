@@ -11,7 +11,7 @@ namespace Meguri.Models {
     [Index(nameof(ImageId))]
     [Index(nameof(MessageId))]
     [Index(nameof(Type))]
-    [Index(nameof(Created))]
+    [Index(nameof(CreatedAt))]
     [Index(nameof(UserId), nameof(PostId), nameof(Type), IsUnique = true)]
     [Index(nameof(UserId), nameof(CommentId), nameof(Type), IsUnique = true)]
     [Index(nameof(UserId), nameof(ImageId), nameof(Type), IsUnique = true)]
@@ -42,7 +42,7 @@ namespace Meguri.Models {
         public long? MessageId { get; set; }
         public Message? Message { get; set; }
 
-        public DateTime Created { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 
 }

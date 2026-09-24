@@ -91,7 +91,7 @@ namespace Meguri.Controllers {
                 .Include(p => p.PostImages).ThenInclude(pi => pi.Image)
                 .Include(p => p.PostTags).ThenInclude(pt => pt.TagConcept).ThenInclude(tc => tc.Tags)
                 .Include(p => p.Reactions)
-                .OrderByDescending(p => p.Created)
+                .OrderByDescending(p => p.CreatedAt)
                 .Skip(resolvedSkip)
                 .Take(pageSize)
                 .ToListAsync();
@@ -105,7 +105,7 @@ namespace Meguri.Controllers {
                 ? await imageQuery
                     .Include(i => i.User)
                     .Include(i => i.ImageTags).ThenInclude(it => it.TagConcept).ThenInclude(tc => tc.Tags)
-                    .OrderByDescending(i => i.Created)
+                    .OrderByDescending(i => i.CreatedAt)
                     .Skip(resolvedImageSkip)
                     .Take(pageSize)
                     .ToListAsync()

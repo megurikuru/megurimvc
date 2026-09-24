@@ -116,7 +116,7 @@ namespace Meguri.Controllers {
             }
 
             var images = await query
-                .OrderByDescending(i => i.Created)
+                .OrderByDescending(i => i.CreatedAt)
                 .Skip(resolvedSkip)
                 .Take(pageSize)
                 .ToListAsync();

@@ -61,8 +61,8 @@ namespace Meguri.Controllers {
                 ParentId = parentId,
                 Number = nextNumber,
                 Text = text ?? string.Empty,
-                Created = DateTime.UtcNow,
-                Updated = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false
             };
 

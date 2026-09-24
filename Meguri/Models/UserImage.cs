@@ -17,7 +17,7 @@ namespace Meguri.Models {
         public Image Image { get; set; } = null!;
 
         /// ユーザーが画像を登録した日時
-        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 
 }

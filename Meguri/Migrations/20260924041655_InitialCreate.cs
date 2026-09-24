@@ -36,8 +36,8 @@ namespace Meguri.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "text", nullable: false),
                     IsGroup = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -137,7 +137,7 @@ namespace Meguri.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: true),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     Bio = table.Column<string>(type: "text", nullable: false),
                     ActiveAvatarImageId = table.Column<long>(type: "bigint", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -250,8 +250,8 @@ namespace Meguri.Migrations
                     IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     IsSexual = table.Column<bool>(type: "boolean", nullable: false),
                     IsViolence = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -273,8 +273,8 @@ namespace Meguri.Migrations
                     ConversationId = table.Column<long>(type: "bigint", nullable: false),
                     SenderId = table.Column<string>(type: "text", nullable: false),
                     Text = table.Column<string>(type: "text", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -300,19 +300,19 @@ namespace Meguri.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<string>(type: "text", nullable: false),
+                    FandomId = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Text = table.Column<string>(type: "text", nullable: false),
-                    FandomId = table.Column<int>(type: "integer", nullable: false),
+                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     IsSexual = table.Column<bool>(type: "boolean", nullable: false),
                     IsViolence = table.Column<bool>(type: "boolean", nullable: false),
-                    IsPublic = table.Column<bool>(type: "boolean", nullable: false),
                     IsPinned = table.Column<bool>(type: "boolean", nullable: false),
                     IsLocked = table.Column<bool>(type: "boolean", nullable: false),
                     CommentCount = table.Column<int>(type: "integer", nullable: false),
                     ViewCount = table.Column<int>(type: "integer", nullable: false),
-                    LastCommentedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastCommentedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -360,7 +360,7 @@ namespace Meguri.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     ImageId = table.Column<long>(type: "bigint", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -419,8 +419,8 @@ namespace Meguri.Migrations
                     DocId = table.Column<long>(type: "bigint", nullable: true),
                     ImageId = table.Column<long>(type: "bigint", nullable: true),
                     ParentId = table.Column<long>(type: "bigint", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -621,7 +621,7 @@ namespace Meguri.Migrations
                     CommentId = table.Column<long>(type: "bigint", nullable: true),
                     ImageId = table.Column<long>(type: "bigint", nullable: true),
                     MessageId = table.Column<long>(type: "bigint", nullable: true),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -734,9 +734,9 @@ namespace Meguri.Migrations
                 column: "ImageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_Created",
+                name: "IX_Comments_CreatedAt",
                 table: "Comments",
-                column: "Created");
+                column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_DocId",
@@ -744,9 +744,9 @@ namespace Meguri.Migrations
                 column: "DocId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_DocId_Created",
+                name: "IX_Comments_DocId_CreatedAt",
                 table: "Comments",
-                columns: new[] { "DocId", "Created" });
+                columns: new[] { "DocId", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_DocId_Number",
@@ -781,14 +781,14 @@ namespace Meguri.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conversations_Created",
+                name: "IX_Conversations_CreatedAt",
                 table: "Conversations",
-                column: "Created");
+                column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Conversations_Updated",
+                name: "IX_Conversations_UpdatedAt",
                 table: "Conversations",
-                column: "Updated");
+                column: "UpdatedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Fandoms_Name",
@@ -806,9 +806,9 @@ namespace Meguri.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_Created",
+                name: "IX_Images_CreatedAt",
                 table: "Images",
-                column: "Created");
+                column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_IsPublic",
@@ -816,9 +816,9 @@ namespace Meguri.Migrations
                 column: "IsPublic");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Images_IsPublic_Created",
+                name: "IX_Images_IsPublic_CreatedAt",
                 table: "Images",
-                columns: new[] { "IsPublic", "Created" });
+                columns: new[] { "IsPublic", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Images_UserId",
@@ -853,14 +853,14 @@ namespace Meguri.Migrations
                 column: "ConversationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ConversationId_Created",
+                name: "IX_Messages_ConversationId_CreatedAt",
                 table: "Messages",
-                columns: new[] { "ConversationId", "Created" });
+                columns: new[] { "ConversationId", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_Created",
+                name: "IX_Messages_CreatedAt",
                 table: "Messages",
-                column: "Created");
+                column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_SenderId",
@@ -879,9 +879,9 @@ namespace Meguri.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_Created",
+                name: "IX_Posts_CreatedAt",
                 table: "Posts",
-                column: "Created");
+                column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_FandomId",
@@ -889,9 +889,9 @@ namespace Meguri.Migrations
                 column: "FandomId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_FandomId_Created",
+                name: "IX_Posts_FandomId_CreatedAt",
                 table: "Posts",
-                columns: new[] { "FandomId", "Created" });
+                columns: new[] { "FandomId", "CreatedAt" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_FandomId_LastCommentedAt",
@@ -914,9 +914,9 @@ namespace Meguri.Migrations
                 column: "LastCommentedAt");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_Updated",
+                name: "IX_Posts_UpdatedAt",
                 table: "Posts",
-                column: "Updated");
+                column: "UpdatedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserId",
@@ -945,9 +945,9 @@ namespace Meguri.Migrations
                 columns: new[] { "CommentId", "Type" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reactions_Created",
+                name: "IX_Reactions_CreatedAt",
                 table: "Reactions",
-                column: "Created");
+                column: "CreatedAt");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reactions_ImageId",
@@ -1029,6 +1029,11 @@ namespace Meguri.Migrations
                 name: "IX_Tags_TagConceptId",
                 table: "Tags",
                 column: "TagConceptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tags_TagText",
+                table: "Tags",
+                column: "TagText");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserImages_ImageId",

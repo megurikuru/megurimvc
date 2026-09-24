@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Meguri.Models {
     [Table("Images")]
-    [Index(nameof(Created))]
+    [Index(nameof(CreatedAt))]
     [Index(nameof(IsPublic))]
-    [Index(nameof(IsPublic), nameof(Created))]
+    [Index(nameof(IsPublic), nameof(CreatedAt))]
     [Index(nameof(UserId))]
     public class Image { 
         public long Id { get; set; }
@@ -25,8 +25,8 @@ namespace Meguri.Models {
         public bool IsPublic { get; set; } = false;
         public bool IsSexual  { get; set; } = false;
         public bool IsViolence  { get; set; } = false;
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         // PostとImageは中間テーブルを介した多対多の関係
         public ICollection<PostImage> PostImages { get; set; } = new List<PostImage>();

@@ -53,7 +53,7 @@ namespace Meguri.Controllers {
                 var anchorStart = DateTime.SpecifyKind(date.Value.Date, DateTimeKind.Utc);
                 var anchorEnd = anchorStart.AddDays(1);
                 // 指定日より新しい会話の件数（一覧では上側に表示される）
-                var moreRecentCount = await baseQuery.CountAsync(c => c.Updated >= anchorEnd);
+                var moreRecentCount = await baseQuery.CountAsync(c => c.UpdatedAt >= anchorEnd);
                 resolvedSkip = Math.Max(0, moreRecentCount - halfWindow);
             } else {
                 resolvedSkip = 0;
@@ -68,14 +68,14 @@ namespace Meguri.Controllers {
             var conversations = await baseQuery
                 .Include(c => c.Members).ThenInclude(m => m.User)
                 .Include(c => c.Messages).ThenInclude(m => m.Sender)
-                .OrderByDescending(c => c.Updated)
+                .OrderByDescending(c => c.UpdatedAt)
                 .Skip(resolvedSkip)
                 .Take(pageSize)
                 .ToListAsync();
 
             var vmList = new List<ConversationItemViewModel>();
             foreach (var conv in conversations) {
-                var lastMsg = conv.Messages.OrderByDescending(m => m.Created).FirstOrDefault();
+                var lastMsg = conv.Messages.OrderByDescending(m => m.CreatedAt).FirstOrDefault();
                 string title = conv.Title;
                 if (!conv.IsGroup || string.IsNullOrEmpty(title)) {
                     var otherMember = conv.Members.FirstOrDefault(m => m.UserId != currentUserId);
@@ -87,7 +87,7 @@ namespace Meguri.Controllers {
                     Title = title,
                     IsGroup = conv.IsGroup,
                     LastMessageText = lastMsg?.Text ?? "(メッセージなし)",
-                    LastMessageTime = lastMsg?.Created ?? conv.Created,
+                    LastMessageTime = lastMsg?.CreatedAt ?? conv.CreatedAt,
                     MemberNames = conv.Members.Select(m => m.User?.UserName ?? "User").ToList()
                 });
             }
@@ -149,7 +149,7 @@ namespace Meguri.Controllers {
                 resolvedSkip = skip.Value;
             } else if (date.HasValue) {
                 var anchorUtc = DateTime.SpecifyKind(date.Value.Date, DateTimeKind.Utc);
-                var beforeCount = await baseQuery.CountAsync(m => m.Created < anchorUtc);
+                var beforeCount = await baseQuery.CountAsync(m => m.CreatedAt < anchorUtc);
                 resolvedSkip = Math.Max(0, beforeCount - halfWindow);
             } else {
                 resolvedSkip = Math.Max(0, totalCount - pageSize);
@@ -165,7 +165,7 @@ namespace Meguri.Controllers {
                 .Include(m => m.Sender)
                 .Include(m => m.MessageImages).ThenInclude(mi => mi.Image)
                 .Include(m => m.Reactions).ThenInclude(r => r.User)
-                .OrderBy(m => m.Created)
+                .OrderBy(m => m.CreatedAt)
                 .Skip(resolvedSkip)
                 .Take(pageSize)
                 .ToListAsync();
@@ -224,8 +224,8 @@ namespace Meguri.Controllers {
             var conv = new Conversation {
                 Title = model.IsGroup ? (model.Title ?? "グループチャット") : string.Empty,
                 IsGroup = model.IsGroup,
-                Created = DateTime.UtcNow,
-                Updated = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             conv.Members.Add(new ConversationMember { UserId = currentUserId, JoinedAt = DateTime.UtcNow });
@@ -267,8 +267,8 @@ namespace Meguri.Controllers {
                 ConversationId = conversationId,
                 SenderId = senderId,
                 Text = text ?? string.Empty,
-                Created = DateTime.UtcNow,
-                Updated = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             if (imageFiles != null && imageFiles.Count > 0) {
@@ -316,7 +316,7 @@ namespace Meguri.Controllers {
 
             var conv = await _context.Conversations.FindAsync(conversationId);
             if (conv != null) {
-                conv.Updated = DateTime.UtcNow;
+                conv.UpdatedAt = DateTime.UtcNow;
             }
 
             await _context.SaveChangesAsync();

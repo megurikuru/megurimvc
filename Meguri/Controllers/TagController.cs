@@ -81,7 +81,7 @@ namespace Meguri.Controllers {
                 .Where(pt => pt.TagConceptId == conceptId)
                 .Include(pt => pt.Post).ThenInclude(p => p.User)
                 .Include(pt => pt.Post).ThenInclude(p => p.PostImages)
-                .OrderByDescending(pt => pt.Post.Created);
+                .OrderByDescending(pt => pt.Post.CreatedAt);
 
             var postTagsTotalCount = await postTagsQuery.CountAsync();
             var resolvedPostSkip = postSkip.HasValue && postSkip.Value > 0 ? postSkip.Value : 0;
@@ -93,7 +93,7 @@ namespace Meguri.Controllers {
             var imageTagsQuery = _context.ImageTags
                 .Where(it => it.TagConceptId == conceptId)
                 .Include(it => it.Image)
-                .OrderByDescending(it => it.Image.Created);
+                .OrderByDescending(it => it.Image.CreatedAt);
 
             var imageTagsTotalCount = await imageTagsQuery.CountAsync();
             var resolvedImageSkip = imageSkip.HasValue && imageSkip.Value > 0 ? imageSkip.Value : 0;

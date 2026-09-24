@@ -9,8 +9,8 @@ namespace Meguri.Models {
     [Table("Messages")]
     [Index(nameof(ConversationId))]
     [Index(nameof(SenderId))]
-    [Index(nameof(Created))]
-    [Index(nameof(ConversationId), nameof(Created))]
+    [Index(nameof(CreatedAt))]
+    [Index(nameof(ConversationId), nameof(CreatedAt))]
     public class Message {
         public long Id { get; set; }
 
@@ -22,8 +22,8 @@ namespace Meguri.Models {
 
         public string Text { get; set; } = string.Empty;
 
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         // --- 順序付き添付画像 ---
         public ICollection<MessageImage> MessageImages { get; set; } = new List<MessageImage>();

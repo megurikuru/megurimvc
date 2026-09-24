@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace Meguri.Models {
 
     [Table("Conversations")]
-    [Index(nameof(Created))]
-    [Index(nameof(Updated))]
+    [Index(nameof(CreatedAt))]
+    [Index(nameof(UpdatedAt))]
     public class Conversation {
         public long Id { get; set; }
 
@@ -17,8 +17,8 @@ namespace Meguri.Models {
         /// 1対1 DMかグループチャットかの識別フラグ
         public bool IsGroup { get; set; } = false;
 
-        public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         // --- ナビゲーションプロパティ ---
         public ICollection<ConversationMember> Members { get; set; } = new List<ConversationMember>();
