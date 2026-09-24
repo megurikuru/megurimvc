@@ -1011,6 +1011,36 @@
   <data name="Account_Field_DateOfBirth" xml:space="preserve">
     <value>生年月日</value>
   </data>
+  <data name="Account_Field_DateOfBirth_Year" xml:space="preserve">
+    <value>生年月日(年)</value>
+  </data>
+  <data name="Account_Field_DateOfBirth_Month" xml:space="preserve">
+    <value>生年月日(月)</value>
+  </data>
+  <data name="Account_Field_DateOfBirth_Day" xml:space="preserve">
+    <value>生年月日(日)</value>
+  </data>
+  <data name="Account_Field_DateOfBirth_YearPlaceholder" xml:space="preserve">
+    <value>1990</value>
+  </data>
+  <data name="Account_Field_DateOfBirth_MonthPlaceholder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="Account_Field_DateOfBirth_DayPlaceholder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="Account_Field_DateOfBirth_YearUnit" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="Account_Field_DateOfBirth_MonthUnit" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="Account_Field_DateOfBirth_DayUnit" xml:space="preserve">
+    <value>日</value>
+  </data>
+  <data name="Validation_InvalidDate" xml:space="preserve">
+    <value>正しい日付を入力してください。</value>
+  </data>
   <data name="Nav_Public" xml:space="preserve">
     <value>公開</value>
   </data>

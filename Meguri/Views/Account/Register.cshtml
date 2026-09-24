@@ -32,9 +32,18 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="DateOfBirth" class="form-label">@SharedLocalizer["Account_Field_DateOfBirth"]</label>
-                <input asp-for="DateOfBirth" class="form-control" type="date" />
-                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                <label class="form-label">@SharedLocalizer["Account_Field_DateOfBirth"]</label>
+                <div class="d-flex align-items-center gap-2">
+                    <input asp-for="BirthYear" class="form-control text-end" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_YearPlaceholder"]" autocomplete="bday-year" />
+                    <span>@SharedLocalizer["Account_Field_DateOfBirth_YearUnit"]</span>
+                    <input asp-for="BirthMonth" class="form-control text-end" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_MonthPlaceholder"]" autocomplete="bday-month" />
+                    <span>@SharedLocalizer["Account_Field_DateOfBirth_MonthUnit"]</span>
+                    <input asp-for="BirthDay" class="form-control text-end" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_DayPlaceholder"]" autocomplete="bday-day" />
+                    <span>@SharedLocalizer["Account_Field_DateOfBirth_DayUnit"]</span>
+                </div>
+                <span asp-validation-for="BirthYear" class="text-danger"></span>
+                <span asp-validation-for="BirthMonth" class="text-danger"></span>
+                <span asp-validation-for="BirthDay" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-secondary">@SharedLocalizer["Account_Register_Button"]</button>
         </form>
