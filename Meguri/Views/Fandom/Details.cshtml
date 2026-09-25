@@ -23,11 +23,11 @@
 				</nav>
 				<div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
 						<div>
-								<h2 class="fw-bold mb-1">🏛️ @Model.Name</h2>
-								<div class="text-body-secondary small">
-										👥 @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
+								<h2 class="fw-bold mb-1">@Model.Name</h2>
+								<div class="text-body-secondary small icon-wrap">
+										<img src="~/icons/users.svg" class="lucide-icons me-2 icon-sm" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
 										&nbsp;|&nbsp;
-										📝 @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
+										<img src="~/icons/gallery-vertical-end.svg" class="lucide-icons me-2 icon-md" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
 								</div>
 						</div>
 
@@ -42,8 +42,8 @@
 								} else {
 										<form asp-action="Join" asp-route-id="@Model.Id" method="post">
 												@Html.AntiForgeryToken()
-												<button type="submit" class="btn btn-primary">
-														+ @SharedLocalizer["Fandom_Join"]
+												<button type="submit" class="btn btn btn-outline-primary d-flex align-items-center">
+														<img src="~/icons/plus.svg" class="lucide-icons me-2" /> @SharedLocalizer["Fandom_Join"]
 												</button>
 										</form>
 								}
