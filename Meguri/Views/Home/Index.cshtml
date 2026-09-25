@@ -154,16 +154,19 @@
 	<div class="col-lg-4">
 		<div class="card shadow-sm border-0 mb-4">
 			<div class="card-header bg-body-tertiary fw-bold d-flex justify-content-between align-items-center">
-				<span><img src="~/icons/loader-pinwheel.svg" class="me-2" /> @SharedLocalizer["Fandom_Title"]</span>
-				<a asp-controller="Fandom" asp-action="Index" class="btn btn-sm btn-link p-0">@SharedLocalizer["Common_All"]</a>
+				<div class="icon-wrap">
+						<img src="~/icons/loader-pinwheel.svg" class="lucide-icons me-2" /> 
+						<div>@SharedLocalizer["Fandom_Title"]</div>
+				</div>
+				<a asp-controller="Fandom" asp-action="Index" class="btn btn-sm btn-link p-0">@SharedLocalizer["Common_All"]</a>	
 			</div>
 			<div class="list-group list-group-flush">
 				@foreach (var f in topFandoms) {
 					<a asp-controller="Fandom" asp-action="Details" asp-route-id="@f.Id" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
 						<div>
-							<span class="fw-semibold">@f.Name</span>
+							<span class="fw-semibold me-2">@f.Name</span>
 							@if (f.ChildFandoms.Any()) {
-								<div class="small text-body-secondary">
+								<div class="small text-body-secondary icon-wrap">
 									@string.Join(", ", f.ChildFandoms.Select(c => c.Name))
 								</div>
 							}
@@ -175,7 +178,7 @@
 
 		<div class="card shadow-sm border-0 bg-body-tertiary">
 			<div class="card-body">
-				<h6 class="fw-bold">ℹ️ @SharedLocalizer["Fandom_Title"]の仕組み</h6>
+				<h6 class="fw-bold icon-wrap"><img src="~/icons/info.svg" class="lucide-icons me-2 icon-md" /> @SharedLocalizer["Fandom_Title"]の仕組み</h6>
 				<p class="small text-body-secondary mb-0">@SharedLocalizer["Fandom_CascadeNote"]</p>
 			</div>
 		</div>

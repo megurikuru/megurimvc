@@ -760,13 +760,13 @@
     <value>子界隈</value>
   </data>
   <data name="Fandom_Join" xml:space="preserve">
-    <value>参加する</value>
+    <value>入る</value>
   </data>
   <data name="Fandom_Joined" xml:space="preserve">
-    <value>参加中</value>
+    <value>入ってる</value>
   </data>
   <data name="Fandom_Leave" xml:space="preserve">
-    <value>脱退する</value>
+    <value>出る</value>
   </data>
   <data name="Fandom_MembersCount" xml:space="preserve">
     <value>メンバー: {0}人</value>
@@ -775,7 +775,7 @@
     <value>投稿: {0}件</value>
   </data>
   <data name="Fandom_CascadeNote" xml:space="preserve">
-    <value>※親の界隈に参加すると、子の界隈にも自動的に参加します。</value>
+    <value>※親の界隈に入ると子の界隈にもそのまま入れます。</value>
   </data>
   <data name="Fandom_CreateNew" xml:space="preserve">
     <value>新しい界隈を作成</value>
@@ -784,7 +784,7 @@
     <value>界隈を探す</value>
   </data>
   <data name="Fandom_MyFandoms" xml:space="preserve">
-    <value>参加中の界隈</value>
+    <value>入ってる界隈</value>
   </data>
   <data name="Post_Title" xml:space="preserve">
     <value>投稿</value>

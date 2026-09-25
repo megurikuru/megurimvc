@@ -1,4 +1,29 @@
-﻿body {
+﻿/* ダークモードの時だけアイコンを反転して白くする */
+[data-bs-theme="dark"] .lucide-icons {
+  filter: invert(1);
+}
+
+/* アイコンサイズのクラスを定義 */
+.icon-sm {
+	width: 0.875rem;		/* 14px 相当 */	
+	height: 0.875rem;
+}
+.icon-md {
+  width: 1rem;				/* 16px 相当 */
+  height: 1rem;
+}
+.icon-lg {
+	width: 1.125rem;		/* 18px 相当 */
+	height: 1.125rem;
+}
+
+.icon-wrap {
+	display: inline-flex;
+	align-items: center; /* 上下中央に整列 */	
+}
+
+
+body {
 	padding-bottom: 20px;
 	font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Hiragino Sans", "Noto Sans CJK JP", sans-serif;
 	color: var(--bs-body-color);

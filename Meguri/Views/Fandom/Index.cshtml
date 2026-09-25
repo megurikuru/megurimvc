@@ -7,12 +7,9 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
 		<div>
-		<h2 class="fw-bold mb-1"><img src="~/icons/loader-pinwheel.svg" class="me-2" />@SharedLocalizer["Fandom_Title"]</h2>
+		<h2 class="fw-bold mb-1 icon-wrap"><img src="~/icons/loader-pinwheel.svg" class="me-2" />@SharedLocalizer["Fandom_Title"]</h2>
 				<p class="text-body-secondary mb-0">@SharedLocalizer["Fandom_SubTitle"]</p>
 		</div>
-		<a asp-action="Create" class="btn btn-primary">
-				➕ @SharedLocalizer["Fandom_CreateNew"]
-		</a>
 </div>
 
 <div class="alert alert-info py-2 mb-4 d-flex align-items-center">
@@ -35,10 +32,10 @@
 																		@parent.Name
 																</a>
 														</h4>
-														<div class="small text-body-secondary">
-																👥 @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, parent.FandomUsers.Count)
+														<div class="small text-body-secondary icon-wrap">
+																<img src="~/icons/users.svg" class="lucide-icons me-2 icon-md" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, parent.FandomUsers.Count)
 																&nbsp;|&nbsp;
-																📝 @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, parent.Posts.Count)
+																<img src="~/icons/gallery-vertical-end.svg" class="lucide-icons me-2 icon-md" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, parent.Posts.Count)
 														</div>
 												</div>
 
@@ -56,7 +53,7 @@
 																<form asp-action="Join" asp-route-id="@parent.Id" method="post" class="d-inline">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-																		<button type="submit" class="btn btn-sm btn-primary">
+																		<button type="submit" class="btn btn-sm btn btn-outline-primary">
 																				+ @SharedLocalizer["Fandom_Join"]
 																		</button>
 																</form>
