@@ -813,8 +813,8 @@
   <data name="Image_ShowingTagFormat" xml:space="preserve">
     <value>Showing images for #{0}</value>
   </data>
-  <data name="Image_MembersOnlyBadge" xml:space="preserve">
-    <value>Members Only</value>
+  <data name="Image_PublicBadge" xml:space="preserve">
+    <value>Public</value>
   </data>
   <data name="Lang_Japanese" xml:space="preserve">
     <value>日本語</value>

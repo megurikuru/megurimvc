@@ -34,8 +34,8 @@
 													@if (Model.Width.HasValue && Model.Height.HasValue) {
 														<span class="badge bg-body-secondary border">@Model.Width.Value × @Model.Height.Value</span>
 													}
-													@if (!Model.IsPublic) {
-														<span class="badge bg-warning text-dark">会員限定</span>
+													@if (Model.IsPublic) {
+														<span class="badge bg-warning text-dark">公開</span>
 													}
 													@if (Model.IsSexual) {
 														<span class="badge bg-danger">R-18</span>
