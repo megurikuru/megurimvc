@@ -12,90 +12,68 @@
 		</div>
 </div>
 
-<div class="row g-4">
-		@foreach (var parent in topLevelFandoms) {
-				var isParentJoined = joinedFandomIds.Contains(parent.Id);
-				var childFandoms = Model.Where(f => f.ParentFandomId == parent.Id).ToList();
-
-				<div class="col-lg-6">
-						<div class="card h-100 shadow-sm border-0">
-								<div class="card-body">
-										<div class="d-flex justify-content-between align-items-start mb-2">
-												<div>
-														<h4 class="card-title fw-bold mb-1">
-																<a asp-action="Details" asp-route-id="@parent.Id" class="text-decoration-none text-body">
-																		@parent.Name
-																</a>
-														</h4>
-														<div class="small text-body-secondary icon-wrap">
-																<img src="~/icons/users.svg" class="lucide-icons me-2 icon-md" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, parent.FandomUsers.Count)
-																&nbsp;|&nbsp;
-																<img src="~/icons/gallery-vertical-end.svg" class="lucide-icons me-2 icon-md" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, parent.Posts.Count)
-														</div>
-												</div>
-
-												<div>
-														@if (isParentJoined) {
-																<form asp-action="Leave" asp-route-id="@parent.Id" method="post" class="d-inline">
-																		@Html.AntiForgeryToken()
-																		<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-																		<button type="submit" class="btn btn-sm btn-outline-success">
-																				✓ @SharedLocalizer["Fandom_Joined"]
-																		</button>
-																</form>
-														} else {
-																<form asp-action="Join" asp-route-id="@parent.Id" method="post" class="d-inline">
-																		@Html.AntiForgeryToken()
-																		<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-																		<button type="submit" class="btn btn-sm btn btn-outline-primary">
-																				+ @SharedLocalizer["Fandom_Join"]
-																		</button>
-																</form>
-														}
-												</div>
-										</div>
-
-										<!-- 子界隈リスト -->
-										@if (childFandoms.Any()) {
-												<div class="mt-3 pt-3 border-top">
-														<h6 class="text-body-secondary small fw-bold mb-2">📂 @SharedLocalizer["Fandom_ChildFandoms"]</h6>
-														<div class="d-flex flex-wrap gap-2">
-																@foreach (var child in childFandoms) {
-																		var isChildJoined = joinedFandomIds.Contains(child.Id);
-																		<div class="border rounded-pill px-3 py-1 bg-body-secondary d-flex align-items-center gap-2 small">
-																				<a asp-action="Details" asp-route-id="@child.Id" class="text-decoration-none text-body fw-semibold">
-																						@child.Name
-																				</a>
-																				@if (isChildJoined) {
-																						<form asp-action="Leave" asp-route-id="@child.Id" method="post" class="d-inline">
-																						@Html.AntiForgeryToken()
-																						<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-																						<!-- button type="submit" class="btn btn-sm btn-outline-success" -->
-																						<button type="submit" class="badge bg-success-subtle text-success-emphasis">
-																								✓ @SharedLocalizer["Fandom_Joined"]
-																						</button>
-																					</form>
-
-																					<!-- <span class="badge bg-success-subtle text-success-emphasis" style="font-size: 0.65rem;">@SharedLocalizer["Fandom_JoinedBadge"]</span> -->
-																				} else {
-																						<form asp-action="Join" asp-route-id="@child.Id" method="post" class="d-inline">
-																								@Html.AntiForgeryToken()
-																								<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-																								<button type="submit" class="btn btn-link p-0 text-primary small text-decoration-none">
-																										@SharedLocalizer["Fandom_JoinShort"]
-																								</button>
-																						</form>
-																				}
-																		</div>
-																}
-														</div>
-												</div>
-										}
-								</div>
-						</div>
+<div class="file-explorer">
+		<div class="file-explorer-header">
+				<div class="file-row-icon"></div>
+				<div class="file-row-main">@SharedLocalizer["Fandom_Title"]</div>
+				<div class="file-row-meta">
+						<span class="file-row-meta-col">参加者</span>
+						<span class="file-row-meta-col">参加</span>
 				</div>
+		</div>
+
+		@if (!topLevelFandoms.Any()) {
+				<div class="file-explorer-empty">@SharedLocalizer["Fandom_NoPosts"]</div>
+		} else {
+				@foreach (var parent in topLevelFandoms) {
+						var isParentJoined = joinedFandomIds.Contains(parent.Id);
+						var childFandoms = Model.Where(f => f.ParentFandomId == parent.Id).ToList();
+
+						<a asp-action="Details" asp-route-id="@parent.Id" class="file-row">
+								<div class="file-row-icon"><img src="~/icons/loader-pinwheel.svg" class="lucide-icons" /></div>
+								<div class="file-row-main">
+										<div class="file-row-name">@parent.Name</div>
+										<div class="file-row-sub">
+												@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, parent.Posts.Count)
+												@if (childFandoms.Any()) {
+														<text>&nbsp;|&nbsp;@childFandoms.Count @SharedLocalizer["Fandom_ChildFandoms"]</text>
+												}
+										</div>
+								</div>
+								<div class="file-row-meta">
+										<span class="file-row-meta-col">@parent.FandomUsers.Count</span>
+										<span class="file-row-meta-col">
+												@if (isParentJoined) {
+														<span class="badge bg-success-subtle text-success-emphasis">✓</span>
+												}
+										</span>
+								</div>
+						</a>
+
+						@if (childFandoms.Any()) {
+								@foreach (var child in childFandoms) {
+										var isChildJoined = joinedFandomIds.Contains(child.Id);
+										<a asp-action="Details" asp-route-id="@child.Id" class="file-row" style="padding-left: 2.5rem;">
+												<div class="file-row-icon"><img src="~/icons/loader-pinwheel.svg" class="lucide-icons" /></div>
+												<div class="file-row-main">
+														<div class="file-row-name">@child.Name</div>
+														<div class="file-row-sub">@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, child.Posts.Count)</div>
+												</div>
+												<div class="file-row-meta">
+														<span class="file-row-meta-col">@child.FandomUsers.Count</span>
+														<span class="file-row-meta-col">
+																@if (isChildJoined) {
+																		<span class="badge bg-success-subtle text-success-emphasis">✓</span>
+																}
+														</span>
+												</div>
+										</a>
+								}
+						}
+				}
 		}
 </div>
+
 
 @{
 	var fHasPrevious = ViewBag.HasPrevious as bool? ?? false;

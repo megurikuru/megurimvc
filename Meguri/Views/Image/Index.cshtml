@@ -39,8 +39,8 @@ else {
 								<div class="position-absolute bottom-0 start-0 w-100 p-2 bg-dark bg-opacity-75 text-white small d-flex justify-content-between align-items-center gap-2">
 										<span class="text-truncate me-1">@(string.IsNullOrEmpty(item.Caption) ? item.Name : item.Caption)</span>
 										<div class="d-flex align-items-center gap-1 flex-shrink-0">
-											@if (!item.IsPublic) {
-												<span class="badge bg-warning text-dark">@SharedLocalizer["Image_MembersOnlyBadge"]</span>
+											@if (item.IsPublic) {
+												<span class="badge bg-warning text-dark">@SharedLocalizer["Image_PublicBadge"]</span>
 											}
 											@if (item.IsSexual) {
 												<span class="badge bg-danger">R-18</span>
