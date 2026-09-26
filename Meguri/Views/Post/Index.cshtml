@@ -10,7 +10,7 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
 		<div>
 				<h2 class="fw-bold mb-1">📝 @SharedLocalizer["Post_Title"]</h2>
-				<p class="text-body-secondary mb-0">界隈のメンバーによる投稿・作品一覧</p>
+				<p class="text-body-secondary mb-0">@SharedLocalizer["Post_SubTitle"]</p>
 		</div>
 		<a asp-action="Create" asp-route-fandomId="@currentFandom?.Id" class="btn btn btn-outline-primary">
 				✏️ @SharedLocalizer["Post_CreateNew"]
@@ -23,14 +23,14 @@
 				<form asp-action="Index" method="get" class="row g-2 align-items-center">
 						<div class="col-md-4">
 								<select name="fandomId" class="form-select" onchange="this.form.submit()">
-										<option value="">-- すべての界隈 --</option>
+										<option value="">@SharedLocalizer["Fandom_AllOption"]</option>
 										@foreach (var f in fandoms) {
 												<!option value="@f.Id" @(currentFandom?.Id == f.Id ? "selected" : "")>@f.Name</!option>
 										}
 								</select>
 						</div>
 						<div class="col-md-6">
-								<input type="text" name="search" value="@currentSearch" class="form-control" placeholder="タイトルや本文で検索..." />
+								<input type="text" name="search" value="@currentSearch" class="form-control" placeholder="@SharedLocalizer["Post_SearchPlaceholder"]" />
 						</div>
 						<div class="col-md-2 d-grid">
 								<button type="submit" class="btn btn-outline-primary">@SharedLocalizer["Common_Search"]</button>
@@ -41,7 +41,7 @@
 
 @if (!string.IsNullOrEmpty(currentTag)) {
 		<div class="alert alert-info d-flex justify-content-between align-items-center py-2 mb-4">
-				<span>タグ: <strong>#@currentTag</strong> の投稿を表示中</span>
+				<span>@Html.Raw(string.Format(SharedLocalizer["Post_ShowingTagFormat"].Value, $"<strong>#{currentTag}</strong>"))</span>
 				<a asp-action="Index" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_All"]</a>
 		</div>
 }
@@ -62,10 +62,10 @@ else {
 										<div class="d-flex justify-content-between align-items-center mb-2">
 												<div class="d-flex align-items-center gap-2">
 														<a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId" class="badge bg-secondary text-decoration-none">
-																@(post.Fandom?.Name ?? "界隈")
+																@(post.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value)
 														</a>
 														@if (post.IsPinned) {
-																<span class="badge bg-warning text-dark">📌 固定</span>
+																<span class="badge bg-warning text-dark">@SharedLocalizer["Post_PinnedBadge"]</span>
 														}
 														@if (post.IsSexual) {
 																<span class="badge bg-danger">R-18</span>
@@ -112,12 +112,12 @@ else {
 
 										<div class="d-flex justify-content-between align-items-center pt-2 border-top small text-body-secondary">
 												<div>
-														<span>👤 @(post.User?.UserName ?? "User")</span>
+														<span>👤 @(post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
 												</div>
 												<div class="d-flex gap-3">
-														<span>💬 @post.CommentCount コメント</span>
-														<span>👁️ @post.ViewCount 閲覧</span>
-														<span>❤️ @post.Reactions.Count リアクション</span>
+														@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)
+														@string.Format(SharedLocalizer["Post_ViewCountSuffix"].Value, post.ViewCount)
+														@string.Format(SharedLocalizer["Post_ReactionCountSuffix"].Value, post.Reactions.Count)
 												</div>
 										</div>
 								</div>
@@ -138,15 +138,15 @@ else {
 						@if (postTotalCount > 0) {
 							<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
 								@if (postHasPrevious) {
-									<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postPreviousSkip" asp-route-fandomId="@currentFandom?.Id" asp-route-tag="@currentTag" asp-route-search="@currentSearch">← 前の40件</a>
+									<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postPreviousSkip" asp-route-fandomId="@currentFandom?.Id" asp-route-tag="@currentTag" asp-route-search="@currentSearch">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
 								} else {
-									<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+									<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
 								}
-								<span class="small text-body-secondary">@(postSkip + 1) - @(postSkip + postCount) / @postTotalCount 件</span>
+								<span class="small text-body-secondary">@(postSkip + 1) - @(postSkip + postCount) / @postTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 								@if (postHasNext) {
-									<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postNextSkip" asp-route-fandomId="@currentFandom?.Id" asp-route-tag="@currentTag" asp-route-search="@currentSearch">次の40件 →</a>
+									<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postNextSkip" asp-route-fandomId="@currentFandom?.Id" asp-route-tag="@currentTag" asp-route-search="@currentSearch">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
 								} else {
-									<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+									<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
 								}
 							</nav>
 						}

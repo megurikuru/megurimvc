@@ -7,14 +7,9 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
 		<div>
-		<h2 class="fw-bold mb-1 icon-wrap"><img src="~/icons/loader-pinwheel.svg" class="me-2" />@SharedLocalizer["Fandom_Title"]</h2>
+		<h2 class="fw-bold mb-1 icon-wrap"><img src="~/icons/loader-pinwheel.svg" class="lucide-icons me-2" />@SharedLocalizer["Fandom_Title"]</h2>
 				<p class="text-body-secondary mb-0">@SharedLocalizer["Fandom_SubTitle"]</p>
 		</div>
-</div>
-
-<div class="alert alert-info py-2 mb-4 d-flex align-items-center">
-		<span class="me-2">💡</span>
-		<span>@SharedLocalizer["Fandom_CascadeNote"]</span>
 </div>
 
 <div class="row g-4">
@@ -73,14 +68,14 @@
 																						@child.Name
 																				</a>
 																				@if (isChildJoined) {
-																						<span class="badge bg-success" style="font-size: 0.65rem;">参加中</span>
+																						<span class="badge bg-success-subtle text-success-emphasis" style="font-size: 0.65rem;">@SharedLocalizer["Fandom_JoinedBadge"]</span>
 																				}
 																				else {
 																						<form asp-action="Join" asp-route-id="@child.Id" method="post" class="d-inline">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
 																								<button type="submit" class="btn btn-link p-0 text-primary small text-decoration-none">
-																										参加
+																										@SharedLocalizer["Fandom_JoinShort"]
 																								</button>
 																						</form>
 																				}
@@ -107,15 +102,15 @@
 @if (fTotalCount > 0) {
 	<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
 		@if (fHasPrevious) {
-			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@fPreviousSkip">← 前の40件</a>
+			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@fPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
 		} else {
-			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
 		}
-		<span class="small text-body-secondary">@(fSkip + 1) - @(fSkip + fCount) / @fTotalCount 件</span>
+		<span class="small text-body-secondary">@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fSkip + 1, fSkip + fCount, fTotalCount)</span>
 		@if (fHasNext) {
-			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@fNextSkip">次の40件 →</a>
+			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@fNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
 		} else {
-			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
 		}
 	</nav>
 }

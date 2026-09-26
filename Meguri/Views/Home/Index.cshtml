@@ -15,7 +15,7 @@
 		<div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
 			<form asp-controller="Home" asp-action="Index" method="get" class="row g-2 align-items-center">
 				<div class="col">
-					<input type="text" name="search" value="@currentSearch" class="form-control" placeholder="タイトル・本文・タグで検索..." />
+					<input type="text" name="search" value="@currentSearch" class="form-control" placeholder="@SharedLocalizer["Home_SearchPlaceholder"]" />
 				</div>
 				<div class="col-auto">
 					<button type="submit" class="btn btn-outline-primary">@SharedLocalizer["Common_Search"]</button>
@@ -40,7 +40,7 @@
 					<div class="card shadow-sm border-0">
 						<div class="card-body">
 							<div class="d-flex justify-content-between align-items-center mb-2">
-								<span class="badge bg-secondary">@(post.Fandom?.Name ?? "界隈")</span>
+								<span class="badge bg-secondary">@(post.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value)</span>
 								<small class="text-body-secondary">@post.CreatedAt.ToString("yyyy/MM/dd HH:mm")</small>
 							</div>
 							<h5 class="card-title">
@@ -76,7 +76,7 @@
 
 							<div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top small text-body-secondary">
 								<div>
-									<span>👤 @(post.User?.UserName ?? "User")</span>
+									<span>👤 @(post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
 								</div>
 								<div class="d-flex gap-3">
 									<span>💬 @post.CommentCount</span>
@@ -100,15 +100,15 @@
 		@if (postsTotalCount > 0) {
 			<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
 				@if (postsHasPrevious) {
-					<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postsPreviousSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">← 前の40件</a>
+					<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postsPreviousSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
 				} else {
-					<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+					<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
 				}
-				<span class="small text-body-secondary">@(postsSkip + 1) - @(postsSkip + recentPosts.Count) / @postsTotalCount 件</span>
+				<span class="small text-body-secondary">@(postsSkip + 1) - @(postsSkip + recentPosts.Count) / @postsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 				@if (postsHasNext) {
-					<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postsNextSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">次の40件 →</a>
+					<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@postsNextSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
 				} else {
-					<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+					<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
 				}
 			</nav>
 		}
@@ -135,15 +135,15 @@
 			@if (imagesTotalCount > 0) {
 				<nav class="d-flex justify-content-between align-items-center py-2 mt-1 border-top px-1">
 					@if (imagesHasPrevious) {
-						<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-imageSkip="@imagesPreviousSkip" asp-route-skip="@postsSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">← 前の40件</a>
+						<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-imageSkip="@imagesPreviousSkip" asp-route-skip="@postsSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
 					} else {
-						<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+						<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
 					}
-					<span class="small text-body-secondary">@(imagesSkip + 1) - @(imagesSkip + recentImages.Count) / @imagesTotalCount 件</span>
+					<span class="small text-body-secondary">@(imagesSkip + 1) - @(imagesSkip + recentImages.Count) / @imagesTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 					@if (imagesHasNext) {
-						<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-imageSkip="@imagesNextSkip" asp-route-skip="@postsSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">次の40件 →</a>
+						<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-imageSkip="@imagesNextSkip" asp-route-skip="@postsSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
 					} else {
-						<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+						<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
 					}
 				</nav>
 			}
@@ -173,13 +173,6 @@
 						</div>
 					</a>
 				}
-			</div>
-		</div>
-
-		<div class="card shadow-sm border-0 bg-body-tertiary">
-			<div class="card-body">
-				<h6 class="fw-bold icon-wrap"><img src="~/icons/info.svg" class="lucide-icons me-2 icon-md" /> @SharedLocalizer["Fandom_Title"]の仕組み</h6>
-				<p class="small text-body-secondary mb-0">@SharedLocalizer["Fandom_CascadeNote"]</p>
 			</div>
 		</div>
 	</div>
