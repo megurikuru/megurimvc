@@ -1,165 +1,141 @@
 ﻿@model Meguri.Models.Fandom
 @{
-		ViewData["Title"] = Model.Name;
-		bool isJoined = ViewBag.IsJoined is true;
-		var fandomPosts = ViewBag.FandomPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
+	ViewData["Title"] = Model.Name;
+	bool isJoined = ViewBag.IsJoined is true;
+	var fandomPosts = ViewBag.FandomPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
 }
 
-<div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
-		<div class="card-body p-4 pb-2">
-				<!-- パンくず / 親界隈：ファイルマネージャー風パス表示 -->
-				<div class="file-explorer-path mb-2">
-						<a asp-action="Index" class="icon-wrap">@SharedLocalizer["Fandom_Title"]</a>
-						@if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
-							@foreach (var ancestor in ancestors) {
-									<span class="path-sep">/</span>
-									<a asp-action="Details" asp-route-id="@ancestor.Id">@ancestor.Name</a>
-							}
-						} else if (Model.ParentFandom != null) {
-								<span class="path-sep">/</span>
-								<a asp-action="Details" asp-route-id="@Model.ParentFandom.Id">@Model.ParentFandom.Name</a>
-						}
-						<span class="path-sep">/</span>
-						<span class="path-current">@Model.Name</span>
-				</div>
-				<div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
-						<div>
-								<h2 class="fw-bold mb-1">@Model.Name</h2>
-								<div class="text-body-secondary small icon-wrap">
-										<img src="~/icons/users.svg" class="lucide-icons me-2 icon-sm" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
-										&nbsp;|&nbsp;
-										<img src="~/icons/gallery-vertical-end.svg" class="lucide-icons me-2 icon-md" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
-								</div>
-						</div>
 
-						<div class="d-flex gap-2">
-								@if (isJoined) {
-										<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
-												@Html.AntiForgeryToken()
-												<button type="submit" class="btn btn-outline-danger">
-														@SharedLocalizer["Fandom_Leave"]
-												</button>
-										</form>
-								} else {
-										<form asp-action="Join" asp-route-id="@Model.Id" method="post">
-												@Html.AntiForgeryToken()
-												<button type="submit" class="btn btn btn-outline-primary d-flex align-items-center">
-														<img src="~/icons/plus.svg" class="lucide-icons me-2" /> @SharedLocalizer["Fandom_Join"]
-												</button>
-										</form>
-								}
-
-								<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="btn btn-outline-secondary">
-										✏️ @SharedLocalizer["Post_CreateNew"]
-								</a>
-										</div>
-								</div>
-
-						<!-- ファイルマネージャー風一覧：子界隈（フォルダ）＋投稿（ファイル） -->
-						<div class="row g-4">
-								<div class="col-lg-8">
-										<div class="file-explorer">
-								<div class="file-explorer-header">
-										<div class="file-row-icon"></div>
-										<div class="file-row-main">@SharedLocalizer["Fandom_Title"]</div>
-										<div class="file-row-meta">
-												<span class="file-row-meta-col">投稿者</span>
-												<span class="file-row-meta-col">更新日時</span>
-										</div>
-								</div>
-
-								@if (!Model.ChildFandoms.Any() && !fandomPosts.Any()) {
-										<div class="file-explorer-empty">@SharedLocalizer["Fandom_NoPosts"]</div>
-								} else {
-										@foreach (var child in Model.ChildFandoms) {
-												<a asp-action="Details" asp-route-id="@child.Id" class="file-row">
-														<div class="file-row-icon"><img src="~/icons/loader-pinwheel.svg" class="lucide-icons" /></div>
-														<div class="file-row-main">
-																<div class="file-row-name">@child.Name</div>
-																<div class="file-row-sub">@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, child.Posts.Count)</div>
-														</div>
-														<div class="file-row-meta">
-																<span class="file-row-meta-col">-</span>
-																<span class="file-row-meta-col">-</span>
-														</div>
-												</a>
-										}
-
-										@foreach (var post in fandomPosts) {
-												var thumb = post.PostImages.OrderBy(x => x.DisplayOrder).FirstOrDefault();
-												<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="file-row">
-														<div class="file-row-icon">
-																@if (thumb != null) {
-																		<img src="/Image/File/@thumb.ImageId" class="file-row-thumb" alt="@thumb.Image.Name" />
-																} else {
-																		<img src="~/icons/file-text.svg" class="lucide-icons" />
-																}
-														</div>
-														<div class="file-row-main">
-																<div class="file-row-name">@post.Name</div>
-																<div class="file-row-sub">
-																		@string.Format(SharedLocalizer["Post_CommentCountFormat"].Value, post.CommentCount)
-																		&nbsp;|&nbsp;
-																		@string.Format(SharedLocalizer["Post_ReactionCountFormat"].Value, post.Reactions.Count)
-																</div>
-														</div>
-														<div class="file-row-meta">
-																<span class="file-row-meta-col">@(post.User?.UserName ?? "User")</span>
-																<span class="file-row-meta-col">@post.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
-														</div>
-												</a>
-										}
-								}
-						</div>
-				</div>
-
-
-
-		@{
-			var fpHasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false;
-			var fpHasNext = ViewBag.FandomPostsHasNext as bool? ?? false;
-			var fpTotalCount = ViewBag.FandomPostsTotalCount as int? ?? 0;
-			var fpSkip = ViewBag.FandomPostsSkip as int? ?? 0;
-			var fpPreviousSkip = ViewBag.FandomPostsPreviousSkip as int? ?? 0;
-			var fpNextSkip = ViewBag.FandomPostsNextSkip as int? ?? 0;
-			var fpCount = fandomPosts.Count;
+<!-- パンくず / 親界隈：ファイルマネージャー風パス表示 -->
+<div class="file-explorer-path mb-2">
+	<a asp-action="Index" class="icon-wrap">@SharedLocalizer["Fandom_Title"]</a>
+	@if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
+		@foreach (var ancestor in ancestors) {
+			<span class="path-sep">/</span>
+			<a asp-action="Details" asp-route-id="@ancestor.Id">@ancestor.Name</a>
 		}
-		@if (fpTotalCount > 0) {
-			<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
-				@if (fpHasPrevious) {
-					<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-				} else {
-					<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
-				}
-				<span class="small text-body-secondary">@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fpSkip + 1, fpSkip + fpCount, fpTotalCount)</span>
-				@if (fpHasNext) {
-					<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-				} else {
-					<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
-				}
-			</nav>
-		}
+	} else if (Model.ParentFandom != null) {
+		<span class="path-sep">/</span>
+		<a asp-action="Details" asp-route-id="@Model.ParentFandom.Id">@Model.ParentFandom.Name</a>
+	}
+	<span class="path-sep">/</span>
+	<span class="path-current">@Model.Name</span>
+</div>
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+	<div>
+		<h2 class="fw-bold mb-1">@Model.Name</h2>
+		<div class="text-body-secondary small icon-wrap">
+			<img src="~/icons/users.svg" class="lucide-icons me-2 icon-sm" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
+			&nbsp;|&nbsp;
+			<img src="~/icons/gallery-vertical-end.svg" class="lucide-icons me-2 icon-md" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
+		</div>
 	</div>
 
-	<!-- サイドバー：参加ユーザー -->
-	<div class="col-lg-4">
-				<div class="card shadow-sm border-0">
-						<div class="card-header bg-body-tertiary fw-bold">
-								👥 @string.Format(SharedLocalizer["Fandom_MembersHeaderFormat"].Value, Model.FandomUsers.Count)
-						</div>
-						<div class="card-body">
-								@if (!Model.FandomUsers.Any()) {
-										<p class="text-body-secondary small mb-0">@SharedLocalizer["Fandom_NoMembers"]</p>
-								} else {
-										<div class="d-flex flex-wrap gap-2">
-												@foreach (var fu in Model.FandomUsers.Take(20)) {
-														<span class="badge bg-body-secondary border p-2">
-																👤 @(fu.User?.UserName ?? "User")
-														</span>
-												}
-										</div>
-								}
-						</div>
-				</div>
+	<div class="d-flex gap-2">
+		@if (isJoined) {
+			<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
+				@Html.AntiForgeryToken()
+				<button type="submit" class="btn btn-outline-danger">
+					@SharedLocalizer["Fandom_Leave"]
+				</button>
+			</form>
+		} else {
+			<form asp-action="Join" asp-route-id="@Model.Id" method="post">
+				@Html.AntiForgeryToken()
+				<button type="submit" class="btn btn btn-outline-primary d-flex align-items-center">
+					<img src="~/icons/plus.svg" class="lucide-icons me-2" /> @SharedLocalizer["Fandom_Join"]
+				</button>
+			</form>
+		}
+
+		<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="btn btn-outline-secondary">
+			✏️ @SharedLocalizer["Post_CreateNew"]
+		</a>
+			</div>
 		</div>
+
+	<!-- ファイルマネージャー風一覧：子界隈（フォルダ）＋投稿（ファイル） -->
+	<div class="row g-4">
+		<div class="col-lg-8">
+			<div class="file-explorer">
+		<div class="file-explorer-header">
+			<div class="file-row-icon"></div>
+			<div class="file-row-main">@SharedLocalizer["Fandom_Title"]</div>
+			<div class="file-row-meta">
+				<span class="file-row-meta-col">投稿者</span>
+				<span class="file-row-meta-col">更新日時</span>
+			</div>
+		</div>
+
+		@if (!Model.ChildFandoms.Any() && !fandomPosts.Any()) {
+			<div class="file-explorer-empty">@SharedLocalizer["Fandom_NoPosts"]</div>
+		} else {
+			@foreach (var child in Model.ChildFandoms) {
+				<a asp-action="Details" asp-route-id="@child.Id" class="file-row">
+					<div class="file-row-icon"><img src="~/icons/loader-pinwheel.svg" class="lucide-icons" /></div>
+					<div class="file-row-main">
+						<div class="file-row-name">@child.Name</div>
+						<div class="file-row-sub">@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, child.Posts.Count)</div>
+					</div>
+					<div class="file-row-meta">
+						<span class="file-row-meta-col">-</span>
+						<span class="file-row-meta-col">-</span>
+					</div>
+				</a>
+			}
+
+			@foreach (var post in fandomPosts) {
+				var thumb = post.PostImages.OrderBy(x => x.DisplayOrder).FirstOrDefault();
+				<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="file-row">
+					<div class="file-row-icon">
+						@if (thumb != null) {
+							<img src="/Image/File/@thumb.ImageId" class="file-row-thumb" alt="@thumb.Image.Name" />
+						} else {
+							<img src="~/icons/file-text.svg" class="lucide-icons" />
+						}
+					</div>
+					<div class="file-row-main">
+						<div class="file-row-name">@post.Name</div>
+						<div class="file-row-sub">
+							@string.Format(SharedLocalizer["Post_CommentCountFormat"].Value, post.CommentCount)
+							&nbsp;|&nbsp;
+							@string.Format(SharedLocalizer["Post_ReactionCountFormat"].Value, post.Reactions.Count)
+						</div>
+					</div>
+					<div class="file-row-meta">
+						<span class="file-row-meta-col">@(post.User?.UserName ?? "User")</span>
+						<span class="file-row-meta-col">@post.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
+					</div>
+				</a>
+			}
+		}
+	</div>
+</div>
+
+
+
+@{
+	var fpHasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false;
+	var fpHasNext = ViewBag.FandomPostsHasNext as bool? ?? false;
+	var fpTotalCount = ViewBag.FandomPostsTotalCount as int? ?? 0;
+	var fpSkip = ViewBag.FandomPostsSkip as int? ?? 0;
+	var fpPreviousSkip = ViewBag.FandomPostsPreviousSkip as int? ?? 0;
+	var fpNextSkip = ViewBag.FandomPostsNextSkip as int? ?? 0;
+	var fpCount = fandomPosts.Count;
+}
+@if (fpTotalCount > 0) {
+	<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+	@if (fpHasPrevious) {
+		<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+	} else {
+		<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+	}
+	<span class="small text-body-secondary">@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fpSkip + 1, fpSkip + fpCount, fpTotalCount)</span>
+	@if (fpHasNext) {
+		<a class="btn btn-sm btn-outline-secondary" asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+	} else {
+		<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+	}
+	</nav>
+}
 </div>
