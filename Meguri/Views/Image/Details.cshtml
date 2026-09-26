@@ -8,6 +8,13 @@
 
 <div class="row justify-content-center">
 		<div class="col-lg-9">
+				<!-- パンくず -->
+				<nav aria-label="breadcrumb" class="mb-2">
+						<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item"><a asp-controller="Image" asp-action="Index">@SharedLocalizer["Image_GalleryTitle"]</a></li>
+								<li class="breadcrumb-item active" aria-current="page">@(string.IsNullOrEmpty(Model.Caption) ? Model.Name : Model.Caption)</li>
+						</ol>
+				</nav>
 				<div class="card shadow-sm border-0 mb-4">
 						<div class="card-body p-0 text-center bg-black rounded-top overflow-hidden">
 								<img src="/Image/File/@Model.Id" alt="@Model.Name" class="img-fluid" style="max-height: 70vh; object-fit: contain;" />

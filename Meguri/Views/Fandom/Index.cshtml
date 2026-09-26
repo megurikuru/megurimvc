@@ -43,8 +43,7 @@
 																				✓ @SharedLocalizer["Fandom_Joined"]
 																		</button>
 																</form>
-														}
-														else {
+														} else {
 																<form asp-action="Join" asp-route-id="@parent.Id" method="post" class="d-inline">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
@@ -68,9 +67,17 @@
 																						@child.Name
 																				</a>
 																				@if (isChildJoined) {
-																						<span class="badge bg-success-subtle text-success-emphasis" style="font-size: 0.65rem;">@SharedLocalizer["Fandom_JoinedBadge"]</span>
-																				}
-																				else {
+																						<form asp-action="Leave" asp-route-id="@child.Id" method="post" class="d-inline">
+																						@Html.AntiForgeryToken()
+																						<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+																						<!-- button type="submit" class="btn btn-sm btn-outline-success" -->
+																						<button type="submit" class="badge bg-success-subtle text-success-emphasis">
+																								✓ @SharedLocalizer["Fandom_Joined"]
+																						</button>
+																					</form>
+
+																					<!-- <span class="badge bg-success-subtle text-success-emphasis" style="font-size: 0.65rem;">@SharedLocalizer["Fandom_JoinedBadge"]</span> -->
+																				} else {
 																						<form asp-action="Join" asp-route-id="@child.Id" method="post" class="d-inline">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="returnUrl" value="@Context.Request.Path" />

@@ -120,7 +120,7 @@ namespace Meguri.Controllers {
         }
 
         // POST: /Fandom/Join/5
-        // 親のFandomに参加したら子のFandomにも、子のFandomに参加したら親のFandomにも自動的に参加する
+        // 子界隈に参加したら、親界隈にも自動的に参加する
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -132,9 +132,8 @@ namespace Meguri.Controllers {
             var targetFandom = allFandoms.FirstOrDefault(f => f.Id == id);
             if (targetFandom == null) return NotFound();
 
-            // 対象界隈とその全子孫界隈、および全祖先界隈のIDを収集
+            // 対象界隈とその全祖先界隈のIDを収集
             var fandomIdsToJoin = new HashSet<int> { id };
-            CollectDescendantFandomIds(id, allFandoms, fandomIdsToJoin);
             CollectAncestorFandomIds(id, allFandoms, fandomIdsToJoin);
 
             var existingJoinedIds = (await _context.FandomUsers
@@ -160,7 +159,7 @@ namespace Meguri.Controllers {
         }
 
         // POST: /Fandom/Leave/5
-        // 親のFandomから脱退したら、子のFandomからも自動的に脱退する
+        // 親界隈から脱退したら、子界隈からも自動的に脱退する
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
