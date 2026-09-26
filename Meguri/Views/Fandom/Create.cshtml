@@ -16,7 +16,7 @@
 
 										<div class="mb-3">
 												<label asp-for="Name" class="form-label fw-bold">@SharedLocalizer["Fandom_Name"] <span class="text-danger">*</span></label>
-												<input asp-for="Name" class="form-control" placeholder="例: イラスト、ゲーム、SF小説" required />
+												<input asp-for="Name" class="form-control" placeholder="@SharedLocalizer["Fandom_NamePlaceholder"]" required />
 												<span asp-validation-for="Name" class="text-danger"></span>
 										</div>
 
@@ -28,7 +28,7 @@
 																<option value="@p.Id">@p.Name</option>
 														}
 												</select>
-												<div class="form-text">親界隈を指定すると、その親界隈の「子界隈」として階層化されます。</div>
+												<div class="form-text">@SharedLocalizer["Fandom_ParentHelp"]</div>
 										</div>
 
 										<div class="d-flex justify-content-between mt-4">

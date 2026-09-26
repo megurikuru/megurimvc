@@ -16,7 +16,7 @@
 
 @if (!string.IsNullOrEmpty(currentTag)) {
 		<div class="alert alert-info d-flex justify-content-between align-items-center py-2 mb-4">
-				<span>#@currentTag の画像を表示中</span>
+				<span>@string.Format(SharedLocalizer["Image_ShowingTagFormat"].Value, currentTag)</span>
 				<a asp-action="Index" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_All"]</a>
 		</div>
 }
@@ -40,7 +40,7 @@ else {
 										<span class="text-truncate me-1">@(string.IsNullOrEmpty(item.Caption) ? item.Name : item.Caption)</span>
 										<div class="d-flex align-items-center gap-1 flex-shrink-0">
 											@if (!item.IsPublic) {
-												<span class="badge bg-warning text-dark">会員限定</span>
+												<span class="badge bg-warning text-dark">@SharedLocalizer["Image_MembersOnlyBadge"]</span>
 											}
 											@if (item.IsSexual) {
 												<span class="badge bg-danger">R-18</span>
@@ -68,15 +68,15 @@ else {
 @if (imgTotalCount > 0) {
 	<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
 		@if (imgHasPrevious) {
-			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@imgPreviousSkip" asp-route-tag="@currentTag">← 前の40件</a>
+			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@imgPreviousSkip" asp-route-tag="@currentTag">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
 		} else {
-			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の40件</button>
+			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
 		}
-		<span class="small text-body-secondary">@(imgSkip + 1) - @(imgSkip + imgCount) / @imgTotalCount 件</span>
+		<span class="small text-body-secondary">@(imgSkip + 1) - @(imgSkip + imgCount) / @imgTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 		@if (imgHasNext) {
-			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@imgNextSkip" asp-route-tag="@currentTag">次の40件 →</a>
+			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@imgNextSkip" asp-route-tag="@currentTag">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
 		} else {
-			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の40件 →</button>
+			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
 		}
 	</nav>
 }

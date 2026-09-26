@@ -7,7 +7,7 @@
 
 <div class="comment-thread-container">
 		@if (!Model.Comments.Any()) {
-				<p class="text-body-secondary text-center py-3">コメントはまだありません。最初のコメントを投稿してみましょう！</p>
+				<p class="text-body-secondary text-center py-3">@SharedLocalizer["Comment_NoCommentsYet"]</p>
 		}
 		else {
 				<div class="d-flex flex-column gap-3 mb-4">
@@ -19,7 +19,7 @@
 
 		<!-- コメント投稿フォーム -->
 		<div class="card bg-body-tertiary border-0 p-3 mt-4" id="commentForm">
-				<h6 class="fw-bold mb-2">💬 コメントを投稿する</h6>
+				<h6 class="fw-bold mb-2">@SharedLocalizer["Comment_WriteTitle"]</h6>
 
 				<!-- 返信先インジケーター -->
 				<div id="replyNotice" class="alert alert-info py-1 px-2 small mb-2 d-none d-flex justify-content-between align-items-center"></div>

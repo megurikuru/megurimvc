@@ -471,6 +471,9 @@
   <data name="Manage_Profile_Bio" xml:space="preserve">
     <value>Bio</value>
   </data>
+  <data name="Manage_Profile_BioPlaceholder" xml:space="preserve">
+    <value>Enter your bio</value>
+  </data>
   <data name="Manage_Profile_SendVerificationEmail" xml:space="preserve">
     <value>Send verification email</value>
   </data>
@@ -687,6 +690,9 @@
   <data name="Common_Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="Common_Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
   <data name="Common_Details" xml:space="preserve">
     <value>Details</value>
   </data>
@@ -732,6 +738,84 @@
   <data name="Common_Filter" xml:space="preserve">
     <value>Filter</value>
   </data>
+  <data name="Common_ItemsSuffix" xml:space="preserve">
+    <value>items</value>
+  </data>
+  <data name="Message_MembersCountFormat" xml:space="preserve">
+    <value>👥 Members ({0})</value>
+  </data>
+  <data name="Common_UnknownUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Home_SearchPlaceholder" xml:space="preserve">
+    <value>Search by title, text, or tags...</value>
+  </data>
+  <data name="Fandom_DefaultLabel" xml:space="preserve">
+    <value>Fandom</value>
+  </data>
+  <data name="Fandom_HowItWorksFormat" xml:space="preserve">
+    <value>How {0} Works</value>
+  </data>
+  <data name="Comment_NoCommentsYet" xml:space="preserve">
+    <value>No comments yet. Be the first to comment!</value>
+  </data>
+  <data name="Comment_WriteTitle" xml:space="preserve">
+    <value>💬 Write a Comment</value>
+  </data>
+  <data name="Tag_CreatorInfoFormat" xml:space="preserve">
+    <value>Creator: {0} | Posts: {1} | Images: {2}</value>
+  </data>
+  <data name="Common_SystemLabel" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="Post_ListTitle" xml:space="preserve">
+    <value>📝 Post List</value>
+  </data>
+  <data name="Image_ListTitle" xml:space="preserve">
+    <value>🖼️ Image List</value>
+  </data>
+  <data name="Tag_RelatedPostsTitleFormat" xml:space="preserve">
+    <value>📝 Related Posts ({0})</value>
+  </data>
+  <data name="Post_NoPostsFound" xml:space="preserve">
+    <value>No posts found.</value>
+  </data>
+  <data name="Tag_RelatedImagesTitleFormat" xml:space="preserve">
+    <value>🖼️ Related Images ({0})</value>
+  </data>
+  <data name="Image_NoImagesFound" xml:space="preserve">
+    <value>No images found.</value>
+  </data>
+  <data name="Post_SubTitle" xml:space="preserve">
+    <value>A list of posts and works by fandom members.</value>
+  </data>
+  <data name="Fandom_AllOption" xml:space="preserve">
+    <value>-- All Fandoms --</value>
+  </data>
+  <data name="Post_SearchPlaceholder" xml:space="preserve">
+    <value>Search by title or text...</value>
+  </data>
+  <data name="Post_ShowingTagFormat" xml:space="preserve">
+    <value>Tag: #{0} - Showing posts</value>
+  </data>
+  <data name="Post_PinnedBadge" xml:space="preserve">
+    <value>📌 Pinned</value>
+  </data>
+  <data name="Post_CommentCountSuffix" xml:space="preserve">
+    <value>💬 {0} comments</value>
+  </data>
+  <data name="Post_ViewCountSuffix" xml:space="preserve">
+    <value>👁️ {0} views</value>
+  </data>
+  <data name="Post_ReactionCountSuffix" xml:space="preserve">
+    <value>❤️ {0} reactions</value>
+  </data>
+  <data name="Image_ShowingTagFormat" xml:space="preserve">
+    <value>Showing images for #{0}</value>
+  </data>
+  <data name="Image_MembersOnlyBadge" xml:space="preserve">
+    <value>Members Only</value>
+  </data>
   <data name="Lang_Japanese" xml:space="preserve">
     <value>日本語</value>
   </data>
@@ -756,6 +840,36 @@
   <data name="Fandom_NoParent" xml:space="preserve">
     <value>None (Top Level)</value>
   </data>
+  <data name="Fandom_NamePlaceholder" xml:space="preserve">
+    <value>e.g. Illustrations, Games, Sci-Fi Novels</value>
+  </data>
+  <data name="Fandom_ParentHelp" xml:space="preserve">
+    <value>Specifying a parent fandom makes this a sub-fandom nested under it.</value>
+  </data>
+  <data name="Fandom_ChildLabel" xml:space="preserve">
+    <value>(Sub-Fandom)</value>
+  </data>
+  <data name="Fandom_SelectOptionalFormat" xml:space="preserve">
+    <value>-- Select {0} (Optional) --</value>
+  </data>
+  <data name="Image_FileFormatLine1" xml:space="preserve">
+    <value>· Supported formats: <strong>PNG, JPEG</strong> only (max <strong>5MB</strong> per file)</value>
+  </data>
+  <data name="Image_FileFormatLine2" xml:space="preserve">
+    <value>· Files are <strong>converted to WebP</strong> and <strong>optimized to under 250KB</strong> on the server.</value>
+  </data>
+  <data name="Image_FileFormatLine3" xml:space="preserve">
+    <value>· Selecting multiple files lets you group them into a single post.</value>
+  </data>
+  <data name="Image_CaptionPlaceholder" xml:space="preserve">
+    <value>Title or caption for the artwork</value>
+  </data>
+  <data name="Image_DescriptionPlaceholder" xml:space="preserve">
+    <value>Materials used, concept, intent, etc.</value>
+  </data>
+  <data name="Image_FileTooLargeAlert" xml:space="preserve">
+    <value>File "{0}" exceeds 5MB. Please select a file 5MB or smaller.</value>
+  </data>
   <data name="Fandom_ChildFandoms" xml:space="preserve">
     <value>Sub-Fandoms</value>
   </data>
@@ -764,6 +878,12 @@
   </data>
   <data name="Fandom_Joined" xml:space="preserve">
     <value>Joined</value>
+  </data>
+  <data name="Fandom_JoinedBadge" xml:space="preserve">
+    <value>Joined</value>
+  </data>
+  <data name="Fandom_JoinShort" xml:space="preserve">
+    <value>Join</value>
   </data>
   <data name="Fandom_Leave" xml:space="preserve">
     <value>Leave</value>
@@ -785,6 +905,36 @@
   </data>
   <data name="Fandom_MyFandoms" xml:space="preserve">
     <value>My Fandoms</value>
+  </data>
+  <data name="Fandom_NoPosts" xml:space="preserve">
+    <value>No posts in this fandom yet.</value>
+  </data>
+  <data name="Fandom_MembersHeaderFormat" xml:space="preserve">
+    <value>Members ({0})</value>
+  </data>
+  <data name="Fandom_NoMembers" xml:space="preserve">
+    <value>No members have joined yet.</value>
+  </data>
+  <data name="Post_CommentCountFormat" xml:space="preserve">
+    <value>{0} comments</value>
+  </data>
+  <data name="Post_ReactionCountFormat" xml:space="preserve">
+    <value>{0} reactions</value>
+  </data>
+  <data name="Pagination_PreviousPosts" xml:space="preserve">
+    <value>← Previous 40</value>
+  </data>
+  <data name="Pagination_NextPosts" xml:space="preserve">
+    <value>Next 40 →</value>
+  </data>
+  <data name="Pagination_PreviousCountFormat" xml:space="preserve">
+    <value>← Previous {0}</value>
+  </data>
+  <data name="Pagination_NextCountFormat" xml:space="preserve">
+    <value>Next {0} →</value>
+  </data>
+  <data name="Pagination_RangeFormat" xml:space="preserve">
+    <value>{0} - {1} of {2}</value>
   </data>
   <data name="Post_Title" xml:space="preserve">
     <value>Posts</value>
@@ -935,6 +1085,93 @@
   </data>
   <data name="Tag_SuccessUpdated" xml:space="preserve">
     <value>Thesaurus relationships updated successfully.</value>
+  </data>
+  <data name="Tag_SubTitle" xml:space="preserve">
+    <value>A list of tags and thesaurus concepts attached to posts and images.</value>
+  </data>
+  <data name="Tag_NoTagsFound" xml:space="preserve">
+    <value>No matching tags found.</value>
+  </data>
+  <data name="Tag_TotalCountFormat" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="Tag_TotalCountZero" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="Tag_DisambiguationIntroFormat" xml:space="preserve">
+    <value>To clarify the meaning or category of tag "#{0}", you can set broader terms (more general concepts), narrower terms (more specific concepts), synonyms (alternate names/spellings), and related terms (related concepts).</value>
+  </data>
+  <data name="Tag_StandardBadge" xml:space="preserve">
+    <value>(Standard)</value>
+  </data>
+  <data name="Tag_SynonymHelp" xml:space="preserve">
+    <value>Alternate spellings with the same meaning (e.g. "Illustration" and "Art")</value>
+  </data>
+  <data name="Tag_SynonymPlaceholder" xml:space="preserve">
+    <value>New synonym...</value>
+  </data>
+  <data name="Tag_BroaderHelp" xml:space="preserve">
+    <value>A broader concept that includes this tag (e.g. the broader term of "Domestic Car" is "Car")</value>
+  </data>
+  <data name="Tag_BroaderPlaceholder" xml:space="preserve">
+    <value>Broader term tag name...</value>
+  </data>
+  <data name="Tag_NarrowerHelp" xml:space="preserve">
+    <value>Specific concepts included in this tag (e.g. narrower terms of "Creative Work" are "Illustration", "Manga")</value>
+  </data>
+  <data name="Tag_NarrowerPlaceholder" xml:space="preserve">
+    <value>Narrower term tag name...</value>
+  </data>
+  <data name="Tag_RelatedHelp" xml:space="preserve">
+    <value>A related concept without a hierarchical relation (e.g. "Manga" and "Anime")</value>
+  </data>
+  <data name="Tag_RelatedPlaceholder" xml:space="preserve">
+    <value>Related term tag name...</value>
+  </data>
+  <data name="Common_NotSet" xml:space="preserve">
+    <value>Not set</value>
+  </data>
+  <data name="Message_SubTitle" xml:space="preserve">
+    <value>You can send 1-on-1 direct messages or group chats.</value>
+  </data>
+  <data name="Message_DateLabel" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Message_DateFilterHint" xml:space="preserve">
+    <value>Shows up to 10 conversations before and after the specified date (20 total).</value>
+  </data>
+  <data name="Message_ChatDateFilterHintFormat" xml:space="preserve">
+    <value>Shows up to {0} messages before and after the specified date ({1} total).</value>
+  </data>
+  <data name="Message_NoConversationsHint" xml:space="preserve">
+    <value>Start a new message to connect with other users!</value>
+  </data>
+  <data name="Message_GroupBadge" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="Message_OpenBadge" xml:space="preserve">
+    <value>Open →</value>
+  </data>
+  <data name="Message_ChatTypeLabel" xml:space="preserve">
+    <value>Chat Type</value>
+  </data>
+  <data name="Message_GroupNamePlaceholder" xml:space="preserve">
+    <value>e.g. Manga Creation Lodge, Illustration Club</value>
+  </data>
+  <data name="Message_NoOtherUsers" xml:space="preserve">
+    <value>No other users found.</value>
+  </data>
+  <data name="Message_ImageAttachLabel" xml:space="preserve">
+    <value>🖼️ Attach Image</value>
+  </data>
+  <data name="Message_TextPlaceholder" xml:space="preserve">
+    <value>Enter your message...</value>
+  </data>
+  <data name="Message_MembersLabel" xml:space="preserve">
+    <value>🧑‍🤝‍🧑 Members</value>
+  </data>
+  <data name="Message_NoMessagesForDate" xml:space="preserve">
+    <value>No matching messages</value>
   </data>
   <data name="Message_Title" xml:space="preserve">
     <value>Messages</value>

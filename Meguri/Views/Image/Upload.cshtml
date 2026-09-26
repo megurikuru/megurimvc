@@ -20,9 +20,9 @@
 												<input asp-for="Files" type="file" multiple class="form-control" accept=".jpg,.jpeg,.png,image/jpeg,image/png" required id="imageFileInput" />
 												<span asp-validation-for="Files" class="text-danger"></span>
 												<div class="form-text">
-													・対応形式: <strong>PNG, JPEG</strong> のみ（1枚あたり最大 <strong>5MB</strong>）<br />
-													・サーバー側で <strong>WebP形式に変換</strong> し、<strong>250KB以下に最適化</strong> して保存されます。<br />
-													・複数枚選択すると、ひとつの投稿としてまとめることもできます。
+													@Html.Raw(SharedLocalizer["Image_FileFormatLine1"].Value)<br />
+													@Html.Raw(SharedLocalizer["Image_FileFormatLine2"].Value)<br />
+													@SharedLocalizer["Image_FileFormatLine3"]
 												</div>
 										</div>
 
@@ -30,9 +30,9 @@
 										<div class="mb-3">
 												<label asp-for="FandomId" class="form-label fw-bold">@SharedLocalizer["Post_SelectFandom"]</label>
 												<select asp-for="FandomId" class="form-select">
-														<option value="">-- @SharedLocalizer["Fandom_Title"] を選択 (任意) --</option>
-														@foreach (var f in fandoms) {
-																<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
+														<option value="">@string.Format(SharedLocalizer["Fandom_SelectOptionalFormat"].Value, SharedLocalizer["Fandom_Title"].Value)</option>
+																@foreach (var f in fandoms) {
+																		<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? SharedLocalizer["Fandom_ChildLabel"].Value : "")</option>
 														}
 												</select>
 										</div>
@@ -40,14 +40,14 @@
 										<!-- キャプション・タイトル -->
 										<div class="mb-3">
 												<label asp-for="Caption" class="form-label fw-bold">@SharedLocalizer["Image_Caption"]</label>
-												<input asp-for="Caption" class="form-control" placeholder="作品のタイトルやキャプション" />
+												<input asp-for="Caption" class="form-control" placeholder="@SharedLocalizer["Image_CaptionPlaceholder"]" />
 												<span asp-validation-for="Caption" class="text-danger"></span>
 										</div>
 
 										<!-- 説明・解説 -->
 										<div class="mb-3">
 												<label asp-for="Description" class="form-label fw-bold">@SharedLocalizer["Image_Description"]</label>
-												<textarea asp-for="Description" rows="4" class="form-control" placeholder="使用画材、コンセプト、制作意図など"></textarea>
+												<textarea asp-for="Description" rows="4" class="form-control" placeholder="@SharedLocalizer["Image_DescriptionPlaceholder"]"></textarea>
 												<span asp-validation-for="Description" class="text-danger"></span>
 										</div>
 
@@ -101,16 +101,17 @@
 		</div>
 </div>
 
-@section Scripts {
-		<script>
-				$(document).ready(function () {
-						TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
+				@section Scripts {
+<script>
+		const imageFileTooLargeMessage = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Image_FileTooLargeAlert"].Value));
+		$(document).ready(function () {
+				TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
 
-						$('#imageFileInput').on('change', function () {
-								const maxBytes = 5 * 1024 * 1024;
-								for (let i = 0; i < this.files.length; i++) {
-										if (this.files[i].size > maxBytes) {
-												alert('ファイル「' + this.files[i].name + '」が5MBを超えています。5MB以下のファイルを選択してください。');
+				$('#imageFileInput').on('change', function () {
+						const maxBytes = 5 * 1024 * 1024;
+						for (let i = 0; i < this.files.length; i++) {
+								if (this.files[i].size > maxBytes) {
+										alert(imageFileTooLargeMessage.replace('{0}', this.files[i].name));
 												this.value = '';
 												break;
 										}

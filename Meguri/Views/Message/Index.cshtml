@@ -6,7 +6,7 @@
 <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
 		<div>
 				<h2 class="fw-bold mb-1">💬 @SharedLocalizer["Message_Title"]</h2>
-				<p class="text-body-secondary mb-0">1対1のダイレクトメッセージやグループチャットができます。</p>
+				<p class="text-body-secondary mb-0">@SharedLocalizer["Message_SubTitle"]</p>
 		</div>
 		<button type="button" class="btn btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#newConversationModal">
 				➕ @SharedLocalizer["Message_NewConversation"]
@@ -18,12 +18,12 @@
 		<div class="card-body py-2">
 				<form asp-action="Index" method="get" class="d-flex flex-wrap align-items-end gap-2">
 						<div>
-								<label class="form-label small mb-0">日付</label>
+								<label class="form-label small mb-0">@SharedLocalizer["Message_DateLabel"]</label>
 								<input type="date" name="date" class="form-control form-control-sm" value="@(Model.FilterDate?.ToString("yyyy-MM-dd"))" />
 						</div>
-						<button type="submit" class="btn btn-sm btn-outline-primary">絞り込み</button>
-						<a asp-action="Index" class="btn btn-sm btn-outline-secondary">クリア</a>
-						<span class="small text-body-secondary ms-2">指定した日付の前後最大10件（合計最大20件）の会話を表示します</span>
+						<button type="submit" class="btn btn-sm btn-outline-primary">@SharedLocalizer["Common_Filter"]</button>
+						<a asp-action="Index" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Clear"]</a>
+						<span class="small text-body-secondary ms-2">@SharedLocalizer["Message_DateFilterHint"]</span>
 				</form>
 		</div>
 </div>
@@ -33,7 +33,7 @@
 		@if (!Model.Conversations.Any()) {
 				<div class="card-body p-5 text-center text-body-secondary">
 						<h4>@SharedLocalizer["Message_NoConversations"]</h4>
-						<p>新しいメッセージを作成して他のユーザーと交流してみましょう！</p>
+						<p>@SharedLocalizer["Message_NoConversationsHint"]</p>
 						<button type="button" class="btn btn btn-outline-primary mt-2" data-bs-toggle="modal" data-bs-target="#newConversationModal">
 								➕ @SharedLocalizer["Message_NewConversation"]
 						</button>
@@ -51,7 +51,7 @@
 														<h6 class="fw-bold mb-1">
 																@c.Title
 																@if (c.IsGroup) {
-																		<span class="badge bg-secondary ms-1">グループ</span>
+																		<span class="badge bg-secondary ms-1">@SharedLocalizer["Message_GroupBadge"]</span>
 																}
 														</h6>
 														<p class="text-body-secondary small mb-0 text-truncate" style="max-width: 400px;">
@@ -61,7 +61,7 @@
 										</div>
 										<div class="text-end text-body-secondary small">
 												<div class="message-time" data-utc="@c.LastMessageTime.ToString("o")">@c.LastMessageTime.ToString("MM/dd HH:mm")</div>
-												<span class="badge bg-body-secondary border">開く →</span>
+												<span class="badge bg-body-secondary border">@SharedLocalizer["Message_OpenBadge"]</span>
 										</div>
 								</a>
 						}
@@ -72,15 +72,15 @@
 @if (Model.TotalCount > 0) {
 		<nav class="d-flex justify-content-between align-items-center py-2 border-top px-3">
 				@if (Model.HasPrevious) {
-						<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@Model.PreviousSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">← 前の20件</a>
+						<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@Model.PreviousSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 20)</a>
 				} else {
-						<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の20件</button>
+						<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 20)</button>
 				}
-				<span class="small text-body-secondary">@(Model.TotalCount == 0 ? 0 : Model.Skip + 1) - @(Model.Skip + Model.Conversations.Count) / @Model.TotalCount 件</span>
+				<span class="small text-body-secondary">@(Model.TotalCount == 0 ? 0 : Model.Skip + 1) - @(Model.Skip + Model.Conversations.Count) / @Model.TotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 				@if (Model.HasNext) {
-						<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@Model.NextSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">次の20件 →</a>
+						<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@Model.NextSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 20)</a>
 				} else {
-						<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の20件 →</button>
+						<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 20)</button>
 				}
 		</nav>
 }
@@ -98,7 +98,7 @@
 								<div class="modal-body">
 										<!-- タイプ切替 -->
 										<div class="mb-3">
-												<label class="form-label fw-bold">チャット種別</label>
+												<label class="form-label fw-bold">@SharedLocalizer["Message_ChatTypeLabel"]</label>
 												<div class="d-flex gap-3">
 														<div class="form-check">
 																<input class="form-check-input" type="radio" name="IsGroup" id="typeDirect" value="false" checked onchange="$('#groupTitleContainer').addClass('d-none')" />
@@ -114,7 +114,7 @@
 										<!-- グループ名入力（グループ時のみ） -->
 										<div class="mb-3 d-none" id="groupTitleContainer">
 												<label class="form-label fw-bold">@SharedLocalizer["Message_GroupName"]</label>
-												<input type="text" name="Title" class="form-control" placeholder="例: 漫画制作合宿、イラスト部" />
+												<input type="text" name="Title" class="form-control" placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
 										</div>
 
 										<!-- メンバー選択 -->
@@ -122,7 +122,7 @@
 												<label class="form-label fw-bold">@SharedLocalizer["Message_SelectRecipient"] <span class="text-danger">*</span></label>
 												<div class="border rounded p-2" style="max-height: 150px; overflow-y: auto;">
 																@if (!Model.AvailableUsers.Any()) {
-																			<p class="text-body-secondary small mb-0">他のユーザーが見つかりません。</p>
+																			<p class="text-body-secondary small mb-0">@SharedLocalizer["Message_NoOtherUsers"]</p>
 																		}
 																		@foreach (var user in Model.AvailableUsers) {
 																				<div class="form-check">
@@ -138,12 +138,12 @@
 														<!-- メッセージ入力 -->
 														<div class="mb-3">
 																<label class="form-label fw-bold">@SharedLocalizer["Message_InputPlaceholder"] <span class="text-danger">*</span></label>
-																<textarea name="InitialMessage" id="initialMessageInput" rows="3" class="form-control" placeholder="メッセージを入力してください..." required></textarea>
+																<textarea name="InitialMessage" id="initialMessageInput" rows="3" class="form-control" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
 														</div>
 
 										<!-- 画像添付 -->
 										<div class="mb-3">
-												<label class="form-label fw-bold">🖼️ 画像を添付</label>
+												<label class="form-label fw-bold">@SharedLocalizer["Message_ImageAttachLabel"]</label>
 												<input type="file" name="ImageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="form-control form-control-sm" />
 										</div>
 								</div>

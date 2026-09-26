@@ -18,7 +18,7 @@
 								}
 
 								<p class="text-body-secondary">
-										タグ「#@Model.PrimaryTagText」の意味やカテゴリを明確にするため、上位語（より包括的な概念）、下位語（より具体的な概念）、同義語（別名・表記揺れ）、関連語（関係する概念）を設定できます。
+										@string.Format(SharedLocalizer["Tag_DisambiguationIntroFormat"].Value, Model.PrimaryTagText)
 								</p>
 
 								<div class="row g-4 mt-2">
@@ -26,10 +26,10 @@
 										<div class="col-md-6">
 												<div class="card h-100 bg-body-tertiary border-0 p-3">
 														<h5 class="fw-bold mb-2">🔄 @SharedLocalizer["Tag_SynonymTerms"]</h5>
-														<p class="small text-body-secondary mb-3">同じ意味を持つ別の表記（例: 「イラスト」と「絵」）</p>
+														<p class="small text-body-secondary mb-3">@SharedLocalizer["Tag_SynonymHelp"]</p>
 
 														<div class="d-flex flex-wrap gap-2 mb-3">
-																<span class="badge bg-primary fs-6 p-2">#@Model.PrimaryTagText (標準)</span>
+																<span class="badge bg-primary fs-6 p-2">#@Model.PrimaryTagText @SharedLocalizer["Tag_StandardBadge"]</span>
 																@foreach (var syn in Model.Synonyms) {
 																		<span class="badge bg-secondary fs-6 p-2">#@syn</span>
 																}
@@ -40,7 +40,7 @@
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
 																		<div class="input-group">
-																				<input type="text" name="synonymText" class="form-control" placeholder="新しい同義語..." required />
+																				<input type="text" name="synonymText" class="form-control" placeholder="@SharedLocalizer["Tag_SynonymPlaceholder"]" required />
 																				<button type="submit" class="btn btn btn-outline-primary">@SharedLocalizer["Common_Add"]</button>
 																		</div>
 																</form>
@@ -52,11 +52,11 @@
 										<div class="col-md-6">
 												<div class="card h-100 bg-body-tertiary border-0 p-3">
 														<h5 class="fw-bold mb-2">⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h5>
-														<p class="small text-body-secondary mb-3">このタグが含まれるより広い概念（例: 「国産車」の上位語は「車」）</p>
+														<p class="small text-body-secondary mb-3">@SharedLocalizer["Tag_BroaderHelp"]</p>
 
 														<div class="d-flex flex-wrap gap-2 mb-3">
 																@if (!Model.BroaderConcepts.Any()) {
-																		<span class="text-body-secondary small">未設定</span>
+																		<span class="text-body-secondary small">@SharedLocalizer["Common_NotSet"]</span>
 																}
 																@foreach (var b in Model.BroaderConcepts) {
 																		<div class="btn-group btn-group-sm">
@@ -79,7 +79,7 @@
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
 																		<input type="hidden" name="predicate" value="broader" />
 																		<div class="input-group">
-																				<input type="text" name="targetTagText" class="form-control" placeholder="上位語タグ名..." required />
+																				<input type="text" name="targetTagText" class="form-control" placeholder="@SharedLocalizer["Tag_BroaderPlaceholder"]" required />
 																				<button type="submit" class="btn btn btn-outline-primary">@SharedLocalizer["Common_Add"]</button>
 																		</div>
 																</form>
@@ -91,11 +91,11 @@
 										<div class="col-md-6">
 												<div class="card h-100 bg-body-tertiary border-0 p-3">
 														<h5 class="fw-bold mb-2">⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h5>
-														<p class="small text-body-secondary mb-3">このタグに含まれる具体的な概念（例: 「創作」の下位語は「イラスト」「漫画」）</p>
+														<p class="small text-body-secondary mb-3">@SharedLocalizer["Tag_NarrowerHelp"]</p>
 
 														<div class="d-flex flex-wrap gap-2 mb-3">
 																@if (!Model.NarrowerConcepts.Any()) {
-																		<span class="text-body-secondary small">未設定</span>
+																		<span class="text-body-secondary small">@SharedLocalizer["Common_NotSet"]</span>
 																}
 																@foreach (var n in Model.NarrowerConcepts) {
 																		<div class="btn-group btn-group-sm">
@@ -118,7 +118,7 @@
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
 																		<input type="hidden" name="predicate" value="narrower" />
 																		<div class="input-group">
-																				<input type="text" name="targetTagText" class="form-control" placeholder="下位語タグ名..." required />
+																				<input type="text" name="targetTagText" class="form-control" placeholder="@SharedLocalizer["Tag_NarrowerPlaceholder"]" required />
 																				<button type="submit" class="btn btn btn-outline-primary">@SharedLocalizer["Common_Add"]</button>
 																		</div>
 																</form>
@@ -130,11 +130,11 @@
 										<div class="col-md-6">
 												<div class="card h-100 bg-body-tertiary border-0 p-3">
 														<h5 class="fw-bold mb-2">🔗 @SharedLocalizer["Tag_RelatedTerms"]</h5>
-														<p class="small text-body-secondary mb-3">上下関係ではないが関連する概念（例: 「漫画」と「アニメ」）</p>
+														<p class="small text-body-secondary mb-3">@SharedLocalizer["Tag_RelatedHelp"]</p>
 
 														<div class="d-flex flex-wrap gap-2 mb-3">
 																@if (!Model.RelatedConcepts.Any()) {
-																		<span class="text-body-secondary small">未設定</span>
+																		<span class="text-body-secondary small">@SharedLocalizer["Common_NotSet"]</span>
 																}
 																@foreach (var r in Model.RelatedConcepts) {
 																		<div class="btn-group btn-group-sm">
@@ -157,7 +157,7 @@
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
 																		<input type="hidden" name="predicate" value="related" />
 																		<div class="input-group">
-																				<input type="text" name="targetTagText" class="form-control" placeholder="関連語タグ名..." required />
+																				<input type="text" name="targetTagText" class="form-control" placeholder="@SharedLocalizer["Tag_RelatedPlaceholder"]" required />
 																				<button type="submit" class="btn btn btn-outline-primary">@SharedLocalizer["Common_Add"]</button>
 																		</div>
 																</form>

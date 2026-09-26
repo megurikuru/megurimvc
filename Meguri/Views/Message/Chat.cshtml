@@ -15,11 +15,11 @@
 								</div>
 								<div class="dropdown">
 										<button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown">
-												👥 メンバー (@Model.Conversation.Members.Count)
+												👥 @string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count)
 										</button>
 										<ul class="dropdown-menu dropdown-menu-end">
 												@foreach (var m in Model.Conversation.Members) {
-														<li class="dropdown-item-text small">👤 @(m.User?.UserName ?? "User")</li>
+														<li class="dropdown-item-text small">👤 @(m.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</li>
 												}
 										</ul>
 								</div>
@@ -30,25 +30,25 @@
 								<form asp-action="Chat" method="get" class="d-flex flex-wrap align-items-end gap-2">
 										<input type="hidden" name="id" value="@Model.Conversation.Id" />
 										<div>
-												<label class="form-label small mb-0">日付</label>
+												<label class="form-label small mb-0">@SharedLocalizer["Message_DateLabel"]</label>
 												<input type="date" name="date" class="form-control form-control-sm" value="@(Model.FilterDate?.ToString("yyyy-MM-dd"))" />
 										</div>
-										<button type="submit" class="btn btn-sm btn-outline-primary">絞り込み</button>
-										<a asp-action="Chat" asp-route-id="@Model.Conversation.Id" class="btn btn-sm btn-outline-secondary">クリア</a>
-										<span class="small text-body-secondary ms-2">指定した日付の前後最大40件（合計最大80件）を表示します</span>
+										<button type="submit" class="btn btn-sm btn-outline-primary">@SharedLocalizer["Common_Filter"]</button>
+										<a asp-action="Chat" asp-route-id="@Model.Conversation.Id" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Clear"]</a>
+										<span class="small text-body-secondary ms-2">@string.Format(SharedLocalizer["Message_ChatDateFilterHintFormat"].Value, 40, 80)</span>
 								</form>
 						</div>
 
 						<!-- チャットメッセージエリア -->
 						<div class="chat-container" id="chatMessageContainer">
 								@if (!Model.Messages.Any()) {
-										<p class="text-center text-body-secondary my-auto">該当するメッセージがありません</p>
+										<p class="text-center text-body-secondary my-auto">@SharedLocalizer["Message_NoMessagesForDate"]</p>
 								} else {
 										@foreach (var msg in Model.Messages) {
 											var isMe = msg.SenderId == Model.CurrentUserId;
 												<div class="d-flex flex-column @(isMe ? "align-items-end" : "align-items-start")">
 														@if (!isMe) {
-																<span class="small text-body-secondary ms-1 mb-1">👤 @(msg.Sender?.UserName ?? "User")</span>
+																<span class="small text-body-secondary ms-1 mb-1">👤 @(msg.Sender?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
 														}
 														<div class="chat-bubble @(isMe ? "chat-bubble-outgoing" : "chat-bubble-incoming") shadow-sm">
 																@if (!string.IsNullOrEmpty(msg.Text)) {
@@ -78,15 +78,15 @@
 
 						<nav class="d-flex justify-content-between align-items-center py-2 border-top px-3">
 								@if (Model.HasPrevious) {
-										<a class="btn btn-sm btn-outline-secondary" asp-action="Chat" asp-route-id="@Model.Conversation.Id" asp-route-skip="@Model.PreviousSkip">← 前の80件</a>
+										<a class="btn btn-sm btn-outline-secondary" asp-action="Chat" asp-route-id="@Model.Conversation.Id" asp-route-skip="@Model.PreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 80)</a>
 								} else {
-										<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>← 前の80件</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 80)</button>
 								}
-								<span class="small text-body-secondary">@(Model.TotalCount == 0 ? 0 : Model.Skip + 1) - @(Model.Skip + Model.Messages.Count) / @Model.TotalCount 件</span>
+								<span class="small text-body-secondary">@(Model.TotalCount == 0 ? 0 : Model.Skip + 1) - @(Model.Skip + Model.Messages.Count) / @Model.TotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 								@if (Model.HasNext) {
-										<a class="btn btn-sm btn-outline-secondary" asp-action="Chat" asp-route-id="@Model.Conversation.Id" asp-route-skip="@Model.NextSkip">次の80件 →</a>
+										<a class="btn btn-sm btn-outline-secondary" asp-action="Chat" asp-route-id="@Model.Conversation.Id" asp-route-skip="@Model.NextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 80)</a>
 								} else {
-										<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>次の80件 →</button>
+										<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 80)</button>
 								}
 						</nav>
 

@@ -471,6 +471,9 @@
   <data name="Manage_Profile_Bio" xml:space="preserve">
     <value>自己紹介</value>
   </data>
+  <data name="Manage_Profile_BioPlaceholder" xml:space="preserve">
+    <value>自己紹介を入力</value>
+  </data>
   <data name="Manage_Profile_SendVerificationEmail" xml:space="preserve">
     <value>確認メールを送信</value>
   </data>
@@ -687,6 +690,9 @@
   <data name="Common_Search" xml:space="preserve">
     <value>検索</value>
   </data>
+  <data name="Common_Clear" xml:space="preserve">
+    <value>クリア</value>
+  </data>
   <data name="Common_Details" xml:space="preserve">
     <value>詳細</value>
   </data>
@@ -718,10 +724,10 @@
     <value>データがありません。</value>
   </data>
   <data name="Post_NoPostsFound" xml:space="preserve">
-    <value>該当する投稿はありません。</value>
+    <value>投稿はありません。</value>
   </data>
   <data name="Image_NoImagesFound" xml:space="preserve">
-    <value>該当する画像はありません。</value>
+    <value>画像はありません。</value>
   </data>
   <data name="Common_NothingFound" xml:space="preserve">
     <value>何も見つかりませんでした。</value>
@@ -731,6 +737,78 @@
   </data>
   <data name="Common_Filter" xml:space="preserve">
     <value>絞り込み</value>
+  </data>
+  <data name="Common_ItemsSuffix" xml:space="preserve">
+    <value>件</value>
+  </data>
+  <data name="Message_MembersCountFormat" xml:space="preserve">
+    <value>👥 メンバー ({0})</value>
+  </data>
+  <data name="Common_UnknownUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="Home_SearchPlaceholder" xml:space="preserve">
+    <value>タイトル・本文・タグで検索...</value>
+  </data>
+  <data name="Fandom_DefaultLabel" xml:space="preserve">
+    <value>界隈</value>
+  </data>
+  <data name="Fandom_HowItWorksFormat" xml:space="preserve">
+    <value>{0}の仕組み</value>
+  </data>
+  <data name="Comment_NoCommentsYet" xml:space="preserve">
+    <value>コメントはまだありません。最初のコメントを投稿してみましょう！</value>
+  </data>
+  <data name="Comment_WriteTitle" xml:space="preserve">
+    <value>💬 コメントを投稿する</value>
+  </data>
+  <data name="Tag_CreatorInfoFormat" xml:space="preserve">
+    <value>作成者: {0} | 投稿: {1} 件 | 画像: {2} 件</value>
+  </data>
+  <data name="Common_SystemLabel" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="Post_ListTitle" xml:space="preserve">
+    <value>📝 投稿一覧</value>
+  </data>
+  <data name="Image_ListTitle" xml:space="preserve">
+    <value>🖼️ 画像一覧</value>
+  </data>
+  <data name="Tag_RelatedPostsTitleFormat" xml:space="preserve">
+    <value>📝 関連する投稿 ({0})</value>
+  </data>
+  <data name="Tag_RelatedImagesTitleFormat" xml:space="preserve">
+    <value>🖼️ 関連する画像 ({0})</value>
+  </data>
+  <data name="Post_SubTitle" xml:space="preserve">
+    <value>界隈のメンバーによる投稿・作品一覧</value>
+  </data>
+  <data name="Fandom_AllOption" xml:space="preserve">
+    <value>-- すべての界隈 --</value>
+  </data>
+  <data name="Post_SearchPlaceholder" xml:space="preserve">
+    <value>タイトルや本文で検索...</value>
+  </data>
+  <data name="Post_ShowingTagFormat" xml:space="preserve">
+    <value>タグ: #{0} の投稿を表示中</value>
+  </data>
+  <data name="Post_PinnedBadge" xml:space="preserve">
+    <value>📌 固定</value>
+  </data>
+  <data name="Post_CommentCountSuffix" xml:space="preserve">
+    <value>💬 {0} コメント</value>
+  </data>
+  <data name="Post_ViewCountSuffix" xml:space="preserve">
+    <value>👁️ {0} 閲覧</value>
+  </data>
+  <data name="Post_ReactionCountSuffix" xml:space="preserve">
+    <value>❤️ {0} リアクション</value>
+  </data>
+  <data name="Image_ShowingTagFormat" xml:space="preserve">
+    <value>#{0} の画像を表示中</value>
+  </data>
+  <data name="Image_MembersOnlyBadge" xml:space="preserve">
+    <value>会員限定</value>
   </data>
   <data name="Lang_Japanese" xml:space="preserve">
     <value>日本語</value>
@@ -756,6 +834,36 @@
   <data name="Fandom_NoParent" xml:space="preserve">
     <value>なし（最上位）</value>
   </data>
+  <data name="Fandom_NamePlaceholder" xml:space="preserve">
+    <value>例: イラスト、ゲーム、SF小説</value>
+  </data>
+  <data name="Fandom_ParentHelp" xml:space="preserve">
+    <value>親界隈を指定すると、その親界隈の「子界隈」として階層化されます。</value>
+  </data>
+  <data name="Fandom_ChildLabel" xml:space="preserve">
+    <value>(子界隈)</value>
+  </data>
+  <data name="Fandom_SelectOptionalFormat" xml:space="preserve">
+    <value>-- {0} を選択 (任意) --</value>
+  </data>
+  <data name="Image_FileFormatLine1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Image_FileFormatLine2" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Image_FileFormatLine3" xml:space="preserve">
+    <value>・複数枚選択すると、ひとつの投稿としてまとめることもできます。</value>
+  </data>
+  <data name="Image_CaptionPlaceholder" xml:space="preserve">
+    <value>作品のタイトルやキャプション</value>
+  </data>
+  <data name="Image_DescriptionPlaceholder" xml:space="preserve">
+    <value>使用画材、コンセプト、制作意図など</value>
+  </data>
+  <data name="Image_FileTooLargeAlert" xml:space="preserve">
+    <value>ファイル「{0}」が5MBを超えています。5MB以下のファイルを選択してください。</value>
+  </data>
   <data name="Fandom_ChildFandoms" xml:space="preserve">
     <value>子界隈</value>
   </data>
@@ -764,6 +872,12 @@
   </data>
   <data name="Fandom_Joined" xml:space="preserve">
     <value>入ってる</value>
+  </data>
+  <data name="Fandom_JoinedBadge" xml:space="preserve">
+    <value>入ってる</value>
+  </data>
+  <data name="Fandom_JoinShort" xml:space="preserve">
+    <value>入る</value>
   </data>
   <data name="Fandom_Leave" xml:space="preserve">
     <value>出る</value>
@@ -775,7 +889,7 @@
     <value>投稿: {0}件</value>
   </data>
   <data name="Fandom_CascadeNote" xml:space="preserve">
-    <value>※親の界隈に入ると子の界隈にもそのまま入れます。</value>
+    <value>※親の界隈に入ると子の界隈にもそのまま入ります。子界隈から出たい場合、その界隈で「出る」を選択してください。</value>
   </data>
   <data name="Fandom_CreateNew" xml:space="preserve">
     <value>新しい界隈を作成</value>
@@ -785,6 +899,36 @@
   </data>
   <data name="Fandom_MyFandoms" xml:space="preserve">
     <value>入ってる界隈</value>
+  </data>
+  <data name="Fandom_NoPosts" xml:space="preserve">
+    <value>この界隈にはまだ投稿がありません。</value>
+  </data>
+  <data name="Fandom_MembersHeaderFormat" xml:space="preserve">
+    <value>参加メンバー ({0})</value>
+  </data>
+  <data name="Fandom_NoMembers" xml:space="preserve">
+    <value>まだ参加メンバーはいません。</value>
+  </data>
+  <data name="Post_CommentCountFormat" xml:space="preserve">
+    <value>{0} コメント</value>
+  </data>
+  <data name="Post_ReactionCountFormat" xml:space="preserve">
+    <value>{0} リアクション</value>
+  </data>
+  <data name="Pagination_PreviousPosts" xml:space="preserve">
+    <value>← 前の40件</value>
+  </data>
+  <data name="Pagination_NextPosts" xml:space="preserve">
+    <value>次の40件 →</value>
+  </data>
+  <data name="Pagination_PreviousCountFormat" xml:space="preserve">
+    <value>← 前の{0}件</value>
+  </data>
+  <data name="Pagination_NextCountFormat" xml:space="preserve">
+    <value>次の{0}件 →</value>
+  </data>
+  <data name="Pagination_RangeFormat" xml:space="preserve">
+    <value>{0} - {1} / {2} 件</value>
   </data>
   <data name="Post_Title" xml:space="preserve">
     <value>投稿</value>
@@ -935,6 +1079,93 @@
   </data>
   <data name="Tag_SuccessUpdated" xml:space="preserve">
     <value>シソーラスの関係性を更新しました。</value>
+  </data>
+  <data name="Tag_SubTitle" xml:space="preserve">
+    <value>投稿や画像に付与されているタグとシソーラス概念の一覧です。</value>
+  </data>
+  <data name="Tag_NoTagsFound" xml:space="preserve">
+    <value>該当するタグが見つかりませんでした。</value>
+  </data>
+  <data name="Tag_TotalCountFormat" xml:space="preserve">
+    <value>{0} 件</value>
+  </data>
+  <data name="Tag_TotalCountZero" xml:space="preserve">
+    <value>0 件</value>
+  </data>
+  <data name="Tag_DisambiguationIntroFormat" xml:space="preserve">
+    <value>タグ「#{0}」の意味やカテゴリを明確にするため、上位語（より包括的な概念）、下位語（より具体的な概念）、同義語（別名・表記揺れ）、関連語（関係する概念）を設定できます。</value>
+  </data>
+  <data name="Tag_StandardBadge" xml:space="preserve">
+    <value>(標準)</value>
+  </data>
+  <data name="Tag_SynonymHelp" xml:space="preserve">
+    <value>同じ意味を持つ別の表記（例: 「イラスト」と「絵」）</value>
+  </data>
+  <data name="Tag_SynonymPlaceholder" xml:space="preserve">
+    <value>新しい同義語...</value>
+  </data>
+  <data name="Tag_BroaderHelp" xml:space="preserve">
+    <value>このタグが含まれるより広い概念（例: 「国産車」の上位語は「車」）</value>
+  </data>
+  <data name="Tag_BroaderPlaceholder" xml:space="preserve">
+    <value>上位語タグ名...</value>
+  </data>
+  <data name="Tag_NarrowerHelp" xml:space="preserve">
+    <value>このタグに含まれる具体的な概念（例: 「創作」の下位語は「イラスト」「漫画」）</value>
+  </data>
+  <data name="Tag_NarrowerPlaceholder" xml:space="preserve">
+    <value>下位語タグ名...</value>
+  </data>
+  <data name="Tag_RelatedHelp" xml:space="preserve">
+    <value>上下関係ではないが関連する概念（例: 「漫画」と「アニメ」）</value>
+  </data>
+  <data name="Tag_RelatedPlaceholder" xml:space="preserve">
+    <value>関連語タグ名...</value>
+  </data>
+  <data name="Common_NotSet" xml:space="preserve">
+    <value>未設定</value>
+  </data>
+  <data name="Message_SubTitle" xml:space="preserve">
+    <value>1対1のダイレクトメッセージやグループチャットができます。</value>
+  </data>
+  <data name="Message_DateLabel" xml:space="preserve">
+    <value>日付</value>
+  </data>
+  <data name="Message_DateFilterHint" xml:space="preserve">
+    <value>指定した日付の前後最大10件（合計最大20件）の会話を表示します</value>
+  </data>
+  <data name="Message_ChatDateFilterHintFormat" xml:space="preserve">
+    <value>指定した日付の前後最大{0}件（合計最大{1}件）を表示します</value>
+  </data>
+  <data name="Message_NoConversationsHint" xml:space="preserve">
+    <value>新しいメッセージを作成して他のユーザーと交流してみましょう！</value>
+  </data>
+  <data name="Message_GroupBadge" xml:space="preserve">
+    <value>グループ</value>
+  </data>
+  <data name="Message_OpenBadge" xml:space="preserve">
+    <value>開く →</value>
+  </data>
+  <data name="Message_ChatTypeLabel" xml:space="preserve">
+    <value>チャット種別</value>
+  </data>
+  <data name="Message_GroupNamePlaceholder" xml:space="preserve">
+    <value>例: 漫画制作合宿、イラスト部</value>
+  </data>
+  <data name="Message_NoOtherUsers" xml:space="preserve">
+    <value>他のユーザーが見つかりません。</value>
+  </data>
+  <data name="Message_ImageAttachLabel" xml:space="preserve">
+    <value>🖼️ 画像を添付</value>
+  </data>
+  <data name="Message_TextPlaceholder" xml:space="preserve">
+    <value>メッセージを入力してください...</value>
+  </data>
+  <data name="Message_MembersLabel" xml:space="preserve">
+    <value>🧑‍🤝‍🧑 メンバー</value>
+  </data>
+  <data name="Message_NoMessagesForDate" xml:space="preserve">
+    <value>該当するメッセージがありません</value>
   </data>
   <data name="Message_Title" xml:space="preserve">
     <value>メッセージ</value>

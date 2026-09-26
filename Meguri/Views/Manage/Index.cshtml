@@ -40,7 +40,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="Bio" class="form-label">@SharedLocalizer["Manage_Profile_Bio"]</label>
-                <textarea asp-for="Bio" class="form-control" rows="4" placeholder="自己紹介を入力"></textarea>
+                <textarea asp-for="Bio" class="form-control" rows="4" placeholder="@SharedLocalizer["Manage_Profile_BioPlaceholder"]"></textarea>
                 <span asp-validation-for="Bio" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-secondary">@SharedLocalizer["Manage_Profile_Save"]</button>
