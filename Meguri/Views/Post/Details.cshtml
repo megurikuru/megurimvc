@@ -11,6 +11,14 @@
 		<div class="col-lg-9">
 				<div class="card shadow-sm border-0 mb-4 bg-body-tertiary">
 					<div class="card-body p-4">
+						<!-- パンくず -->
+						<nav aria-label="breadcrumb" class="mb-2">
+							<ol class="breadcrumb mb-0">
+								<li class="breadcrumb-item"><a asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Fandom_Title"]</a></li>
+								<li class="breadcrumb-item"><a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.FandomId">@(Model.Fandom?.Name ?? "界隈")</a></li>
+								<li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+							</ol>
+						</nav>
 						<!-- ヘッダー情報 -->
 								<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
 										<div class="d-flex align-items-center gap-2">
