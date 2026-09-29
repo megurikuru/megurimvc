@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.Data.SqlClient;
 using Meguri.Data;
 using Meguri.Models;
 
@@ -45,123 +46,101 @@ namespace Meguri.Controllers {
         }
 
         // トップページ（インデックス画面）の表示処理
-        // 投稿や画像の取得・フィルタリング・ページネーション設定を行います。
-        public async Task<IActionResult> Index(int? fandomId, string? search, int? skip, int? imageSkip) {
-            const int pageSize = 40; // 1ページあたりの表示件数
+        public async Task<IActionResult> Index(string? search, int? skip) {
+            const int pageSize = 40;
 
-            // 負の値などを防止してスキップ数を正規化
+            // パラメータの正規化
             var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
-            var resolvedImageSkip = imageSkip.HasValue && imageSkip.Value > 0 ? imageSkip.Value : 0;
-
-            // 投稿データのベースクエリ作成
-            var query = _context.Posts.AsQueryable();
-
-            // ファンダムIDが指定されている場合、投稿を絞り込む
-            if (fandomId.HasValue) {
-                query = query.Where(p => p.FandomId == fandomId.Value);
-                ViewBag.CurrentFandom = await _context.Fandoms.FindAsync(fandomId.Value);
-            }
-
-            // 画像データのベースクエリ作成
-            var imageQuery = _context.Images.AsQueryable();
+            ViewBag.Search = search;
 
             // ユーザーの認証状態と年齢制限のチェック
             var isAuthenticated = User.Identity?.IsAuthenticated == true;
             var isAdult = isAuthenticated && await IsUserAdultAsync();
 
-            // 年齢制限・ログイン状態に応じた画像のフィルタリング
-            if (!isAuthenticated) {
-                // 未ログインユーザー: 公開画像かつ一般（非NSFW）のみ
-                imageQuery = imageQuery.Where(i => i.IsPublic && !i.IsSexual && !i.IsViolence);
-            } else if (!isAdult) {
-                // 18歳未満または生年月日未登録の会員: 一般画像のみ（公開＋非公開問わず）
-                imageQuery = imageQuery.Where(i => !i.IsSexual && !i.IsViolence);
+            // 1. ベースとなる SQL（テーブル名・カラム名をダブルクォーテーションで囲む）
+            var sql = @"
+                SELECT DISTINCT p.*
+                FROM ""Posts"" p
+                LEFT JOIN ""PostTags"" pt ON p.""Id"" = pt.""PostId""
+                LEFT JOIN ""TagConcepts"" tc ON pt.""TagConceptId"" = tc.""Id""
+                LEFT JOIN ""Tags"" t ON tc.""Id"" = t.""TagConceptId""
+                LEFT JOIN ""PostImages"" pi ON p.""Id"" = pi.""PostId""
+                LEFT JOIN ""Images"" i ON pi.""ImageId"" = i.""Id""
+                LEFT JOIN ""ImageTags"" it ON i.""Id"" = it.""ImageId""
+                LEFT JOIN ""TagConcepts"" itc ON it.""TagConceptId"" = itc.""Id""
+                LEFT JOIN ""Tags"" itg ON itc.""Id"" = itg.""TagConceptId""";
+
+            var parameters = new List<object>();
+
+            // 検索キーワードがある場合のみ WHERE 句を追加
+            if (!string.IsNullOrWhiteSpace(search)) {
+                sql += @"
+                WHERE (
+                    p.""Name"" LIKE @search OR
+                    p.""Text"" LIKE @search OR
+                    t.""TagText"" LIKE @search OR
+                    i.""Name"" LIKE @search OR
+                    i.""Caption"" LIKE @search OR
+                    i.""Description"" LIKE @search OR
+                    itg.""TagText"" LIKE @search
+                )";
+
+                parameters.Add(new Npgsql.NpgsqlParameter("@search", $"%{search}%"));
             }
-            // 18歳以上の会員: 全て閲覧可能
+            // SQL から Posts のクエリを作成
+            var postQuery = _context.Posts.FromSqlRaw(sql, parameters.ToArray());
 
-            // 検索キーワードが指定されている場合、投稿および画像を検索
-            if (!string.IsNullOrEmpty(search)) {
-                // 投稿の件名・本文・タグテキストから曖昧検索
-                query = query.Where(p =>
-                    p.Name.Contains(search) ||
-                    p.Text.Contains(search) ||
-                    p.PostTags.Any(pt => pt.TagConcept.Tags.Any(t => t.TagText.Contains(search))));
-
-                // 画像の名称・キャプション・説明・タグテキストから曖昧検索
-                imageQuery = imageQuery.Where(i =>
-                    i.Name.Contains(search) ||
-                    i.Caption.Contains(search) ||
-                    i.Description.Contains(search) ||
-                    i.ImageTags.Any(it => it.TagConcept.Tags.Any(t => t.TagText.Contains(search))));
-                
-                ViewBag.CurrentSearch = search;
+            // 2. 総件数取得とページネーションの調整
+            var totalCount = await postQuery.CountAsync();
+            if (totalCount > 0 && resolvedSkip >= totalCount) {
+                resolvedSkip = Math.Max(0, ((totalCount - 1) / pageSize) * pageSize);
             }
 
-            // --- 投稿（Posts）の取得とページネーション計算 ---
-            var totalCount = await query.CountAsync();
-            // スキップ数が全件数を超えている場合は最後のページに調整
-            if (resolvedSkip >= totalCount) {
-                resolvedSkip = Math.Max(0, totalCount - pageSize);
-            }
-
-            // 関連データ（ユーザー、ファンダム、画像、タグ、リアクション）をインクルードして最新順に取得
-            var recentPosts = await query
+            // 3. 関連データのインクルードとデータ取得（添付画像へのアクセス権限・年齢制限フィルタ適用）
+            var posts = await postQuery
                 .Include(p => p.User)
                 .Include(p => p.Fandom)
-                .Include(p => p.PostImages).ThenInclude(pi => pi.Image)
-                .Include(p => p.PostTags).ThenInclude(pt => pt.TagConcept).ThenInclude(tc => tc.Tags)
+                .Include(p => p.PostImages)
+                    .ThenInclude(pi => pi.Image)
+                .Include(p => p.PostTags)
+                    .ThenInclude(pt => pt.TagConcept)
+                        .ThenInclude(tc => tc.Tags)
                 .Include(p => p.Reactions)
                 .OrderByDescending(p => p.CreatedAt)
                 .Skip(resolvedSkip)
                 .Take(pageSize)
+                .Select(p => new Post {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Text = p.Text,
+                    CreatedAt = p.CreatedAt,
+                    User = p.User,
+                    Fandom = p.Fandom,
+                    Reactions = p.Reactions,
+                    PostTags = p.PostTags,
+                    PostImages = p.PostImages.Where(pi =>
+                        (!isAuthenticated ? (pi.Image.IsPublic && !pi.Image.IsSexual && !pi.Image.IsViolence) :
+                         !isAdult ? (!pi.Image.IsSexual && !pi.Image.IsViolence) : true)
+                    ).ToList()
+                })
                 .ToListAsync();
 
-            // --- 画像（Images）の取得とページネーション計算 ---
-            var imageTotalCount = await imageQuery.CountAsync();
-            if (resolvedImageSkip >= imageTotalCount) {
-                resolvedImageSkip = Math.Max(0, imageTotalCount - pageSize);
-            }
-
-            // 検索キーワードがある場合のみ画像を検索して取得（無しの場合は空リスト）
-            var recentImages = !string.IsNullOrEmpty(search)
-                ? await imageQuery
-                    .Include(i => i.User)
-                    .Include(i => i.ImageTags).ThenInclude(it => it.TagConcept).ThenInclude(tc => tc.Tags)
-                    .OrderByDescending(i => i.CreatedAt)
-                    .Skip(resolvedImageSkip)
-                    .Take(pageSize)
-                    .ToListAsync()
-                : new List<Image>();
-
-            // 親ファンダム一覧（カテゴリー階層のトップレベル）を取得
-            var fandoms = await _context.Fandoms
+            // View へ渡すデータの設定
+            ViewBag.Posts = posts;
+            ViewBag.TopFandoms = await _context.Fandoms
                 .Include(f => f.ChildFandoms)
                 .Where(f => f.ParentFandomId == null)
                 .ToListAsync();
-
-            // --- View 側へ渡すデータのセット ---
-            ViewBag.RecentPosts = recentPosts;
-            ViewBag.TopFandoms = fandoms;
             ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
-            
-            // 投稿用ページネーション情報
+
+            // ページネーション情報
             ViewBag.PostsPageSize = pageSize;
             ViewBag.PostsTotalCount = totalCount;
             ViewBag.PostsSkip = resolvedSkip;
             ViewBag.PostsHasPrevious = resolvedSkip > 0;
-            ViewBag.PostsHasNext = resolvedSkip + recentPosts.Count < totalCount;
+            ViewBag.PostsHasNext = resolvedSkip + posts.Count < totalCount;
             ViewBag.PostsPreviousSkip = Math.Max(0, resolvedSkip - pageSize);
             ViewBag.PostsNextSkip = resolvedSkip + pageSize;
-
-            // 画像用ページネーション情報
-            ViewBag.RecentImages = recentImages;
-            ViewBag.ImagesPageSize = pageSize;
-            ViewBag.ImagesTotalCount = imageTotalCount;
-            ViewBag.ImagesSkip = resolvedImageSkip;
-            ViewBag.ImagesHasPrevious = resolvedImageSkip > 0;
-            ViewBag.ImagesHasNext = resolvedImageSkip + recentImages.Count < imageTotalCount;
-            ViewBag.ImagesPreviousSkip = Math.Max(0, resolvedImageSkip - pageSize);
-            ViewBag.ImagesNextSkip = resolvedImageSkip + pageSize;
 
             return View();
         }
