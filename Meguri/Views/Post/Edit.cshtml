@@ -1,146 +1,140 @@
 ﻿@model Meguri.Models.PostViewModels.PostEditViewModel
 @{
-		ViewData["Title"] = SharedLocalizer["Post_EditTitle"];
-		var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
+	ViewData["Title"] = SharedLocalizer["Post_EditTitle"];
+	var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
 }
 
+
+<h1>@SharedLocalizer["Post_EditTitle"]</h1>
 <div>
+	<form asp-action="Edit" method="post" enctype="multipart/form-data">
+		<input type="hidden" asp-for="Id" />
+		<div asp-validation-summary="ModelOnly"></div>
+
+		<!-- 界隈選択 -->
 		<div>
-				<div>
-						<div>
-								<h4 >✏️ @SharedLocalizer["Post_EditTitle"]</h4>
-						</div>
-						<div>
-								<form asp-action="Edit" method="post" enctype="multipart/form-data">
-										<input type="hidden" asp-for="Id" />
-										<div asp-validation-summary="ModelOnly" ></div>
-
-										<!-- 界隈選択 -->
-										<div>
-												<label asp-for="FandomId" >@SharedLocalizer["Post_SelectFandom"] <span >*</span></label>
-												<select asp-for="FandomId"  required>
-														@foreach (var f in fandoms) {
-																<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
-														}
-												</select>
-												<span asp-validation-for="FandomId" ></span>
-										</div>
-
-										<!-- タイトル -->
-										<div>
-												<label asp-for="Name" >@SharedLocalizer["Post_PostName"] <span >*</span></label>
-												<input asp-for="Name"  required />
-												<span asp-validation-for="Name" ></span>
-										</div>
-
-										<!-- 本文 -->
-										<div>
-												<label asp-for="Text" >@SharedLocalizer["Post_PostText"] <span >*</span></label>
-												<textarea asp-for="Text" rows="6"  required></textarea>
-												<span asp-validation-for="Text" ></span>
-										</div>
-
-										<!-- 既存の添付画像の並び替え & 削除 -->
-										@if (Model.ExistingImages != null && Model.ExistingImages.Any()) {
-												<div>
-														<label >🖼️ @SharedLocalizer["Post_AttachImages"] の並び順・管理</label>
-														<p >@SharedLocalizer["Post_ImageOrderHint"]</p>
-														<div id="imageOrderContainer">
-																@for (int i = 0; i < Model.ExistingImages.Count; i++) {
-																		<div>
-																				<div>
-																						<span >@(i + 1)</span>
-																						<img src="/Image/File/@Model.ExistingImages[i].ImageId" style="width: 50px; height: 50px; object-fit: cover;"  />
-																						<span  style="max-width: 200px;">@Model.ExistingImages[i].ImageName</span>
-																						<input type="hidden" name="ExistingImages[@i].ImageId" value="@Model.ExistingImages[i].ImageId" />
-																						<input type="hidden"  name="ExistingImages[@i].DisplayOrder" value="@Model.ExistingImages[i].DisplayOrder" />
-																				</div>
-																				<div>
-																						<button type="button"  onclick="moveImageOrder(this, 'up')" title="@SharedLocalizer["Common_MoveUp"]">▲</button>
-																						<button type="button"  onclick="moveImageOrder(this, 'down')" title="@SharedLocalizer["Common_MoveDown"]">▼</button>
-																						<div>
-																								<input  type="checkbox" name="ExistingImages[@i].Remove" value="true" id="remove_@i" />
-																								<label  for="remove_@i">@SharedLocalizer["Common_Delete"]</label>
-																						</div>
-																				</div>
-																		</div>
-																}
-														</div>
-												</div>
-										}
-
-										<!-- 新規画像追加 -->
-										<div>
-												<label asp-for="NewImageFiles" >➕ 画像を追加添付</label>
-												<input asp-for="NewImageFiles" type="file" multiple  accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
-												<div >PNG/JPEG形式（最大5MB/枚）、WebPに自動変換され250KB以下に最適化されます。</div>
-										</div>
-
-										<!-- タグ編集コンポーネント (最大10個) -->
-										<div>
-												<div>
-														<label >🏷️ @SharedLocalizer["Post_Tags"]</label>
-														<span  id="tagCountDisplay">0/10</span>
-												</div>
-												<div>
-														<input type="text" id="tagInput"  placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
-														<button type="button"  onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
-												</div>
-												<div id="tagSuggestions"  style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
-
-												<div id="selectedTagsContainer" ></div>
-												<div id="hiddenTagsInputs"></div>
-												<div >@SharedLocalizer["Post_TagsHint"]</div>
-										</div>
-
-										<!-- 各種フラグ -->
-										<div>
-												<div>
-														<div>
-																<input asp-for="IsPublic"  type="checkbox" role="switch" />
-																<label asp-for="IsPublic" >@SharedLocalizer["Post_Public"]</label>
-														</div>
-												</div>
-												<div>
-														<div>
-																<input asp-for="IsPinned"  type="checkbox" role="switch" />
-																<label asp-for="IsPinned" >@SharedLocalizer["Post_Pinned"]</label>
-														</div>
-												</div>
-												<div>
-														<div>
-																<input asp-for="IsLocked"  type="checkbox" role="switch" />
-																<label asp-for="IsLocked" >@SharedLocalizer["Post_Locked"]</label>
-														</div>
-												</div>
-												<div>
-														<div>
-																<input asp-for="IsSexual"  type="checkbox" role="switch" />
-																<label asp-for="IsSexual" >@SharedLocalizer["Post_NSFW_Sexual"]</label>
-														</div>
-												</div>
-												<div>
-														<div>
-																<input asp-for="IsViolence"  type="checkbox" role="switch" />
-																<label asp-for="IsViolence" >@SharedLocalizer["Post_NSFW_Violence"]</label>
-														</div>
-												</div>
-										</div>
-
-										<div>
-												<a asp-action="Details" asp-route-id="@Model.Id" >@SharedLocalizer["Common_Back"]</a>
-												<button type="submit" >@SharedLocalizer["Common_Save"]</button>
-										</div>
-								</form>
-						</div>
-				</div>
+			<label asp-for="FandomId">@SharedLocalizer["Post_SelectFandom"] <span>*</span></label>
+			<select asp-for="FandomId" required>
+				@foreach (var f in fandoms) {
+					<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
+				}
+			</select>
+			<span asp-validation-for="FandomId"></span>
 		</div>
+
+		<!-- タイトル -->
+		<div>
+			<label asp-for="Name">@SharedLocalizer["Post_PostName"] <span>*</span></label>
+			<input asp-for="Name" required />
+			<span asp-validation-for="Name"></span>
+		</div>
+
+		<!-- 本文 -->
+		<div>
+			<label asp-for="Text">@SharedLocalizer["Post_PostText"] <span>*</span></label>
+			<textarea asp-for="Text" rows="6" required></textarea>
+			<span asp-validation-for="Text"></span>
+		</div>
+
+		<!-- 既存の添付画像の並び替え & 削除 -->
+		@if (Model.ExistingImages != null && Model.ExistingImages.Any()) {
+			<div>
+				<label>🖼️ @SharedLocalizer["Post_AttachImages"] の並び順・管理</label>
+				<p>@SharedLocalizer["Post_ImageOrderHint"]</p>
+				<div id="imageOrderContainer">
+					@for (int i = 0; i < Model.ExistingImages.Count; i++) {
+						<div>
+							<div>
+								<span>@(i + 1)</span>
+								<img src="/Image/File/@Model.ExistingImages[i].ImageId" style="width: 50px; height: 50px; object-fit: cover;" />
+								<span style="max-width: 200px;">@Model.ExistingImages[i].ImageName</span>
+								<input type="hidden" name="ExistingImages[@i].ImageId" value="@Model.ExistingImages[i].ImageId" />
+								<input type="hidden" name="ExistingImages[@i].DisplayOrder" value="@Model.ExistingImages[i].DisplayOrder" />
+							</div>
+							<div>
+								<button type="button" onclick="moveImageOrder(this, 'up')" title="@SharedLocalizer["Common_MoveUp"]">▲</button>
+								<button type="button" onclick="moveImageOrder(this, 'down')" title="@SharedLocalizer["Common_MoveDown"]">▼</button>
+								<div>
+									<input type="checkbox" name="ExistingImages[@i].Remove" value="true" id="remove_@i" />
+									<label for="remove_@i">@SharedLocalizer["Common_Delete"]</label>
+								</div>
+							</div>
+						</div>
+					}
+				</div>
+			</div>
+		}
+
+		<!-- 新規画像追加 -->
+		<div>
+			<label asp-for="NewImageFiles">➕ 画像を追加添付</label>
+			<input asp-for="NewImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+			<div>PNG/JPEG形式（最大5MB/枚）、WebPに自動変換され250KB以下に最適化されます。</div>
+		</div>
+
+		<!-- タグ編集コンポーネント (最大10個) -->
+		<div>
+			<div>
+				<label>🏷️ @SharedLocalizer["Post_Tags"]</label>
+				<span id="tagCountDisplay">0/10</span>
+			</div>
+			<div>
+				<input type="text" id="tagInput" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
+				<button type="button" onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
+			</div>
+			<div id="tagSuggestions" style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
+
+			<div id="selectedTagsContainer"></div>
+			<div id="hiddenTagsInputs"></div>
+			<div>@SharedLocalizer["Post_TagsHint"]</div>
+		</div>
+
+		<!-- 各種フラグ -->
+		<div>
+			<div>
+				<div>
+					<input asp-for="IsPublic" type="checkbox" role="switch" />
+					<label asp-for="IsPublic">@SharedLocalizer["Post_Public"]</label>
+				</div>
+			</div>
+			<div>
+				<div>
+					<input asp-for="IsPinned" type="checkbox" role="switch" />
+					<label asp-for="IsPinned">@SharedLocalizer["Post_Pinned"]</label>
+				</div>
+			</div>
+			<div>
+				<div>
+					<input asp-for="IsLocked" type="checkbox" role="switch" />
+					<label asp-for="IsLocked">@SharedLocalizer["Post_Locked"]</label>
+				</div>
+			</div>
+			<div>
+				<div>
+					<input asp-for="IsSexual" type="checkbox" role="switch" />
+					<label asp-for="IsSexual">@SharedLocalizer["Post_NSFW_Sexual"]</label>
+				</div>
+			</div>
+			<div>
+				<div>
+					<input asp-for="IsViolence" type="checkbox" role="switch" />
+					<label asp-for="IsViolence">@SharedLocalizer["Post_NSFW_Violence"]</label>
+				</div>
+			</div>
+		</div>
+
+		<div>
+			<a asp-action="Details" asp-route-id="@Model.Id">@SharedLocalizer["Common_Back"]</a>
+			<button type="submit">@SharedLocalizer["Common_Save"]</button>
+		</div>
+	</form>
 </div>
 
+
 @section Scripts {
-		<script>
-				$(document).ready(function () {
-						TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
-				});
-		</script>
+	<script>
+		$(document).ready(function () {
+				TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
+		});
+	</script>
 }
