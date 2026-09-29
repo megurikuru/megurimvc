@@ -10,182 +10,190 @@
 		var imageTagsTotalCount = ViewBag.ImageTagsTotalCount as int? ?? 0;
 }
 
-<div>
+@* ================================================== *@
+@* 1. タグ基本情報 & シソーラスエリア                  *@
+@* ================================================== *@
+<div id="search-box">
 		<div>
-				<div>
-						<div>
-								<h2 >🏷️ #@primaryTag</h2>
-								<div>
-										@string.Format(SharedLocalizer["Tag_CreatorInfoFormat"].Value, Model.User?.UserName ?? SharedLocalizer["Common_SystemLabel"].Value, postTagsTotalCount, imageTagsTotalCount)
-								</div>
-						</div>
-
-						<div>
-								<a asp-action="Disambiguation" asp-route-id="@Model.Id">
-										⚖️ @SharedLocalizer["Tag_DisambiguationBtn"]
-								</a>
-								<a asp-controller="Post" asp-action="Index" asp-route-tag="@primaryTag">
-										@SharedLocalizer["Post_ListTitle"]
-								</a>
-								<a asp-controller="Image" asp-action="Index" asp-route-tag="@primaryTag">
-										@SharedLocalizer["Image_ListTitle"]
-								</a>
-						</div>
+				<div class="space-between-wrap">
+						<h2>🏷️ #@primaryTag</h2>
+						<small>
+								@string.Format(SharedLocalizer["Tag_CreatorInfoFormat"].Value, Model.User?.UserName ?? SharedLocalizer["Common_SystemLabel"].Value, postTagsTotalCount, imageTagsTotalCount)
+						</small>
 				</div>
 
-				<!-- シソーラス情報（上位語・下位語・関連語・同義語） -->
 				<div>
-						<!-- 同義語 -->
-						@if (Model.Tags.Count > 1) {
-								<div>
-										<h6 >🔄 @SharedLocalizer["Tag_SynonymTerms"]</h6>
-										<div>
-												@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag)) {
-														<span >#@t.TagText</span>
-												}
-										</div>
-								</div>
-						}
-
-						<!-- 上位語 -->
-						@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader")) {
-								<div>
-										<h6 >⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h6>
-										<div>
-												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader")) {
-														var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
-														<a asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
-																#@text
-														</a>
-												}
-										</div>
-								</div>
-						}
-
-						<!-- 下位語 -->
-						@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader")) {
-								<div>
-										<h6 >⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h6>
-										<div>
-												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader")) {
-														var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
-														<a asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
-																#@text
-														</a>
-												}
-										</div>
-								</div>
-						}
-
-						<!-- 関連語 -->
-						@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related")) {
-								<div>
-										<h6 >🔗 @SharedLocalizer["Tag_RelatedTerms"]</h6>
-										<div>
-												@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related")) {
-														var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
-														<a asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
-																#@text
-														</a>
-												}
-												@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related")) {
-														var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
-														<a asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
-																#@text
-														</a>
-												}
-										</div>
-								</div>
-						}
+						<a asp-action="Disambiguation" asp-route-id="@Model.Id">
+								⚖️ @SharedLocalizer["Tag_DisambiguationBtn"]
+						</a>
+						<a asp-controller="Post" asp-action="Index" asp-route-tag="@primaryTag">
+								@SharedLocalizer["Post_ListTitle"]
+						</a>
+						<a asp-controller="Image" asp-action="Index" asp-route-tag="@primaryTag">
+								@SharedLocalizer["Image_ListTitle"]
+						</a>
 				</div>
 		</div>
-</div>
 
-<!-- 投稿 & 画像一覧 -->
-<div>
+		<!-- シソーラス情報（上位語・下位語・関連語・同義語） -->
 		<div>
-				<h4 >@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, postTagsTotalCount)</h4>
-				@if (!postTags.Any()) {
-						<p >@SharedLocalizer["Post_NoPostsFound"]</p>
-				}
-				else {
+				<!-- 同義語 -->
+				@if (Model.Tags.Count > 1) {
 						<div>
-								@foreach (var pt in postTags) {
-										<div>
-												<h6>
-														<a asp-controller="Post" asp-action="Details" asp-route-id="@pt.PostId">
-																@pt.Post.Name
-														</a>
-												</h6>
-												<small >👤 @(pt.Post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value) | @pt.Post.CreatedAt.ToString("yyyy/MM/dd")</small>
-										</div>
-								}
+								<h6>🔄 @SharedLocalizer["Tag_SynonymTerms"]</h6>
+								<div>
+										@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag)) {
+												<span class="icon-with-text">#@t.TagText</span>
+										}
+								</div>
 						</div>
 				}
 
-				@{
-					var ptHasPrevious = ViewBag.PostTagsHasPrevious as bool? ?? false;
-					var ptHasNext = ViewBag.PostTagsHasNext as bool? ?? false;
-					var ptSkip = ViewBag.PostTagsSkip as int? ?? 0;
-					var ptPreviousSkip = ViewBag.PostTagsPreviousSkip as int? ?? 0;
-					var ptNextSkip = ViewBag.PostTagsNextSkip as int? ?? 0;
-				}
-				@if (postTagsTotalCount > 0) {
-					<nav>
-						@if (ptHasPrevious) {
-							<a  asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-						} else {
-							<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
-						}
-						<span >@(ptSkip + 1) - @(ptSkip + postTags.Count) / @postTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
-						@if (ptHasNext) {
-							<a  asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-						} else {
-							<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
-						}
-					</nav>
-				}
-		</div>
-
-		<div>
-				<h4 >@string.Format(SharedLocalizer["Tag_RelatedImagesTitleFormat"].Value, imageTagsTotalCount)</h4>
-				@if (!imageTags.Any()) {
-						<p >@SharedLocalizer["Image_NoImagesFound"]</p>
-				}
-				else {
+				<!-- 上位語 -->
+				@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader")) {
 						<div>
-								@foreach (var it in imageTags) {
-										<div>
-												<a asp-controller="Image" asp-action="Details" asp-route-id="@it.ImageId">
-														<img src="/Image/File/@it.ImageId" alt="@it.Image.Name" />
+								<h6>⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h6>
+								<div>
+										@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader")) {
+												var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
+												<a class="icon-with-text" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
+														#@text
 												</a>
-										</div>
-								}
+										}
+								</div>
 						</div>
 				}
 
-				@{
-					var itHasPrevious = ViewBag.ImageTagsHasPrevious as bool? ?? false;
-					var itHasNext = ViewBag.ImageTagsHasNext as bool? ?? false;
-					var itSkip = ViewBag.ImageTagsSkip as int? ?? 0;
-					var itPreviousSkip = ViewBag.ImageTagsPreviousSkip as int? ?? 0;
-					var itNextSkip = ViewBag.ImageTagsNextSkip as int? ?? 0;
-				}
-				@if (imageTagsTotalCount > 0) {
-					<nav>
-						@if (itHasPrevious) {
-							<a  asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-						} else {
-							<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
-						}
-						<span >@(itSkip + 1) - @(itSkip + imageTags.Count) / @imageTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
-						@if (itHasNext) {
-							<a  asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-						} else {
-							<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
-						}
-					</nav>
+				<!-- 下位語 -->
+				@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader")) {
+						<div>
+								<h6>⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h6>
+								<div>
+										@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader")) {
+												var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
+												<a class="icon-with-text" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
+														#@text
+												</a>
+										}
+								</div>
+						</div>
 				}
 
+				<!-- 関連語 -->
+				@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related")) {
+						<div>
+								<h6>🔗 @SharedLocalizer["Tag_RelatedTerms"]</h6>
+								<div>
+										@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related")) {
+												var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
+												<a class="icon-with-text" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
+														#@text
+												</a>
+										}
+										@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related")) {
+												var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
+												<a class="icon-with-text" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
+														#@text
+												</a>
+										}
+								</div>
+						</div>
+				}
 		</div>
 </div>
+
+@* ================================================== *@
+@* 2. 関連投稿一覧エリア                              *@
+@* ================================================== *@
+<div id="post-list">
+		<h1>@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, postTagsTotalCount)</h1>
+		@if (!postTags.Any()) {
+				<p>@SharedLocalizer["Post_NoPostsFound"]</p>
+		}
+		else {
+				@foreach (var pt in postTags) {
+						<div>
+								<div class="space-between-wrap">
+										<h3>
+												<a asp-controller="Post" asp-action="Details" asp-route-id="@pt.PostId">
+														@pt.Post.Name
+												</a>
+										</h3>
+										<small>@pt.Post.CreatedAt.ToString("yyyy/MM/dd")</small>
+								</div>
+								<div>
+										<span class="icon-with-text">
+												<img src="~/icons/user.svg"> @(pt.Post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)
+										</span>
+								</div>
+						</div>
+				}
+		}
+</div>
+
+@* 投稿用ページネーション *@
+@{
+		var ptHasPrevious = ViewBag.PostTagsHasPrevious as bool? ?? false;
+		var ptHasNext = ViewBag.PostTagsHasNext as bool? ?? false;
+		var ptSkip = ViewBag.PostTagsSkip as int? ?? 0;
+		var ptPreviousSkip = ViewBag.PostTagsPreviousSkip as int? ?? 0;
+		var ptNextSkip = ViewBag.PostTagsNextSkip as int? ?? 0;
+}
+@if (postTagsTotalCount > 0) {
+		<nav class="pagination">
+				@if (ptHasPrevious) {
+						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+				} else {
+						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+				}
+				<span>@(ptSkip + 1) - @(ptSkip + postTags.Count) / @postTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
+				@if (ptHasNext) {
+						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+				} else {
+						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+				}
+		</nav>
+}
+
+@* ================================================== *@
+@* 3. 関連画像一覧エリア                              *@
+@* ================================================== *@
+<div id="post-list">
+		<h1>@string.Format(SharedLocalizer["Tag_RelatedImagesTitleFormat"].Value, imageTagsTotalCount)</h1>
+		@if (!imageTags.Any()) {
+				<p>@SharedLocalizer["Image_NoImagesFound"]</p>
+		}
+		else {
+				<div>
+						@foreach (var it in imageTags) {
+								<a asp-controller="Image" asp-action="Details" asp-route-id="@it.ImageId">
+										<img src="/Image/File/@it.ImageId" alt="@it.Image.Name" />
+								</a>
+						}
+				</div>
+		}
+</div>
+
+@* 画像用ページネーション *@
+@{
+		var itHasPrevious = ViewBag.ImageTagsHasPrevious as bool? ?? false;
+		var itHasNext = ViewBag.ImageTagsHasNext as bool? ?? false;
+		var itSkip = ViewBag.ImageTagsSkip as int? ?? 0;
+		var itPreviousSkip = ViewBag.ImageTagsPreviousSkip as int? ?? 0;
+		var itNextSkip = ViewBag.ImageTagsNextSkip as int? ?? 0;
+}
+@if (imageTagsTotalCount > 0) {
+		<nav class="pagination">
+				@if (itHasPrevious) {
+						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+				} else {
+						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+				}
+				<span>@(itSkip + 1) - @(itSkip + imageTags.Count) / @imageTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
+				@if (itHasNext) {
+						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+				} else {
+						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+				}
+		</nav>
+}
