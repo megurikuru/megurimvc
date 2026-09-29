@@ -4,13 +4,11 @@
 	ViewData["IsHomePage"] = true;
 
 	// コントローラー（ViewBag）からのデータ取得と型キャスト（nullの場合は空リスト・既定値を設定）
-	var recentPosts = ViewBag.RecentPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
-	var recentImages = ViewBag.RecentImages as List<Meguri.Models.Image> ?? new List<Meguri.Models.Image>();
-	var currentSearch = ViewBag.CurrentSearch as string;
-	var currentFandom = ViewBag.CurrentFandom as Meguri.Models.Fandom;
+	var posts = ViewBag.Posts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
+	var search = ViewBag.Search as string;
 
 	// 投稿・画像ともに存在しない場合の判定フラグ
-	var nothingFound = !recentPosts.Any() && !recentImages.Any();
+	var nothingFound = !posts.Any();
 }
 
 @* ================================================== *@
@@ -19,13 +17,13 @@
 <div id="search-box">
 	<form class="search" asp-controller="Home" asp-action="Index" method="get">
 		@* 検索キーワード入力欄 *@
-		<input type="text" name="search" value="@currentSearch" placeholder="@SharedLocalizer["Home_SearchPlaceholder"]" />
+		<input type="text" name="search" value="@search" placeholder="@SharedLocalizer["Home_SearchPlaceholder"]" />
 
 		@* 検索送信ボタン *@
 		<button type="submit">検索</button>
 
 		@* 検索キーワード入力中、またはファンダム選択中の場合のみリセットボタンを表示 *@
-		@if (!string.IsNullOrEmpty(currentSearch) || currentFandom != null) {
+		@if (!string.IsNullOrEmpty(search)) {
 			<div>
 				<a asp-controller="Home" asp-action="Index">リセット</a>
 			</div>
@@ -42,10 +40,10 @@
 @* ================================================== *@
 <div id="post-list">
 	@* 投稿データが存在する場合 *@
-	@if (recentPosts.Any()) {
+	@if (posts.Any()) {
 		<h1>投稿</h1>
 		@* 投稿リストをループして描画 *@
-		@foreach (var post in recentPosts) {
+		@foreach (var post in posts) {
 			<div>
 				@* ファンダム名（未設定時はデフォルト名）と投稿日時 *@
 				<div class="space-between-wrap">
@@ -117,69 +115,22 @@
 	<nav class="pagination">
 		@* 前のページ（存在する場合はリンク、ない場合は無効化ボタン） *@
 		@if (postsHasPrevious) {
-			<a asp-action="Index" asp-route-skip="@postsPreviousSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+			<a asp-action="Index" asp-route-skip="@postsPreviousSkip" asp-route-search="@search">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
 		} else {
 			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
 		}
 
 		@* 現在の表示範囲と総件数 (例: 1 - 40 / 120件) *@
-		<span>@(postsSkip + 1) - @(postsSkip + recentPosts.Count) / @postsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
+		<span>@(postsSkip + 1) - @(postsSkip + posts.Count) / @postsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 
 		@* 次のページ（存在する場合はリンク、ない場合は無効化ボタン） *@
 		@if (postsHasNext) {
-			<a asp-action="Index" asp-route-skip="@postsNextSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+			<a asp-action="Index" asp-route-skip="@postsNextSkip" asp-route-search="@search">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
 		} else {
 			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
 		}
 	</nav>
 }
 
-@* ================================================== *@
-@* 4. 検索結果の画像一覧および画像ページネーション    *@
-@* ================================================== *@
-@{
-	// 画像用ページネーション情報の取得
-	var imagesTotalCount = ViewBag.ImagesTotalCount as int? ?? 0;
-	var imagesHasPrevious = ViewBag.ImagesHasPrevious as bool? ?? false;
-	var imagesHasNext = ViewBag.ImagesHasNext as bool? ?? false;
-	var imagesSkip = ViewBag.ImagesSkip as int? ?? 0;
-	var imagesPreviousSkip = ViewBag.ImagesPreviousSkip as int? ?? 0;
-	var imagesNextSkip = ViewBag.ImagesNextSkip as int? ?? 0;
-}
-
-@* 検索キーワードが指定されている場合のみ画像検索セクションを表示 *@
-@if (!string.IsNullOrEmpty(currentSearch)) {
-	@* 画像サムネイル一覧 *@
-	@if (recentImages.Any()) {
-		<div id="image-list">
-			<h1>画像</h1>
-			@foreach (var image in recentImages) {
-				<a asp-controller="Image" asp-action="Details" asp-route-id="@image.Id">
-					<img src="/Image/File/@image.Id" style="width: 120px; height: 120px; object-fit: cover;" alt="@image.Name" />
-				</a>
-			}
-		</div>
-	}
-
-	@* 画像用のページネーション *@
-	@if (imagesTotalCount > 0) {
-		<nav class="pagination">
-			@* 画像の前ページ *@
-			@if (imagesHasPrevious) {
-				<a asp-action="Index" asp-route-imageSkip="@imagesPreviousSkip" asp-route-skip="@postsSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-			} else {
-				<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
-			}
-
-			@* 画像の現在表示範囲と総件数 *@
-			<span>@(imagesSkip + 1) - @(imagesSkip + recentImages.Count) / @imagesTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
-
-			@* 画像の次ページ *@
-			@if (imagesHasNext) {
-				<a asp-action="Index" asp-route-imageSkip="@imagesNextSkip" asp-route-skip="@postsSkip" asp-route-search="@currentSearch" asp-route-fandomId="@currentFandom?.Id">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-			} else {
-				<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
-			}
-		</nav>
-	}
-}
+@* 	}
+} *@
