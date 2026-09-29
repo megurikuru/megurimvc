@@ -25,29 +25,62 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Index(string? q, int? skip) {
             const int pageSize = 40;
 
-            var query = _context.TagConcepts
-                .Include(tc => tc.Tags)
-                .Include(tc => tc.PostTags)
-                .Include(tc => tc.ImageTags)
-                .Include(tc => tc.User)
-                .AsQueryable();
-
+            // 総件数の取得 (SQL)
+            int totalCount;
             if (!string.IsNullOrWhiteSpace(q)) {
-                var keyword = q.Trim();
-                query = query.Where(tc => tc.Tags.Any(t => t.TagText.Contains(keyword)));
+                var keywordPattern = $"%{q.Trim()}%";
+                totalCount = await _context.Database
+                    .SqlQuery<int>($@"
+                        SELECT COUNT(DISTINCT tc.""Id"") AS ""Value""
+                        FROM ""TagConcepts"" tc
+                        INNER JOIN ""Tags"" t ON tc.""Id"" = t.""TagConceptId""
+                        WHERE t.""TagText"" LIKE {keywordPattern}")
+                    .SingleAsync();
+            } else {
+                totalCount = await _context.TagConcepts.CountAsync();
             }
 
-            var totalCount = await query.CountAsync();
             var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
             if (resolvedSkip >= totalCount) {
                 resolvedSkip = Math.Max(0, totalCount - pageSize);
             }
 
-            var concepts = await query
-                .OrderByDescending(tc => tc.PostTags.Count + tc.ImageTags.Count)
-                .Skip(resolvedSkip)
-                .Take(pageSize)
-                .ToListAsync();
+            // データの取得 (SQL)
+            List<TagConcept> concepts;
+            if (!string.IsNullOrWhiteSpace(q)) {
+                var keywordPattern = $"%{q.Trim()}%";
+                concepts = await _context.TagConcepts
+                    .FromSqlInterpolated($@"
+                        SELECT tc.*
+                        FROM ""TagConcepts"" tc
+                        INNER JOIN ""Tags"" t ON tc.""Id"" = t.""TagConceptId""
+                        LEFT JOIN ""PostTags"" pt ON tc.""Id"" = pt.""TagConceptId""
+                        LEFT JOIN ""ImageTags"" it ON tc.""Id"" = it.""TagConceptId""
+                        WHERE t.""TagText"" LIKE {keywordPattern}
+                        GROUP BY tc.""Id""
+                        ORDER BY (COUNT(DISTINCT pt.""Id"") + COUNT(DISTINCT it.""Id"")) DESC
+                        LIMIT {pageSize} OFFSET {resolvedSkip}")
+                    .Include(tc => tc.Tags)
+                    .Include(tc => tc.PostTags)
+                    .Include(tc => tc.ImageTags)
+                    .Include(tc => tc.User)
+                    .ToListAsync();
+            } else {
+                concepts = await _context.TagConcepts
+                    .FromSqlInterpolated($@"
+                        SELECT tc.*
+                        FROM ""TagConcepts"" tc
+                        LEFT JOIN ""PostTags"" pt ON tc.""Id"" = pt.""TagConceptId""
+                        LEFT JOIN ""ImageTags"" it ON tc.""Id"" = it.""TagConceptId""
+                        GROUP BY tc.""Id""
+                        ORDER BY (COUNT(DISTINCT pt.""Id"") + COUNT(DISTINCT it.""Id"")) DESC
+                        LIMIT {pageSize} OFFSET {resolvedSkip}")
+                    .Include(tc => tc.Tags)
+                    .Include(tc => tc.PostTags)
+                    .Include(tc => tc.ImageTags)
+                    .Include(tc => tc.User)
+                    .ToListAsync();
+            }
 
             ViewBag.SearchQuery = q;
             ViewBag.PageSize = pageSize;
@@ -66,41 +99,60 @@ namespace Meguri.Controllers {
             const int pageSize = 40;
 
             var concept = await _context.TagConcepts
+                .FromSqlInterpolated($"SELECT * FROM \"TagConcepts\" WHERE \"Id\" = {conceptId}")
                 .Include(tc => tc.Tags)
                 .Include(tc => tc.User)
                 .Include(tc => tc.SubjectRelationships).ThenInclude(sr => sr.ObjectConcept).ThenInclude(oc => oc.Tags)
                 .Include(tc => tc.ObjectRelationships).ThenInclude(or => or.SubjectConcept).ThenInclude(sc => sc.Tags)
-                .FirstOrDefaultAsync(tc => tc.Id == conceptId);
+                .FirstOrDefaultAsync();
 
             if (concept == null) return NotFound();
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ViewBag.CanEdit = concept.UserId == currentUserId || User.IsInRole("Admin");
 
-            var postTagsQuery = _context.PostTags
-                .Where(pt => pt.TagConceptId == conceptId)
-                .Include(pt => pt.Post).ThenInclude(p => p.User)
-                .Include(pt => pt.Post).ThenInclude(p => p.PostImages)
-                .OrderByDescending(pt => pt.Post.CreatedAt);
+            // PostTags の件数取得とデータ取得 (SQL)
+            var postTagsTotalCount = await _context.Database
+                .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"PostTags\" WHERE \"TagConceptId\" = {conceptId}")
+                .SingleAsync();
 
-            var postTagsTotalCount = await postTagsQuery.CountAsync();
             var resolvedPostSkip = postSkip.HasValue && postSkip.Value > 0 ? postSkip.Value : 0;
             if (resolvedPostSkip >= postTagsTotalCount) {
                 resolvedPostSkip = Math.Max(0, postTagsTotalCount - pageSize);
             }
-            var postTags = await postTagsQuery.Skip(resolvedPostSkip).Take(pageSize).ToListAsync();
 
-            var imageTagsQuery = _context.ImageTags
-                .Where(it => it.TagConceptId == conceptId)
-                .Include(it => it.Image)
-                .OrderByDescending(it => it.Image.CreatedAt);
+            var postTags = await _context.PostTags
+                .FromSqlInterpolated($@"
+                    SELECT pt.*
+                    FROM ""PostTags"" pt
+                    INNER JOIN ""Posts"" p ON pt.""PostId"" = p.""Id""
+                    WHERE pt.""TagConceptId"" = {conceptId}
+                    ORDER BY p.""CreatedAt"" DESC
+                    LIMIT {pageSize} OFFSET {resolvedPostSkip}")
+                .Include(pt => pt.Post).ThenInclude(p => p.User)
+                .Include(pt => pt.Post).ThenInclude(p => p.PostImages)
+                .ToListAsync();
 
-            var imageTagsTotalCount = await imageTagsQuery.CountAsync();
+            // ImageTags の件数取得とデータ取得 (SQL)
+            var imageTagsTotalCount = await _context.Database
+                .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"ImageTags\" WHERE \"TagConceptId\" = {conceptId}")
+                .SingleAsync();
+
             var resolvedImageSkip = imageSkip.HasValue && imageSkip.Value > 0 ? imageSkip.Value : 0;
             if (resolvedImageSkip >= imageTagsTotalCount) {
                 resolvedImageSkip = Math.Max(0, imageTagsTotalCount - pageSize);
             }
-            var imageTags = await imageTagsQuery.Skip(resolvedImageSkip).Take(pageSize).ToListAsync();
+
+            var imageTags = await _context.ImageTags
+                .FromSqlInterpolated($@"
+                    SELECT it.*
+                    FROM ""ImageTags"" it
+                    INNER JOIN ""Images"" i ON it.""ImageId"" = i.""Id""
+                    WHERE it.""TagConceptId"" = {conceptId}
+                    ORDER BY i.""CreatedAt"" DESC
+                    LIMIT {pageSize} OFFSET {resolvedImageSkip}")
+                .Include(it => it.Image)
+                .ToListAsync();
 
             ViewBag.PostTags = postTags;
             ViewBag.PostTagsPageSize = pageSize;
@@ -134,10 +186,11 @@ namespace Meguri.Controllers {
         [Authorize]
         public async Task<IActionResult> Disambiguation(long id) {
             var concept = await _context.TagConcepts
+                .FromSqlInterpolated($"SELECT * FROM \"TagConcepts\" WHERE \"Id\" = {id}")
                 .Include(tc => tc.Tags)
                 .Include(tc => tc.SubjectRelationships).ThenInclude(sr => sr.ObjectConcept).ThenInclude(oc => oc.Tags)
                 .Include(tc => tc.ObjectRelationships).ThenInclude(or => or.SubjectConcept).ThenInclude(sc => sc.Tags)
-                .FirstOrDefaultAsync(tc => tc.Id == id);
+                .FirstOrDefaultAsync();
 
             if (concept == null) return NotFound();
 
@@ -154,7 +207,6 @@ namespace Meguri.Controllers {
                 CanEdit = canEdit,
                 Synonyms = concept.Tags.Where(t => t.TagText != primaryTag).Select(t => t.TagText).ToList(),
 
-                // 上位語: Subject = this, Predicate = "broader"
                 BroaderConcepts = concept.SubjectRelationships
                     .Where(r => r.Predicate == "broader")
                     .Select(r => new RelatedConceptDto {
@@ -163,7 +215,6 @@ namespace Meguri.Controllers {
                         Text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}"
                     }).ToList(),
 
-                // 下位語: Object = this, Predicate = "broader"
                 NarrowerConcepts = concept.ObjectRelationships
                     .Where(r => r.Predicate == "broader")
                     .Select(r => new RelatedConceptDto {
@@ -172,7 +223,6 @@ namespace Meguri.Controllers {
                         Text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}"
                     }).ToList(),
 
-                // 関連語: Subject = this or Object = this, Predicate = "related"
                 RelatedConcepts = concept.SubjectRelationships
                     .Where(r => r.Predicate == "related")
                     .Select(r => new RelatedConceptDto {
@@ -198,7 +248,10 @@ namespace Meguri.Controllers {
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddSynonym(long tagConceptId, string synonymText) {
-            var concept = await _context.TagConcepts.FindAsync(tagConceptId);
+            var concept = await _context.TagConcepts
+                .FromSqlInterpolated($"SELECT * FROM \"TagConcepts\" WHERE \"Id\" = {tagConceptId}")
+                .FirstOrDefaultAsync();
+
             if (concept == null) return NotFound();
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -210,16 +263,14 @@ namespace Meguri.Controllers {
                 var text = synonymText.Trim();
                 var normalized = text.ToLowerInvariant();
 
-                var exists = await _context.Tags.AnyAsync(t => t.TagConceptId == tagConceptId && t.NormalizedText == normalized);
-                if (!exists) {
-                    _context.Tags.Add(new Tag {
-                        TagConceptId = tagConceptId,
-                        TagText = text,
-                        NormalizedText = normalized,
-                        LanguageCode = "ja",
-                        IsCanonical = false
-                    });
-                    await _context.SaveChangesAsync();
+                var existsCount = await _context.Database
+                    .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"Tags\" WHERE \"TagConceptId\" = {tagConceptId} AND \"NormalizedText\" = {normalized}")
+                    .SingleAsync();
+
+                if (existsCount == 0) {
+                    await _context.Database.ExecuteSqlInterpolatedAsync($@"
+                        INSERT INTO ""Tags"" (""TagConceptId"", ""TagText"", ""NormalizedText"", ""LanguageCode"", ""IsCanonical"")
+                        VALUES ({tagConceptId}, {text}, {normalized}, 'ja', false)");
                 }
             }
 
@@ -231,7 +282,10 @@ namespace Meguri.Controllers {
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRelationship(long tagConceptId, string predicate, string targetTagText) {
-            var concept = await _context.TagConcepts.FindAsync(tagConceptId);
+            var concept = await _context.TagConcepts
+                .FromSqlInterpolated($"SELECT * FROM \"TagConcepts\" WHERE \"Id\" = {tagConceptId}")
+                .FirstOrDefaultAsync();
+
             if (concept == null) return NotFound();
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -245,39 +299,37 @@ namespace Meguri.Controllers {
 
                 if (targetConcept != null && targetConcept.Id != tagConceptId) {
                     if (predicate == "broader") {
-                        // tagConceptId の上位語が targetConceptId
-                        var exists = await _context.TagRelationships.AnyAsync(r => r.SubjectConceptId == tagConceptId && r.ObjectConceptId == targetConcept.Id && r.Predicate == "broader");
-                        if (!exists) {
-                            _context.TagRelationships.Add(new TagRelationship {
-                                SubjectConceptId = tagConceptId,
-                                ObjectConceptId = targetConcept.Id,
-                                Predicate = "broader"
-                            });
-                            await _context.SaveChangesAsync();
+                        var existsCount = await _context.Database
+                            .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"TagRelationships\" WHERE \"SubjectConceptId\" = {tagConceptId} AND \"ObjectConceptId\" = {targetConcept.Id} AND \"Predicate\" = 'broader'")
+                            .SingleAsync();
+
+                        if (existsCount == 0) {
+                            await _context.Database.ExecuteSqlInterpolatedAsync($@"
+                                INSERT INTO ""TagRelationships"" (""SubjectConceptId"", ""ObjectConceptId"", ""Predicate"")
+                                VALUES ({tagConceptId}, {targetConcept.Id}, 'broader')");
                         }
                     } else if (predicate == "narrower") {
-                        // tagConceptId の下位語が targetConceptId (targetConcept の上位語が tagConceptId)
-                        var exists = await _context.TagRelationships.AnyAsync(r => r.SubjectConceptId == targetConcept.Id && r.ObjectConceptId == tagConceptId && r.Predicate == "broader");
-                        if (!exists) {
-                            _context.TagRelationships.Add(new TagRelationship {
-                                SubjectConceptId = targetConcept.Id,
-                                ObjectConceptId = tagConceptId,
-                                Predicate = "broader"
-                            });
-                            await _context.SaveChangesAsync();
+                        var existsCount = await _context.Database
+                            .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"TagRelationships\" WHERE \"SubjectConceptId\" = {targetConcept.Id} AND \"ObjectConceptId\" = {tagConceptId} AND \"Predicate\" = 'broader'")
+                            .SingleAsync();
+
+                        if (existsCount == 0) {
+                            await _context.Database.ExecuteSqlInterpolatedAsync($@"
+                                INSERT INTO ""TagRelationships"" (""SubjectConceptId"", ""ObjectConceptId"", ""Predicate"")
+                                VALUES ({targetConcept.Id}, {tagConceptId}, 'broader')");
                         }
                     } else if (predicate == "related") {
-                        // 関連語
-                        var exists = await _context.TagRelationships.AnyAsync(r =>
-                            (r.SubjectConceptId == tagConceptId && r.ObjectConceptId == targetConcept.Id && r.Predicate == "related") ||
-                            (r.SubjectConceptId == targetConcept.Id && r.ObjectConceptId == tagConceptId && r.Predicate == "related"));
-                        if (!exists) {
-                            _context.TagRelationships.Add(new TagRelationship {
-                                SubjectConceptId = tagConceptId,
-                                ObjectConceptId = targetConcept.Id,
-                                Predicate = "related"
-                            });
-                            await _context.SaveChangesAsync();
+                        var existsCount = await _context.Database
+                            .SqlQuery<int>($@"
+                                SELECT COUNT(*) AS ""Value"" FROM ""TagRelationships"" 
+                                WHERE (""SubjectConceptId"" = {tagConceptId} AND ""ObjectConceptId"" = {targetConcept.Id} AND ""Predicate"" = 'related')
+                                   OR (""SubjectConceptId"" = {targetConcept.Id} AND ""ObjectConceptId"" = {tagConceptId} AND ""Predicate"" = 'related')")
+                            .SingleAsync();
+
+                        if (existsCount == 0) {
+                            await _context.Database.ExecuteSqlInterpolatedAsync($@"
+                                INSERT INTO ""TagRelationships"" (""SubjectConceptId"", ""ObjectConceptId"", ""Predicate"")
+                                VALUES ({tagConceptId}, {targetConcept.Id}, 'related')");
                         }
                     }
                 }
@@ -291,13 +343,18 @@ namespace Meguri.Controllers {
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveRelationship(long relationshipId, long tagConceptId) {
-            var rel = await _context.TagRelationships.FindAsync(relationshipId);
+            var rel = await _context.TagRelationships
+                .FromSqlInterpolated($"SELECT * FROM \"TagRelationships\" WHERE \"Id\" = {relationshipId}")
+                .FirstOrDefaultAsync();
+
             if (rel != null) {
-                var concept = await _context.TagConcepts.FindAsync(tagConceptId);
+                var concept = await _context.TagConcepts
+                    .FromSqlInterpolated($"SELECT * FROM \"TagConcepts\" WHERE \"Id\" = {tagConceptId}")
+                    .FirstOrDefaultAsync();
+
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (concept != null && (concept.UserId == currentUserId || User.IsInRole("Admin"))) {
-                    _context.TagRelationships.Remove(rel);
-                    await _context.SaveChangesAsync();
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM \"TagRelationships\" WHERE \"Id\" = {relationshipId}");
                 }
             }
             return RedirectToAction(nameof(Disambiguation), new { id = tagConceptId });
