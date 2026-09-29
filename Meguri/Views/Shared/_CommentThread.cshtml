@@ -5,12 +5,12 @@
 		var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
-<div class="comment-thread-container">
+<div>
 		@if (!Model.Comments.Any()) {
-				<p class="text-body-secondary text-center py-3">@SharedLocalizer["Comment_NoCommentsYet"]</p>
+				<p >@SharedLocalizer["Comment_NoCommentsYet"]</p>
 		}
 		else {
-				<div class="d-flex flex-column gap-3 mb-4">
+				<div>
 						@foreach (var comment in Model.Comments) {
 								@await Html.PartialAsync("_CommentItem", (comment, Model.TargetType, Model.TargetId, 0))
 						}
@@ -18,11 +18,11 @@
 		}
 
 		<!-- コメント投稿フォーム -->
-		<div class="card bg-body-tertiary border-0 p-3 mt-4" id="commentForm">
-				<h6 class="fw-bold mb-2">@SharedLocalizer["Comment_WriteTitle"]</h6>
+		<div  id="commentForm">
+				<h6 >@SharedLocalizer["Comment_WriteTitle"]</h6>
 
 				<!-- 返信先インジケーター -->
-				<div id="replyNotice" class="alert alert-info py-1 px-2 small mb-2 d-none d-flex justify-content-between align-items-center"></div>
+				<div id="replyNotice" ></div>
 
 				<form asp-controller="Comment" asp-action="Create" method="post" enctype="multipart/form-data">
 						@Html.AntiForgeryToken()
@@ -36,15 +36,15 @@
 								<input type="hidden" name="imageId" value="@Model.TargetId" />
 						}
 
-						<div class="mb-2">
-								<textarea name="text" id="commentTextInput" rows="3" class="form-control" placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
+						<div>
+								<textarea name="text" id="commentTextInput" rows="3"  placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
 						</div>
 
-						<div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
-								<div class="d-flex align-items-center gap-2">
-										<input type="file" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="form-control form-control-sm" style="max-width: 250px;" />
+						<div>
+								<div>
+										<input type="file" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png"  style="max-width: 250px;" />
 								</div>
-								<button type="submit" class="btn btn btn-outline-primary btn-sm px-3">
+								<button type="submit">
 										@SharedLocalizer["Comment_Submit"]
 								</button>
 						</div>

@@ -4,50 +4,50 @@
 		var searchQuery = ViewBag.SearchQuery as string;
 }
 
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+<div>
 		<div>
-				<h2 class="fw-bold mb-1">🏷️ @SharedLocalizer["Tag_Title"] & @SharedLocalizer["Tag_Thesaurus"]</h2>
-				<p class="text-body-secondary mb-0">@SharedLocalizer["Tag_SubTitle"]</p>
+				<h2 >🏷️ @SharedLocalizer["Tag_Title"] & @SharedLocalizer["Tag_Thesaurus"]</h2>
+				<p >@SharedLocalizer["Tag_SubTitle"]</p>
 		</div>
 </div>
 
-<div class="card shadow-sm border-0 mb-4">
-		<div class="card-body p-3">
-				<form asp-action="Index" method="get" class="d-flex gap-2">
-						<div class="col">
-								<input type="text" name="q" value="@searchQuery" class="form-control" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
+<div>
+		<div>
+				<form asp-action="Index" method="get">
+						<div>
+								<input type="text" name="q" value="@searchQuery"  placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
 						</div>
-						<div class="col-auto">
-								<button type="submit" class="btn btn-outline-primary">@SharedLocalizer["Common_Search"]</button>
+						<div>
+								<button type="submit" >@SharedLocalizer["Common_Search"]</button>
 						</div>
 						@if (!string.IsNullOrWhiteSpace(searchQuery)) {
-								<div class="col-auto">
-										<a asp-action="Index" class="btn btn-outline-secondary">@SharedLocalizer["Common_Clear"]</a>
+								<div>
+										<a asp-action="Index" >@SharedLocalizer["Common_Clear"]</a>
 								</div>
 						}
 				</form>
 		</div>
 </div>
 
-<div class="card shadow-sm border-0 bg-body-tertiary">
-		<div class="card-body p-4">
-				<div class="d-flex flex-wrap gap-2">
+<div>
+		<div>
+				<div>
 						@foreach (var concept in Model) {
 								var tagText = concept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{concept.Id}";
 								var count = concept.PostTags.Count + concept.ImageTags.Count;
-								<div class="btn-group mb-2">
-										<a asp-action="Details" asp-route-conceptId="@concept.Id" class="btn btn-outline-primary">
+								<div>
+										<a asp-action="Details" asp-route-conceptId="@concept.Id">
 												#@tagText
-												<span class="badge bg-secondary ms-1">@count</span>
+												<span >@count</span>
 										</a>
-										<a asp-action="Disambiguation" asp-route-id="@concept.Id" class="btn btn-outline-secondary" title="@SharedLocalizer["Tag_DisambiguationBtn"]">
+										<a asp-action="Disambiguation" asp-route-id="@concept.Id"  title="@SharedLocalizer["Tag_DisambiguationBtn"]">
 												⚖️
 										</a>
 								</div>
 										}
 										</div>
 										@if (!Model.Any()) {
-												<p class="text-body-secondary mb-0">@SharedLocalizer["Tag_NoTagsFound"]</p>
+												<p >@SharedLocalizer["Tag_NoTagsFound"]</p>
 										}
 								</div>
 
@@ -60,17 +60,17 @@
 							var tNextSkip = ViewBag.NextSkip as int? ?? 0;
 							var tCount = Model.Count();
 						}
-						<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+						<nav>
 										@if (tHasPrevious) {
-											<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@tPreviousSkip" asp-route-q="@searchQuery">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+											<a  asp-action="Index" asp-route-skip="@tPreviousSkip" asp-route-q="@searchQuery">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
 										} else {
-											<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+											<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
 										}
-										<span class="small text-body-secondary">@(tTotalCount == 0 ? SharedLocalizer["Tag_TotalCountZero"].Value : string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, tSkip + 1, tSkip + tCount, tTotalCount))</span>
+										<span >@(tTotalCount == 0 ? SharedLocalizer["Tag_TotalCountZero"].Value : string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, tSkip + 1, tSkip + tCount, tTotalCount))</span>
 										@if (tHasNext) {
-											<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@tNextSkip" asp-route-q="@searchQuery">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+											<a  asp-action="Index" asp-route-skip="@tNextSkip" asp-route-q="@searchQuery">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
 										} else {
-											<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+											<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
 										}
 									</nav>
 							</div>

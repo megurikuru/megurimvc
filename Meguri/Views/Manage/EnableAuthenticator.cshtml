@@ -7,32 +7,32 @@
 <h4>@ViewData["Title"]</h4>
 <div>
     <p>@SharedLocalizer["Manage_EnableAuthenticator_Intro"]</p>
-    <ol class="list-group list-group-numbered">
-        <li class="list-group-item">
+    <ol>
+        <li>
             <p>
                 @SharedLocalizer["Manage_EnableAuthenticator_AppInstruction"]
             </p>
         </li>
-        <li class="list-group-item">
+        <li>
             <p>@SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part1"] <kbd>@Model.SharedKey</kbd> @SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part2"]</p>
-            @* <div class="alert alert-info">@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div> *@
+            @* <div >@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div> *@
             <div id="qrCode"></div>
             <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
         </li>
-        <li class="list-group-item">
+        <li>
             <p>
                 @SharedLocalizer["Manage_EnableAuthenticator_ConfirmationPrompt"]
             </p>
-            <div class="row">
-                <div class="col-md-6">
+            <div>
+                <div>
                     <form method="post">
-                        <div class="mb-3">
-                            <label asp-for="Code" class="form-label">@SharedLocalizer["Manage_EnableAuthenticator_VerificationCode"]</label>
-                            <input asp-for="Code" class="form-control" autocomplete="off" />
-                            <span asp-validation-for="Code" class="text-danger"></span>
+                        <div>
+                            <label asp-for="Code" >@SharedLocalizer["Manage_EnableAuthenticator_VerificationCode"]</label>
+                            <input asp-for="Code"  autocomplete="off" />
+                            <span asp-validation-for="Code" ></span>
                         </div>
-                        <button type="submit" class="btn btn-secondary">@SharedLocalizer["Manage_EnableAuthenticator_VerifyButton"]</button>
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <button type="submit" >@SharedLocalizer["Manage_EnableAuthenticator_VerifyButton"]</button>
+                        <div asp-validation-summary="ModelOnly" ></div>
                     </form>
                 </div>
             </div>

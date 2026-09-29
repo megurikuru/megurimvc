@@ -1,6 +1,11 @@
 # 上位ディレクトリから .editorconfig 設定を継承する場合は、以下の行を削除します
 root = true
 
+[*.cshtml]
+indent_size = 2
+indent_style = space
+tab_width = 2
+
 # C# ファイル
 [*.cs]
 

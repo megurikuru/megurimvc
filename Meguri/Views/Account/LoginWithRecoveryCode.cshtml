@@ -8,16 +8,16 @@
 <p>
     @SharedLocalizer["Account_LoginWithRecoveryCode_Description"]
 </p>
-<div class="row">
-    <div class="col-md-4">
+<div>
+    <div>
         <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="mb-3">
-                <label asp-for="RecoveryCode" class="form-label"></label>
-                <input asp-for="RecoveryCode" class="form-control" autocomplete="off" />
-                <span asp-validation-for="RecoveryCode" class="text-danger"></span>
+            <div asp-validation-summary="All" ></div>
+            <div>
+                <label asp-for="RecoveryCode" ></label>
+                <input asp-for="RecoveryCode"  autocomplete="off" />
+                <span asp-validation-for="RecoveryCode" ></span>
             </div>
-            <button type="submit" class="btn btn-secondary">@SharedLocalizer["Account_Login_Button"]</button>
+            <button type="submit" >@SharedLocalizer["Account_Login_Button"]</button>
         </form>
     </div>
 </div>

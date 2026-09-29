@@ -9,77 +9,44 @@
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
-    ViewData["Title"] = SharedLocalizer["Account_Login_Title"];
+	ViewData["Title"] = SharedLocalizer["Account_Login_Title"];
 }
 
 <h2>@ViewData["Title"]</h2>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                <h4>@SharedLocalizer["Account_Login_UseLocalAccount"]</h4>
-                <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
-                <div class="mb-3">
-                    <label asp-for="UserName" class="form-label"></label>
-                    <input asp-for="UserName" class="form-control" />
-                    <span asp-validation-for="UserName" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" class="form-control" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="mb-3 form-check">
-                    <label asp-for="RememberMe" class="form-check-label">
-                        <input asp-for="RememberMe" class="form-check-input" />
-                        @Html.DisplayNameFor(m => m.RememberMe)
-                    </label>
-                </div>
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-secondary">@SharedLocalizer["Account_Login_Button"]</button>
-                </div>
-                <div class="mb-3">
-                    <p>
-                        <a asp-action="ForgotPassword">@SharedLocalizer["Account_Login_ForgotPassword"]</a>
-                    </p>
-                    <p>
-                        <a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">@SharedLocalizer["Account_Login_RegisterNewUser"]</a>
-                    </p>
-                </div>
-            </form>
-        </section>
-    </div>
-    <div class="col-md-6 offset-md-2">
-        <section>
-            <h4>@SharedLocalizer["Account_Login_UseAnotherService"]</h4>
-            <hr />
-            @{
-                var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-                if (loginProviders.Count == 0) {
-                    <div>
-                        <p>
-                            @SharedLocalizer["Account_Login_NoExternalServices"] <a href="https://go.microsoft.com/fwlink/?LinkID=532715">@SharedLocalizer["Account_Login_ThisArticle"]</a>
-                            @SharedLocalizer["Account_Login_NoExternalServices_Detail"]
-                        </p>
-                    </div>
-                }
-                else {
-                    <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-                        <div>
-                            <p>
-                                @foreach (var provider in loginProviders) {
-                                    <button type="submit" class="btn btn-secondary" name="provider" value="@provider.Name" title="@SharedLocalizer["Account_Login_ExternalProviderButtonTitle", provider.DisplayName]">@provider.Name</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
-</div>
+<section>
+	<form class="account" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+		<hr />
+		<div asp-validation-summary="All"></div>
+		<div>
+			<label asp-for="UserName"></label>
+			<input asp-for="UserName" />
+			<span asp-validation-for="UserName"></span>
+		</div>
+		<div>
+			<label asp-for="Password"></label>
+			<input asp-for="Password" />
+			<span asp-validation-for="Password"></span>
+		</div>
+		<div>
+			<label asp-for="RememberMe">
+				<input asp-for="RememberMe" />
+				@Html.DisplayNameFor(m => m.RememberMe)
+			</label>
+		</div>
+		<div>
+			<button type="submit">@SharedLocalizer["Account_Login_Button"]</button>
+		</div>
+		<div>
+			<p>
+				<a asp-action="ForgotPassword">@SharedLocalizer["Account_Login_ForgotPassword"]</a>
+			</p>
+			<p>
+				<a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">@SharedLocalizer["Account_Login_RegisterNewUser"]</a>
+			</p>
+		</div>
+	</form>
+</section>
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
+	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

@@ -3,72 +3,72 @@
 		ViewData["Title"] = SharedLocalizer["Image_EditTitle"];
 }
 
-<div class="row justify-content-center">
-		<div class="col-lg-8">
-				<div class="card shadow-sm border-0">
-						<div class="card-header bg-body-tertiary py-3">
-								<h4 class="card-title fw-bold mb-0">✏️ @SharedLocalizer["Image_EditTitle"]</h4>
+<div>
+		<div>
+				<div>
+						<div>
+								<h4 >✏️ @SharedLocalizer["Image_EditTitle"]</h4>
 						</div>
-						<div class="card-body p-4">
-								<div class="text-center mb-4">
-										<img src="/Image/File/@Model.Id" class="img-thumbnail" style="max-height: 200px;" />
+						<div>
+								<div>
+										<img src="/Image/File/@Model.Id"  style="max-height: 200px;" />
 								</div>
 								<form asp-action="Edit" method="post">
 										<input type="hidden" asp-for="Id" />
-										<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+										<div asp-validation-summary="ModelOnly" ></div>
 
-										<div class="mb-3">
-												<label asp-for="Caption" class="form-label fw-bold">@SharedLocalizer["Image_Caption"]</label>
-												<input asp-for="Caption" class="form-control" />
-												<span asp-validation-for="Caption" class="text-danger"></span>
+										<div>
+												<label asp-for="Caption" >@SharedLocalizer["Image_Caption"]</label>
+												<input asp-for="Caption"  />
+												<span asp-validation-for="Caption" ></span>
 										</div>
 
-										<div class="mb-3">
-												<label asp-for="Description" class="form-label fw-bold">@SharedLocalizer["Image_Description"]</label>
-												<textarea asp-for="Description" rows="4" class="form-control"></textarea>
-												<span asp-validation-for="Description" class="text-danger"></span>
+										<div>
+												<label asp-for="Description" >@SharedLocalizer["Image_Description"]</label>
+												<textarea asp-for="Description" rows="4" ></textarea>
+												<span asp-validation-for="Description" ></span>
 										</div>
 
 										<!-- タグ編集 -->
-										<div class="mb-3">
-												<div class="d-flex justify-content-between align-items-center mb-1">
-														<label class="form-label fw-bold mb-0">🏷️ @SharedLocalizer["Post_Tags"]</label>
-														<span class="small text-body-secondary" id="tagCountDisplay">0/10</span>
+										<div>
+												<div>
+														<label >🏷️ @SharedLocalizer["Post_Tags"]</label>
+														<span  id="tagCountDisplay">0/10</span>
 												</div>
-												<div class="input-group">
-														<input type="text" id="tagInput" class="form-control" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
-														<button type="button" class="btn btn-outline-secondary" onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
+												<div>
+														<input type="text" id="tagInput"  placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
+														<button type="button"  onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
 												</div>
-												<div id="tagSuggestions" class="list-group position-absolute shadow-sm" style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
+												<div id="tagSuggestions"  style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
 
-												<div id="selectedTagsContainer" class="d-flex flex-wrap gap-1 mt-2"></div>
+												<div id="selectedTagsContainer" ></div>
 												<div id="hiddenTagsInputs"></div>
 										</div>
 
-										<div class="row mb-4">
-												<div class="col-md-4 mb-2">
-													<div class="form-check form-switch">
-														<input asp-for="IsPublic" class="form-check-input" type="checkbox" role="switch" />
-														<label asp-for="IsPublic" class="form-check-label small">@SharedLocalizer["Post_Public"]</label>
+										<div>
+												<div>
+													<div>
+														<input asp-for="IsPublic"  type="checkbox" role="switch" />
+														<label asp-for="IsPublic" >@SharedLocalizer["Post_Public"]</label>
 													</div>
 												</div>
-												<div class="col-md-4 mb-2">
-													<div class="form-check form-switch">
-														<input asp-for="IsSexual" class="form-check-input" type="checkbox" role="switch" />
-														<label asp-for="IsSexual" class="form-check-label small">@SharedLocalizer["Post_NSFW_Sexual"]</label>
+												<div>
+													<div>
+														<input asp-for="IsSexual"  type="checkbox" role="switch" />
+														<label asp-for="IsSexual" >@SharedLocalizer["Post_NSFW_Sexual"]</label>
 													</div>
 												</div>
-												<div class="col-md-4 mb-2">
-													<div class="form-check form-switch">
-														<input asp-for="IsViolence" class="form-check-input" type="checkbox" role="switch" />
-														<label asp-for="IsViolence" class="form-check-label small text-body">@SharedLocalizer["Post_NSFW_Violence"]</label>
+												<div>
+													<div>
+														<input asp-for="IsViolence"  type="checkbox" role="switch" />
+														<label asp-for="IsViolence" >@SharedLocalizer["Post_NSFW_Violence"]</label>
 													</div>
 												</div>
 										</div>
 
-										<div class="d-flex justify-content-between">
-												<a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">@SharedLocalizer["Common_Back"]</a>
-												<button type="submit" class="btn btn btn-outline-primary px-4">@SharedLocalizer["Common_Save"]</button>
+										<div>
+												<a asp-action="Details" asp-route-id="@Model.Id" >@SharedLocalizer["Common_Back"]</a>
+												<button type="submit" >@SharedLocalizer["Common_Save"]</button>
 										</div>
 								</form>
 						</div>

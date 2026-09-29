@@ -1,0 +1,217 @@
+﻿/* ==========================================
+  1. モバイル（デフォルト）スタイル
+  ※ max-width 767px まではこの指定が適用されます
+   ========================================== */
+/* ------------------------------------------
+    変数の定義 
+   ------------------------------------------ */
+:root {
+	/* --- カラー関連 --- */
+	--color-primary: #2563eb; /* メインカラー（ブランドカラー） */
+	--color-primary-hover: #1d4ed8; /* ホバー時のメインカラー */
+	--color-text: #1f2937; /* 基本の文字色 */
+	--color-text-muted: #6b7280; /* 補足・薄い文字色 */
+	--color-bg: #F9F7F9; /* わずかに紫 */
+	--color-bg-sub: #f9fafb; /* サブ背景・グレー背景 */
+	--color-border: #B9AFBE; /* くすんだ紫 */
+	/* --- フォント・文字サイズ --- */
+	--font-base: system-ui, -apple-system, sans-serif;
+	--font-size-xs: 0.75rem; /* 12px相当 */
+	--font-size-sm: 0.875rem; /* 14px相当 */
+	--font-size-base: 1rem; /* 16px相当 */
+	--font-size-lg: 1.25rem; /* 20px相当 */
+	/* --- スペーシング（余白） --- */
+	--space-1: 0.25rem; /* 4px相当 */
+	--space-2: 0.5rem; /* 8px相当 */
+	--space-3: 0.75rem; /* 12px相当 */
+	--space-4: 1rem; /* 16px相当 */
+	--space-5: 1.25rem; /* 20px相当 */
+	--space-6: 1.5rem; /* 24px相当 */
+	--space-7: 1.75rem; /* 28px相当 */
+	--space-8: 2rem; /* 32px相当 */
+	/* --- 角丸・シャドウ --- */
+	--radius-sm: 4px;
+	--radius-md: 8px;
+	--radius-full: 9999px;
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* ------------------------------------------
+    基本構造要素
+   ------------------------------------------ */
+body {
+	display: grid;
+	gap: var(--space-2);
+	font-size: 1rem;
+	padding: 0 var(--space-2);
+	width: 375px; /* 開発用 */
+	border: 1px solid blue; /* 開発用 */
+	background-color: var(--color-bg);
+}
+
+main {
+	/*display: block;*/
+	display: grid;
+	gap: var(--space-2);
+	border: 1px dotted blue; /* 開発用 */
+}
+
+/* メインナビゲーション */
+nav#nav-main {
+	font-size: var(--font-size-xs);
+	border: 1px solid red; /* 開発用 */
+
+	& > a {
+		display: block;
+		margin: 0 auto;
+		padding: var(--space-2) var(--space-3);
+		width: fit-content;
+		font-weight: bold;
+		border: 1px solid orange; /* 開発用 */
+	}
+
+	& ul {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		list-style: none;
+
+		& li {
+			border: 1px solid #ccc;
+
+			& a, & button {
+				display: block;
+				padding: var(--space-2);
+				width: 100%;
+				text-decoration: none;
+				/*color: #333;*/
+				/*background: none;*/
+				border: 0;
+				cursor: pointer;
+				/*font: inherit;*/
+				text-align: center;
+			}
+		}
+	}
+}
+
+nav#nav-sub {
+	border: 1px solid purple; /* 開発用 */
+}
+
+footer {
+	margin: 0 auto;
+	font-size: var(--font-size-xs);
+	border: 1px dotted blue; /* 開発用 */
+}
+
+/* ------------------------------------------
+    基本要素
+   ------------------------------------------ */
+a {
+	color: var(--color-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-align: center;
+	border: 1px dotted orange; /* 開発用 */
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ------------------------------------------
+    独自レイアウト要素
+   ------------------------------------------ */
+
+
+/* ------------------------------------------
+    パーツ
+   ------------------------------------------ */
+div {
+	border: 1px solid pink; /* 開発用 */
+}
+
+/* アカウントフォーム */
+form.account {
+	border: 1px solid blue; /* 開発用 */
+}
+
+/* 検索フォーム */
+form.search {
+	display: flex;
+	flex-direction: row;
+	gap: var(--space-2);
+	border: 1px solid orange; /* 開発用 */
+
+	& input[type="text"] {
+		flex: 1; /* 残りの横幅いっぱいに広がる */
+		padding: var(--space-2) var(--space-3);
+		border: 1px solid purple; /* 開発用 */
+	}
+
+	& a {
+		display: inline-block;
+	}
+
+	& button, & a {
+		width: max-content;
+		white-space: nowrap; /* テキストの意図しない改行を防止 */
+		padding: var(--space-2) var(--space-3);
+		border: 1px solid var(--color-border);
+	}
+}
+
+#post-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2);
+	border: 1px dotted gray; /* 開発用 */
+}
+
+.space-between-wrap {
+	display: flex;
+	justify-content: space-between;
+}
+
+.pagination {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	text-align: center;
+	border: 1px dotted gray; /* 開発用 */
+}
+
+#image-list {
+	border: 1px dotted gray; /* 開発用 */
+}
+
+#image-list-pagination {
+	border: 1px dotted gray; /* 開発用 */
+}
+
+/* アイコン付きテキスト */
+.icon-with-text {
+	display: inline-flex;
+	align-items: center; /* 上下中央揃え */
+	gap: var(--space-1); /* アイコンとテキストの間隔（お好みで調整） */
+	font-size: var(--font-size-sm); /* お好みで調整 */
+
+	& img {
+		height: var(--font-size-sm); /* テキストのフォントサイズと同じ高さに揃える */
+		width: auto; /* 縦横比を維持 */
+	}
+}
+
+/* ==========================================
+   2. タブレット用（768px 以上）
+   ========================================== */
+@media (min-width: 768px) {
+}
+
+
+/* ==========================================
+   3. デスクトップ・PC用（1024px 以上）
+   ========================================== */
+@media (min-width: 1024px) {
+}

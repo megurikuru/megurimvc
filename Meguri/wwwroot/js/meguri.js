@@ -101,9 +101,9 @@ const TagManager = {
 
         this.selectedTags.forEach((tag, idx) => {
             const badge = $(`
-                <span class="badge bg-primary text-white me-1 mb-1 p-2">
+                <span>
                     #${tag}
-                    <button type="button" class="btn-close btn-close-white btn-sm ms-1" style="font-size:0.6rem;" aria-label="Remove"></button>
+                    <button type="button"  style="font-size:0.6rem;" aria-label="Remove"></button>
                 </span>
             `);
             badge.find('button').on('click', () => this.removeTag(tag));
@@ -132,7 +132,7 @@ const TagManager = {
                     suggestions.empty();
                     if (data && data.length > 0) {
                         data.forEach(item => {
-                            const opt = $(`<button type="button" class="list-group-item list-group-item-action py-1 px-2 small">${item.text}</button>`);
+                            const opt = $(`<button type="button" >${item.text}</button>`);
                             opt.on('click', function () {
                                 TagManager.addTag(item.text);
                             });
@@ -158,7 +158,7 @@ const TagManager = {
 // コメント返信機能
 function replyToComment(commentId, commentNumber, userName) {
     $('#replyParentId').val(commentId);
-    $('#replyNotice').html(`<strong>>>${commentNumber} (${userName})</strong> への返信 <button type="button" class="btn-close btn-sm ms-2" onclick="cancelReply()"></button>`).removeClass('d-none');
+    $('#replyNotice').html(`<strong>>>${commentNumber} (${userName})</strong> への返信 <button type="button"  onclick="cancelReply()"></button>`).removeClass('d-none');
     $('html, body').animate({
         scrollTop: $('#commentForm').offset().top - 100
     }, 300);
@@ -169,23 +169,3 @@ function cancelReply() {
     $('#replyParentId').val('');
     $('#replyNotice').addClass('d-none').empty();
 }
-
-// カラーモード切替
-function applyTheme(theme) {
-    if (theme === 'auto') {
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
-    } else {
-        document.documentElement.setAttribute('data-bs-theme', theme);
-    }
-}
-window.applyTheme = applyTheme;
-
-// OSのダークモード変更監視
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    const themeCookie = document.cookie.split('; ').find(row => row.startsWith('meguri_theme='));
-    const theme = themeCookie ? themeCookie.split('=')[1] : 'auto';
-    if (theme === 'auto') {
-        applyTheme('auto');
-    }
-});

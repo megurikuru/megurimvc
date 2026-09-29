@@ -5,9 +5,9 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<div class="alert alert-warning" role="alert">
+<div  role="alert">
     <p>
-        <span class="me-2">⚠️</span>
+        <span >⚠️</span>
         <strong>@SharedLocalizer["Manage_Disable2fa_Warning"]</strong>
     </p>
     <p>
@@ -18,6 +18,6 @@
 
 <div>
     <form asp-action="Disable2fa" method="post">
-        <button class="btn btn-danger" type="submit">@SharedLocalizer["Manage_Disable2fa_Button"]</button>
+        <button  type="submit">@SharedLocalizer["Manage_Disable2fa_Button"]</button>
     </form>
 </div>
