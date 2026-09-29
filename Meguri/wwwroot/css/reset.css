@@ -224,7 +224,7 @@ iframe {
  * 2. Inherit text-transform from parent.
  */
 
-button,
+/*button,
 input,
 optgroup,
 select,
@@ -240,7 +240,7 @@ textarea {
   border-radius: 0;
   text-align: inherit;
   text-transform: inherit;  2 
-}
+}*/
 
 /**
  * Correct cursors for clickable elements.
