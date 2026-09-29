@@ -1,0 +1,31 @@
+﻿<nav id="nav-main">
+	<a asp-area="" asp-controller="Home" asp-action="Index">meguri</a>
+	<ul>
+		@* ホーム *@
+		<li>
+			<a asp-area="" asp-controller="Home" asp-action="Index">@SharedLocalizer["Nav_Home"]</a>
+		</li>
+		@* 界隈一覧 *@
+		<li>
+			<a asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Nav_Fandom"]</a>
+		</li>
+		@* イラスト界隈 *@
+		<li>
+			<a asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="4">@SharedLocalizer["Nav_Illustrations"]</a>
+		</li>
+		@* つぶやき *@
+		<li>
+			<a asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="2">@SharedLocalizer["Nav_Murmurs"]</a>
+		</li>
+		@* タグ一覧 *@
+		<li>
+			<a asp-area="" asp-controller="Tag" asp-action="Index">@SharedLocalizer["Nav_Tags"]</a>
+		</li>
+		@* メッセージ *@
+		<li>
+			<a asp-area="" asp-controller="Message" asp-action="Index">@SharedLocalizer["Nav_Messages"]</a>
+		</li>
+		@* ログイン *@
+		@await Html.PartialAsync("_LoginPartial")
+	</ul>
+</nav>

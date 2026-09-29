@@ -3,72 +3,72 @@
 		ViewData["Title"] = Model.DisplayTitle;
 }
 
-<div class="row justify-content-center">
-		<div class="col-lg-9">
-				<div class="card shadow-sm border-0 mb-3 bg-body-tertiary">
-						<div class="card-header bg-body-tertiary py-3 d-flex justify-content-between align-items-center">
-								<div class="d-flex align-items-center gap-2">
-										<a asp-action="Index" class="btn btn-sm btn-outline-secondary">←</a>
-										<h5 class="fw-bold mb-0">
+<div>
+		<div>
+				<div>
+						<div>
+								<div>
+										<a asp-action="Index" >←</a>
+										<h5>
 												@(Model.Conversation.IsGroup ? "👥" : "👤") @Model.DisplayTitle
 										</h5>
 								</div>
-								<div class="dropdown">
-										<button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown">
+								<div>
+										<button  type="button" data-bs-toggle="dropdown">
 												👥 @string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count)
 										</button>
-										<ul class="dropdown-menu dropdown-menu-end">
+										<ul>
 												@foreach (var m in Model.Conversation.Members) {
-														<li class="dropdown-item-text small">👤 @(m.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</li>
+														<li >👤 @(m.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</li>
 												}
 										</ul>
 								</div>
 						</div>
 
 						<!-- 日付絞り込みフォーム -->
-						<div class="card-body border-bottom py-2">
-								<form asp-action="Chat" method="get" class="d-flex flex-wrap align-items-end gap-2">
+						<div>
+								<form asp-action="Chat" method="get">
 										<input type="hidden" name="id" value="@Model.Conversation.Id" />
 										<div>
-												<label class="form-label small mb-0">@SharedLocalizer["Message_DateLabel"]</label>
-												<input type="date" name="date" class="form-control form-control-sm" value="@(Model.FilterDate?.ToString("yyyy-MM-dd"))" />
+												<label >@SharedLocalizer["Message_DateLabel"]</label>
+												<input type="date" name="date"  value="@(Model.FilterDate?.ToString("yyyy-MM-dd"))" />
 										</div>
-										<button type="submit" class="btn btn-sm btn-outline-primary">@SharedLocalizer["Common_Filter"]</button>
-										<a asp-action="Chat" asp-route-id="@Model.Conversation.Id" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Clear"]</a>
-										<span class="small text-body-secondary ms-2">@string.Format(SharedLocalizer["Message_ChatDateFilterHintFormat"].Value, 40, 80)</span>
+										<button type="submit" >@SharedLocalizer["Common_Filter"]</button>
+										<a asp-action="Chat" asp-route-id="@Model.Conversation.Id" >@SharedLocalizer["Common_Clear"]</a>
+										<span >@string.Format(SharedLocalizer["Message_ChatDateFilterHintFormat"].Value, 40, 80)</span>
 								</form>
 						</div>
 
 						<!-- チャットメッセージエリア -->
-						<div class="chat-container" id="chatMessageContainer">
+						<div  id="chatMessageContainer">
 								@if (!Model.Messages.Any()) {
-										<p class="text-center text-body-secondary my-auto">@SharedLocalizer["Message_NoMessagesForDate"]</p>
+										<p >@SharedLocalizer["Message_NoMessagesForDate"]</p>
 								} else {
 										@foreach (var msg in Model.Messages) {
 											var isMe = msg.SenderId == Model.CurrentUserId;
-												<div class="d-flex flex-column @(isMe ? "align-items-end" : "align-items-start")">
+												<div align-items-end" : "align-items-start")">
 														@if (!isMe) {
-																<span class="small text-body-secondary ms-1 mb-1">👤 @(msg.Sender?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
+																<span >👤 @(msg.Sender?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
 														}
-														<div class="chat-bubble @(isMe ? "chat-bubble-outgoing" : "chat-bubble-incoming") shadow-sm">
+														<div chat-bubble-outgoing" : "chat-bubble-incoming") shadow-sm">
 																@if (!string.IsNullOrEmpty(msg.Text)) {
-																		<div style="white-space: pre-line;">@msg.Text</div>
+																		<div>@msg.Text</div>
 																}
 
 																@if (msg.MessageImages.Any()) {
-																		<div class="d-flex flex-wrap gap-2 mt-2">
+																		<div>
 																				@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder)) {
 																						<a asp-controller="Image" asp-action="Details" asp-route-id="@mi.ImageId">
-																								<img src="/Image/File/@mi.ImageId" class="rounded" style="max-height: 150px; object-fit: cover;" alt="Attached" />
+																								<img src="/Image/File/@mi.ImageId"  style="max-height: 150px; object-fit: cover;" alt="Attached" />
 																						</a>
 																				}
 																		</div>
 																}
-																<div class="timestamp" data-utc="@msg.CreatedAt.ToString("o")">@msg.CreatedAt.ToString("yyyy/MM/dd HH:mm")</div>
+																<div  data-utc="@msg.CreatedAt.ToString("o")">@msg.CreatedAt.ToString("yyyy/MM/dd HH:mm")</div>
 														</div>
 
 														<!-- リアクションバー -->
-														<div class="mt-1">
+														<div>
 																@await Html.PartialAsync("_ReactionButtons", ("Message", msg.Id, msg.Reactions.AsEnumerable()))
 														</div>
 												</div>
@@ -76,33 +76,33 @@
 								}
 						</div>
 
-						<nav class="d-flex justify-content-between align-items-center py-2 border-top px-3">
+						<nav>
 								@if (Model.HasPrevious) {
-										<a class="btn btn-sm btn-outline-secondary" asp-action="Chat" asp-route-id="@Model.Conversation.Id" asp-route-skip="@Model.PreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 80)</a>
+										<a  asp-action="Chat" asp-route-id="@Model.Conversation.Id" asp-route-skip="@Model.PreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 80)</a>
 								} else {
-										<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 80)</button>
+										<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 80)</button>
 								}
-								<span class="small text-body-secondary">@(Model.TotalCount == 0 ? 0 : Model.Skip + 1) - @(Model.Skip + Model.Messages.Count) / @Model.TotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
+								<span >@(Model.TotalCount == 0 ? 0 : Model.Skip + 1) - @(Model.Skip + Model.Messages.Count) / @Model.TotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 								@if (Model.HasNext) {
-										<a class="btn btn-sm btn-outline-secondary" asp-action="Chat" asp-route-id="@Model.Conversation.Id" asp-route-skip="@Model.NextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 80)</a>
+										<a  asp-action="Chat" asp-route-id="@Model.Conversation.Id" asp-route-skip="@Model.NextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 80)</a>
 								} else {
-										<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 80)</button>
+										<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 80)</button>
 								}
 						</nav>
 
 						<!-- 送信フォーム -->
-						<div class="card-footer bg-body-tertiary border-top p-3">
+						<div>
 								<form asp-action="SendMessage" method="post" enctype="multipart/form-data">
 										@Html.AntiForgeryToken()
 										<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
 
-										<div class="mb-2">
-											<textarea name="text" id="messageTextInput" rows="2" class="form-control" placeholder="@SharedLocalizer["Message_InputPlaceholder"]" autofocus></textarea>
+										<div>
+											<textarea name="text" id="messageTextInput" rows="2"  placeholder="@SharedLocalizer["Message_InputPlaceholder"]" autofocus></textarea>
 										</div>
 
-										<div class="d-flex justify-content-between align-items-center">
-											<input type="file" name="imageFiles" id="messageImageInput" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="form-control form-control-sm" style="max-width: 250px;" />
-											<button type="submit" id="sendMessageBtn" class="btn btn btn-outline-primary btn-sm px-4" disabled>
+										<div>
+											<input type="file" name="imageFiles" id="messageImageInput" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png"  style="max-width: 250px;" />
+											<button type="submit" id="sendMessageBtn"  disabled>
 												🚀 @SharedLocalizer["Message_SendBtn"]
 											</button>
 										</div>

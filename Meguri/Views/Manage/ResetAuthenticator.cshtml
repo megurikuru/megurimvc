@@ -4,9 +4,9 @@
 }
 
 <h4>@ViewData["Title"]</h4>
-<div class="alert alert-warning" role="alert">
+<div  role="alert">
     <p>
-        <span class="me-2">⚠️</span>
+        <span >⚠️</span>
         <strong>@SharedLocalizer["Manage_ResetAuthenticator_Warning"]</strong>
     </p>
     <p>
@@ -15,6 +15,6 @@
 </div>
 <div>
     <form asp-action="ResetAuthenticator" method="post">
-        <button class="btn btn-danger" type="submit">@SharedLocalizer["Manage_ResetAuthenticator_Button"]</button>
+        <button  type="submit">@SharedLocalizer["Manage_ResetAuthenticator_Button"]</button>
     </form>
 </div>

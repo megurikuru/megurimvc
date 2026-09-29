@@ -333,9 +333,6 @@
   <data name="Account_Login_Title" xml:space="preserve">
     <value>Log in</value>
   </data>
-  <data name="Account_Login_UseLocalAccount" xml:space="preserve">
-    <value>Use a local account to log in.</value>
-  </data>
   <data name="Account_Login_Button" xml:space="preserve">
     <value>Log in</value>
   </data>
@@ -723,12 +720,6 @@
   <data name="Common_NoItems" xml:space="preserve">
     <value>No items found.</value>
   </data>
-  <data name="Post_NoPostsFound" xml:space="preserve">
-    <value>No matching posts found.</value>
-  </data>
-  <data name="Image_NoImagesFound" xml:space="preserve">
-    <value>No matching images found.</value>
-  </data>
   <data name="Common_NothingFound" xml:space="preserve">
     <value>Nothing found.</value>
   </data>
@@ -853,10 +844,10 @@
     <value>-- Select {0} (Optional) --</value>
   </data>
   <data name="Image_FileFormatLine1" xml:space="preserve">
-    <value>· Supported formats: <strong>PNG, JPEG</strong> only (max <strong>5MB</strong> per file)</value>
+    <value />
   </data>
   <data name="Image_FileFormatLine2" xml:space="preserve">
-    <value>· Files are <strong>converted to WebP</strong> and <strong>optimized to under 250KB</strong> on the server.</value>
+    <value />
   </data>
   <data name="Image_FileFormatLine3" xml:space="preserve">
     <value>· Selecting multiple files lets you group them into a single post.</value>

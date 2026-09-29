@@ -1,77 +1,50 @@
 ﻿@model IEnumerable<Meguri.Models.Fandom>
 @{
-		ViewData["Title"] = SharedLocalizer["Fandom_Title"];
-		var joinedFandomIds = ViewBag.JoinedFandomIds as HashSet<int> ?? new HashSet<int>();
-		var topLevelFandoms = Model.Where(f => f.ParentFandomId == null).OrderBy(f => f.Id).ToList();
+	ViewData["Title"] = SharedLocalizer["Fandom_Title"];
+	var joinedFandomIds = ViewBag.JoinedFandomIds as HashSet<int> ?? new HashSet<int>();
+	var topLevelFandoms = Model.Where(f => f.ParentFandomId == null).OrderBy(f => f.Id).ToList();
 }
 
-<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
-		<div>
-		<h2 class="fw-bold mb-1 icon-wrap"><img src="~/icons/loader-pinwheel.svg" class="lucide-icons me-2" />@SharedLocalizer["Fandom_Title"]</h2>
-				<p class="text-body-secondary mb-0">@SharedLocalizer["Fandom_SubTitle"]</p>
-		</div>
-</div>
+<h2>@SharedLocalizer["Fandom_Title"]</h2>
 
-<div class="file-explorer">
-		<div class="file-explorer-header">
-				<div class="file-row-icon"></div>
-				<div class="file-row-main">@SharedLocalizer["Fandom_Title"]</div>
-				<div class="file-row-meta">
-						<span class="file-row-meta-col">参加者</span>
-						<span class="file-row-meta-col">参加</span>
+<div id="fandom-list">
+	@foreach (var parent in topLevelFandoms) {
+		var isParentJoined = joinedFandomIds.Contains(parent.Id);
+		var childFandoms = Model.Where(f => f.ParentFandomId == parent.Id).ToList();
+		
+			<div class="space-between-wrap">
+				<div>		
+					<a asp-action="Details" asp-route-id="@parent.Id">@parent.Name</a>
+					<span>
+					@if (isParentJoined) {
+						<span>✓</span>
+					}
+					</span>
 				</div>
-		</div>
+				<div>	
+					<small>@parent.FandomUsers.Count 人</small>
+					<small>@parent.Posts.Count 投稿</small>
+				</div>
+			</div>
 
-		@if (!topLevelFandoms.Any()) {
-				<div class="file-explorer-empty">@SharedLocalizer["Fandom_NoPosts"]</div>
-		} else {
-				@foreach (var parent in topLevelFandoms) {
-						var isParentJoined = joinedFandomIds.Contains(parent.Id);
-						var childFandoms = Model.Where(f => f.ParentFandomId == parent.Id).ToList();
-
-						<a asp-action="Details" asp-route-id="@parent.Id" class="file-row">
-								<div class="file-row-icon"><img src="~/icons/loader-pinwheel.svg" class="lucide-icons" /></div>
-								<div class="file-row-main">
-										<div class="file-row-name">@parent.Name</div>
-										<div class="file-row-sub">
-												@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, parent.Posts.Count)
-												@if (childFandoms.Any()) {
-														<text>&nbsp;|&nbsp;@childFandoms.Count @SharedLocalizer["Fandom_ChildFandoms"]</text>
-												}
-										</div>
-								</div>
-								<div class="file-row-meta">
-										<span class="file-row-meta-col">@parent.FandomUsers.Count</span>
-										<span class="file-row-meta-col">
-												@if (isParentJoined) {
-														<span class="badge bg-success-subtle text-success-emphasis">✓</span>
-												}
-										</span>
-								</div>
-						</a>
-
-						@if (childFandoms.Any()) {
-								@foreach (var child in childFandoms) {
-										var isChildJoined = joinedFandomIds.Contains(child.Id);
-										<a asp-action="Details" asp-route-id="@child.Id" class="file-row" style="padding-left: 2.5rem;">
-												<div class="file-row-icon"><img src="~/icons/loader-pinwheel.svg" class="lucide-icons" /></div>
-												<div class="file-row-main">
-														<div class="file-row-name">@child.Name</div>
-														<div class="file-row-sub">@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, child.Posts.Count)</div>
-												</div>
-												<div class="file-row-meta">
-														<span class="file-row-meta-col">@child.FandomUsers.Count</span>
-														<span class="file-row-meta-col">
-																@if (isChildJoined) {
-																		<span class="badge bg-success-subtle text-success-emphasis">✓</span>
-																}
-														</span>
-												</div>
-										</a>
-								}
+		@if (childFandoms.Any()) {
+			@foreach (var child in childFandoms) {
+				var isChildJoined = joinedFandomIds.Contains(child.Id);
+				<div class="space-between-wrap">
+					<div>
+						<a asp-action="Details" asp-route-id="@child.Id">@child.Name</a>
+						@if (isChildJoined) {
+							<span>✓</span>
 						}
-				}
+					</div>
+					<div>
+						<small>@child.FandomUsers.Count 人</small>
+						<small>@child.Posts.Count 件</small>					
+					</div>
+				</div>
+			}
 		}
+	}
 </div>
 
 
@@ -85,17 +58,17 @@
 	var fCount = Model.Count();
 }
 @if (fTotalCount > 0) {
-	<nav class="d-flex justify-content-between align-items-center py-2 mt-3 border-top px-1">
+	<nav class="pagination">
 		@if (fHasPrevious) {
-			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@fPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+			<a asp-action="Index" asp-route-skip="@fPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
 		} else {
-			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
 		}
-		<span class="small text-body-secondary">@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fSkip + 1, fSkip + fCount, fTotalCount)</span>
+		<span>@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fSkip + 1, fSkip + fCount, fTotalCount)</span>
 		@if (fHasNext) {
-			<a class="btn btn-sm btn-outline-secondary" asp-action="Index" asp-route-skip="@fNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+			<a asp-action="Index" asp-route-skip="@fNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
 		} else {
-			<button type="button" class="btn btn-sm btn-outline-secondary disabled" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
 		}
 	</nav>
 }

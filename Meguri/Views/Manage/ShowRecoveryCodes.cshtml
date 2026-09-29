@@ -5,17 +5,17 @@
 }
 
 <h4>@ViewData["Title"]</h4>
-<div class="alert alert-warning" role="alert">
+<div  role="alert">
     <p>
-        <span class="me-2">⚠️</span>
+        <span >⚠️</span>
         <strong>@SharedLocalizer["Manage_ShowRecoveryCodes_Warning"]</strong>
     </p>
     <p>
         @SharedLocalizer["Manage_ShowRecoveryCodes_Description"]
     </p>
 </div>
-<div class="row">
-    <div class="col-md-12">
+<div>
+    <div>
         @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2) {
             <code>@Model.RecoveryCodes[row]</code><text>&nbsp;</text><code>@Model.RecoveryCodes[row + 1]</code><br />
         }

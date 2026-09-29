@@ -6,24 +6,24 @@
 <h2>@ViewData["Title"]</h2>
 <hr />
 <p>@SharedLocalizer["Account_LoginWith2fa_Description"]</p>
-<div class="row">
-    <div class="col-md-4">
+<div>
+    <div>
         <form method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
             <input asp-for="RememberMe" type="hidden" />
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="mb-3">
-                <label asp-for="TwoFactorCode" class="form-label"></label>
-                <input asp-for="TwoFactorCode" class="form-control" autocomplete="off" />
-                <span asp-validation-for="TwoFactorCode" class="text-danger"></span>
+            <div asp-validation-summary="All" ></div>
+            <div>
+                <label asp-for="TwoFactorCode" ></label>
+                <input asp-for="TwoFactorCode"  autocomplete="off" />
+                <span asp-validation-for="TwoFactorCode" ></span>
             </div>
-            <div class="mb-3 form-check">
-                <label asp-for="RememberMachine" class="form-check-label">
-                    <input asp-for="RememberMachine" class="form-check-input" />
+            <div>
+                <label asp-for="RememberMachine">
+                    <input asp-for="RememberMachine"  />
                     @Html.DisplayNameFor(m => m.RememberMachine)
                 </label>
             </div>
-            <div class="mb-3">
-                <button type="submit" class="btn btn-secondary">@SharedLocalizer["Account_Login_Button"]</button>
+            <div>
+                <button type="submit" >@SharedLocalizer["Account_Login_Button"]</button>
             </div>
         </form>
     </div>

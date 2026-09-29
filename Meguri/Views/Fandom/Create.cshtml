@@ -4,36 +4,36 @@
 		var parentFandoms = ViewBag.ParentFandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
 }
 
-<div class="row justify-content-center">
-		<div class="col-lg-6">
-				<div class="card shadow-sm border-0">
-						<div class="card-header bg-body-tertiary py-3">
-								<h4 class="card-title fw-bold mb-0">🏛️ @SharedLocalizer["Fandom_CreateNew"]</h4>
+<div>
+		<div>
+				<div>
+						<div>
+								<h4 >🏛️ @SharedLocalizer["Fandom_CreateNew"]</h4>
 						</div>
-						<div class="card-body p-4">
+						<div>
 								<form asp-action="Create" method="post">
-										<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+										<div asp-validation-summary="ModelOnly" ></div>
 
-										<div class="mb-3">
-												<label asp-for="Name" class="form-label fw-bold">@SharedLocalizer["Fandom_Name"] <span class="text-danger">*</span></label>
-												<input asp-for="Name" class="form-control" placeholder="@SharedLocalizer["Fandom_NamePlaceholder"]" required />
-												<span asp-validation-for="Name" class="text-danger"></span>
+										<div>
+												<label asp-for="Name" >@SharedLocalizer["Fandom_Name"] <span >*</span></label>
+												<input asp-for="Name"  placeholder="@SharedLocalizer["Fandom_NamePlaceholder"]" required />
+												<span asp-validation-for="Name" ></span>
 										</div>
 
-										<div class="mb-3">
-												<label asp-for="ParentFandomId" class="form-label fw-bold">@SharedLocalizer["Fandom_Parent"]</label>
-												<select asp-for="ParentFandomId" class="form-select">
+										<div>
+												<label asp-for="ParentFandomId" >@SharedLocalizer["Fandom_Parent"]</label>
+												<select asp-for="ParentFandomId">
 														<option value="">-- @SharedLocalizer["Fandom_NoParent"] --</option>
 														@foreach (var p in parentFandoms) {
 																<option value="@p.Id">@p.Name</option>
 														}
 												</select>
-												<div class="form-text">@SharedLocalizer["Fandom_ParentHelp"]</div>
+												<div >@SharedLocalizer["Fandom_ParentHelp"]</div>
 										</div>
 
-										<div class="d-flex justify-content-between mt-4">
-												<a asp-action="Index" class="btn btn-outline-secondary">@SharedLocalizer["Common_Back"]</a>
-												<button type="submit" class="btn btn btn-outline-primary px-4">@SharedLocalizer["Common_Create"]</button>
+										<div>
+												<a asp-action="Index" >@SharedLocalizer["Common_Back"]</a>
+												<button type="submit" >@SharedLocalizer["Common_Create"]</button>
 										</div>
 								</form>
 						</div>

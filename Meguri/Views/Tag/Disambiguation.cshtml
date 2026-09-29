@@ -3,45 +3,45 @@
 		ViewData["Title"] = string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText);
 }
 
-<div class="row justify-content-center">
-		<div class="col-lg-10">
-				<div class="card shadow-sm border-0 mb-4">
-						<div class="card-header bg-body-tertiary py-3 d-flex justify-content-between align-items-center">
-								<h4 class="card-title fw-bold mb-0">⚖️ @string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h4>
-								<a asp-action="Details" asp-route-conceptId="@Model.TagConceptId" class="btn btn-sm btn-outline-secondary">@SharedLocalizer["Common_Back"]</a>
+<div>
+		<div>
+				<div>
+						<div>
+								<h4 >⚖️ @string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h4>
+								<a asp-action="Details" asp-route-conceptId="@Model.TagConceptId" >@SharedLocalizer["Common_Back"]</a>
 						</div>
-						<div class="card-body p-4">
+						<div>
 								@if (!Model.CanEdit) {
-										<div class="alert alert-warning">
+										<div>
 												@SharedLocalizer["Tag_OnlyOwnerCanEdit"]
 										</div>
 								}
 
-								<p class="text-body-secondary">
+								<p>
 										@string.Format(SharedLocalizer["Tag_DisambiguationIntroFormat"].Value, Model.PrimaryTagText)
 								</p>
 
-								<div class="row g-4 mt-2">
+								<div>
 										<!-- 同義語 (Synonyms) -->
-										<div class="col-md-6">
-												<div class="card h-100 bg-body-tertiary border-0 p-3">
-														<h5 class="fw-bold mb-2">🔄 @SharedLocalizer["Tag_SynonymTerms"]</h5>
-														<p class="small text-body-secondary mb-3">@SharedLocalizer["Tag_SynonymHelp"]</p>
+										<div>
+												<div>
+														<h5 >🔄 @SharedLocalizer["Tag_SynonymTerms"]</h5>
+														<p >@SharedLocalizer["Tag_SynonymHelp"]</p>
 
-														<div class="d-flex flex-wrap gap-2 mb-3">
-																<span class="badge bg-primary fs-6 p-2">#@Model.PrimaryTagText @SharedLocalizer["Tag_StandardBadge"]</span>
+														<div>
+																<span >#@Model.PrimaryTagText @SharedLocalizer["Tag_StandardBadge"]</span>
 																@foreach (var syn in Model.Synonyms) {
-																		<span class="badge bg-secondary fs-6 p-2">#@syn</span>
+																		<span >#@syn</span>
 																}
 														</div>
 
 														@if (Model.CanEdit) {
-																<form asp-action="AddSynonym" method="post" class="mt-auto">
+																<form asp-action="AddSynonym" method="post">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-																		<div class="input-group">
-																				<input type="text" name="synonymText" class="form-control" placeholder="@SharedLocalizer["Tag_SynonymPlaceholder"]" required />
-																				<button type="submit" class="btn btn btn-outline-primary">@SharedLocalizer["Common_Add"]</button>
+																		<div>
+																				<input type="text" name="synonymText"  placeholder="@SharedLocalizer["Tag_SynonymPlaceholder"]" required />
+																				<button type="submit" >@SharedLocalizer["Common_Add"]</button>
 																		</div>
 																</form>
 														}
@@ -49,24 +49,24 @@
 										</div>
 
 										<!-- 上位語 (Broader) -->
-										<div class="col-md-6">
-												<div class="card h-100 bg-body-tertiary border-0 p-3">
-														<h5 class="fw-bold mb-2">⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h5>
-														<p class="small text-body-secondary mb-3">@SharedLocalizer["Tag_BroaderHelp"]</p>
+										<div>
+												<div>
+														<h5 >⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h5>
+														<p >@SharedLocalizer["Tag_BroaderHelp"]</p>
 
-														<div class="d-flex flex-wrap gap-2 mb-3">
+														<div>
 																@if (!Model.BroaderConcepts.Any()) {
-																		<span class="text-body-secondary small">@SharedLocalizer["Common_NotSet"]</span>
+																		<span >@SharedLocalizer["Common_NotSet"]</span>
 																}
 																@foreach (var b in Model.BroaderConcepts) {
-																		<div class="btn-group btn-group-sm">
-																				<a asp-action="Details" asp-route-conceptId="@b.ConceptId" class="btn btn-secondary">#@b.Text</a>
+																		<div>
+																				<a asp-action="Details" asp-route-conceptId="@b.ConceptId" >#@b.Text</a>
 																				@if (Model.CanEdit) {
-																						<form asp-action="RemoveRelationship" method="post" class="d-inline">
+																						<form asp-action="RemoveRelationship" method="post">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@b.RelationshipId" />
 																								<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-																								<button type="submit" class="btn btn-danger btn-sm">✕</button>
+																								<button type="submit" >✕</button>
 																						</form>
 																				}
 																		</div>
@@ -74,13 +74,13 @@
 														</div>
 
 														@if (Model.CanEdit) {
-																<form asp-action="AddRelationship" method="post" class="mt-auto">
+																<form asp-action="AddRelationship" method="post">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
 																		<input type="hidden" name="predicate" value="broader" />
-																		<div class="input-group">
-																				<input type="text" name="targetTagText" class="form-control" placeholder="@SharedLocalizer["Tag_BroaderPlaceholder"]" required />
-																				<button type="submit" class="btn btn btn-outline-primary">@SharedLocalizer["Common_Add"]</button>
+																		<div>
+																				<input type="text" name="targetTagText"  placeholder="@SharedLocalizer["Tag_BroaderPlaceholder"]" required />
+																				<button type="submit" >@SharedLocalizer["Common_Add"]</button>
 																		</div>
 																</form>
 														}
@@ -88,24 +88,24 @@
 										</div>
 
 										<!-- 下位語 (Narrower) -->
-										<div class="col-md-6">
-												<div class="card h-100 bg-body-tertiary border-0 p-3">
-														<h5 class="fw-bold mb-2">⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h5>
-														<p class="small text-body-secondary mb-3">@SharedLocalizer["Tag_NarrowerHelp"]</p>
+										<div>
+												<div>
+														<h5 >⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h5>
+														<p >@SharedLocalizer["Tag_NarrowerHelp"]</p>
 
-														<div class="d-flex flex-wrap gap-2 mb-3">
+														<div>
 																@if (!Model.NarrowerConcepts.Any()) {
-																		<span class="text-body-secondary small">@SharedLocalizer["Common_NotSet"]</span>
+																		<span >@SharedLocalizer["Common_NotSet"]</span>
 																}
 																@foreach (var n in Model.NarrowerConcepts) {
-																		<div class="btn-group btn-group-sm">
-																				<a asp-action="Details" asp-route-conceptId="@n.ConceptId" class="btn btn-secondary">#@n.Text</a>
+																		<div>
+																				<a asp-action="Details" asp-route-conceptId="@n.ConceptId" >#@n.Text</a>
 																				@if (Model.CanEdit) {
-																						<form asp-action="RemoveRelationship" method="post" class="d-inline">
+																						<form asp-action="RemoveRelationship" method="post">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@n.RelationshipId" />
 																								<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-																								<button type="submit" class="btn btn-danger btn-sm">✕</button>
+																								<button type="submit" >✕</button>
 																						</form>
 																				}
 																		</div>
@@ -113,13 +113,13 @@
 														</div>
 
 														@if (Model.CanEdit) {
-																<form asp-action="AddRelationship" method="post" class="mt-auto">
+																<form asp-action="AddRelationship" method="post">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
 																		<input type="hidden" name="predicate" value="narrower" />
-																		<div class="input-group">
-																				<input type="text" name="targetTagText" class="form-control" placeholder="@SharedLocalizer["Tag_NarrowerPlaceholder"]" required />
-																				<button type="submit" class="btn btn btn-outline-primary">@SharedLocalizer["Common_Add"]</button>
+																		<div>
+																				<input type="text" name="targetTagText"  placeholder="@SharedLocalizer["Tag_NarrowerPlaceholder"]" required />
+																				<button type="submit" >@SharedLocalizer["Common_Add"]</button>
 																		</div>
 																</form>
 														}
@@ -127,24 +127,24 @@
 										</div>
 
 										<!-- 関連語 (Related) -->
-										<div class="col-md-6">
-												<div class="card h-100 bg-body-tertiary border-0 p-3">
-														<h5 class="fw-bold mb-2">🔗 @SharedLocalizer["Tag_RelatedTerms"]</h5>
-														<p class="small text-body-secondary mb-3">@SharedLocalizer["Tag_RelatedHelp"]</p>
+										<div>
+												<div>
+														<h5 >🔗 @SharedLocalizer["Tag_RelatedTerms"]</h5>
+														<p >@SharedLocalizer["Tag_RelatedHelp"]</p>
 
-														<div class="d-flex flex-wrap gap-2 mb-3">
+														<div>
 																@if (!Model.RelatedConcepts.Any()) {
-																		<span class="text-body-secondary small">@SharedLocalizer["Common_NotSet"]</span>
+																		<span >@SharedLocalizer["Common_NotSet"]</span>
 																}
 																@foreach (var r in Model.RelatedConcepts) {
-																		<div class="btn-group btn-group-sm">
-																				<a asp-action="Details" asp-route-conceptId="@r.ConceptId" class="btn btn-info text-dark">#@r.Text</a>
+																		<div>
+																				<a asp-action="Details" asp-route-conceptId="@r.ConceptId" >#@r.Text</a>
 																				@if (Model.CanEdit) {
-																						<form asp-action="RemoveRelationship" method="post" class="d-inline">
+																						<form asp-action="RemoveRelationship" method="post">
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@r.RelationshipId" />
 																								<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-																								<button type="submit" class="btn btn-danger btn-sm">✕</button>
+																								<button type="submit" >✕</button>
 																						</form>
 																				}
 																		</div>
@@ -152,13 +152,13 @@
 														</div>
 
 														@if (Model.CanEdit) {
-																<form asp-action="AddRelationship" method="post" class="mt-auto">
+																<form asp-action="AddRelationship" method="post">
 																		@Html.AntiForgeryToken()
 																		<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
 																		<input type="hidden" name="predicate" value="related" />
-																		<div class="input-group">
-																				<input type="text" name="targetTagText" class="form-control" placeholder="@SharedLocalizer["Tag_RelatedPlaceholder"]" required />
-																				<button type="submit" class="btn btn btn-outline-primary">@SharedLocalizer["Common_Add"]</button>
+																		<div>
+																				<input type="text" name="targetTagText"  placeholder="@SharedLocalizer["Tag_RelatedPlaceholder"]" required />
+																				<button type="submit" >@SharedLocalizer["Common_Add"]</button>
 																		</div>
 																</form>
 														}
