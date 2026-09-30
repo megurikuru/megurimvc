@@ -43,7 +43,7 @@
 								<h6>🔄 @SharedLocalizer["Tag_SynonymTerms"]</h6>
 								<div>
 										@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag)) {
-												<span class="icon-with-text">#@t.TagText</span>
+												<span class="icon-wrap">#@t.TagText</span>
 										}
 								</div>
 						</div>
@@ -56,7 +56,7 @@
 								<div>
 										@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader")) {
 												var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
-												<a class="icon-with-text" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
+												<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
 														#@text
 												</a>
 										}
@@ -71,7 +71,7 @@
 								<div>
 										@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader")) {
 												var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
-												<a class="icon-with-text" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
+												<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
 														#@text
 												</a>
 										}
@@ -86,13 +86,13 @@
 								<div>
 										@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related")) {
 												var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
-												<a class="icon-with-text" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
+												<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
 														#@text
 												</a>
 										}
 										@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related")) {
 												var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
-												<a class="icon-with-text" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
+												<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
 														#@text
 												</a>
 										}
@@ -122,7 +122,7 @@
 										<small>@pt.Post.CreatedAt.ToString("yyyy/MM/dd")</small>
 								</div>
 								<div>
-										<span class="icon-with-text">
+										<span class="icon-wrap">
 												<img src="~/icons/user.svg"> @(pt.Post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)
 										</span>
 								</div>

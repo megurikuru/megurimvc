@@ -1,35 +1,31 @@
 @model OptionsViewModel
 @{
-		ViewData["Title"] = SharedLocalizer["Manage_Options_Title"];
-		ViewData.AddActivePage(ManageNavPages.Options);
+	ViewData["Title"] = SharedLocalizer["Manage_Options_Title"];
+	ViewData.AddActivePage(ManageNavPages.Options);
 }
 
-<h4>@ViewData["Title"]</h4>
+<h2>@ViewData["Title"]</h2>
 @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
-<div>
-		<div>
-				<form method="post" id="optionsForm">
-						<div asp-validation-summary="All" ></div>
-						<div>
-								<label asp-for="Culture" >@SharedLocalizer["Manage_Options_Language"]</label>
-								<div>
-										<input  type="radio" asp-for="Culture" id="cultureJa" value="ja">
-										<label  for="cultureJa">
-												@SharedLocalizer["Manage_Options_Language_Ja"]
-										</label>
-								</div>
-								<div>
-										<input  type="radio" asp-for="Culture" id="cultureEn" value="en">
-										<label  for="cultureEn">
-												@SharedLocalizer["Manage_Options_Language_En"]
-										</label>
-								</div>
-						</div>
-						<button type="submit" >@SharedLocalizer["Manage_Options_Save"]</button>
-				</form>
-		</div>
-</div>
+
+<form method="post" id="optionsForm" class="account">
+	<div asp-validation-summary="All"></div>
+	<label asp-for="Culture">@SharedLocalizer["Manage_Options_Language"]</label>
+	<div>
+		<input type="radio" asp-for="Culture" id="cultureJa" value="ja">
+		<label for="cultureJa">
+			@SharedLocalizer["Manage_Options_Language_Ja"]
+		</label>
+	</div>
+	<div>
+		<input type="radio" asp-for="Culture" id="cultureEn" value="en">
+		<label for="cultureEn">
+			@SharedLocalizer["Manage_Options_Language_En"]
+		</label>
+	</div>
+	<button type="submit">@SharedLocalizer["Manage_Options_Save"]</button>
+</form>
+
 
 @section Scripts {
-		@await Html.PartialAsync("_ValidationScriptsPartial")
+	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

@@ -76,7 +76,7 @@
 						@foreach (var pt in post.PostTags) {
 							var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
 							if (!string.IsNullOrEmpty(tagText)) {
-								<a class="icon-with-text" asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId">
+								<a class="icon-wrap" asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId">
 									<img src="~/icons/tag.svg">@tagText
 								</a>
 							}
@@ -87,7 +87,7 @@
 				@* 投稿ユーザー情報および反響データ（コメント数・リアクション数） *@
 				<div>
 					<div>
-						<span class="icon-with-text"><img src="~/icons/user.svg"> @(post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
+						<span class="icon-wrap"><img src="~/icons/user.svg"> @(post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
 					</div>
 					<div>
 						<span>💬 @post.CommentCount</span>
