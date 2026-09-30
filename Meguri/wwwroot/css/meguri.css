@@ -126,10 +126,11 @@ img {
 	height: auto;
 }
 
-button {
+button, .button-like {
+	width: max-content;
 	padding: var(--space-1) var(--space-2);
 	cursor: pointer;
-	border: 1px solid var(--color-border);
+	border: 3px solid var(--color-border);
 	background-color: white;
 	transition: background-color 0.3s ease;
 
@@ -137,6 +138,20 @@ button {
 		background-color: var(--color-primary-hover);
 		color: white;
 	}
+}
+
+.button-wrap {
+	display: flex;
+	padding: var(--space-2) 0;
+	justify-content: center;
+	gap: var(--space-8);
+}
+
+.attribute-wrap {
+	display: block;
+	padding: var(--space-2) 0;
+	justify-content: center;
+	gap: var(--space-2);
 }
 
 /* ------------------------------------------
