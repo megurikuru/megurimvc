@@ -5,8 +5,8 @@
 @model (string TargetType, long TargetId, IEnumerable<Reaction> Reactions)
 
 @{
-		var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-		var mainTypes = new[] {
+	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+	var mainTypes = new[] {
 				ReactionType.Like,
 				ReactionType.Precious,
 				ReactionType.Heartstruck,
@@ -19,18 +19,18 @@
 }
 
 <div>
-		@Html.AntiForgeryToken()
-		@foreach (var type in mainTypes) {
-				var count = Model.Reactions.Count(r => r.Type == type);
-				var hasReacted = currentUserId != null && Model.Reactions.Any(r => r.Type == type && r.UserId == currentUserId);
+	@Html.AntiForgeryToken()
+	@foreach (var type in mainTypes) {
+		var count = Model.Reactions.Count(r => r.Type == type);
+		var hasReacted = currentUserId != null && Model.Reactions.Any(r => r.Type == type && r.UserId == currentUserId);
 
-				<button type="button"
-								reacted" : "")"
-								title="@type.GetDescription()"
-								onclick="toggleReaction('@Model.TargetType', @Model.TargetId, @((int)type), this)">
-						<span>@type.GetEmoji()</span>
-						<span >@type.GetLabel()</span>
-						<span >@count</span>
-				</button>
-		}
+		<button type="button"
+						reacted" : "" )"
+						title="@type.GetDescription()"
+						onclick="toggleReaction('@Model.TargetType', @Model.TargetId, @((int)type), this)">
+			<span>@type.GetEmoji()</span>
+			<span>@type.GetLabel()</span>
+			<span class="reaction-count">@count</span>
+		</button>
+	}
 </div>

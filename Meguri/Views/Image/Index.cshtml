@@ -34,7 +34,7 @@ else {
 				@foreach (var item in Model) {
 						<div>
 								<a asp-action="Details" asp-route-id="@item.Id">
-										<img src="/Image/File/@item.Id" alt="@item.Name" loading="lazy" />
+										<img src="/Image/File/@item.Id" alt="@item.Name" />
 								</a>
 								<div>
 										<span >@(string.IsNullOrEmpty(item.Caption) ? item.Name : item.Caption)</span>

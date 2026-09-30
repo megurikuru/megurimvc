@@ -5,16 +5,17 @@
 @using Meguri.Views.Manage
 @inject SignInManager<ApplicationUser> SignInManager
 @{
-    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+	var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
 
-<ul>
-    <li ><a  asp-action="Index">@SharedLocalizer["Manage_Nav_Profile"]</a></li>
-    <li ><a  asp-action="ChangePassword">@SharedLocalizer["Manage_Nav_Password"]</a></li>
-    @if (hasExternalLogins) {
-        <li ><a  asp-action="ExternalLogins">@SharedLocalizer["Manage_Nav_ExternalLogins"]</a></li>
-    }
-    <li ><a  asp-action="TwoFactorAuthentication">@SharedLocalizer["Manage_Nav_TwoFactorAuthentication"]</a></li>
-    <li ><a  asp-action="Options">@SharedLocalizer["Manage_Nav_Options"]</a></li>
-</ul>
-
+<nav class="nav-grid">
+	<ul>
+		<li><a asp-action="Index">@SharedLocalizer["Manage_Nav_Profile"]</a></li>
+		<li><a asp-action="ChangePassword">@SharedLocalizer["Manage_Nav_Password"]</a></li>
+		@if (hasExternalLogins) {
+			<li><a asp-action="ExternalLogins">@SharedLocalizer["Manage_Nav_ExternalLogins"]</a></li>
+		}
+		<li><a asp-action="TwoFactorAuthentication">@SharedLocalizer["Manage_Nav_TwoFactorAuthentication"]</a></li>
+		<li><a asp-action="Options">@SharedLocalizer["Manage_Nav_Options"]</a></li>
+	</ul>
+</nav>
