@@ -20,8 +20,8 @@
 		</nav>
 		<!-- ヘッダー情報 -->
 		<div>
-			<div>
-				<a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.FandomId">@(Model.Fandom?.Name ?? "界隈")</a>
+			<a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.FandomId">@Model.Fandom?.Name</a>
+			<div class="attribute-wrap">
 				<!-- 公開ステータス -->
 				@if (Model.IsPublic) {
 					<label title="@SharedLocalizer["Post_Public"]">
@@ -79,10 +79,12 @@
 			</div>
 
 			@if (isAuthor) {
-				<div>
-					<a asp-action="Edit" asp-route-id="@Model.Id" class="icon-wrap">
-						<img src="~/icons/square-pen.svg" alt="Edit" />@SharedLocalizer["Common_Edit"]
-					</a>
+				<div class="button-wrap">
+					<div class="button-like">
+						<a asp-action="Edit" asp-route-id="@Model.Id" class="icon-wrap">
+							<img src="~/icons/square-pen.svg" alt="Edit" />@SharedLocalizer["Common_Edit"]
+						</a>
+					</div>
 					<form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
 						@Html.AntiForgeryToken()
 						<button type="submit" class="icon-wrap">
