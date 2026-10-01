@@ -40,7 +40,7 @@
     基本構造要素
    ------------------------------------------ */
 body {
-	display: grid;
+	display: block grid; /* 自身：ブロック要素として改行 / 子：Gridレイアウト（縦1列）で配置 */
 	gap: var(--space-2);
 	font-size: 1rem;
 	padding: 0 var(--space-2);
@@ -50,8 +50,7 @@ body {
 }
 
 main {
-	/*display: block;*/
-	display: grid;
+	display: block grid; /* 自身：ブロック要素として改行 / 子：Gridレイアウト（縦1列）で配置 */
 	gap: var(--space-2);
 	border: 1px dotted blue; /* 開発用 */
 }
@@ -62,7 +61,7 @@ main {
 	border: 1px solid red; /* 開発用 */
 
 	& > a {
-		display: block;
+		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
 		margin: 0 auto;
 		padding: var(--space-2) var(--space-3);
 		width: fit-content;
@@ -71,17 +70,17 @@ main {
 	}
 
 	& ul {
-		display: grid;
+		display: block grid; /* 自身：ブロック要素として改行 / 子：Gridレイアウト（4均等列）で配置 */
 		grid-template-columns: 1fr 1fr 1fr 1fr;
 		list-style: none;
 
 		& li {
-			display: flex;
+			display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（上下中央揃え）で配置 */
 			align-items: center;
 			border: 1px solid #ccc;
 
 			& a, & button {
-				display: block;
+				display: block flow; /* 自身：ブロック要素（全幅・改行） / 子：通常のインライン/ブロックフロー配置 */
 				padding: var(--space-1);
 				width: 100%;
 				text-decoration: none;
@@ -141,17 +140,21 @@ button, .button-like {
 }
 
 .button-wrap {
-	display: flex;
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び・中央寄せ）で配置 */
 	padding: var(--space-2) 0;
 	justify-content: center;
 	gap: var(--space-8);
 }
 
 .attribute-wrap {
-	display: block;
+	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
 	padding: var(--space-2) 0;
 	justify-content: center;
 	gap: var(--space-2);
+
+	& label {
+		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+	}
 }
 
 /* ------------------------------------------
@@ -173,7 +176,7 @@ form.account {
 
 /* 検索フォーム */
 form.search {
-	display: flex;
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び）で配置 */
 	flex-direction: row;
 	gap: var(--space-2);
 	border: 1px solid orange; /* 開発用 */
@@ -185,7 +188,7 @@ form.search {
 	}
 
 	& a {
-		display: inline-block;
+		display: inline flow-root; /* 自身：インラインとしてテキストの流れに並ぶ / 子：BFC（独自ブロック文脈）を形成 */
 	}
 
 	& button, & a {
@@ -208,25 +211,25 @@ form.account {
 	}
 
 	& button[type="submit"] {
-		display: block;
+		display: block flow; /* 自身：ブロック要素（改行・margin: 0 auto 中央寄せ可） / 子：通常のフロー配置 */
 		margin: 0 auto ;
 	}
 }
 
 #post-list {
-	display: flex;
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（縦並び column）で配置 */
 	flex-direction: column;
 	gap: var(--space-2);
 	border: 1px dotted gray; /* 開発用 */
 }
 
 .space-between-wrap {
-	display: flex;
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（両端揃え space-between）で配置 */
 	justify-content: space-between;
 }
 
 .pagination {
-	display: grid;
+	display: block grid; /* 自身：ブロック要素として改行 / 子：Gridレイアウト（均等3列）で配置 */
 	grid-template-columns: 1fr 1fr 1fr;
 	text-align: center;
 	border: 1px dotted gray; /* 開発用 */
@@ -242,7 +245,7 @@ form.account {
 
 /* アイコンラッパー */
 .icon-wrap {
-	display: inline-flex;
+	display: inline flex; /* 自身：インライン要素（テキストと同じ行に並ぶ） / 子：Flexbox（横並び・上下中央揃え）で配置 */
 	align-items: center; /* 上下中央揃え */
 	gap: var(--space-1); /* アイコンとテキストの間隔（お好みで調整） */
 	font-size: var(--font-size-sm); /* お好みで調整 */
