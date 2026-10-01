@@ -57,30 +57,31 @@ main {
 
 /* ナビゲーション */
 .nav-grid {
-	font-size: var(--font-size-xs);
+	font-size: var(--font-size-md);
 	border: 1px solid red; /* 開発用 */
 
 	& > a {
 		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
 		margin: 0 auto;
-		padding: var(--space-2) var(--space-3);
+		padding: var(--space-3) var(--space-4);
 		width: fit-content;
 		font-weight: bold;
 		border: 1px solid orange; /* 開発用 */
 	}
 
 	& ul {
-		display: block grid; /* 自身：ブロック要素として改行 / 子：Gridレイアウト（4均等列）で配置 */
-		grid-template-columns: 1fr 1fr 1fr 1fr;
+		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（2均等列）で配置 */
+		grid-template-columns: 1fr 1fr;
 		list-style: none;
 
 		& li {
-			display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（上下中央揃え）で配置 */
+			display: block;	/* 自身：ブロック要素 */
 			align-items: center;
 			border: 1px solid #ccc;
 
 			& a, & button {
-				display: block flow; /* 自身：ブロック要素（全幅・改行） / 子：通常のインライン/ブロックフロー配置 */
+				/*display: block block;*/ /* 自身：ブロック要素 / 子：通常のインライン/ブロックフロー配置 */
+				display: block;
 				padding: var(--space-1);
 				width: 100%;
 				text-decoration: none;
@@ -100,6 +101,10 @@ main {
 
 nav#nav-sub {
 	border: 1px solid purple; /* 開発用 */
+
+	& div {
+		padding: var(--space-2) 0;
+	}
 }
 
 footer {
