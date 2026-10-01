@@ -619,7 +619,7 @@
     <value>認証アプリを有効化</value>
   </data>
   <data name="Manage_EnableAuthenticator_Intro" xml:space="preserve">
-    <value>認証アプリを使うには、次の手順に従ってください。</value>
+    <value>　認証アプリを使用するには、以下の手順に従ってください。</value>
   </data>
   <data name="Manage_EnableAuthenticator_AppInstruction" xml:space="preserve">
     <value>スマートフォンにGoogle Authenticator または Microsoft Authenticator などの二段階認証アプリをインストールしてください。</value>

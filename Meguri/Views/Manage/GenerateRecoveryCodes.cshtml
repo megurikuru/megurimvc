@@ -1,26 +1,21 @@
-﻿@{
-    ViewData["Title"] = SharedLocalizer["Manage_GenerateRecoveryCodes_Title"];
-    ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
+@{
+	ViewData["Title"] = SharedLocalizer["Manage_GenerateRecoveryCodes_Title"];
+	ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<div  role="alert">
-    <p>
-        <span >⚠️</span>
-        <strong>@SharedLocalizer["Manage_GenerateRecoveryCodes_Warning"]</strong>
-    </p>
-    <p>
-        @SharedLocalizer["Manage_GenerateRecoveryCodes_Description"]
-    </p>
-    <p>
-        @SharedLocalizer["Manage_GenerateRecoveryCodes_DescriptionExtra"]
-        <a asp-action="ResetAuthenticatorWarning">@SharedLocalizer["Manage_GenerateRecoveryCodes_ResetLink"]</a>
-    </p>
-</div>
-
-<div>
-    <form asp-action="GenerateRecoveryCodes" method="post">
-        <button  type="submit">@SharedLocalizer["Manage_GenerateRecoveryCodes_Button"]</button>
-    </form>
-</div>
+<form asp-action="GenerateRecoveryCodes" method="post" class="account">
+	<div role="alert">
+		<p>
+			<span>⚠️</span>
+			<strong>@SharedLocalizer["Manage_GenerateRecoveryCodes_Warning"]</strong>
+		</p>
+		<p>@SharedLocalizer["Manage_GenerateRecoveryCodes_Description"]</p>
+		<p>
+			@SharedLocalizer["Manage_GenerateRecoveryCodes_DescriptionExtra"]
+			<a asp-action="ResetAuthenticatorWarning">@SharedLocalizer["Manage_GenerateRecoveryCodes_ResetLink"]</a>
+		</p>
+	</div>
+	<button type="submit">@SharedLocalizer["Manage_GenerateRecoveryCodes_Button"]</button>
+</form>

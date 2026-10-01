@@ -1,23 +1,22 @@
-﻿@model ShowRecoveryCodesViewModel
+@model ShowRecoveryCodesViewModel
 @{
-    ViewData["Title"] = SharedLocalizer["Manage_ShowRecoveryCodes_Title"];
-    ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
+	ViewData["Title"] = SharedLocalizer["Manage_ShowRecoveryCodes_Title"];
+	ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
-<h4>@ViewData["Title"]</h4>
-<div  role="alert">
-    <p>
-        <span >⚠️</span>
-        <strong>@SharedLocalizer["Manage_ShowRecoveryCodes_Warning"]</strong>
-    </p>
-    <p>
-        @SharedLocalizer["Manage_ShowRecoveryCodes_Description"]
-    </p>
-</div>
-<div>
-    <div>
-        @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2) {
-            <code>@Model.RecoveryCodes[row]</code><text>&nbsp;</text><code>@Model.RecoveryCodes[row + 1]</code><br />
-        }
-    </div>
+<h2>@ViewData["Title"]</h2>
+
+<div class="account">
+	<div role="alert">
+		<p>
+			<span>⚠️</span>
+			<strong>@SharedLocalizer["Manage_ShowRecoveryCodes_Warning"]</strong>
+		</p>
+		<p>@SharedLocalizer["Manage_ShowRecoveryCodes_Description"]</p>
+	</div>
+	<div>
+		@foreach (var code in Model.RecoveryCodes) {
+			<code>@code</code>
+		}
+	</div>
 </div>

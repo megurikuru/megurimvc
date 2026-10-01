@@ -5,7 +5,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+<form class="account" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
 	<h2>@SharedLocalizer["Account_Register_CreateNewAccount"]</h2>
 	<div asp-validation-summary="All"></div>
 	<div>
@@ -30,7 +30,7 @@
 	</div>
 	<div>
 		<label>@SharedLocalizer["Account_Field_DateOfBirth"]</label>
-		<div>
+		<div class="birth">
 			<input asp-for="BirthYear" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_YearPlaceholder"]" autocomplete="bday-year" />
 			<span>@SharedLocalizer["Account_Field_DateOfBirth_YearUnit"]</span>
 			<input asp-for="BirthMonth" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_MonthPlaceholder"]" autocomplete="bday-month" />
