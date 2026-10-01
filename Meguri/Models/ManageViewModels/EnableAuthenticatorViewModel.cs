@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Meguri.Models.ManageViewModels {
     public class EnableAuthenticatorViewModel {
@@ -15,9 +16,11 @@ namespace Meguri.Models.ManageViewModels {
         public string Code { get; set; }
 
         [BindNever]
+        [ValidateNever]
         public string SharedKey { get; set; }
 
         [BindNever]
+        [ValidateNever]
         public string AuthenticatorUri { get; set; }
     }
 }
