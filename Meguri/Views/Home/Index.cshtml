@@ -41,7 +41,7 @@
 <div id="post-list">
 	@* 投稿データが存在する場合 *@
 	@if (posts.Any()) {
-		<h1>投稿</h1>
+		<h1>新着投稿</h1>
 		@* 投稿リストをループして描画 *@
 		@foreach (var post in posts) {
 			<div>
@@ -69,31 +69,6 @@
 						}
 					</div>
 				}
-
-				@* タグ一覧 *@
-				@if (post.PostTags.Any()) {
-					<div>
-						@foreach (var pt in post.PostTags) {
-							var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
-							if (!string.IsNullOrEmpty(tagText)) {
-								<a class="icon-wrap" asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId">
-									<img src="~/icons/tag.svg">@tagText
-								</a>
-							}
-						}
-					</div>
-				}
-
-				@* 投稿ユーザー情報および反響データ（コメント数・リアクション数） *@
-				<div>
-					<div>
-						<span class="icon-wrap"><img src="~/icons/user.svg"> @(post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
-					</div>
-					<div>
-						<span>💬 @post.CommentCount</span>
-						<span>❤️ @post.Reactions.Count</span>
-					</div>
-				</div>
 			</div>
 		}
 	}
