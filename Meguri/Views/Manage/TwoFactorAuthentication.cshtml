@@ -4,7 +4,8 @@
     ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
-<h4>@ViewData["Title"]</h4>
+<h2>@ViewData["Title"]</h2>
+<div class="account">
 @if (Model.Is2faEnabled) {
     if (Model.RecoveryCodesLeft == 0) {
         <div>
@@ -37,6 +38,7 @@ else {
     <a asp-action="EnableAuthenticator" >@SharedLocalizer["Manage_TwoFactorAuthentication_ConfigureAuthenticator"]</a>
     <a asp-action="ResetAuthenticatorWarning" >@SharedLocalizer["Manage_TwoFactorAuthentication_ResetAuthenticatorKey"]</a>
 }
+</div>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")

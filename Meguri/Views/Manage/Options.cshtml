@@ -10,13 +10,13 @@
 <form method="post" id="optionsForm" class="account">
 	<div asp-validation-summary="All"></div>
 	<label asp-for="Culture">@SharedLocalizer["Manage_Options_Language"]</label>
-	<div>
+	<div class="option-row">
 		<input type="radio" asp-for="Culture" id="cultureJa" value="ja">
 		<label for="cultureJa">
 			@SharedLocalizer["Manage_Options_Language_Ja"]
 		</label>
 	</div>
-	<div>
+	<div class="option-row">
 		<input type="radio" asp-for="Culture" id="cultureEn" value="en">
 		<label for="cultureEn">
 			@SharedLocalizer["Manage_Options_Language_En"]
@@ -24,6 +24,9 @@
 	</div>
 	<button type="submit">@SharedLocalizer["Manage_Options_Save"]</button>
 </form>
+
+
+
 
 
 @section Scripts {

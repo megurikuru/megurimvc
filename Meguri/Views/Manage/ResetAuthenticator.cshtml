@@ -1,20 +1,17 @@
-﻿@{
-    ViewData["Title"] = SharedLocalizer["Manage_ResetAuthenticator_Title"];
-    ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
+@{
+	ViewData["Title"] = SharedLocalizer["Manage_ResetAuthenticator_Title"];
+	ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
-<h4>@ViewData["Title"]</h4>
-<div  role="alert">
-    <p>
-        <span >⚠️</span>
-        <strong>@SharedLocalizer["Manage_ResetAuthenticator_Warning"]</strong>
-    </p>
-    <p>
-        @SharedLocalizer["Manage_ResetAuthenticator_Description"]
-    </p>
-</div>
-<div>
-    <form asp-action="ResetAuthenticator" method="post">
-        <button  type="submit">@SharedLocalizer["Manage_ResetAuthenticator_Button"]</button>
-    </form>
-</div>
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="ResetAuthenticator" method="post" class="account">
+	<div role="alert">
+		<p>
+			<span>⚠️</span>
+			<strong>@SharedLocalizer["Manage_ResetAuthenticator_Warning"]</strong>
+		</p>
+		<p>@SharedLocalizer["Manage_ResetAuthenticator_Description"]</p>
+	</div>
+	<button type="submit">@SharedLocalizer["Manage_ResetAuthenticator_Button"]</button>
+</form>
