@@ -4,17 +4,16 @@
 @{
 		ViewData["Title"] = !string.IsNullOrEmpty(Model.Caption) ? Model.Caption : Model.Name;
 		var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+		var breadcrumbs = new List<Meguri.Models.BreadcrumbItem> {
+			new(SharedLocalizer["Image_GalleryTitle"].Value, Url.Action("Index", "Image")),
+			new(string.IsNullOrEmpty(Model.Caption) ? Model.Name : Model.Caption)
+		};
 }
 
 <div>
 		<div>
 				<!-- パンくず -->
-				<nav aria-label="breadcrumb">
-						<ol>
-								<li ><a asp-controller="Image" asp-action="Index">@SharedLocalizer["Image_GalleryTitle"]</a></li>
-								<li  aria-current="page">@(string.IsNullOrEmpty(Model.Caption) ? Model.Name : Model.Caption)</li>
-						</ol>
-				</nav>
+				<partial name="_Breadcrumb" model="breadcrumbs" />
 				<div>
 						<div>
 								<img src="/Image/File/@Model.Id" alt="@Model.Name"  style="max-height: 70vh; object-fit: contain;" />

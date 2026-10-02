@@ -55,57 +55,6 @@ main {
 	border: 1px dotted blue; /* 開発用 */
 }
 
-/* ナビゲーション */
-.nav-grid {
-	font-size: var(--font-size-md);
-	border: 1px solid red; /* 開発用 */
-
-	& > a {
-		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
-		margin: 0 auto;
-		padding: var(--space-3) var(--space-4);
-		width: fit-content;
-		font-weight: bold;
-		border: 1px solid orange; /* 開発用 */
-	}
-
-	& ul {
-		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（2均等列）で配置 */
-		grid-template-columns: 1fr 1fr;
-		list-style: none;
-
-		& li {
-			display: block;	/* 自身：ブロック要素 */
-			align-items: center;
-			border: 1px solid #ccc;
-
-			& a, & button {
-				/*display: block block;*/ /* 自身：ブロック要素 / 子：通常のインライン/ブロックフロー配置 */
-				display: block;
-				padding: var(--space-1);
-				width: 100%;
-				text-decoration: none;
-				border: 0;
-				cursor: pointer;
-				text-align: center;
-				vertical-align: middle;
-
-				&:hover {
-					background-color: var(--color-primary-hover);
-					color: white;
-				}
-			}
-		}
-	}
-}
-
-nav#nav-sub {
-	border: 1px solid purple; /* 開発用 */
-
-	& div {
-		padding: var(--space-2) 0;
-	}
-}
 
 footer {
 	margin: 0 auto;
@@ -206,6 +155,102 @@ button, .button-like {
 /* ------------------------------------------
     パーツ
    ------------------------------------------ */
+
+
+/* ナビゲーション */
+.nav-grid {
+	font-size: var(--font-size-md);
+	border: 1px solid red; /* 開発用 */
+
+	& > a {
+		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+		margin: 0 auto;
+		padding: var(--space-3) var(--space-4);
+		width: fit-content;
+		font-weight: bold;
+		border: 1px solid orange; /* 開発用 */
+	}
+
+	& ul {
+		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（2均等列）で配置 */
+		grid-template-columns: 1fr 1fr;
+		list-style: none;
+
+		& li {
+			display: block;	/* 自身：ブロック要素 */
+			align-items: center;
+			border: 1px solid #ccc;
+
+			& a, & button {
+				/*display: block block;*/ /* 自身：ブロック要素 / 子：通常のインライン/ブロックフロー配置 */
+				display: block;
+				padding: var(--space-2);
+				width: 100%;
+				text-decoration: none;
+				border: 0;
+				cursor: pointer;
+				text-align: center;
+				vertical-align: middle;
+
+				&:hover {
+					background-color: var(--color-primary-hover);
+					color: white;
+				}
+			}
+		}
+	}
+}
+
+.nav-sub {
+	border: 1px solid purple; /* 開発用 */
+
+	& div {
+		padding: var(--space-2) 0;
+	}
+}
+
+[aria-label="breadcrumb"] {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+
+  /* リスト全体のレイアウト */
+  ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 各要素（li） */
+  li {
+    /* 隣接するliの前に区切り文字（/）を挿入 */
+    & + li::before {
+      content: "/";
+      margin: 0 0.5rem;
+      color: #888888;
+    }
+  }
+
+  /* リンクの基本スタイル */
+  a {
+    color: #0066cc;
+    text-decoration: none;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+
+    &:hover {
+      color: #004499;
+      text-decoration: underline;
+    }
+  }
+
+  /* 現在地（最末尾の要素）のスタイル */
+  [aria-current="page"] {
+    color: #333333;
+    font-weight: bold;
+  }
+}
 
 /* 検索フォーム */
 form.search {

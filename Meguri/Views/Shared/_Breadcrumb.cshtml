@@ -1,0 +1,13 @@
+@model IEnumerable<Meguri.Models.BreadcrumbItem>
+
+<nav aria-label="breadcrumb">
+	<ol>
+		@foreach (var item in Model) {
+			if (string.IsNullOrEmpty(item.Url)) {
+				<li aria-current="page">@item.Text</li>
+			} else {
+				<li><a href="@item.Url">@item.Text</a></li>
+			}
+		}
+	</ol>
+</nav>
