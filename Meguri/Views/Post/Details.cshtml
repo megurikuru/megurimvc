@@ -5,19 +5,18 @@
 	ViewData["Title"] = Model.Name;
 	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 	var isAuthor = Model.UserId == currentUserId || User.IsInRole("Admin");
+	var breadcrumbs = new List<Meguri.Models.BreadcrumbItem> {
+		new(SharedLocalizer["Fandom_Title"].Value, Url.Action("Index", "Fandom")),
+		new(Model.Fandom?.Name ?? "界隈", Url.Action("Details", "Fandom", new { id = Model.FandomId })),
+		new(Model.Name)
+	};
 }
 
 
 <div>
 	<div>
 		<!-- パンくず -->
-		<nav aria-label="breadcrumb">
-			<ol>
-				<li><a asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Fandom_Title"]</a></li>
-				<li><a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.FandomId">@(Model.Fandom?.Name ?? "界隈")</a></li>
-				<li aria-current="page">@Model.Name</li>
-			</ol>
-		</nav>
+		<partial name="_Breadcrumb" model="breadcrumbs" />
 		<!-- ヘッダー情報 -->
 		<div>
 			<a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.FandomId">@Model.Fandom?.Name</a>
