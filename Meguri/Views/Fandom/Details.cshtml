@@ -8,30 +8,30 @@
 
 <!-- パンくず / 親界隈：ファイルマネージャー風パス表示 -->
 <div>
-	<a asp-action="Index" >@SharedLocalizer["Fandom_Title"]</a>
+	<a asp-action="Index">@SharedLocalizer["Fandom_Title"]</a>
 	@if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
 		@foreach (var ancestor in ancestors) {
-			<span >/</span>
+			<span>/</span>
 			<a asp-action="Details" asp-route-id="@ancestor.Id">@ancestor.Name</a>
 		}
 	} else if (Model.ParentFandom != null) {
-		<span >/</span>
+		<span>/</span>
 		<a asp-action="Details" asp-route-id="@Model.ParentFandom.Id">@Model.ParentFandom.Name</a>
 	}
-	<span >/</span>
-	<span >@Model.Name</span>
+	<span>/</span>
+	<span>@Model.Name</span>
 </div>
 <div>
 	<div>
-		<h2 >@Model.Name</h2>
+		<h2>@Model.Name</h2>
 		<div>
-			<img src="~/icons/users.svg"  /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
+			<img src="~/icons/users.svg" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
 			&nbsp;|&nbsp;
-			<img src="~/icons/gallery-vertical-end.svg"  /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
+			<img src="~/icons/gallery-vertical-end.svg" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
 		</div>
 	</div>
 
-	<div>
+	<div class="button-wrap">
 		@if (isJoined) {
 			<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
 				@Html.AntiForgeryToken()
@@ -43,99 +43,70 @@
 			<form asp-action="Join" asp-route-id="@Model.Id" method="post">
 				@Html.AntiForgeryToken()
 				<button type="submit">
-					<img src="~/icons/plus.svg"  /> @SharedLocalizer["Fandom_Join"]
+					<img src="~/icons/plus.svg" /> @SharedLocalizer["Fandom_Join"]
 				</button>
 			</form>
 		}
 
-		<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id">
-			✏️ @SharedLocalizer["Post_CreateNew"]
+		<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
+			@SharedLocalizer["Post_CreateNew"]
 		</a>
-			</div>
-		</div>
+	</div>
+</div>
 
-	<!-- ファイルマネージャー風一覧：子界隈（フォルダ）＋投稿（ファイル） -->
+<!-- ファイルマネージャー風一覧：子界隈（フォルダ）＋投稿（ファイル） -->
+<div>
 	<div>
-		<div>
-			<div>
-		<div>
-			<div ></div>
-			<div >@SharedLocalizer["Fandom_Title"]</div>
-			<div>
-				<span >投稿者</span>
-				<span >更新日時</span>
-			</div>
-		</div>
-
 		@if (!Model.ChildFandoms.Any() && !fandomPosts.Any()) {
-			<div >@SharedLocalizer["Fandom_NoPosts"]</div>
+			<div>@SharedLocalizer["Fandom_NoPosts"]</div>
 		} else {
 			@foreach (var child in Model.ChildFandoms) {
-				<a asp-action="Details" asp-route-id="@child.Id">
-					<div ><img src="~/icons/loader-pinwheel.svg"  /></div>
-					<div>
-						<div >@child.Name</div>
-						<div >@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, child.Posts.Count)</div>
-					</div>
-					<div>
-						<span >-</span>
-						<span >-</span>
-					</div>
-				</a>
+				<div>
+					<img src="~/icons/folder.svg" />	
+					<a asp-action="Details" asp-route-id="@child.Id">@child.Name</a>
+				</div>
 			}
 
 			@foreach (var post in fandomPosts) {
 				var thumb = post.PostImages.OrderBy(x => x.DisplayOrder).FirstOrDefault();
-				<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
-					<div>
-						@if (thumb != null) {
-							<img src="/Image/File/@thumb.ImageId"  alt="@thumb.Image.Name" />
-						} else {
-							<img src="~/icons/file-text.svg"  />
-						}
-					</div>
-					<div>
-						<div >@post.Name</div>
-						<div>
-							@string.Format(SharedLocalizer["Post_CommentCountFormat"].Value, post.CommentCount)
-							&nbsp;|&nbsp;
-							@string.Format(SharedLocalizer["Post_ReactionCountFormat"].Value, post.Reactions.Count)
+				<div>
+					<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+						<div class="icon-wrap">
+							@if (thumb != null) {
+								<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image.Name" />
+							} else {
+								<img src="~/icons/file-text.svg" />
+							}
+							<span>@post.Name</span>
 						</div>
-					</div>
-					<div>
-						<span >@(post.User?.UserName ?? "User")</span>
-						<span >@post.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
-					</div>
-				</a>
+					</a>
+				</div>
 			}
 		}
 	</div>
-</div>
 
-
-
-@{
-	var fpHasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false;
-	var fpHasNext = ViewBag.FandomPostsHasNext as bool? ?? false;
-	var fpTotalCount = ViewBag.FandomPostsTotalCount as int? ?? 0;
-	var fpSkip = ViewBag.FandomPostsSkip as int? ?? 0;
-	var fpPreviousSkip = ViewBag.FandomPostsPreviousSkip as int? ?? 0;
-	var fpNextSkip = ViewBag.FandomPostsNextSkip as int? ?? 0;
-	var fpCount = fandomPosts.Count;
-}
-@if (fpTotalCount > 0) {
-	<nav>
-	@if (fpHasPrevious) {
-		<a  asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-	} else {
-		<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+	@{
+		var fpHasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false;
+		var fpHasNext = ViewBag.FandomPostsHasNext as bool? ?? false;
+		var fpTotalCount = ViewBag.FandomPostsTotalCount as int? ?? 0;
+		var fpSkip = ViewBag.FandomPostsSkip as int? ?? 0;
+		var fpPreviousSkip = ViewBag.FandomPostsPreviousSkip as int? ?? 0;
+		var fpNextSkip = ViewBag.FandomPostsNextSkip as int? ?? 0;
+		var fpCount = fandomPosts.Count;
 	}
-	<span >@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fpSkip + 1, fpSkip + fpCount, fpTotalCount)</span>
-	@if (fpHasNext) {
-		<a  asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-	} else {
-		<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+	@if (fpTotalCount > 0) {
+		<nav>
+			@if (fpHasPrevious) {
+				<a asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+			} else {
+				<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+			}
+			<span>@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fpSkip + 1, fpSkip + fpCount, fpTotalCount)</span>
+			@if (fpHasNext) {
+				<a asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+			} else {
+				<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+			}
+		</nav>
 	}
-	</nav>
-}
 </div>
