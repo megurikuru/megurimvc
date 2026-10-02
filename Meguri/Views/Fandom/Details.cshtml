@@ -6,7 +6,7 @@
 }
 
 
-<!-- パンくず / 親界隈：ファイルマネージャー風パス表示 -->
+<!-- パンくずリスト -->
 <div>
 	<a asp-action="Index">@SharedLocalizer["Fandom_Title"]</a>
 	@if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
@@ -21,38 +21,30 @@
 	<span>/</span>
 	<span>@Model.Name</span>
 </div>
-<div>
-	<div>
-		<h2>@Model.Name</h2>
-		<div>
-			<img src="~/icons/users.svg" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
-			&nbsp;|&nbsp;
-			<img src="~/icons/gallery-vertical-end.svg" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
-		</div>
-	</div>
 
-	<div class="button-wrap">
-		@if (isJoined) {
-			<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
-				@Html.AntiForgeryToken()
-				<button type="submit">
-					@SharedLocalizer["Fandom_Leave"]
-				</button>
-			</form>
-		} else {
-			<form asp-action="Join" asp-route-id="@Model.Id" method="post">
-				@Html.AntiForgeryToken()
-				<button type="submit">
-					<img src="~/icons/plus.svg" /> @SharedLocalizer["Fandom_Join"]
-				</button>
-			</form>
-		}
-
-		<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
-			@SharedLocalizer["Post_CreateNew"]
-		</a>
-	</div>
-</div>
+<!-- 界隈メニュー -->
+<nav class="nav-grid">
+	<ul>
+		<li>
+			@if (isJoined) {
+				<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
+					@Html.AntiForgeryToken()
+					<button type="submit">@SharedLocalizer["Fandom_Leave"]</button>
+				</form>
+			} else {
+				<form asp-action="Join" asp-route-id="@Model.Id" method="post">
+					@Html.AntiForgeryToken()
+					<button type="submit">@SharedLocalizer["Fandom_Join"]</button>
+				</form>
+			}
+		</li>
+		<li>
+			<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
+				@SharedLocalizer["Post_CreateNew"]
+			</a>
+		</li>
+	</ul>
+</nav>
 
 <!-- ファイルマネージャー風一覧：子界隈（フォルダ）＋投稿（ファイル） -->
 <div>
@@ -62,7 +54,7 @@
 		} else {
 			@foreach (var child in Model.ChildFandoms) {
 				<div>
-					<img src="~/icons/folder.svg" />	
+					<img src="~/icons/folder.svg" />
 					<a asp-action="Details" asp-route-id="@child.Id">@child.Name</a>
 				</div>
 			}
@@ -83,6 +75,12 @@
 				</div>
 			}
 		}
+	</div>
+
+	<div>
+		<img src="~/icons/users.svg" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
+		&nbsp;|&nbsp;
+		<img src="~/icons/gallery-vertical-end.svg" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
 	</div>
 
 	@{
