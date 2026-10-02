@@ -204,6 +204,15 @@ button, .button-like {
 .nav-sub {
 	border: 1px solid purple; /* 開発用 */
 
+	& > a {
+		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+		margin: 0 auto;
+		padding: var(--space-3) var(--space-4);
+		width: fit-content;
+		font-weight: bold;
+		border: 1px solid orange; /* 開発用 */
+	}
+
 	& div {
 		padding: var(--space-2) 0;
 	}
