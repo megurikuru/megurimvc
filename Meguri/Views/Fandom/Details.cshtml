@@ -3,23 +3,26 @@
 	ViewData["Title"] = Model.Name;
 	bool isJoined = ViewBag.IsJoined is true;
 	var fandomPosts = ViewBag.FandomPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
-}
-
-
-<!-- パンくずリスト -->
-<div>
-	<a asp-action="Index">@SharedLocalizer["Fandom_Title"]</a>
-	@if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
-		@foreach (var ancestor in ancestors) {
-			<span>/</span>
-			<a asp-action="Details" asp-route-id="@ancestor.Id">@ancestor.Name</a>
+	var breadcrumbs = new List<Meguri.Models.BreadcrumbItem> {
+		new(SharedLocalizer["Fandom_Title"].Value, Url.Action("Index", "Fandom"))
+	};
+	if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
+		foreach (var ancestor in ancestors) {
+			breadcrumbs.Add(new(ancestor.Name, Url.Action("Details", "Fandom", new { id = ancestor.Id })));
 		}
 	} else if (Model.ParentFandom != null) {
-		<span>/</span>
-		<a asp-action="Details" asp-route-id="@Model.ParentFandom.Id">@Model.ParentFandom.Name</a>
+		breadcrumbs.Add(new(Model.ParentFandom.Name, Url.Action("Details", "Fandom", new { id = Model.ParentFandom.Id })));
 	}
-	<span>/</span>
-	<span>@Model.Name</span>
+	breadcrumbs.Add(new(Model.Name));
+}
+
+<!-- パンくずリスト -->
+<partial name="_Breadcrumb" model="breadcrumbs" />
+
+<!-- 界隈メタ情報 -->
+<div class="fandom-meta">
+	<img src="~/icons/users.svg" class="icon"/><span>@string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)</span>
+	<img src="~/icons/gallery-vertical-end.svg" class="icon"/><span>@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))</span>
 </div>
 
 <!-- 界隈メニュー -->
@@ -46,43 +49,39 @@
 	</ul>
 </nav>
 
-<!-- ファイルマネージャー風一覧：子界隈（フォルダ）＋投稿（ファイル） -->
+<!-- ファインダー：子界隈（フォルダ）＋投稿（ファイル） -->
 <div>
 	<div>
-		@if (!Model.ChildFandoms.Any() && !fandomPosts.Any()) {
-			<div>@SharedLocalizer["Fandom_NoPosts"]</div>
-		} else {
-			@foreach (var child in Model.ChildFandoms) {
-				<div>
-					<img src="~/icons/folder.svg" />
-					<a asp-action="Details" asp-route-id="@child.Id">@child.Name</a>
-				</div>
-			}
-
-			@foreach (var post in fandomPosts) {
-				var thumb = post.PostImages.OrderBy(x => x.DisplayOrder).FirstOrDefault();
-				<div>
-					<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
-						<div class="icon-wrap">
-							@if (thumb != null) {
-								<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image.Name" />
-							} else {
-								<img src="~/icons/file-text.svg" />
-							}
-							<span>@post.Name</span>
-						</div>
-					</a>
-				</div>
-			}
+		<!-- フォルダー  -->
+		@foreach (var child in Model.ChildFandoms) {
+			<a asp-action="Details" asp-route-id="@child.Id" class="finder-item-wrap">
+				<img src="~/icons/folder.svg" class="icon"/>
+				<span class="name">@child.Name</span>
+			</a>
+		}
+		<!-- 投稿  -->
+		@foreach (var post in fandomPosts) {
+			var thumb = post.PostImages.OrderBy(x => x.DisplayOrder).FirstOrDefault();
+			<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="finder-item-wrap">
+				<!-- 画像がある場合-->
+				@if (thumb != null) {
+					<img src="~/icons/image.svg" class="icon">
+					<span class="name with-thumb">@post.Name</span>
+					<div class="thumb-wrap">
+						<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image.Name" class="thumb"/>
+					</div>
+				<!-- 画像がない場合-->
+				} else {
+					<img src="~/icons/file-text.svg" class="icon" />
+					<span class="name">@post.Name</span>
+				}
+			</a>
 		}
 	</div>
+</div>
 
-	<div>
-		<img src="~/icons/users.svg" /> @string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)
-		&nbsp;|&nbsp;
-		<img src="~/icons/gallery-vertical-end.svg" /> @string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))
-	</div>
-
+<!-- ページネーション -->	
+<div>
 	@{
 		var fpHasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false;
 		var fpHasNext = ViewBag.FandomPostsHasNext as bool? ?? false;

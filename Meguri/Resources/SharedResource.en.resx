@@ -1291,4 +1291,7 @@
   <data name="Common_Reset" xml:space="preserve">
     <value>Reset</value>
   </data>
+  <data name="Image_MembersOnlyBadge" xml:space="preserve">
+    <value>Fandom members only</value>
+  </data>
 </root>
