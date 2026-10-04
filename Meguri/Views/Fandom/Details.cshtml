@@ -21,8 +21,12 @@
 
 <!-- 界隈メタ情報 -->
 <div class="fandom-meta">
-	<img src="~/icons/users.svg" class="icon"/><span>@string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)</span>
-	<img src="~/icons/gallery-vertical-end.svg" class="icon"/><span>@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, (int)(ViewBag.FandomPostsTotalCount ?? 0))</span>
+	<div>
+		<img src="~/icons/users.svg" class="icon"/><span>参加者：@Model.FandomUsers.Count</span>
+	</div>
+	<div>
+		<img src="~/icons/files.svg" class="icon"/><span>投稿：@(ViewBag.FandomPostsTotalCount as int? ?? 0)</span>
+	</div>
 </div>
 
 <!-- 界隈メニュー -->
