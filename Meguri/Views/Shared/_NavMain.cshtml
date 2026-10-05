@@ -7,15 +7,15 @@
 		</li>
 		@* 界隈一覧 *@
 		<li>
-			<a asp-area="" asp-controller="Fandom" asp-action="Index">@SharedLocalizer["Nav_Fandom"]</a>
+			<a asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="1">@SharedLocalizer["Nav_Fandom"]</a>
 		</li>
 		@* イラスト界隈 *@
 		<li>
-			<a asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="4">@SharedLocalizer["Nav_Illustrations"]</a>
+			<a asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="5">@SharedLocalizer["Nav_Illustrations"]</a>
 		</li>
 		@* つぶやき *@
 		<li>
-			<a asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="2">@SharedLocalizer["Nav_Murmurs"]</a>
+			<a asp-area="" asp-controller="Fandom" asp-action="Details" asp-route-id="3">@SharedLocalizer["Nav_Murmurs"]</a>
 		</li>
 		@* タグ一覧 *@
 		<li>
