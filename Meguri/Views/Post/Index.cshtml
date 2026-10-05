@@ -5,6 +5,27 @@
 		var currentTag = ViewBag.CurrentTag as string;
 		var currentSearch = ViewBag.CurrentSearch as string;
 		var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
+		var postRouteValues = new Dictionary<string, string>();
+		if (currentFandom != null) {
+			postRouteValues["fandomId"] = currentFandom.Id.ToString();
+		}
+		if (!string.IsNullOrEmpty(currentTag)) {
+			postRouteValues["tag"] = currentTag;
+		}
+		if (!string.IsNullOrEmpty(currentSearch)) {
+			postRouteValues["search"] = currentSearch;
+		}
+		var pager = new Meguri.ViewModels.PaginationViewModel {
+			Action = "Index",
+			HasPrevious = ViewBag.HasPrevious as bool? ?? false,
+			HasNext = ViewBag.HasNext as bool? ?? false,
+			TotalCount = ViewBag.TotalCount as int? ?? 0,
+			Skip = ViewBag.Skip as int? ?? 0,
+			PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
+			NextSkip = ViewBag.NextSkip as int? ?? 0,
+			CurrentCount = Model.Count(),
+			RouteValues = postRouteValues
+		};
 }
 
 <div>
@@ -126,27 +147,4 @@ else {
 						</div>
 						}
 
-						@{
-							var postHasPrevious = ViewBag.HasPrevious as bool? ?? false;
-							var postHasNext = ViewBag.HasNext as bool? ?? false;
-							var postTotalCount = ViewBag.TotalCount as int? ?? 0;
-							var postSkip = ViewBag.Skip as int? ?? 0;
-							var postPreviousSkip = ViewBag.PreviousSkip as int? ?? 0;
-							var postNextSkip = ViewBag.NextSkip as int? ?? 0;
-							var postCount = Model.Count();
-						}
-						@if (postTotalCount > 0) {
-							<nav>
-								@if (postHasPrevious) {
-									<a  asp-action="Index" asp-route-skip="@postPreviousSkip" asp-route-fandomId="@currentFandom?.Id" asp-route-tag="@currentTag" asp-route-search="@currentSearch">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-								} else {
-									<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
-								}
-								<span >@(postSkip + 1) - @(postSkip + postCount) / @postTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
-								@if (postHasNext) {
-									<a  asp-action="Index" asp-route-skip="@postNextSkip" asp-route-fandomId="@currentFandom?.Id" asp-route-tag="@currentTag" asp-route-search="@currentSearch">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-								} else {
-									<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
-								}
-							</nav>
-						}
+						<partial name="_Pagination" model="pager" />

@@ -14,6 +14,19 @@
 		breadcrumbs.Add(new(Model.ParentFandom.Name, Url.Action("Details", "Fandom", new { id = Model.ParentFandom.Id })));
 	}
 	breadcrumbs.Add(new(Model.Name));
+	var pager = new Meguri.ViewModels.PaginationViewModel {
+		Action = "Details",
+		HasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false,
+		HasNext = ViewBag.FandomPostsHasNext as bool? ?? false,
+		TotalCount = ViewBag.FandomPostsTotalCount as int? ?? 0,
+		Skip = ViewBag.FandomPostsSkip as int? ?? 0,
+		PreviousSkip = ViewBag.FandomPostsPreviousSkip as int? ?? 0,
+		NextSkip = ViewBag.FandomPostsNextSkip as int? ?? 0,
+		CurrentCount = fandomPosts.Count,
+		RouteValues = new Dictionary<string, string> {
+			["id"] = Model.Id.ToString()
+		}
+	};
 }
 
 <!-- パンくずリスト -->
@@ -86,28 +99,5 @@
 
 <!-- ページネーション -->	
 <div>
-	@{
-		var fpHasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false;
-		var fpHasNext = ViewBag.FandomPostsHasNext as bool? ?? false;
-		var fpTotalCount = ViewBag.FandomPostsTotalCount as int? ?? 0;
-		var fpSkip = ViewBag.FandomPostsSkip as int? ?? 0;
-		var fpPreviousSkip = ViewBag.FandomPostsPreviousSkip as int? ?? 0;
-		var fpNextSkip = ViewBag.FandomPostsNextSkip as int? ?? 0;
-		var fpCount = fandomPosts.Count;
-	}
-	@if (fpTotalCount > 0) {
-		<nav>
-			@if (fpHasPrevious) {
-				<a asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-			} else {
-				<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
-			}
-			<span>@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fpSkip + 1, fpSkip + fpCount, fpTotalCount)</span>
-			@if (fpHasNext) {
-				<a asp-action="Details" asp-route-id="@Model.Id" asp-route-skip="@fpNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-			} else {
-				<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
-			}
-		</nav>
-	}
+	<partial name="_Pagination" model="pager" />
 </div>

@@ -3,6 +3,16 @@
 	ViewData["Title"] = SharedLocalizer["Fandom_Title"];
 	var joinedFandomIds = ViewBag.JoinedFandomIds as HashSet<int> ?? new HashSet<int>();
 	var topLevelFandoms = Model.Where(f => f.ParentFandomId == null).OrderBy(f => f.Id).ToList();
+	var pager = new Meguri.ViewModels.PaginationViewModel {
+		Action = "Index",
+		HasPrevious = ViewBag.HasPrevious as bool? ?? false,
+		HasNext = ViewBag.HasNext as bool? ?? false,
+		TotalCount = ViewBag.TotalCount as int? ?? 0,
+		Skip = ViewBag.Skip as int? ?? 0,
+		PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
+		NextSkip = ViewBag.NextSkip as int? ?? 0,
+		CurrentCount = Model.Count()
+	};
 }
 
 <h2>@SharedLocalizer["Fandom_Title"]</h2>
@@ -48,27 +58,4 @@
 </div>
 
 
-@{
-	var fHasPrevious = ViewBag.HasPrevious as bool? ?? false;
-	var fHasNext = ViewBag.HasNext as bool? ?? false;
-	var fTotalCount = ViewBag.TotalCount as int? ?? 0;
-	var fSkip = ViewBag.Skip as int? ?? 0;
-	var fPreviousSkip = ViewBag.PreviousSkip as int? ?? 0;
-	var fNextSkip = ViewBag.NextSkip as int? ?? 0;
-	var fCount = Model.Count();
-}
-@if (fTotalCount > 0) {
-	<nav class="pagination">
-		@if (fHasPrevious) {
-			<a asp-action="Index" asp-route-skip="@fPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-		} else {
-			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
-		}
-		<span>@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, fSkip + 1, fSkip + fCount, fTotalCount)</span>
-		@if (fHasNext) {
-			<a asp-action="Index" asp-route-skip="@fNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-		} else {
-			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
-		}
-	</nav>
-}
+<partial name="_Pagination" model="pager" />

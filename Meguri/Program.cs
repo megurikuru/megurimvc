@@ -147,10 +147,14 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// データベースの初期データ登録（シード）
+// 設定に応じて全データ削除と初期データ登録（シード）を実行
 using (var scope = app.Services.CreateScope()) {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    await DbInitializer.InitializeAsync(dbContext);
+    if (app.Configuration.GetValue<bool>("DatabaseInitialization:DeleteAllData")) {
+        await DbInitializer.DeleteAllDataAsync(dbContext);
+    }
+
+    await DbInitializer.InitializeAsync(dbContext, app.Configuration);
 }
 
 // アプリケーションを起動し、HTTPリクエストの待ち受けを開始
