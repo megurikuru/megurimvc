@@ -1,0 +1,28 @@
+@model Meguri.ViewModels.PaginationViewModel
+
+@{
+	var prevRoute = new Dictionary<string, string>(Model.RouteValues)
+	{
+		["skip"] = Model.PreviousSkip.ToString()
+	};
+	var nextRoute = new Dictionary<string, string>(Model.RouteValues)
+	{
+		["skip"] = Model.NextSkip.ToString()
+	};
+}
+
+@if (Model.TotalCount > 0) {
+	<nav class="pagination">
+		@if (Model.HasPrevious) {
+			<a asp-controller="@Model.Controller" asp-action="@Model.Action" asp-all-route-data="prevRoute">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, Model.PageSize)</a>
+		} else {
+			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, Model.PageSize)</button>
+		}
+		<span>@string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, Model.Skip + 1, Model.Skip + Model.CurrentCount, Model.TotalCount)</span>
+		@if (Model.HasNext) {
+			<a asp-controller="@Model.Controller" asp-action="@Model.Action" asp-all-route-data="nextRoute">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, Model.PageSize)</a>
+		} else {
+			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, Model.PageSize)</button>
+		}
+	</nav>
+}

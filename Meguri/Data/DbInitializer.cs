@@ -3,43 +3,90 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Configuration;
 using Meguri.Models;
 
 namespace Meguri.Data {
 
     /// <summary>
-    /// データベースの初期データ登録（シード）処理を提供するクラス
+    /// データベースの全データ削除と初期データ登録（シード）処理を提供するクラス
     /// </summary>
     public static class DbInitializer {
+
+        /// <summary>
+        /// ユーザー・認証情報を含む全管理テーブルのデータを削除し、連番をリセットします。
+        /// テーブル構造とマイグレーション履歴は保持します。
+        /// </summary>
+        public static async Task DeleteAllDataAsync(ApplicationDbContext context) {
+            if (!context.Database.IsNpgsql()) {
+                throw new NotSupportedException("全データ削除はPostgreSQLのみ対応しています。");
+            }
+
+            var sqlHelper = context.GetService<ISqlGenerationHelper>();
+            var tableNames = context.Model.GetRelationalModel().Tables
+                .Select(table => sqlHelper.DelimitIdentifier(table.Name, table.Schema))
+                .ToArray();
+
+            if (tableNames.Length == 0) {
+                return;
+            }
+
+            var sql = "TRUNCATE TABLE " + string.Join(", ", tableNames) + " RESTART IDENTITY;";
+            await context.Database.ExecuteSqlRawAsync(sql);
+            context.ChangeTracker.Clear();
+        }
+
+        /// <summary>
+        /// 設定で有効な場合のみ、既存データを削除せずに初期データを登録します。
+        /// </summary>
+        public static async Task InitializeAsync(ApplicationDbContext context, IConfiguration configuration) {
+            if (!configuration.GetValue<bool>("DatabaseInitialization:Enabled")) {
+                return;
+            }
+
+            await InitializeAsync(context);
+        }
 
         /// <summary>
         /// Fandomモデルなどのマスター初期データを登録します。
         /// </summary>
         public static async Task InitializeAsync(ApplicationDbContext context) {
+            await InitializeFandomsAsync(context);
+            await InitializeTagsAsync(context);
+        }
+
+        /// <summary>
+        /// 界隈の初期データを登録・更新します。
+        /// </summary>
+        private static async Task InitializeFandomsAsync(ApplicationDbContext context) {
+            const int rootFandomId = 1;
             // 初期登録するFandom一覧
             var initialFandoms = new[] {
-                new Fandom { Id = 1, Name = "公開界隈", ParentFandomId = null },
-                new Fandom { Id = 2, Name = "つぶやき", ParentFandomId = null },
-                new Fandom { Id = 3, Name = "創作", ParentFandomId = null },
-                new Fandom { Id = 4, Name = "イラスト", ParentFandomId = 3 },
-                new Fandom { Id = 5, Name = "漫画", ParentFandomId = 3 },
-                new Fandom { Id = 6, Name = "小説", ParentFandomId = 3 },
-                new Fandom { Id = 7, Name = "コスプレ", ParentFandomId = null },
-                new Fandom { Id = 8, Name = "車", ParentFandomId = null },
-                new Fandom { Id = 9, Name = "国産車", ParentFandomId = 8 },
-                new Fandom { Id = 10, Name = "トヨタ", ParentFandomId = 9 },
-                new Fandom { Id = 11, Name = "ホンダ", ParentFandomId = 9 },
-                new Fandom { Id = 12, Name = "スバル", ParentFandomId = 9 },
-                new Fandom { Id = 13, Name = "日産", ParentFandomId = 9 },
-                new Fandom { Id = 14, Name = "スズキ", ParentFandomId = 9 },
-                new Fandom { Id = 15, Name = "ダイハツ", ParentFandomId = 9 },
-                new Fandom { Id = 16, Name = "輸入車", ParentFandomId = 8 },
-                new Fandom { Id = 17, Name = "漫画・アニメ", ParentFandomId = null },
-                new Fandom { Id = 18, Name = "漫画", ParentFandomId = 17 },
-                new Fandom { Id = 19, Name = "アニメ", ParentFandomId = 17 },
-                new Fandom { Id = 20, Name = "ゲーム", ParentFandomId = null },
-                new Fandom { Id = 21, Name = "プログラミング", ParentFandomId = null },
-                new Fandom { Id = 22, Name = "運営", ParentFandomId = null }
+                new Fandom { Id = rootFandomId, Name = "ルート", ParentFandomId = null },
+                new Fandom { Id = 2, Name = "公開界隈", ParentFandomId = rootFandomId },
+                new Fandom { Id = 3, Name = "つぶやき", ParentFandomId = rootFandomId },
+                new Fandom { Id = 4, Name = "創作", ParentFandomId = rootFandomId },
+                new Fandom { Id = 5, Name = "イラスト", ParentFandomId = 4 },
+                new Fandom { Id = 6, Name = "漫画", ParentFandomId = 4 },
+                new Fandom { Id = 7, Name = "小説", ParentFandomId = 4 },
+                new Fandom { Id = 8, Name = "コスプレ", ParentFandomId = rootFandomId },
+                new Fandom { Id = 9, Name = "車", ParentFandomId = rootFandomId },
+                new Fandom { Id = 10, Name = "国産車", ParentFandomId = 9 },
+                new Fandom { Id = 11, Name = "トヨタ", ParentFandomId = 10 },
+                new Fandom { Id = 12, Name = "ホンダ", ParentFandomId = 10 },
+                new Fandom { Id = 13, Name = "スバル", ParentFandomId = 10 },
+                new Fandom { Id = 14, Name = "日産", ParentFandomId = 10 },
+                new Fandom { Id = 15, Name = "スズキ", ParentFandomId = 10 },
+                new Fandom { Id = 16, Name = "ダイハツ", ParentFandomId = 10 },
+                new Fandom { Id = 17, Name = "輸入車", ParentFandomId = 9 },
+                new Fandom { Id = 18, Name = "漫画・アニメ", ParentFandomId = rootFandomId },
+                new Fandom { Id = 19, Name = "漫画", ParentFandomId = 18 },
+                new Fandom { Id = 20, Name = "アニメ", ParentFandomId = 18 },
+                new Fandom { Id = 21, Name = "ゲーム", ParentFandomId = rootFandomId },
+                new Fandom { Id = 22, Name = "プログラミング", ParentFandomId = rootFandomId },
+                new Fandom { Id = 23, Name = "運営", ParentFandomId = rootFandomId }
             };
 
             foreach (var fandom in initialFandoms) {
@@ -62,7 +109,12 @@ namespace Meguri.Data {
 
                 await context.SaveChangesAsync();
             }
+        }
 
+        /// <summary>
+        /// 未登録のタグと対応するタグ概念を登録します。
+        /// </summary>
+        private static async Task InitializeTagsAsync(ApplicationDbContext context) {
             // 初期登録するTag一覧
             var initialTagTexts = new[] {
                 "鬼滅の刃", "呪術廻戦", "水星の魔女", "推しの子", "フリーレン", "チェンソーマン", "ぼっち・ざ・ろっく", "SPY_FAMILY", "名探偵コナン", "shingeki",
