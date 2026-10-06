@@ -1,105 +1,76 @@
 @model Meguri.Models.PostViewModels.PostCreateViewModel
 @{
-		ViewData["Title"] = SharedLocalizer["Post_CreateNew"];
-		var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
+	ViewData["Title"] = SharedLocalizer["Post_CreateNew"];
+	var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
 }
 
-<div>
-		<div>
-				<div>
-						<div>
-								<h4 >✏️ @SharedLocalizer["Post_CreateNew"]</h4>
-						</div>
-						<div>
-								<form asp-action="Create" method="post" enctype="multipart/form-data">
-										<div asp-validation-summary="ModelOnly" ></div>
+<h4>✏️ @SharedLocalizer["Post_CreateNew"]</h4>
 
-										<!-- 界隈選択 -->
-										<div>
-												<label asp-for="FandomId" >@SharedLocalizer["Post_SelectFandom"] <span >*</span></label>
-												<select asp-for="FandomId"  required>
-														@foreach (var f in fandoms){
-																<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
-														}
-												</select>
-												<span asp-validation-for="FandomId" ></span>
-										</div>
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+	<div asp-validation-summary="ModelOnly"></div>
 
-										<!-- タイトル -->
-										<div>
-												<label asp-for="Name" >@SharedLocalizer["Post_PostName"] <span >*</span></label>
-												<input asp-for="Name"  placeholder="投稿のタイトル" required />
-												<span asp-validation-for="Name" ></span>
-										</div>
+	<!-- 界隈選択 -->
+	<div class="attribute-wrap">
+		<label asp-for="FandomId">@SharedLocalizer["Post_SelectFandom"] *</label>
+		<select asp-for="FandomId" required>
+			@foreach (var f in fandoms)
+			{
+				<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
+			}
+		</select>
+		<span asp-validation-for="FandomId"></span>
+	</div>
 
-										<!-- 本文 -->
-										<div>
-												<label asp-for="Text" >@SharedLocalizer["Post_PostText"] <span >*</span></label>
-												<textarea asp-for="Text" rows="6"  placeholder="作品の本文、感想、考察など" required></textarea>
-												<span asp-validation-for="Text" ></span>
-										</div>
+	<!-- タイトル -->
+	<div class="attribute-wrap">
+		<label asp-for="Name">@SharedLocalizer["Post_PostName"] *</label>
+		<input asp-for="Name" placeholder="投稿のタイトル" required />
+		<span asp-validation-for="Name"></span>
+	</div>
 
-										<!-- 添付画像（複数可） -->
-										<div>
-												<label asp-for="ImageFiles" >🖼️ @SharedLocalizer["Post_AttachImages"]</label>
-												<input asp-for="ImageFiles" type="file" multiple  accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
-												<div >PNG/JPEG形式（最大5MB/枚）、WebPに自動変換され250KB以下に最適化されます。</div>
-												<div >複数枚の画像を選択できます。投稿後に詳細または編集画面で並び順の変更が可能です。</div>
-										</div>
+	<!-- 本文 -->
+	<div class="attribute-wrap">
+		<label asp-for="Text">@SharedLocalizer["Post_PostText"] *</label>
+		<textarea asp-for="Text" rows="6" placeholder="作品の本文、感想、考察など" required></textarea>
+		<span asp-validation-for="Text"></span>
+	</div>
 
-										<!-- タグ入力コンポーネント (最大10個) -->
-										<div>
-												<div>
-														<label >🏷️ @SharedLocalizer["Post_Tags"]</label>
-														<span  id="tagCountDisplay">0/10</span>
-												</div>
-												<div>
-														<input type="text" id="tagInput"  placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
-														<button type="button"  onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
-												</div>
-												<div id="tagSuggestions"  style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
+	<!-- 添付画像（複数可） -->
+	<div class="attribute-wrap">
+		<label asp-for="ImageFiles">🖼️ @SharedLocalizer["Post_AttachImages"]</label>
+		<input asp-for="ImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+		<div class="description">PNG/JPEG形式（最大5MB/枚）、WebPに自動変換され250KB以下に最適化されます。</div>
+		<div class="description">複数枚の画像を選択できます。投稿後に詳細または編集画面で並び順の変更が可能です。</div>
+	</div>
 
-												<div id="selectedTagsContainer" ></div>
-												<div id="hiddenTagsInputs"></div>
-												<div >@SharedLocalizer["Post_TagsHint"]</div>
-										</div>
+	<!-- タグ入力コンポーネント (最大10個) -->
+	<div class="attribute-wrap">
+		<label>🏷️ @SharedLocalizer["Post_Tags"] <span id="tagCountDisplay">0/10</span></label>
+		<input type="text" id="tagInput" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
+		<button type="button" onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
+		<div id="tagSuggestions" style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
+		<div id="selectedTagsContainer"></div>
+		<div id="hiddenTagsInputs"></div>
+		<div class="description">@SharedLocalizer["Post_TagsHint"]</div>
+	</div>
 
-										<!-- オプションフラグ -->
-										<div>
-												<div>
-														<div>
-																<input asp-for="IsPublic"  type="checkbox" role="switch" />
-																<label asp-for="IsPublic" >@SharedLocalizer["Post_Public"]</label>
-														</div>
-												</div>
-												<div>
-														<div>
-																<input asp-for="IsSexual"  type="checkbox" role="switch" />
-																<label asp-for="IsSexual" >@SharedLocalizer["Post_NSFW_Sexual"]</label>
-														</div>
-												</div>
-												<div>
-														<div>
-																<input asp-for="IsViolence"  type="checkbox" role="switch" />
-																<label asp-for="IsViolence" >@SharedLocalizer["Post_NSFW_Violence"]</label>
-														</div>
-												</div>
-										</div>
+	<!-- オプションフラグ -->
+	<div class="attribute-wrap">
+		<label class="check-row"><input asp-for="IsPublic" type="checkbox" role="switch" /> @SharedLocalizer["Post_Public"]</label>
+		<label class="check-row"><input asp-for="IsSexual" type="checkbox" role="switch" /> @SharedLocalizer["Post_NSFW_Sexual"]</label>
+		<label class="check-row"><input asp-for="IsViolence" type="checkbox" role="switch" /> @SharedLocalizer["Post_NSFW_Violence"]</label>
+	</div>
 
-										<div>
-												<a asp-action="Index" >@SharedLocalizer["Common_Back"]</a>
-												<button type="submit" >@SharedLocalizer["Common_Submit"]</button>
-										</div>
-								</form>
-						</div>
-				</div>
-		</div>
-</div>
+	<div class="button-wrap">
+		<a asp-action="Index" class="button-like">@SharedLocalizer["Common_Back"]</a>
+		<button type="submit">@SharedLocalizer["Common_Submit"]</button>
+	</div>
+</form>
 
 @section Scripts {
-		<script>
-				$(document).ready(function () {
-						TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
-				});
-		</script>
+	<script>
+		$(document).ready(function () {
+			TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
+		});
+	</script>
 }

@@ -1,0 +1,37 @@
+@model Meguri.ViewModels.FinderViewModel
+
+<!-- ファインダー：子界隈（フォルダ）＋投稿（ファイル） -->
+<div class="finder">
+	<!-- 上の階層へ -->
+	@if (Model.ParentFandomId.HasValue) {
+		<a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.ParentFandomId" class="finder-item-wrap">
+			<img src="~/icons/folder-up.svg" class="icon"/>
+			<span class="name">..</span>
+		</a>
+	}
+	<!-- フォルダー  -->
+	@foreach (var child in Model.ChildFandoms) {
+		<a asp-controller="Fandom" asp-action="Details" asp-route-id="@child.Id" class="finder-item-wrap">
+			<img src="~/icons/folder.svg" class="icon"/>
+			<span class="name">@child.Name</span>
+		</a>
+	}
+	<!-- 投稿  -->
+	@foreach (var post in Model.Posts) {
+		var thumb = post.PostImages.OrderBy(x => x.DisplayOrder).FirstOrDefault();
+		<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="finder-item-wrap">
+			<!-- 画像がある場合-->
+			@if (thumb != null) {
+				<img src="~/icons/image.svg" class="icon">
+				<span class="name with-thumb">@post.Name</span>
+				<div class="thumb-wrap">
+					<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image.Name" class="thumb"/>
+				</div>
+			<!-- 画像がない場合-->
+			} else {
+				<img src="~/icons/file-text.svg" class="icon" />
+				<span class="name">@post.Name</span>
+			}
+		</a>
+	}
+</div>

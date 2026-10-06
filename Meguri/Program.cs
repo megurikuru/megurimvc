@@ -154,7 +154,11 @@ using (var scope = app.Services.CreateScope()) {
         await DbInitializer.DeleteAllDataAsync(dbContext);
     }
 
-    await DbInitializer.InitializeAsync(dbContext, app.Configuration);
+    await DbInitializer.InitializeAsync(
+        dbContext,
+        app.Configuration,
+        scope.ServiceProvider.GetService<Meguri.Services.IR2StorageService>(),
+        app.Environment.ContentRootPath);
 }
 
 // アプリケーションを起動し、HTTPリクエストの待ち受けを開始
