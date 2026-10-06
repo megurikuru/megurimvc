@@ -2,19 +2,11 @@
 @{
 	ViewData["IsHomePage"] = true;
 	var topFandoms = ViewBag.TopFandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
+	var rootFandom = topFandoms.FirstOrDefault(f => f.Id == 1);
 }
 
 <!-- サイドバー：界隈（Fandom）一覧 -->
 <nav class="nav-sub">
-	<a asp-controller="Fandom" asp-action="Details" asp-route-id="1">界隈</a>
-	@foreach (var f in topFandoms) {
-		<div class="space-between-wrap">
-			<a asp-controller="Fandom" asp-action="Details" asp-route-id="@f.Id">
-				<span>@f.Name</span>
-			</a>
-			@if (f.ChildFandoms.Any()) {
-				<small>（@string.Join(", ", f.ChildFandoms.Select(c => c.Name))）</small>
-			}
-		</div>
-	}
+	<h2>界隈</h2>
+	<partial name="_Finder" model="new Meguri.ViewModels.FinderViewModel { ChildFandoms = rootFandom?.ChildFandoms ?? [] }" />
 </nav>

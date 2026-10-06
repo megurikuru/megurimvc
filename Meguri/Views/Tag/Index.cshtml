@@ -1,76 +1,86 @@
 ﻿@model IEnumerable<Meguri.Models.TagConcept>
 @{
-		ViewData["Title"] = SharedLocalizer["Tag_Title"];
-		var searchQuery = ViewBag.SearchQuery as string;
+	// ページタイトルと検索クエリの初期設定
+	ViewData["Title"] = SharedLocalizer["Tag_Title"];
+	var searchQuery = ViewBag.SearchQuery as string;
 }
 
-<div>
-		<div>
-				<h2 >🏷️ @SharedLocalizer["Tag_Title"] & @SharedLocalizer["Tag_Thesaurus"]</h2>
-				<p >@SharedLocalizer["Tag_SubTitle"]</p>
-		</div>
+@* ================================================== *@
+@* 1. ヘッダーエリア                                   *@
+@* ================================================== *@
+<div class="tag-page">
+	<div>
+		<h2>🏷️ @SharedLocalizer["Tag_Title"] & @SharedLocalizer["Tag_Thesaurus"]</h2>
+		<p>@SharedLocalizer["Tag_SubTitle"]</p>
+	</div>
 </div>
 
+@* ================================================== *@
+@* 2. タグ検索フォームエリア                           *@
+@* ================================================== *@
+@{
+	var searchForm = new Meguri.Models.SearchFormModel {
+		Controller = "Tag",
+		Action = "Index",
+		ParameterName = "q",
+		Value = searchQuery,
+		PlaceholderKey = "Tag_SearchPlaceholder"
+	};
+}
+<partial name="_SearchForm" model="searchForm" />
+
+@* ================================================== *@
+@* 3. タグ一覧表示エリア                               *@
+@* ================================================== *@
 <div>
+	<div>
 		<div>
-				<form asp-action="Index" method="get">
-						<div>
-								<input type="text" name="q" value="@searchQuery"  placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
-						</div>
-						<div>
-								<button type="submit" >@SharedLocalizer["Common_Search"]</button>
-						</div>
-						@if (!string.IsNullOrWhiteSpace(searchQuery)) {
-								<div>
-										<a asp-action="Index" >@SharedLocalizer["Common_Clear"]</a>
-								</div>
-						}
-				</form>
+			@* タグ概念（TagConcept）一覧のループ表示 *@
+			@foreach (var concept in Model) {
+				// 代表タグ名の取得（存在しない場合はConcept IDでフォールバック）
+				var tagText = concept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{concept.Id}";
+				// 紐づく投稿数と画像数の合計カウント
+				var count = concept.PostTags.Count + concept.ImageTags.Count;
+				<div class="tag-item">
+					@* タグ詳細ページへのリンク（タグ名・使用件数） *@
+					<a asp-action="Details" asp-route-conceptId="@concept.Id">
+						@tagText
+						<span>@count</span>
+					</a>
+					@* 曖昧さ回避ページへのリンク *@
+					<a asp-action="Disambiguation" asp-route-id="@concept.Id" title="@SharedLocalizer["Tag_DisambiguationBtn"]">
+						@SharedLocalizer["Tag_DisambiguationBtn"]
+					</a>
+				</div>
+			}
 		</div>
+		@* タグが1件も見つからなかった場合のメッセージ *@
+		@if (!Model.Any()) {
+			<p>@SharedLocalizer["Tag_NoTagsFound"]</p>
+		}
+	</div>
+
+	@* ================================================== *@
+	@* 4. ページネーションエリア                           *@
+	@* ================================================== *@
+	@{
+		// ViewBagからページネーション用パラメータを展開
+		var routeValues = new Dictionary<string, string>();
+		if (!string.IsNullOrWhiteSpace(searchQuery)) {
+			routeValues["q"] = searchQuery;
+		}
+		var pager = new Meguri.ViewModels.PaginationViewModel {
+			Controller = "Tag",
+			Action = "Index",
+			HasPrevious = ViewBag.HasPrevious as bool? ?? false,
+			HasNext = ViewBag.HasNext as bool? ?? false,
+			TotalCount = ViewBag.TotalCount as int? ?? 0,
+			Skip = ViewBag.Skip as int? ?? 0,
+			PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
+			NextSkip = ViewBag.NextSkip as int? ?? 0,
+			CurrentCount = Model.Count(),
+			RouteValues = routeValues
+		};
+	}
+	<partial name="_Pagination" model="pager" />
 </div>
-
-<div>
-		<div>
-				<div>
-						@foreach (var concept in Model) {
-								var tagText = concept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{concept.Id}";
-								var count = concept.PostTags.Count + concept.ImageTags.Count;
-								<div>
-										<a asp-action="Details" asp-route-conceptId="@concept.Id">
-												#@tagText
-												<span >@count</span>
-										</a>
-										<a asp-action="Disambiguation" asp-route-id="@concept.Id"  title="@SharedLocalizer["Tag_DisambiguationBtn"]">
-												⚖️
-										</a>
-								</div>
-										}
-										</div>
-										@if (!Model.Any()) {
-												<p >@SharedLocalizer["Tag_NoTagsFound"]</p>
-										}
-								</div>
-
-								@{
-									var tHasPrevious = ViewBag.HasPrevious as bool? ?? false;
-							var tHasNext = ViewBag.HasNext as bool? ?? false;
-							var tTotalCount = ViewBag.TotalCount as int? ?? 0;
-							var tSkip = ViewBag.Skip as int? ?? 0;
-							var tPreviousSkip = ViewBag.PreviousSkip as int? ?? 0;
-							var tNextSkip = ViewBag.NextSkip as int? ?? 0;
-							var tCount = Model.Count();
-						}
-						<nav>
-										@if (tHasPrevious) {
-											<a  asp-action="Index" asp-route-skip="@tPreviousSkip" asp-route-q="@searchQuery">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
-										} else {
-											<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
-										}
-										<span >@(tTotalCount == 0 ? SharedLocalizer["Tag_TotalCountZero"].Value : string.Format(SharedLocalizer["Pagination_RangeFormat"].Value, tSkip + 1, tSkip + tCount, tTotalCount))</span>
-										@if (tHasNext) {
-											<a  asp-action="Index" asp-route-skip="@tNextSkip" asp-route-q="@searchQuery">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
-										} else {
-											<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
-										}
-									</nav>
-							</div>

@@ -130,7 +130,39 @@ button, .button-like {
 	}
 }
 
+/* フォーム部品（スマホ向け：幅いっぱい・タップしやすい高さ・iOSのズーム防止で16px） */
+.attribute-wrap input:not([type="checkbox"]),
+.attribute-wrap select,
+.attribute-wrap textarea {
+	display: block;
+	box-sizing: border-box;
+	margin: 0.25rem 0;
+	padding: 0.5rem;
+	width: 100%;
+	min-height: 44px;
+	font-size: 1rem;
+}
+
+.attribute-wrap button {
+	min-height: 44px;
+	margin-top: 0.25rem;
+}
+
+.check-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	min-height: 44px;
+}
+
+.check-row input {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
 .description {
+	font-size: 0.75rem;
+	color: var(--color-text-muted);
 	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
 }
 
@@ -430,4 +462,12 @@ form.search {
 		border: 1px dotted green; /* 開発用 */
 	}
 }
+
+/* Tag/Index */
+.tag-page { padding: 16px; max-width: 600px; margin: 0 auto; }
+.tag-page h2 { font-size: 1.25rem; margin-bottom: 4px; }
+.tag-page p { color: #666; margin: 0 0 16px; }
+.tag-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; }
+.tag-item a { min-height: 24px; }
+.tag-item span { margin-left: 8px; padding: 2px 8px; border-radius: 12px; background: #eee; font-size: 0.85rem; }
 

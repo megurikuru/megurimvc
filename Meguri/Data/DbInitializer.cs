@@ -41,12 +41,19 @@ namespace Meguri.Data {
         /// <summary>
         /// 設定で有効な場合のみ、既存データを削除せずに初期データを登録します。
         /// </summary>
-        public static async Task InitializeAsync(ApplicationDbContext context, IConfiguration configuration) {
+        public static async Task InitializeAsync(ApplicationDbContext context, IConfiguration configuration, Meguri.Services.IR2StorageService? storage = null, string? contentRootPath = null) {
             if (!configuration.GetValue<bool>("DatabaseInitialization:Enabled")) {
                 return;
             }
 
             await InitializeAsync(context);
+
+            if (configuration.GetValue<bool>("DatabaseInitialization:SeedTestData")) {
+                if (storage == null || contentRootPath == null) {
+                    throw new InvalidOperationException("テストデータの登録には画像ストレージとコンテンツルートのパスが必要です。");
+                }
+                await TestDataSeeder.SeedAsync(context, storage, contentRootPath);
+            }
         }
 
         /// <summary>

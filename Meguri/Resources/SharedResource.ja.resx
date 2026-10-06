@@ -1277,7 +1277,7 @@
     <comment>界隈一覧</comment>
   </data>
   <data name="Nav_Tags" xml:space="preserve">
-    <value>タグ一覧</value>
+    <value>タグ</value>
   </data>
   <data name="Nav_Illustrations_LG" xml:space="preserve">
     <value>イラスト界隈</value>

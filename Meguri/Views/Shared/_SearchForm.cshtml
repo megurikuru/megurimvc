@@ -1,0 +1,25 @@
+@model Meguri.Models.SearchFormModel
+
+@* ================================================== *@
+@* 汎用検索フォーム                                   *@
+@* ================================================== *@
+<div id="@Model.ContainerId">
+	<form class="@Model.FormClass" asp-controller="@Model.Controller" asp-action="@Model.Action" method="get">
+		@* 検索キーワード入力欄 *@
+		<input type="text" name="@Model.ParameterName" value="@Model.Value" placeholder="@SharedLocalizer[Model.PlaceholderKey]" />
+
+		@* 検索送信ボタン *@
+		<button type="submit">@SharedLocalizer["Common_Search"]</button>
+
+		@* 検索キーワードがある場合のみリセットボタンを表示 *@
+		@if (!string.IsNullOrWhiteSpace(Model.Value)) {
+			<div>
+				<a asp-controller="@Model.Controller" asp-action="@Model.Action">@SharedLocalizer["Common_Clear"]</a>
+			</div>
+		}
+	</form>
+	@* データがない場合のみメッセージを表示 *@
+	@if (Model.NothingFound) {
+		<p>@SharedLocalizer[Model.NothingFoundKey]</p>
+	}
+</div>

@@ -11,29 +11,16 @@
 	var nothingFound = !posts.Any();
 }
 
-@* ================================================== *@
-@* 1. 検索フォームエリア                             *@
-@* ================================================== *@
-<div id="search-box">
-	<form class="search" asp-controller="Home" asp-action="Index" method="get">
-		@* 検索キーワード入力欄 *@
-		<input type="text" name="search" value="@search" placeholder="@SharedLocalizer["Home_SearchPlaceholder"]" />
-
-		@* 検索送信ボタン *@
-		<button type="submit">検索</button>
-
-		@* 検索キーワード入力中、またはファンダム選択中の場合のみリセットボタンを表示 *@
-		@if (!string.IsNullOrEmpty(search)) {
-			<div>
-				<a asp-controller="Home" asp-action="Index">リセット</a>
-			</div>
-		}
-	</form>
-	@* 投稿も画像もデータがない場合のみ「見つかりません」を表示 *@
-	@if (nothingFound) {
-		<p>@SharedLocalizer["Common_NothingFound"]</p>
-	}
-</div>
+@{
+	var searchForm = new Meguri.Models.SearchFormModel {
+		Controller = "Home",
+		Action = "Index",
+		ParameterName = "search",
+		Value = search,
+		NothingFound = nothingFound
+	};
+}
+<partial name="_SearchForm" model="searchForm" />
 
 @* ================================================== *@
 @* 2. 新着投稿一覧エリア                            *@
