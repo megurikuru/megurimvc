@@ -6,7 +6,6 @@
 	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 	var isAuthor = Model.UserId == currentUserId || User.IsInRole("Admin");
 	var breadcrumbs = new List<Meguri.Models.BreadcrumbItem> {
-		new(SharedLocalizer["Fandom_Title"].Value, Url.Action("Index", "Fandom")),
 		new(Model.Fandom?.Name ?? "界隈", Url.Action("Details", "Fandom", new { id = Model.FandomId })),
 		new(Model.Name)
 	};

@@ -1,11 +1,16 @@
 ﻿<!DOCTYPE html>
 @{
 	var themeCookie = Context.Request.Cookies["meguri_theme"] ?? "auto";
+	var isManagePage = User.Identity?.IsAuthenticated == true
+		&& string.Equals(ViewContext.RouteData.Values["controller"] as string, "Manage", StringComparison.OrdinalIgnoreCase);
 }
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" data-bs-theme="@themeCookie">
 @await Html.PartialAsync("_Head")
 <body>
-	@await Html.PartialAsync("_NavMain")
+	<a asp-area="" asp-controller="Home" asp-action="Index" class="top-link">meguri</a>
+	@if (!isManagePage) {
+		@await Html.PartialAsync("_NavMain")
+	}
 	<main>
 		@RenderBody()
 	</main>

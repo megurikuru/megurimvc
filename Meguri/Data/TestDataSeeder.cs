@@ -90,7 +90,58 @@ namespace Meguri.Data {
             var images = new ImageContext(storage, pool);
 
             await SeedPostsAsync(context, users, random, now, images);
+            await SeedCommentsAsync(context, users, random, now);
             await SeedMessagesAsync(context, users, random, now, images);
+        }
+
+        private static readonly string[] CommentTexts = {
+            "いいですね！", "楽しく読ませてもらいました。", "素敵です、参考になります。", "わかります、自分もハマってます！",
+            "続きが気になります。", "応援してます！", "これは尊い…", "情報ありがとうございます。"
+        };
+
+        /// <summary>
+        /// 登録済みのテスト投稿・画像に対してテストユーザーのコメントを登録します。
+        /// </summary>
+        private static async Task SeedCommentsAsync(ApplicationDbContext context, List<ApplicationUser> users, Random random, DateTime now) {
+            var posts = await context.Set<Post>().Where(p => users.Select(u => u.Id).Contains(p.UserId)).ToListAsync();
+            foreach (var post in posts) {
+                var count = random.Next(0, 5);
+                for (var n = 1; n <= count; n++) {
+                    var createdAt = post.CreatedAt.AddMinutes(random.Next(10, 60 * 24 * 5));
+                    if (createdAt > now) {
+                        createdAt = now;
+                    }
+                    context.Set<Comment>().Add(new Comment {
+                        User = users[random.Next(users.Count)],
+                        DocId = post.Id,
+                        Number = n,
+                        Text = CommentTexts[random.Next(CommentTexts.Length)],
+                        CreatedAt = createdAt,
+                        UpdatedAt = createdAt
+                    });
+                }
+            }
+            await context.SaveChangesAsync();
+
+            var postImages = await context.Set<PostImage>().Select(pi => pi.Image).ToListAsync();
+            foreach (var image in postImages) {
+                var count = random.Next(0, 4);
+                for (var n = 1; n <= count; n++) {
+                    var createdAt = image.CreatedAt.AddMinutes(random.Next(10, 60 * 24 * 5));
+                    if (createdAt > now) {
+                        createdAt = now;
+                    }
+                    context.Set<Comment>().Add(new Comment {
+                        User = users[random.Next(users.Count)],
+                        ImageId = image.Id,
+                        Number = n,
+                        Text = CommentTexts[random.Next(CommentTexts.Length)],
+                        CreatedAt = createdAt,
+                        UpdatedAt = createdAt
+                    });
+                }
+            }
+            await context.SaveChangesAsync();
         }
 
         /// <summary>

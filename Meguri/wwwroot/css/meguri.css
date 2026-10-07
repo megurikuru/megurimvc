@@ -29,7 +29,7 @@ body {
 	gap: 0.5rem;
 	font-family: system-ui, -apple-system, "BlinkMacSystemFont", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
 	font-size: 1rem;
-	padding: 0 0.5rem;
+	padding: 0.5rem;
 	width: 375px; /* 開発用 */
 	border: 1px solid blue; /* 開発用 */
 	background-color: var(--color-bg);
@@ -99,6 +99,12 @@ ol {
 /* ------------------------------------------
     独自レイアウト要素
    ------------------------------------------ */
+.top-link {
+	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+	margin: 0 auto;
+	width: fit-content;
+	border: 1px solid var(--color-border);
+}
 
 button, .button-like {
 	width: max-content;

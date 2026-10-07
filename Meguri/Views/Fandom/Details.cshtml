@@ -3,9 +3,7 @@
 	ViewData["Title"] = Model.Name;
 	bool isJoined = ViewBag.IsJoined is true;
 	var fandomPosts = ViewBag.FandomPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
-	var breadcrumbs = new List<Meguri.Models.BreadcrumbItem> {
-		new(SharedLocalizer["Fandom_Title"].Value, Url.Action("Index", "Fandom"))
-	};
+	var breadcrumbs = new List<Meguri.Models.BreadcrumbItem>();
 	if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
 		foreach (var ancestor in ancestors) {
 			breadcrumbs.Add(new(ancestor.Name, Url.Action("Details", "Fandom", new { id = ancestor.Id })));
