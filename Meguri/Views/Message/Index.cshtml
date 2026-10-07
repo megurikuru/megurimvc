@@ -72,15 +72,15 @@
 @if (Model.TotalCount > 0) {
 		<nav>
 				@if (Model.HasPrevious) {
-						<a  asp-action="Index" asp-route-skip="@Model.PreviousSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 20)</a>
+						<a  asp-action="Index" asp-route-skip="@Model.PreviousSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</a>
 				} else {
-						<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 20)</button>
+						<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</button>
 				}
 				<span >@(Model.TotalCount == 0 ? 0 : Model.Skip + 1) - @(Model.Skip + Model.Conversations.Count) / @Model.TotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 				@if (Model.HasNext) {
-						<a  asp-action="Index" asp-route-skip="@Model.NextSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 20)</a>
+						<a  asp-action="Index" asp-route-skip="@Model.NextSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</a>
 				} else {
-						<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 20)</button>
+						<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</button>
 				}
 		</nav>
 }
