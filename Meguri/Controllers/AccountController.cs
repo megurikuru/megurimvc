@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Meguri.Models;
+using Meguri.Data;
+using Microsoft.EntityFrameworkCore;
 using Meguri.Models.AccountViewModels;
 
 namespace Meguri.Controllers {
@@ -21,12 +23,15 @@ namespace Meguri.Controllers {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender<ApplicationUser> _emailSender;
         private readonly ILogger _logger;
+        private readonly ApplicationDbContext _context;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender<ApplicationUser> emailSender,
-            ILogger<AccountController> logger) {
+            ILogger<AccountController> logger,
+            ApplicationDbContext context) {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -195,6 +200,9 @@ namespace Meguri.Controllers {
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");
 
+                    _context.FandomUsers.Add(new FandomUser { FandomId = 1, UserId = user.Id });
+                    await _context.SaveChangesAsync();
+
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
                     await _emailSender.SendConfirmationLinkAsync(user, model.Email, callbackUrl);
@@ -275,6 +283,8 @@ namespace Meguri.Controllers {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded) {
+                    _context.FandomUsers.Add(new FandomUser { FandomId = 1, UserId = user.Id });
+                    await _context.SaveChangesAsync();
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded) {
                         await _signInManager.SignInAsync(user, isPersistent: false);
