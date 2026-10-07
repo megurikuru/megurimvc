@@ -438,6 +438,12 @@
   <data name="Account_Field_RecoveryCode" xml:space="preserve">
     <value>回復コード</value>
   </data>
+  <data name="Manage_Profile_NoChanges" xml:space="preserve">
+    <value>変更はありません。</value>
+  </data>
+  <data name="Manage_Profile_Updated" xml:space="preserve">
+    <value>プロフィールを更新しました。</value>
+  </data>
   <data name="Validation_Required" xml:space="preserve">
     <value>{0} は必須です。</value>
   </data>

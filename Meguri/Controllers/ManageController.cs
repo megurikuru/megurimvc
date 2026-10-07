@@ -80,8 +80,10 @@ namespace Meguri.Controllers {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            bool isChanged = false;
             var username = user.UserName;
             if (model.Username != username) {
+                isChanged = true;
                 var setUserNameResult = await _userManager.SetUserNameAsync(user, model.Username);
                 if (!setUserNameResult.Succeeded) {
                     throw new ApplicationException($"Unexpected error occurred setting username for user with ID '{user.Id}'.");
@@ -90,6 +92,7 @@ namespace Meguri.Controllers {
 
             var email = user.Email;
             if (model.Email != email) {
+                isChanged = true;
                 var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
                 if (!setEmailResult.Succeeded) {
                     throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
@@ -98,6 +101,7 @@ namespace Meguri.Controllers {
 
             var phoneNumber = user.PhoneNumber;
             if (model.PhoneNumber != phoneNumber) {
+                isChanged = true;
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
                 if (!setPhoneResult.Succeeded) {
                     throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
@@ -108,6 +112,7 @@ namespace Meguri.Controllers {
             if ((model.Bio ?? string.Empty) != user.Bio) {
                 user.Bio = model.Bio ?? string.Empty;
                 isUserModified = true;
+                isChanged = true;
             }
 
             if (isUserModified) {
@@ -117,7 +122,7 @@ namespace Meguri.Controllers {
                 }
             }
 
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = isChanged ? _localizer["Manage_Profile_Updated"] : _localizer["Manage_Profile_NoChanges"];
             return RedirectToAction(nameof(Index));
         }
 

@@ -17,46 +17,6 @@ namespace Meguri.Controllers {
             _context = context;
         }
 
-        // GET: /Fandom
-        public async Task<IActionResult> Index(int? skip) {
-            const int pageSize = 40;
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var totalCount = await _context.Fandoms.CountAsync();
-            var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
-            if (resolvedSkip >= totalCount) {
-                resolvedSkip = Math.Max(0, totalCount - pageSize);
-            }
-
-            var fandoms = await _context.Fandoms
-                .Include(f => f.ParentFandom)
-                .Include(f => f.ChildFandoms)
-                .Include(f => f.FandomUsers)
-                .Include(f => f.Posts)
-                .OrderBy(f => f.Id)
-                .Skip(resolvedSkip)
-                .Take(pageSize)
-                .ToListAsync();
-
-            var joinedFandomIds = new HashSet<int>();
-            if (userId != null) {
-                joinedFandomIds = (await _context.FandomUsers
-                    .Where(fu => fu.UserId == userId)
-                    .Select(fu => fu.FandomId)
-                    .ToListAsync()).ToHashSet();
-            }
-
-            ViewBag.JoinedFandomIds = joinedFandomIds;
-            ViewBag.PageSize = pageSize;
-            ViewBag.TotalCount = totalCount;
-            ViewBag.Skip = resolvedSkip;
-            ViewBag.HasPrevious = resolvedSkip > 0;
-            ViewBag.HasNext = resolvedSkip + fandoms.Count < totalCount;
-            ViewBag.PreviousSkip = Math.Max(0, resolvedSkip - pageSize);
-            ViewBag.NextSkip = resolvedSkip + pageSize;
-            return View(fandoms);
-        }
-
         // GET: /Fandom/Details/5
         public async Task<IActionResult> Details(int? id, int? skip) {
             if (id == null) return NotFound();

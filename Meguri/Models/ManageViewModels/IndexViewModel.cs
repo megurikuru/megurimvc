@@ -20,7 +20,7 @@ namespace Meguri.Models.ManageViewModels {
 
         [Phone]
         [Display(Name = "Manage_Profile_PhoneNumber")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Display(Name = "Manage_Profile_DateOfBirth")]
         [DataType(DataType.Date)]
@@ -30,6 +30,6 @@ namespace Meguri.Models.ManageViewModels {
         [StringLength(1000, ErrorMessage = "Validation_StringLength")]
         public string Bio { get; set; } = string.Empty;
 
-        public string StatusMessage { get; set; }
+        public string? StatusMessage { get; set; }
     }
 }
