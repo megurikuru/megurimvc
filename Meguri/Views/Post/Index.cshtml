@@ -16,6 +16,7 @@
 			postRouteValues["search"] = currentSearch;
 		}
 		var pager = new Meguri.ViewModels.PaginationViewModel {
+			Controller = "Post",
 			Action = "Index",
 			HasPrevious = ViewBag.HasPrevious as bool? ?? false,
 			HasNext = ViewBag.HasNext as bool? ?? false,

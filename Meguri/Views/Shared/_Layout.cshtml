@@ -1,20 +1,24 @@
 ﻿<!DOCTYPE html>
 @{
 	var themeCookie = Context.Request.Cookies["meguri_theme"] ?? "auto";
-	var isManagePage = User.Identity?.IsAuthenticated == true
-		&& string.Equals(ViewContext.RouteData.Values["controller"] as string, "Manage", StringComparison.OrdinalIgnoreCase);
+	var isHomePage = string.Equals(ViewContext.RouteData.Values["controller"] as string, "Home", StringComparison.OrdinalIgnoreCase)
+		&& string.Equals(ViewContext.RouteData.Values["action"] as string, "Index", StringComparison.OrdinalIgnoreCase);
 }
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" data-bs-theme="@themeCookie">
 @await Html.PartialAsync("_Head")
 <body>
 	<a asp-area="" asp-controller="Home" asp-action="Index" class="top-link">meguri</a>
-	@if (!isManagePage) {
+	@if (isHomePage) {
 		@await Html.PartialAsync("_NavMain")
 	}
 	<main>
 		@RenderBody()
 	</main>
-	@await Html.PartialAsync("_NavSub")
+	@if (isHomePage) {
+		@await Html.PartialAsync("_NavSub")
+	} else {
+		@await Html.PartialAsync("_NavMain")
+	}
 	@await Html.PartialAsync("_Footer")
 
 	<environment include="Development">

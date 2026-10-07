@@ -48,7 +48,7 @@ namespace Meguri.Controllers {
         // トップページ（インデックス画面）の表示処理
         public async Task<IActionResult> 
             Index(string? search, int? skip) {
-            const int pageSize = 40;
+            const int pageSize = 10;
 
             // パラメータの正規化
             var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;

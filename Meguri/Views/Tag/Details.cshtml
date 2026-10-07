@@ -142,15 +142,15 @@
 @if (postTagsTotalCount > 0) {
 		<nav class="pagination">
 				@if (ptHasPrevious) {
-						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</a>
 				} else {
-						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</button>
 				}
 				<span>@(ptSkip + 1) - @(ptSkip + postTags.Count) / @postTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 				@if (ptHasNext) {
-						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</a>
 				} else {
-						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</button>
 				}
 		</nav>
 }
@@ -185,15 +185,15 @@
 @if (imageTagsTotalCount > 0) {
 		<nav class="pagination">
 				@if (itHasPrevious) {
-						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</a>
+						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</a>
 				} else {
-						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 40)</button>
+						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</button>
 				}
 				<span>@(itSkip + 1) - @(itSkip + imageTags.Count) / @imageTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 				@if (itHasNext) {
-						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</a>
+						<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-imageSkip="@itNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</a>
 				} else {
-						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 40)</button>
+						<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</button>
 				}
 		</nav>
 }

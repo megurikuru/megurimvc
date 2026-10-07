@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -38,7 +38,7 @@ namespace Meguri.Controllers {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
-            const int pageSize = 20;
+            const int pageSize = 10;
             const int halfWindow = pageSize / 2;
 
             var baseQuery = _context.Conversations

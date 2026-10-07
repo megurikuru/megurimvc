@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace Meguri.Controllers {
 
         // GET: /Post
         public async Task<IActionResult> Index(int? fandomId, string? tag, string? search, int? skip) {
-            const int pageSize = 40;
+            const int pageSize = 10;
 
             var query = _context.Posts
                 .Include(p => p.User)

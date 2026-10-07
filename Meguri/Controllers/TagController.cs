@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -23,7 +23,7 @@ namespace Meguri.Controllers {
 
         // GET: /Tag
         public async Task<IActionResult> Index(string? q, int? skip) {
-            const int pageSize = 40;
+            const int pageSize = 10;
 
             // 総件数の取得 (SQL)
             int totalCount;
@@ -96,7 +96,7 @@ namespace Meguri.Controllers {
 
         // GET: /Tag/Details/5
         public async Task<IActionResult> Details(long conceptId, int? postSkip, int? imageSkip) {
-            const int pageSize = 40;
+            const int pageSize = 10;
 
             var concept = await _context.TagConcepts
                 .FromSqlInterpolated($"SELECT * FROM \"TagConcepts\" WHERE \"Id\" = {conceptId}")

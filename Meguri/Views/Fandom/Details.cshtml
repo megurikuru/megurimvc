@@ -13,6 +13,7 @@
 	}
 	breadcrumbs.Add(new(Model.Name));
 	var pager = new Meguri.ViewModels.PaginationViewModel {
+		Controller = "Fandom",
 		Action = "Details",
 		HasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false,
 		HasNext = ViewBag.FandomPostsHasNext as bool? ?? false,

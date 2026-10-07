@@ -394,7 +394,7 @@ form.search {
 	text-align: center;
 	border: 1px dotted gray; /* 開発用 */
 
-	& > span {
+	& > * {
 		align-self: center;
 	}
 

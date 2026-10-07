@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -919,10 +919,10 @@
     <value>{0} reactions</value>
   </data>
   <data name="Pagination_PreviousPosts" xml:space="preserve">
-    <value>← Previous 40</value>
+    <value>← Previous 10</value>
   </data>
   <data name="Pagination_NextPosts" xml:space="preserve">
-    <value>Next 40 →</value>
+    <value>Next 10 →</value>
   </data>
   <data name="Pagination_PreviousCountFormat" xml:space="preserve">
     <value>← Previous {0}</value>

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Meguri.ViewModels;
 
@@ -15,7 +15,7 @@ public sealed class PaginationViewModel
     public int NextSkip { get; init; }
     public int CurrentCount { get; init; }
 
-    public int PageSize { get; init; } = 40;
+    public int PageSize { get; init; } = 10;
 
     public Dictionary<string, string> RouteValues { get; init; } = new();
 }

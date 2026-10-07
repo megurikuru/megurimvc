@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -82,7 +82,7 @@ namespace Meguri.Controllers {
 
         // GET: /Image
         public async Task<IActionResult> Index(int? fandomId, string? tag, int? skip) {
-            const int pageSize = 40;
+            const int pageSize = 10;
 
             var query = _context.Images
                 .Include(i => i.ImageTags).ThenInclude(it => it.TagConcept).ThenInclude(tc => tc.Tags)

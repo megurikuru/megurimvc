@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -21,7 +21,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Details(int? id, int? skip) {
             if (id == null) return NotFound();
 
-            const int pageSize = 40;
+            const int pageSize = 10;
 
             var fandom = await _context.Fandoms
                 .Include(f => f.ParentFandom)
