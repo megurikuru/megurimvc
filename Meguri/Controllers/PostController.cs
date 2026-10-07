@@ -110,7 +110,8 @@ namespace Meguri.Controllers {
         // GET: /Post/Create
         [Authorize]
         public async Task<IActionResult> Create(int? fandomId) {
-            var fandoms = await _context.Fandoms.ToListAsync();
+            if (fandomId == 1) return BadRequest();
+            var fandoms = (await _context.Fandoms.ToListAsync()).Where(f => f.Id != 1).ToList();
             ViewBag.Fandoms = fandoms;
             return View(new PostCreateViewModel { FandomId = fandomId ?? fandoms.FirstOrDefault()?.Id ?? 1 });
         }
@@ -120,6 +121,7 @@ namespace Meguri.Controllers {
         [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PostCreateViewModel model) {
+            if (model.FandomId == 1) return BadRequest();
             if (!ModelState.IsValid) {
                 ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
                 return View(model);
@@ -251,6 +253,7 @@ namespace Meguri.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, PostEditViewModel model) {
             if (id != model.Id) return NotFound();
+            if (model.FandomId == 1) return BadRequest();
 
             if (!ModelState.IsValid) {
                 ViewBag.Fandoms = await _context.Fandoms.ToListAsync();

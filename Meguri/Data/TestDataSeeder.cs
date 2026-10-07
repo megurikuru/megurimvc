@@ -80,6 +80,7 @@ namespace Meguri.Data {
             await context.SaveChangesAsync();
 
             foreach (var user in users) {
+                context.Set<FandomUser>().Add(new FandomUser { FandomId = 1, UserId = user.Id });
                 foreach (var fandomId in FandomIds.OrderBy(_ => random.Next()).Take(3)) {
                     context.Set<FandomUser>().Add(new FandomUser { FandomId = fandomId, UserId = user.Id });
                 }

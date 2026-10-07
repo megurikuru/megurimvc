@@ -44,6 +44,7 @@
 <!-- 界隈メニュー -->
 <nav class="nav-grid">
 	<ul>
+		@if (Model.Id != 1) {
 		<li>
 			@if (isJoined) {
 				<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
@@ -62,6 +63,7 @@
 				@SharedLocalizer["Post_CreateNew"]
 			</a>
 		</li>
+		}
 	</ul>
 </nav>
 

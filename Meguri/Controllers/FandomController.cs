@@ -127,9 +127,11 @@ namespace Meguri.Controllers {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId)) return Challenge();
 
+            if (id == 1) return BadRequest();
+
             var allFandoms = await _context.Fandoms.ToListAsync();
 
-            // 脱退対象界隈とその全子孫界隈のIDを収集
+            // 脱退対象
             var fandomIdsToLeave = new HashSet<int> { id };
             CollectDescendantFandomIds(id, allFandoms, fandomIdsToLeave);
 
