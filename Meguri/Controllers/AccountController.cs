@@ -267,6 +267,12 @@ namespace Meguri.Controllers {
                 return RedirectToAction(nameof(Login));
             }
 
+            var externalUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
+            if (externalUser != null && externalUser.IsWithdrawn) {
+                ErrorMessage = "存在しないユーザーです。";
+                return RedirectToAction(nameof(Login));
+            }
+
             // Sign in the user with this external login provider if the user already has a login.
             var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
             if (result.Succeeded) {

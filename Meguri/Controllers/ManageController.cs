@@ -593,6 +593,8 @@ namespace Meguri.Controllers {
             user.PhoneNumber = null;
             user.PhoneNumberConfirmed = false;
             user.Bio = string.Empty;
+            user.PasswordHash = null;
+            user.TwoFactorEnabled = false;
             user.LockoutEnabled = true;
             user.LockoutEnd = DateTimeOffset.MaxValue;
 
@@ -601,6 +603,20 @@ namespace Meguri.Controllers {
                 AddErrors(result);
                 return View(model);
             }
+
+            foreach (var login in await _userManager.GetLoginsAsync(user)) {
+                await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
+            }
+            var claims = await _userManager.GetClaimsAsync(user);
+            if (claims.Count > 0) {
+                await _userManager.RemoveClaimsAsync(user, claims);
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles.Count > 0) {
+                await _userManager.RemoveFromRolesAsync(user, roles);
+            }
+            await _userManager.RemoveAuthenticationTokenAsync(user, "[AspNetUserStore]", "AuthenticatorKey");
+            await _userManager.RemoveAuthenticationTokenAsync(user, "[AspNetUserStore]", "RecoveryCodes");
 
             foreach (var key in storageKeys) {
                 try {
