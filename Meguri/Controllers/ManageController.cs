@@ -13,8 +13,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using Meguri.Data;
 using Meguri.Models;
 using Meguri.Models.ManageViewModels;
+using Meguri.Services;
 
 namespace Meguri.Controllers {
     [Authorize]
@@ -26,6 +29,8 @@ namespace Meguri.Controllers {
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
         private readonly IStringLocalizer<SharedResource> _localizer;
+        private readonly ApplicationDbContext _context;
+        private readonly IR2StorageService _r2StorageService;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
@@ -36,7 +41,11 @@ namespace Meguri.Controllers {
           IEmailSender<ApplicationUser> emailSender,
           ILogger<ManageController> logger,
           UrlEncoder urlEncoder,
-          IStringLocalizer<SharedResource> localizer) {
+          IStringLocalizer<SharedResource> localizer,
+          ApplicationDbContext context,
+          IR2StorageService r2StorageService) {
+            _context = context;
+            _r2StorageService = r2StorageService;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
@@ -509,6 +518,102 @@ namespace Meguri.Controllers {
 
             StatusMessage = _localizer["Manage_Options_Updated"];
             return RedirectToAction(nameof(Options));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Withdraw() {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            return View(new WithdrawViewModel {
+                HasPassword = await _userManager.HasPasswordAsync(user)
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Withdraw(WithdrawViewModel model) {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            model.HasPassword = await _userManager.HasPasswordAsync(user);
+            if (model.HasPassword && (string.IsNullOrEmpty(model.Password) || !await _userManager.CheckPasswordAsync(user, model.Password))) {
+                ModelState.AddModelError(nameof(model.Password), _localizer["Manage_Withdraw_InvalidPassword"]);
+            }
+            if (!ModelState.IsValid) {
+                return View(model);
+            }
+
+            // 投稿（投稿画像の関連はカスケード削除）
+            var posts = await _context.Posts
+                .Where(p => p.UserId == user.Id)
+                .Include(p => p.PostImages)
+                .ThenInclude(pi => pi.Image)
+                .ToListAsync();
+
+            // ユーザープロフィール画像
+            var userImages = await _context.UserImages
+                .Where(ui => ui.UserId == user.Id)
+                .Include(ui => ui.Image)
+                .ToListAsync();
+
+            var images = posts.SelectMany(p => p.PostImages).Select(pi => pi.Image)
+                .Concat(userImages.Select(ui => ui.Image))
+                .Where(i => i != null)
+                .GroupBy(i => i.Id)
+                .Select(g => g.First())
+                .ToList();
+
+            // メッセージで使用されている画像は削除しない
+            var imageIds = images.Select(i => i.Id).ToList();
+            var messageImageIds = await _context.MessageImages
+                .Where(mi => imageIds.Contains(mi.ImageId))
+                .Select(mi => mi.ImageId)
+                .ToListAsync();
+            images = images.Where(i => !messageImageIds.Contains(i.Id)).ToList();
+
+            var storageKeys = images
+                .Where(i => !string.IsNullOrEmpty(i.StorageKey))
+                .Select(i => i.StorageKey)
+                .ToList();
+
+            user.ActiveAvatarImageId = null;
+            _context.Posts.RemoveRange(posts);
+            _context.Images.RemoveRange(images);
+
+            // 論理削除（ユーザー名は残し、メールアドレスは再利用可能にする）
+            user.IsWithdrawn = true;
+            user.Email = null;
+            user.NormalizedEmail = null;
+            user.EmailConfirmed = false;
+            user.PhoneNumber = null;
+            user.PhoneNumberConfirmed = false;
+            user.Bio = string.Empty;
+            user.LockoutEnabled = true;
+            user.LockoutEnd = DateTimeOffset.MaxValue;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded) {
+                AddErrors(result);
+                return View(model);
+            }
+
+            foreach (var key in storageKeys) {
+                try {
+                    await _r2StorageService.DeleteFileAsync(key);
+                } catch (Exception ex) {
+                    _logger.LogWarning(ex, "Failed to delete storage file '{Key}' while withdrawing user '{UserId}'.", key, user.Id);
+                }
+            }
+
+            await _userManager.UpdateSecurityStampAsync(user);
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User with ID '{UserId}' withdrew.", user.Id);
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         #region Helpers

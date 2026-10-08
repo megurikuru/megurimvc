@@ -16,6 +16,9 @@ namespace Meguri.Models {
         /// 自己紹介文（Bio / Profile description）
         public string Bio { get; set; } = string.Empty;
 
+        /// 退会フラグ（論理削除）
+        public bool IsWithdrawn { get; set; } = false;
+
         /// 現在選択中のアバター（アイコン）画像ID
         public long? ActiveAvatarImageId { get; set; }
         public Image? ActiveAvatarImage { get; set; }

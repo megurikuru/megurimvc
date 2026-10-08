@@ -134,7 +134,7 @@ else {
 
 										<div>
 												<div>
-														<span>👤 @(post.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)</span>
+														@(post.User == null ? SharedLocalizer["Common_UnknownUser"].Value : post.User.IsWithdrawn ? SharedLocalizer["Common_WithdrawnUser"].Value : post.User.UserName)
 												</div>
 												<div>
 														@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)

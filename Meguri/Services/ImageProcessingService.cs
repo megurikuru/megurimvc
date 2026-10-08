@@ -4,9 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Webp;
-using SixLabors.ImageSharp.Processing;
+using SkiaSharp;
 
 namespace Meguri.Services {
     /// <summary>
@@ -76,7 +74,11 @@ namespace Meguri.Services {
             }
 
             // 3. 画像のデコード & セキュリティ検証 (悪意のあるヘッダー/破損検出)
-            using Image image = await Image.LoadAsync(new MemoryStream(rawBytes), cancellationToken);
+            SKBitmap? image = SKBitmap.Decode(rawBytes);
+            if (image == null) {
+                throw new InvalidOperationException("画像を読み込めませんでした。");
+            }
+            try {
 
             if (image.Width <= 0 || image.Height <= 0 || image.Width > MaxAllowedDimension || image.Height > MaxAllowedDimension) {
                 _logger.LogWarning("Image dimension out of allowed bounds: {Width}x{Height}", image.Width, image.Height);
@@ -85,14 +87,15 @@ namespace Meguri.Services {
 
             // 4. 初回リサイズ (巨大画像の場合は最大辺を2048pxに抑える)
             if (image.Width > InitialMaxDimension || image.Height > InitialMaxDimension) {
-                image.Mutate(x => x.Resize(new ResizeOptions {
-                    Size = new Size(InitialMaxDimension, InitialMaxDimension),
-                    Mode = ResizeMode.Max
-                }));
+                double scale = Math.Min((double)InitialMaxDimension / image.Width, (double)InitialMaxDimension / image.Height);
+                var resized = ResizeBitmap(image, Math.Max(1, (int)(image.Width * scale)), Math.Max(1, (int)(image.Height * scale)));
+                image.Dispose();
+                image = resized;
             }
 
             // 5. WebP変換および250KB以下への画質/解像度調整
-            byte[] optimizedWebpBytes = await OptimizeToWebpAsync(image, cancellationToken);
+            var (optimizedWebpBytes, finalBitmap) = OptimizeToWebp(image, cancellationToken);
+            image = finalBitmap;
 
             return new ProcessedImageResult {
                 Data = optimizedWebpBytes,
@@ -100,6 +103,23 @@ namespace Meguri.Services {
                 Width = image.Width,
                 Height = image.Height
             };
+            } finally {
+                image.Dispose();
+            }
+        }
+
+        private static SKBitmap ResizeBitmap(SKBitmap source, int width, int height) {
+            var resized = source.Resize(new SKImageInfo(width, height), new SKSamplingOptions(SKCubicResampler.Mitchell));
+            return resized ?? throw new InvalidOperationException("画像のリサイズに失敗しました。");
+        }
+
+        private static byte[] EncodeWebp(SKBitmap bitmap, int quality) {
+            using var skImage = SKImage.FromBitmap(bitmap);
+            using var data = skImage.Encode(SKEncodedImageFormat.Webp, quality);
+            if (data == null) {
+                throw new InvalidOperationException("WebPへの変換に失敗しました。");
+            }
+            return data.ToArray();
         }
 
         private static bool IsValidImageSignature(byte[] bytes) {
@@ -125,24 +145,18 @@ namespace Meguri.Services {
             return false;
         }
 
-        private async Task<byte[]> OptimizeToWebpAsync(Image image, CancellationToken cancellationToken) {
+        private (byte[] Data, SKBitmap Bitmap) OptimizeToWebp(SKBitmap image, CancellationToken cancellationToken) {
             // 画質を段階的に調整し、250KB以下に収める
             int[] qualityLevels = new[] { 85, 75, 65, 55, 45, 35, 25 };
 
             byte[] lastResult = Array.Empty<byte>();
 
             foreach (var quality in qualityLevels) {
-                using var outputStream = new MemoryStream();
-                var encoder = new WebpEncoder {
-                    Quality = quality,
-                    FileFormat = WebpFileFormatType.Lossy
-                };
-
-                await image.SaveAsync(outputStream, encoder, cancellationToken);
-                lastResult = outputStream.ToArray();
+                cancellationToken.ThrowIfCancellationRequested();
+                lastResult = EncodeWebp(image, quality);
 
                 if (lastResult.Length <= TargetMaxOutputSizeBytes) {
-                    return lastResult;
+                    return (lastResult, image);
                 }
             }
 
@@ -151,23 +165,19 @@ namespace Meguri.Services {
                 int newWidth = (int)(image.Width * 0.8);
                 int newHeight = (int)(image.Height * 0.8);
 
-                image.Mutate(x => x.Resize(newWidth, newHeight));
+                cancellationToken.ThrowIfCancellationRequested();
+                var resized = ResizeBitmap(image, newWidth, newHeight);
+                image.Dispose();
+                image = resized;
 
-                using var outputStream = new MemoryStream();
-                var encoder = new WebpEncoder {
-                    Quality = 40,
-                    FileFormat = WebpFileFormatType.Lossy
-                };
-
-                await image.SaveAsync(outputStream, encoder, cancellationToken);
-                lastResult = outputStream.ToArray();
+                lastResult = EncodeWebp(image, 40);
 
                 if (lastResult.Length <= TargetMaxOutputSizeBytes) {
-                    return lastResult;
+                    return (lastResult, image);
                 }
             }
 
-            return lastResult;
+            return (lastResult, image);
         }
     }
 }
