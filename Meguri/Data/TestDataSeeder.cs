@@ -160,9 +160,11 @@ namespace Meguri.Data {
                 var data = File.ReadAllBytes(path);
                 int width = 0, height = 0;
                 try {
-                    var info = SixLabors.ImageSharp.Image.Identify(data);
-                    width = info.Width;
-                    height = info.Height;
+                    using var codec = SkiaSharp.SKCodec.Create(new MemoryStream(data));
+                    if (codec != null) {
+                        width = codec.Info.Width;
+                        height = codec.Info.Height;
+                    }
                 } catch (Exception) {
                     // 寸法が取得できない画像はサイズ0のまま登録する
                 }

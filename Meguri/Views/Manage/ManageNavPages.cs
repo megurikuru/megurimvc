@@ -21,6 +21,8 @@ namespace Meguri.Views.Manage
 
         public static string Options => "Options";
 
+        public static string Withdraw => "Withdraw";
+
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);

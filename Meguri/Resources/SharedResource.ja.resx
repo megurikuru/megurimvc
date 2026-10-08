@@ -1212,6 +1212,27 @@
   <data name="Manage_Nav_Options" xml:space="preserve">
     <value>オプション</value>
   </data>
+  <data name="Manage_Nav_Withdraw" xml:space="preserve">
+    <value>退会</value>
+  </data>
+  <data name="Manage_Withdraw_Title" xml:space="preserve">
+    <value>退会</value>
+  </data>
+  <data name="Manage_Withdraw_Description" xml:space="preserve">
+    <value>退会すると、メールアドレス、投稿、投稿画像、プロフィール画像が削除されます。メッセージとユーザー名は残ります。この操作は取り消せません。</value>
+  </data>
+  <data name="Manage_Withdraw_Confirm" xml:space="preserve">
+    <value>本当に退会しますか？</value>
+  </data>
+  <data name="Manage_Withdraw_Button" xml:space="preserve">
+    <value>退会する</value>
+  </data>
+  <data name="Manage_Withdraw_InvalidPassword" xml:space="preserve">
+    <value>パスワードが正しくありません。</value>
+  </data>
+  <data name="Common_WithdrawnUser" xml:space="preserve">
+    <value>存在しないユーザー</value>
+  </data>
   <data name="Manage_Options_Title" xml:space="preserve">
     <value>オプション設定</value>
   </data>
@@ -1299,5 +1320,8 @@
   </data>
   <data name="Image_MembersOnlyBadge" xml:space="preserve">
     <value>界隈限定</value>
+  </data>
+  <data name="Account_InvalidLoginAttempt" xml:space="preserve">
+    <value>ログインに失敗しました。</value>
   </data>
 </root>

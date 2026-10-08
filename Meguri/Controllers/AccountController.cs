@@ -14,6 +14,7 @@ using Meguri.Models;
 using Meguri.Data;
 using Microsoft.EntityFrameworkCore;
 using Meguri.Models.AccountViewModels;
+using Microsoft.Extensions.Localization;
 
 namespace Meguri.Controllers {
     [Authorize]
@@ -24,13 +25,16 @@ namespace Meguri.Controllers {
         private readonly IEmailSender<ApplicationUser> _emailSender;
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender<ApplicationUser> emailSender,
             ILogger<AccountController> logger,
-            ApplicationDbContext context) {
+            ApplicationDbContext context,
+            IStringLocalizer<SharedResource> localizer) {
+            _localizer = localizer;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
@@ -58,6 +62,11 @@ namespace Meguri.Controllers {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid) {
                 // UserNameベースでログインする
+                var existingUser = await _userManager.FindByNameAsync(model.UserName);
+                if (existingUser != null && existingUser.IsWithdrawn) {
+                    ModelState.AddModelError(string.Empty, "存在しないユーザーです。");
+                    return View(model);
+                }
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded) {
                     _logger.LogInformation("User logged in.");
@@ -76,7 +85,7 @@ namespace Meguri.Controllers {
                     return View(model);
                 }
                 else {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    ModelState.AddModelError(string.Empty, _localizer["Account_InvalidLoginAttempt"]);
                     return View(model);
                 }
             }
@@ -195,6 +204,11 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null) {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid) {
+                var withdrawnUser = await _userManager.FindByNameAsync(model.UserName);
+                if (withdrawnUser != null && withdrawnUser.IsWithdrawn) {
+                    ModelState.AddModelError(nameof(model.UserName), "使用できないユーザー名です。");
+                    return View(model);
+                }
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, DateOfBirth = model.DateOfBirth };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) {

@@ -25,7 +25,7 @@
 												<div>
 													<span >@Model.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
 													@if (Model.User != null) {
-														<span >by <strong>@Model.User.UserName</strong></span>
+														<strong>@(Model.User.IsWithdrawn ? SharedLocalizer["Common_WithdrawnUser"].Value : Model.User.UserName)</strong>
 													}
 													@if (Model.FileSize > 0) {
 														<span >@(Model.FileSize / 1024) KB (WebP)</span>
