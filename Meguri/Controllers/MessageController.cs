@@ -79,7 +79,7 @@ namespace Meguri.Controllers {
                 string title = conv.Title;
                 if (!conv.IsGroup || string.IsNullOrEmpty(title)) {
                     var otherMember = conv.Members.FirstOrDefault(m => m.UserId != currentUserId);
-                    title = otherMember?.User?.UserName ?? "ダイレクトメッセージ";
+                    title = otherMember?.User == null ? "ダイレクトメッセージ" : otherMember.User.UserName + (otherMember.User.IsWithdrawn ? "（存在しないユーザー）" : "");
                 }
 
                 vmList.Add(new ConversationItemViewModel {
@@ -116,8 +116,8 @@ namespace Meguri.Controllers {
             return View(vm);
         }
 
-        // GET: /Message/Chat/5
-        public async Task<IActionResult> Chat(long id, DateTime? date, int? skip) {
+        // GET: /Message/Details/5
+        public async Task<IActionResult> Details(long id, DateTime? date, int? skip) {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
@@ -135,7 +135,7 @@ namespace Meguri.Controllers {
             string displayTitle = conversation.Title;
             if (!conversation.IsGroup || string.IsNullOrEmpty(displayTitle)) {
                 var otherMember = conversation.Members.FirstOrDefault(m => m.UserId != currentUserId);
-                displayTitle = otherMember?.User?.UserName ?? "ダイレクトメッセージ";
+                displayTitle = otherMember?.User == null ? "ダイレクトメッセージ" : otherMember.User.UserName + (otherMember.User.IsWithdrawn ? "（存在しないユーザー）" : "");
             }
 
             const int pageSize = 80;
@@ -192,6 +192,16 @@ namespace Meguri.Controllers {
         }
 
 
+        // GET: /Message/Create
+        public async Task<IActionResult> Create() {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId)) return Challenge();
+
+            var model = new CreateConversationViewModel();
+            await LoadAvailableUsersAsync(model, currentUserId);
+            return View(model);
+        }
+
         // POST: /Message/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -204,7 +214,8 @@ namespace Meguri.Controllers {
             }
 
             if (!ModelState.IsValid) {
-                return RedirectToAction(nameof(Index));
+                await LoadAvailableUsersAsync(model, currentUserId);
+                return View(model);
             }
 
             // 1対1の場合、既に同一相手との会話があればそれを再利用
@@ -217,7 +228,7 @@ namespace Meguri.Controllers {
 
                 if (existingConv != null) {
                     await SendMessageInternal(existingConv.Id, currentUserId, model.InitialMessage, model.ImageFiles);
-                    return RedirectToAction(nameof(Chat), new { id = existingConv.Id });
+                    return RedirectToAction(nameof(Details), new { id = existingConv.Id });
                 }
             }
 
@@ -240,7 +251,47 @@ namespace Meguri.Controllers {
 
             await SendMessageInternal(conv.Id, currentUserId, model.InitialMessage, model.ImageFiles);
 
-            return RedirectToAction(nameof(Chat), new { id = conv.Id });
+            return RedirectToAction(nameof(Details), new { id = conv.Id });
+        }
+
+        // GET: /Message/Edit/5 (メッセージID)
+        public async Task<IActionResult> Edit(long id) {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId)) return Challenge();
+
+            var message = await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
+            if (message == null) return NotFound();
+            if (message.SenderId != currentUserId) return Forbid();
+
+            return View(new EditMessageViewModel {
+                Id = message.Id,
+                ConversationId = message.ConversationId,
+                Text = message.Text
+            });
+        }
+
+        // POST: /Message/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(long id, EditMessageViewModel model) {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId)) return Challenge();
+            if (id != model.Id) return BadRequest();
+
+            var message = await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
+            if (message == null) return NotFound();
+            if (message.SenderId != currentUserId) return Forbid();
+
+            if (!ModelState.IsValid) {
+                model.ConversationId = message.ConversationId;
+                return View(model);
+            }
+
+            message.Text = model.Text;
+            message.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = message.ConversationId });
         }
 
         // POST: /Message/SendMessage
@@ -259,7 +310,14 @@ namespace Meguri.Controllers {
                 await SendMessageInternal(conversationId, currentUserId, text, imageFiles);
             }
 
-            return RedirectToAction(nameof(Chat), new { id = conversationId });
+            return RedirectToAction(nameof(Details), new { id = conversationId });
+        }
+
+        private async Task LoadAvailableUsersAsync(CreateConversationViewModel model, string currentUserId) {
+            model.AvailableUsers = await _userManager.Users
+                .Where(u => u.Id != currentUserId)
+                .Take(50)
+                .ToListAsync();
         }
 
         private async Task SendMessageInternal(long conversationId, string senderId, string text, List<IFormFile>? imageFiles) {

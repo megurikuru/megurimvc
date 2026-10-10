@@ -1,0 +1,63 @@
+@model Meguri.Models.MessageViewModels.CreateConversationViewModel
+@{
+	ViewData["Title"] = SharedLocalizer["Message_NewConversation"];
+}
+
+<h2>💬 @SharedLocalizer["Message_NewConversation"]</h2>
+
+<div>
+	<form asp-action="Create" method="post" enctype="multipart/form-data">
+		<div asp-validation-summary="ModelOnly"></div>
+
+		<div>
+			<label>@SharedLocalizer["Message_ChatTypeLabel"]</label>
+			<div>
+				<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" onchange="document.getElementById('groupTitleContainer').style.display = 'none'" />
+				<label for="typeDirect">@SharedLocalizer["Message_Direct"]</label>
+				<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" onchange="document.getElementById('groupTitleContainer').style.display = ''" />
+				<label for="typeGroup">@SharedLocalizer["Message_Group"]</label>
+			</div>
+		</div>
+
+		<div id="groupTitleContainer" style="display: @(Model.IsGroup ? "" : "none");">
+			<label asp-for="Title">@SharedLocalizer["Message_GroupName"]</label>
+			<input asp-for="Title" placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
+		</div>
+
+		<div>
+			<label>@SharedLocalizer["Message_SelectRecipient"] <span>*</span></label>
+			<div style="max-height: 150px; overflow-y: auto;">
+				@if (!Model.AvailableUsers.Any()) {
+					<p>@SharedLocalizer["Message_NoOtherUsers"]</p>
+				}
+				@foreach (var user in Model.AvailableUsers) {
+					<div>
+						<input type="checkbox" name="SelectedUserIds" value="@user.Id" id="user_@user.Id" checked="@Model.SelectedUserIds.Contains(user.Id)" />
+						<label for="user_@user.Id">👤 @user.UserName</label>
+					</div>
+				}
+			</div>
+			<span asp-validation-for="SelectedUserIds"></span>
+		</div>
+
+		<div>
+			<label asp-for="InitialMessage">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
+			<textarea asp-for="InitialMessage" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
+			<span asp-validation-for="InitialMessage"></span>
+		</div>
+
+		<div>
+			<label>@SharedLocalizer["Message_ImageAttachLabel"]</label>
+			<input type="file" name="ImageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+		</div>
+
+		<div>
+			<a asp-action="Index">@SharedLocalizer["Common_Cancel"]</a>
+			<button type="submit">@SharedLocalizer["Message_SendBtn"]</button>
+		</div>
+	</form>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

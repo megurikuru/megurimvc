@@ -324,6 +324,13 @@ namespace Meguri.Data {
                     .WithMany()
                     .HasForeignKey(u => u.ActiveAvatarImageId)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(u => u.HeaderImage)
+                    .WithMany()
+                    .HasForeignKey(u => u.HeaderImageId)
+                    .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasIndex(u => u.IsProfilePublic);
             });
 
             // Fandomマスターの初期シードデータ

@@ -41,6 +41,9 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();                    // パスワードリセット、2要素認証用のトークン生成機能
 
+// 存在しないユーザーの認証Cookieを毎リクエストで無効化する(DB初期化後の古いCookie対策)
+builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.Zero);
+
 // メール送信サービスの設定と登録
 var smtpServerConf = builder.Configuration.GetSection("SMTPServerConf");                                    // appsettings.jsonからSMTPサーバー設定を取得
 builder.Services.AddTransient<Microsoft.AspNetCore.Identity.IEmailSender<ApplicationUser>, EmailSender>();  // Identity用メール送信サービスをDIコンテナに登録(使用時に毎回新しいインスタンスを生成)

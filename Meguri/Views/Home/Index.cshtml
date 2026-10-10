@@ -7,8 +7,10 @@
 	var posts = ViewBag.Posts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
 	var search = ViewBag.Search as string;
 
-	// 投稿・画像ともに存在しない場合の判定フラグ
-	var nothingFound = !posts.Any();
+	var foundUsers = ViewBag.Users as List<Meguri.Models.ApplicationUser>;
+
+	// 投稿・ユーザーともに存在しない場合の判定フラグ
+	var nothingFound = !posts.Any() && (foundUsers == null || !foundUsers.Any());
 }
 
 @{
@@ -21,6 +23,22 @@
 	};
 }
 <partial name="_SearchForm" model="searchForm" />
+
+@if (foundUsers != null && foundUsers.Any()) {
+	<div id="user-list">
+		<h1>ユーザー</h1>
+		<ul>
+			@foreach (var u in foundUsers) {
+				<li>
+					@if (u.ActiveAvatarImageId.HasValue) {
+						<img src="/Image/File/@u.ActiveAvatarImageId" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;" />
+					}
+					<text>@if (!u.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @u.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@u.Id">@u.UserName</a> }</text>
+				</li>
+			}
+		</ul>
+	</div>
+}
 
 @* ================================================== *@
 @* 2. 新着投稿一覧エリア                            *@

@@ -24,6 +24,13 @@
 /* ------------------------------------------
     基本構造要素
    ------------------------------------------ */
+header {
+	display: block grid; /* 外部：block（改行する） / 内部：grid（Gridレイアウト） */
+	grid-template-columns: repeat(3, 1fr); /* 3等分 */
+	gap: 0.5rem;
+	border: 1px dotted blue; /* 開発用 */
+}
+
 body {
 	display: block grid; /* 自身：ブロック要素として改行 / 子：Gridレイアウト（縦1列）で配置 */
 	gap: 0.5rem;
@@ -104,6 +111,15 @@ ol {
 	margin: 0 auto;
 	width: fit-content;
 	border: 1px solid var(--color-border);
+}
+
+.user-name {
+	display: block;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: right;
 }
 
 button, .button-like {

@@ -30,6 +30,18 @@ namespace Meguri.Models.ManageViewModels {
         [StringLength(1000, ErrorMessage = "Validation_StringLength")]
         public string Bio { get; set; } = string.Empty;
 
+        public bool IsProfilePublic { get; set; }
+
+        public Microsoft.AspNetCore.Http.IFormFile? AvatarFile { get; set; }
+        public Microsoft.AspNetCore.Http.IFormFile? HeaderFile { get; set; }
+        public bool RemoveAvatar { get; set; }
+        public bool RemoveHeader { get; set; }
+
+        public long? AvatarImageId { get; set; }
+        public long? HeaderImageId { get; set; }
+
+        public List<string?> ExternalUrls { get; set; } = new() { null, null, null, null, null };
+
         public string? StatusMessage { get; set; }
     }
 }

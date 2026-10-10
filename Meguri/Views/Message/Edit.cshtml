@@ -1,0 +1,29 @@
+@model Meguri.Models.MessageViewModels.EditMessageViewModel
+@{
+	ViewData["Title"] = SharedLocalizer["Common_Edit"];
+}
+
+<h2>✏️ @SharedLocalizer["Common_Edit"]</h2>
+
+<div>
+	<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+		<input type="hidden" asp-for="Id" />
+		<input type="hidden" asp-for="ConversationId" />
+		<div asp-validation-summary="ModelOnly"></div>
+
+		<div>
+			<label asp-for="Text">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
+			<textarea asp-for="Text" rows="4" required></textarea>
+			<span asp-validation-for="Text"></span>
+		</div>
+
+		<div>
+			<a asp-action="Details" asp-route-id="@Model.ConversationId">@SharedLocalizer["Common_Cancel"]</a>
+			<button type="submit">@SharedLocalizer["Common_Save"]</button>
+		</div>
+	</form>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

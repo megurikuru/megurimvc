@@ -7,7 +7,7 @@
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" data-bs-theme="@themeCookie">
 @await Html.PartialAsync("_Head")
 <body>
-	<a asp-area="" asp-controller="Home" asp-action="Index" class="top-link">meguri</a>
+	@await Html.PartialAsync("_Header")
 	@if (isHomePage) {
 		@await Html.PartialAsync("_NavMain")
 	}

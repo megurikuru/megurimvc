@@ -66,6 +66,27 @@ namespace Meguri.Controllers {
                     .FirstOrDefaultAsync(f => f.Id == current.ParentFandomId.Value);
             }
 
+            int descendantPostsCount;
+            if (fandom.Id == 1) {
+                descendantPostsCount = await _context.Posts.CountAsync();
+            } else {
+                var fandomParents = await _context.Fandoms
+                    .AsNoTracking()
+                    .Select(f => new { f.Id, f.ParentFandomId })
+                    .ToListAsync();
+                var targetIds = new HashSet<int> { fandom.Id };
+                var queue = new Queue<int>();
+                queue.Enqueue(fandom.Id);
+                while (queue.Count > 0) {
+                    var parentId = queue.Dequeue();
+                    foreach (var child in fandomParents.Where(f => f.ParentFandomId == parentId)) {
+                        if (targetIds.Add(child.Id)) queue.Enqueue(child.Id);
+                    }
+                }
+                descendantPostsCount = await _context.Posts.CountAsync(p => targetIds.Contains(p.FandomId));
+            }
+
+            ViewBag.FandomPostsDescendantCount = descendantPostsCount;
             ViewBag.Ancestors = ancestors;
             ViewBag.IsJoined = isJoined;
             ViewBag.FandomPosts = posts;

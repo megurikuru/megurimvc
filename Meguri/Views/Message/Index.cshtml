@@ -1,188 +1,70 @@
-﻿@model Meguri.Models.MessageViewModels.ConversationListViewModel
+@model Meguri.Models.MessageViewModels.ConversationListViewModel
 @{
-		ViewData["Title"] = SharedLocalizer["Message_Title"];
+	ViewData["Title"] = SharedLocalizer["Message_Title"];
+	var dateValue = Model.FilterDate?.ToString("yyyy-MM-dd");
+	var routeValues = new Dictionary<string, string>();
+	if (!string.IsNullOrEmpty(dateValue)) {
+		routeValues["date"] = dateValue;
+	}
+	var pager = new Meguri.ViewModels.PaginationViewModel {
+		Controller = "Message",
+		Action = "Index",
+		HasPrevious = Model.HasPrevious,
+		HasNext = Model.HasNext,
+		TotalCount = Model.TotalCount,
+		Skip = Model.Skip,
+		PreviousSkip = Model.PreviousSkip,
+		NextSkip = Model.NextSkip,
+		CurrentCount = Model.Conversations.Count,
+		PageSize = Model.PageSize,
+		RouteValues = routeValues
+	};
 }
 
 <div>
-		<div>
-				<h2 >💬 @SharedLocalizer["Message_Title"]</h2>
-				<p >@SharedLocalizer["Message_SubTitle"]</p>
-		</div>
-		<button type="button"  data-bs-toggle="modal" data-bs-target="#newConversationModal">
-				➕ @SharedLocalizer["Message_NewConversation"]
-		</button>
+	<div>
+		<h2>💬 @SharedLocalizer["Message_Title"]</h2>
+		<p>@SharedLocalizer["Message_SubTitle"]</p>
+	</div>
+	<a asp-action="Create">➕ @SharedLocalizer["Message_NewConversation"]</a>
 </div>
 
-<!-- 日付絞り込みフォーム -->
 <div>
+	<form asp-action="Index" method="get">
 		<div>
-				<form asp-action="Index" method="get">
-						<div>
-								<label >@SharedLocalizer["Message_DateLabel"]</label>
-								<input type="date" name="date"  value="@(Model.FilterDate?.ToString("yyyy-MM-dd"))" />
-						</div>
-						<button type="submit" >@SharedLocalizer["Common_Filter"]</button>
-						<a asp-action="Index" >@SharedLocalizer["Common_Clear"]</a>
-						<span >@SharedLocalizer["Message_DateFilterHint"]</span>
-				</form>
+			<label>@SharedLocalizer["Message_DateLabel"]</label>
+			<input type="date" name="date" value="@dateValue" />
 		</div>
+		<button type="submit">@SharedLocalizer["Common_Filter"]</button>
+		<a asp-action="Index">@SharedLocalizer["Common_Clear"]</a>
+		<span>@SharedLocalizer["Message_DateFilterHint"]</span>
+	</form>
 </div>
 
-<!-- 会話一覧 -->
-<div>
-		@if (!Model.Conversations.Any()) {
-				<div>
-						<h4>@SharedLocalizer["Message_NoConversations"]</h4>
-						<p>@SharedLocalizer["Message_NoConversationsHint"]</p>
-						<button type="button"  data-bs-toggle="modal" data-bs-target="#newConversationModal">
-								➕ @SharedLocalizer["Message_NewConversation"]
-						</button>
-				</div>
+@if (!Model.Conversations.Any()) {
+	<div>
+		<h4>@SharedLocalizer["Message_NoConversations"]</h4>
+		<p>@SharedLocalizer["Message_NoConversationsHint"]</p>
+		<a asp-action="Create">➕ @SharedLocalizer["Message_NewConversation"]</a>
+	</div>
+}
+else {
+	<div>
+		@foreach (var c in Model.Conversations) {
+			<div>
+				<h4>
+					<a asp-action="Details" asp-route-id="@c.Id">
+						@(c.IsGroup ? "👥" : "👤") @c.Title
+					</a>
+					@if (c.IsGroup) {
+						<span>@SharedLocalizer["Message_GroupBadge"]</span>
+					}
+				</h4>
+				<p>@(c.LastMessageText.Length > 100 ? c.LastMessageText.Substring(0, 100) + "..." : c.LastMessageText)</p>
+				<small>@c.LastMessageTime.ToString("yyyy/MM/dd HH:mm")</small>
+			</div>
 		}
-		else {
-				<div>
-						@foreach (var c in Model.Conversations) {
-								<a asp-action="Chat" asp-route-id="@c.Id">
-										<div>
-												<div>
-														@(c.IsGroup ? "👥" : "👤")
-												</div>
-												<div>
-														<h6>
-																@c.Title
-																@if (c.IsGroup) {
-																		<span >@SharedLocalizer["Message_GroupBadge"]</span>
-																}
-														</h6>
-														<p  style="max-width: 400px;">
-																@c.LastMessageText
-														</p>
-												</div>
-										</div>
-										<div>
-												<div  data-utc="@c.LastMessageTime.ToString("o")">@c.LastMessageTime.ToString("MM/dd HH:mm")</div>
-												<span >@SharedLocalizer["Message_OpenBadge"]</span>
-										</div>
-								</a>
-						}
-				</div>
-		}
-</div>
-
-@if (Model.TotalCount > 0) {
-		<nav>
-				@if (Model.HasPrevious) {
-						<a  asp-action="Index" asp-route-skip="@Model.PreviousSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</a>
-				} else {
-						<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</button>
-				}
-				<span >@(Model.TotalCount == 0 ? 0 : Model.Skip + 1) - @(Model.Skip + Model.Conversations.Count) / @Model.TotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
-				@if (Model.HasNext) {
-						<a  asp-action="Index" asp-route-skip="@Model.NextSkip" asp-route-date="@(Model.FilterDate?.ToString("yyyy-MM-dd"))">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</a>
-				} else {
-						<button type="button"  disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</button>
-				}
-		</nav>
+	</div>
 }
 
-<!-- 新規会話作成モーダル -->
-<div  id="newConversationModal" tabindex="-1" aria-labelledby="newConversationModalLabel" aria-hidden="true">
-		<div>
-				<div>
-						<div>
-								<h5  id="newConversationModalLabel">💬 @SharedLocalizer["Message_NewConversation"]</h5>
-								<button type="button"  data-bs-dismiss="modal" aria-label="Close"></button>
-						</div>
-						<form asp-action="Create" method="post" enctype="multipart/form-data">
-								@Html.AntiForgeryToken()
-								<div>
-										<!-- タイプ切替 -->
-										<div>
-												<label >@SharedLocalizer["Message_ChatTypeLabel"]</label>
-												<div>
-														<div>
-																<input  type="radio" name="IsGroup" id="typeDirect" value="false" checked onchange="$('#groupTitleContainer').addClass('d-none')" />
-																<label  for="typeDirect">@SharedLocalizer["Message_Direct"]</label>
-														</div>
-														<div>
-																<input  type="radio" name="IsGroup" id="typeGroup" value="true" onchange="$('#groupTitleContainer').removeClass('d-none')" />
-																<label  for="typeGroup">@SharedLocalizer["Message_Group"]</label>
-														</div>
-												</div>
-										</div>
-
-										<!-- グループ名入力（グループ時のみ） -->
-										<div  id="groupTitleContainer">
-												<label >@SharedLocalizer["Message_GroupName"]</label>
-												<input type="text" name="Title"  placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
-										</div>
-
-										<!-- メンバー選択 -->
-										<div>
-												<label >@SharedLocalizer["Message_SelectRecipient"] <span >*</span></label>
-												<div  style="max-height: 150px; overflow-y: auto;">
-																@if (!Model.AvailableUsers.Any()) {
-																			<p >@SharedLocalizer["Message_NoOtherUsers"]</p>
-																		}
-																		@foreach (var user in Model.AvailableUsers) {
-																				<div>
-																					<input  type="checkbox" name="SelectedUserIds" value="@user.Id" id="user_@user.Id" />
-																					<label  for="user_@user.Id">
-																						👤 @user.UserName
-																					</label>
-																				</div>
-																		}
-																</div>
-														</div>
-
-														<!-- メッセージ入力 -->
-														<div>
-																<label >@SharedLocalizer["Message_InputPlaceholder"] <span >*</span></label>
-																<textarea name="InitialMessage" id="initialMessageInput" rows="3"  placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
-														</div>
-
-										<!-- 画像添付 -->
-										<div>
-												<label >@SharedLocalizer["Message_ImageAttachLabel"]</label>
-												<input type="file" name="ImageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png"  />
-										</div>
-								</div>
-								<div>
-															<button type="button"  data-bs-dismiss="modal">@SharedLocalizer["Common_Cancel"]</button>
-															<button type="submit" id="newConversationSubmitBtn"  disabled>@SharedLocalizer["Message_SendBtn"]</button>
-														</div>
-														</form>
-													</div>
-												</div>
-										</div>
-
-										@section Scripts {
-											<script>
-												$(document).ready(function () {
-													function updateNewConversationButtonState() {
-														var hasRecipient = $('.recipient-checkbox:checked').length > 0;
-														var hasMessage = $('#initialMessageInput').val().trim().length > 0;
-														$('#newConversationSubmitBtn').prop('disabled', !(hasRecipient && hasMessage));
-													}
-
-													$('.message-time[data-utc]').each(function () {
-														var raw = $(this).data('utc');
-														if (!raw) return;
-														var dt = new Date(raw);
-														if (isNaN(dt.getTime())) return;
-														$(this).text(dt.toLocaleString('ja-JP', {
-															month: '2-digit',
-															day: '2-digit',
-															hour: '2-digit',
-															minute: '2-digit',
-															hour12: false
-														}).replace(/\//g, '/'));
-													});
-
-													$(document).on('change', '.recipient-checkbox', updateNewConversationButtonState);
-													$(document).on('input', '#initialMessageInput', updateNewConversationButtonState);
-
-													updateNewConversationButtonState();
-												});
-											</script>
-										}
+<partial name="_Pagination" model="pager" />
