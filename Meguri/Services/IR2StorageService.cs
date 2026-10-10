@@ -32,5 +32,12 @@ namespace Meguri.Services {
         /// <param name="cancellationToken">キャンセレーショントークン</param>
         /// <returns>成功したかどうか</returns>
         Task<bool> DeleteFileAsync(string key, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// 指定プレフィックス配下のファイルをすべて削除
+        /// </summary>
+        /// <param name="prefix">キーのプレフィックス (例: {userId}/)</param>
+        /// <param name="cancellationToken">キャンセレーショントークン</param>
+        Task DeleteByPrefixAsync(string prefix, CancellationToken cancellationToken = default);
     }
 }

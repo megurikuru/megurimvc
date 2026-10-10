@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -93,6 +95,36 @@ namespace Meguri.Services {
             } catch (Exception ex) {
                 _logger.LogError(ex, "Failed to delete file {Key} from R2 bucket {Bucket}", key, _options.BucketName);
                 return false;
+            }
+        }
+
+        public async Task DeleteByPrefixAsync(string prefix, CancellationToken cancellationToken = default) {
+            if (string.IsNullOrWhiteSpace(prefix)) {
+                throw new ArgumentException("prefix is required.", nameof(prefix));
+            }
+
+            try {
+                string? continuationToken = null;
+                do {
+                    var listResponse = await _s3Client.ListObjectsV2Async(new ListObjectsV2Request {
+                        BucketName = _options.BucketName,
+                        Prefix = prefix,
+                        ContinuationToken = continuationToken
+                    }, cancellationToken);
+
+                    var objects = listResponse.S3Objects ?? new List<S3Object>();
+                    if (objects.Count > 0) {
+                        await _s3Client.DeleteObjectsAsync(new DeleteObjectsRequest {
+                            BucketName = _options.BucketName,
+                            Objects = objects.Select(o => new KeyVersion { Key = o.Key }).ToList()
+                        }, cancellationToken);
+                    }
+
+                    continuationToken = listResponse.IsTruncated == true ? listResponse.NextContinuationToken : null;
+                } while (continuationToken != null);
+            } catch (Exception ex) {
+                _logger.LogError(ex, "Failed to delete objects with prefix {Prefix} from R2 bucket {Bucket}", prefix, _options.BucketName);
+                throw;
             }
         }
 
