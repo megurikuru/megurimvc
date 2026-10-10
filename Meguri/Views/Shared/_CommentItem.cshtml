@@ -12,7 +12,7 @@
 				<div>
 						<div>
 								<span >>>@Model.Comment.Number</span>
-								<span >👤 @(Model.Comment.User?.UserName ?? "User")</span>
+								@if (Model.Comment.User == null) { <text>User</text> } else { <text>@if (!Model.Comment.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @Model.Comment.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.Comment.User.Id">@Model.Comment.User.UserName</a> }</text> }
 								<span >@Model.Comment.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
 						</div>
 

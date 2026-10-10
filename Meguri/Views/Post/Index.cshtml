@@ -34,9 +34,11 @@
 				<h2 >📝 @SharedLocalizer["Post_Title"]</h2>
 				<p >@SharedLocalizer["Post_SubTitle"]</p>
 		</div>
+		@if (ViewBag.CanPostToCurrentFandom is true) {
 		<a asp-action="Create" asp-route-fandomId="@currentFandom?.Id">
 				✏️ @SharedLocalizer["Post_CreateNew"]
 		</a>
+		}
 </div>
 
 
@@ -72,7 +74,9 @@
 		<div>
 				<h4>@SharedLocalizer["Common_NoItems"]</h4>
 				<div>
+						@if (ViewBag.CanPostToCurrentFandom is true) {
 						<a asp-action="Create" >@SharedLocalizer["Post_CreateNew"]</a>
+						}
 				</div>
 		</div>
 }
@@ -134,7 +138,13 @@ else {
 
 										<div>
 												<div>
-														@(post.User == null ? SharedLocalizer["Common_UnknownUser"].Value : post.User.IsWithdrawn ? SharedLocalizer["Common_WithdrawnUser"].Value : post.User.UserName)
+														@if (post.User == null) {
+															@SharedLocalizer["Common_UnknownUser"].Value
+														} else if (post.User.IsWithdrawn) {
+															@SharedLocalizer["Common_WithdrawnUser"].Value
+														} else {
+															<text>@if (!post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @post.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@post.User.Id">@post.User.UserName</a> }</text>
+														}
 												</div>
 												<div>
 														@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)

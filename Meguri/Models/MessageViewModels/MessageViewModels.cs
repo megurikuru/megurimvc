@@ -42,6 +42,17 @@ namespace Meguri.Models.MessageViewModels {
         public string InitialMessage { get; set; } = string.Empty;
 
         public List<IFormFile>? ImageFiles { get; set; }
+
+        public List<ApplicationUser> AvailableUsers { get; set; } = new List<ApplicationUser>();
+    }
+
+    public class EditMessageViewModel {
+        public long Id { get; set; }
+        public long ConversationId { get; set; }
+
+        [Required(ErrorMessage = "メッセージを入力してください。")]
+        [Display(Name = "Message_InputPlaceholder")]
+        public string Text { get; set; } = string.Empty;
     }
 
     public class ChatRoomViewModel {

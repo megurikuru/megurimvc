@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Meguri.Models {
 
-    [Table("Posts")]
+    [Table("Posts")]                                                                    // テーブル名
     [Index(nameof(UserId))]
     [Index(nameof(FandomId))]
     [Index(nameof(CreatedAt))]
@@ -18,81 +18,36 @@ namespace Meguri.Models {
     [Index(nameof(FandomId), nameof(LastCommentedAt))]
     [Index(nameof(FandomId), nameof(CreatedAt))]
     public class Post {
-        // ==========================================
-        // 主キー / 外部キー (Keys)
-        // ==========================================
-        public long Id { get; set; }
-        public string UserId { get; set; } = string.Empty;
-        public int FandomId { get; set; }
+        // プロパティ
+        public long Id { get; set; }                                                    // 投稿ID
+        public string UserId { get; set; } = string.Empty;                              // 投稿者ID
+        public int FandomId { get; set; }                                               // 界隈ID
+        public string Name { get; set; } = string.Empty;                                // タイトル
+        public string Text { get; set; } = string.Empty;                                // 本文
+        public bool IsPublic { get; set; } = false;                                     // 公開フラグ
+        public bool IsSexual { get; set; } = false;                                     // 性的表現あり
+        public bool IsViolence { get; set; } = false;                                   // 暴力表現あり
+        public bool IsPinned { get; set; } = false;                                     // 固定表示
+        public bool IsLocked { get; set; } = false;                                     // コメント禁止
+        public int CommentCount { get; set; } = 0;                                      // コメント数
+        public int ViewCount { get; set; } = 0;                                         // 閲覧数
+        public DateTime CreatedAt { get; set; }                                         // 作成日時
+        public DateTime UpdatedAt { get; set; }                                         // 更新日時
+        public DateTime? LastCommentedAt { get; set; }                                  // 最終コメント日時
 
-        // ==========================================
-        // 基本プロパティ (Basic Attributes)
-        // ==========================================
-        public string Name { get; set; } = string.Empty;
-        public string Text { get; set; } = string.Empty;
+        // ナビゲーションプロパティ
+        public ApplicationUser? User { get; set; }                                      // 投稿者
+        public Fandom? Fandom { get; set; }                                             // 界隈
 
-        // ==========================================
-        // フラグ・ステータス (Flags & Status)
-        // ==========================================
-        public bool IsPublic { get; set; } = false;
-        public bool IsSexual { get; set; } = false;
-        public bool IsViolence { get; set; } = false;
+        // 関連データのナビゲーションプロパティ
+        public ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();       // 投稿とタグの関連
+        public ICollection<PostImage> PostImages { get; set; } = new List<PostImage>(); // 添付画像
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();       // コメント一覧
+        public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();    // リアクション一覧
 
-        // スレッドの固定表示フラグ
-        public bool IsPinned { get; set; } = false;
-
-        // スレッドの書き込みロック（締切）フラグ
-        public bool IsLocked { get; set; } = false;
-
-        // ==========================================
-        // カウンター・キャッシュ (Counters)
-        // ==========================================        
-        // コメント件数のキャッシュ
-        public int CommentCount { get; set; } = 0;
-
-        // 閲覧数カウンター
-        public int ViewCount { get; set; } = 0;
-
-        // ==========================================
-        // 日時・タイムスタンプ (Timestamps)
-        // ==========================================
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-
-        // 最終コメント投稿日時（スレッドフロート・ageソート用）
-        public DateTime? LastCommentedAt { get; set; }
-
-        // ==========================================
-        // ナビゲーションプロパティ - 単数 (Reference Navigations)
-        // ==========================================
-        public ApplicationUser? User { get; set; }
-
-        // FandomとPostは一対多の関係
-        public Fandom? Fandom { get; set; }
-
-        // ==========================================
-        // ナビゲーションプロパティ - コレクション (Collection Navigations)
-        // ==========================================
-
-        // PostとTagは中間テーブルを介した多対多の関係
-        public ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
-
-        // PostとImageは中間テーブルを介した多対多の関係
-        public ICollection<PostImage> PostImages { get; set; } = new List<PostImage>();
-
-        // Postに付けられたコメント一覧
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
-
-        // Postに付けられたリアクション一覧
-        public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
-
-        // ==========================================
-        // 非マッピング / 計算プロパティ (Unmapped / Computed Properties)
-        // ==========================================
-        // 直接のTag一覧が必要な場合にPostTagsから取得
-
-        [NotMapped]
-        public IEnumerable<TagConcept> Tags => 
+        // 計算プロパティ
+        [NotMapped]                                                                     // DB非マッピング
+        public IEnumerable<TagConcept> Tags =>                                          // タグ一覧(PostTagsから取得)
             PostTags.Where(pt => pt.TagConcept != null).Select(pt => pt.TagConcept!);
     }
 }

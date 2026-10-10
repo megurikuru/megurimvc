@@ -143,6 +143,16 @@ namespace Meguri.Controllers {
             ViewBag.PostsPreviousSkip = Math.Max(0, resolvedSkip - pageSize);
             ViewBag.PostsNextSkip = resolvedSkip + pageSize;
 
+            // ユーザー名検索（部分一致）。マイページの閲覧条件に合わせ、未ログイン時は公開マイページのみ
+            if (!string.IsNullOrWhiteSpace(search)) {
+                var keyword = search.Trim();
+                ViewBag.Users = await _context.Users
+                    .Where(u => (isAuthenticated || u.IsProfilePublic) && !u.IsWithdrawn && u.UserName != null && EF.Functions.ILike(u.UserName, "%" + keyword + "%"))
+                    .OrderBy(u => u.UserName)
+                    .Take(20)
+                    .ToListAsync();
+            }
+
             return View();
         }
 

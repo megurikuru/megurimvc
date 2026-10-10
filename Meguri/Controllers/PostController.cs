@@ -72,6 +72,8 @@ namespace Meguri.Controllers {
                 .ToListAsync();
 
             ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.CanPostToCurrentFandom = !fandomId.HasValue || (fandomId.Value != 1 && currentUserId != null && await IsJoinedAsync(fandomId.Value, currentUserId));
             ViewBag.PageSize = pageSize;
             ViewBag.TotalCount = totalCount;
             ViewBag.Skip = resolvedSkip;
@@ -111,9 +113,21 @@ namespace Meguri.Controllers {
         [Authorize]
         public async Task<IActionResult> Create(int? fandomId) {
             if (fandomId == 1) return BadRequest();
-            var fandoms = (await _context.Fandoms.ToListAsync()).Where(f => f.Id != 1).ToList();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Challenge();
+            var fandoms = await GetJoinedFandomsAsync(userId);
+            if (fandomId.HasValue && !fandoms.Any(f => f.Id == fandomId.Value)) return Forbid();
             ViewBag.Fandoms = fandoms;
             return View(new PostCreateViewModel { FandomId = fandomId ?? fandoms.FirstOrDefault()?.Id ?? 1 });
+        }
+
+        private Task<bool> IsJoinedAsync(int fandomId, string userId) =>
+            _context.FandomUsers.AnyAsync(fu => fu.FandomId == fandomId && fu.UserId == userId);
+
+        private async Task<List<Fandom>> GetJoinedFandomsAsync(string userId) {
+            return await _context.Fandoms
+                .Where(f => f.Id != 1 && _context.FandomUsers.Any(fu => fu.FandomId == f.Id && fu.UserId == userId))
+                .ToListAsync();
         }
 
         // POST: /Post/Create
@@ -122,13 +136,16 @@ namespace Meguri.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PostCreateViewModel model) {
             if (model.FandomId == 1) return BadRequest();
-            if (!ModelState.IsValid) {
-                ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
-                return View(model);
-            }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId)) return Challenge();
+
+            if (!await IsJoinedAsync(model.FandomId, userId)) return Forbid();
+
+            if (!ModelState.IsValid) {
+                ViewBag.Fandoms = await GetJoinedFandomsAsync(userId);
+                return View(model);
+            }
 
             var post = new Post {
                 UserId = userId,
@@ -181,7 +198,7 @@ namespace Meguri.Controllers {
                             });
                         } catch (Exception ex) {
                             ModelState.AddModelError("ImageFiles", $"{file.FileName}: {ex.Message}");
-                            ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+                            ViewBag.Fandoms = await GetJoinedFandomsAsync(userId);
                             return View(model);
                         }
                     }

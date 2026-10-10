@@ -191,8 +191,8 @@ namespace Meguri.Controllers {
         // GET: /Image/Upload
         [Authorize]
         public async Task<IActionResult> Upload(int? fandomId) {
-            ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
-            ViewBag.DefaultFandomId = fandomId;
+            if (fandomId == 1) return BadRequest();
+            ViewBag.Fandoms = (await _context.Fandoms.ToListAsync()).Where(f => f.Id != 1).ToList();            ViewBag.DefaultFandomId = fandomId;
             return View(new ImageUploadViewModel { FandomId = fandomId });
         }
 
@@ -212,14 +212,21 @@ namespace Meguri.Controllers {
                 ModelState.AddModelError(string.Empty, "18歳未満または生年月日未登録のアカウントは、R-18/R-18G画像の投稿はできません。");
             }
 
+            if (model.FandomId == 1) {
+                ModelState.AddModelError(string.Empty, "ルート界隈には投稿できません。");
+            } else if (!model.FandomId.HasValue && model.Files != null && model.Files.Count > 1) {
+                ModelState.AddModelError(string.Empty, "複数枚を投稿する場合は界隈を指定してください。");
+            } else if (model.FandomId.HasValue && !await _context.FandomUsers.AnyAsync(fu => fu.FandomId == model.FandomId.Value && fu.UserId == userId)) {                ModelState.AddModelError(string.Empty, "参加していない界隈には投稿できません。");
+            }
+
             if (!ModelState.IsValid) {
-                ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+                ViewBag.Fandoms = (await _context.Fandoms.ToListAsync()).Where(f => f.Id != 1).ToList();
                 return View(model);
             }
 
             var tagConcepts = await _tagService.GetOrCreateTagConceptsAsync(model.Tags, userId);
 
-            // 単体または複数枚のImageエンティティを作成
+            // 単体
             var createdImages = new List<Image>();
 
             for (int i = 0; i < model.Files.Count; i++) {
@@ -274,7 +281,7 @@ namespace Meguri.Controllers {
 
             // 複数枚投稿、または界隈(Fandom)への投稿の場合はPostとしてまとめる
             if (model.FandomId.HasValue || createdImages.Count > 1) {
-                var fandomId = model.FandomId ?? (await _context.Fandoms.Select(f => f.Id).FirstOrDefaultAsync());
+                var fandomId = model.FandomId ?? 0;
                 if (fandomId == 0) fandomId = 1;
 
                 var post = new Post {

@@ -484,7 +484,7 @@
     <value>保存</value>
   </data>
   <data name="Manage_AccountManagement_Title" xml:space="preserve">
-    <value>アカウント管理</value>
+    <value>アカウント</value>
   </data>
   <data name="Manage_AccountManagement_Subtitle" xml:space="preserve">
     <value>アカウント設定を変更</value>
@@ -745,7 +745,7 @@
     <value>User</value>
   </data>
   <data name="Home_SearchPlaceholder" xml:space="preserve">
-    <value>タイトル・本文・タグで検索...</value>
+    <value>検索（投稿、タグ、ユーザー）</value>
   </data>
   <data name="Fandom_DefaultLabel" xml:space="preserve">
     <value>界隈</value>
@@ -1209,9 +1209,6 @@
   <data name="Reaction_Add" xml:space="preserve">
     <value>リアクションを追加</value>
   </data>
-  <data name="Manage_Nav_Options" xml:space="preserve">
-    <value>オプション</value>
-  </data>
   <data name="Manage_Nav_Withdraw" xml:space="preserve">
     <value>退会</value>
   </data>
@@ -1232,6 +1229,9 @@
   </data>
   <data name="Common_WithdrawnUser" xml:space="preserve">
     <value>存在しないユーザー</value>
+  </data>
+  <data name="Manage_Nav_Options" xml:space="preserve">
+    <value>オプション</value>
   </data>
   <data name="Manage_Options_Title" xml:space="preserve">
     <value>オプション設定</value>

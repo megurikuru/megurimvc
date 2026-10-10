@@ -23,6 +23,16 @@ namespace Meguri.Models {
         public long? ActiveAvatarImageId { get; set; }
         public Image? ActiveAvatarImage { get; set; }
 
+        /// マイページの外部公開フラグ
+        public bool IsProfilePublic { get; set; } = false;
+
+        /// マイページのヘッダー画像
+        public long? HeaderImageId { get; set; }
+        public Image? HeaderImage { get; set; }
+
+        /// 外部URL（改行区切り、最大5件）
+        public string ExternalUrls { get; set; } = string.Empty;
+
         /// ユーザーが登録・所持している画像一覧
         public ICollection<UserImage> UserImages { get; set; } = new List<UserImage>();
 

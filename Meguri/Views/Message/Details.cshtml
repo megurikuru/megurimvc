@@ -1,0 +1,104 @@
+﻿@model Meguri.Models.MessageViewModels.ChatRoomViewModel
+@{
+	ViewData["Title"] = Model.DisplayTitle;
+	var dateValue = Model.FilterDate?.ToString("yyyy-MM-dd");
+	var routeValues = new Dictionary<string, string> {
+		["id"] = Model.Conversation.Id.ToString()
+	};
+	if (!string.IsNullOrEmpty(dateValue)) {
+		routeValues["date"] = dateValue;
+	}
+	var pager = new Meguri.ViewModels.PaginationViewModel {
+		Controller = "Message",
+		Action = "Details",
+		HasPrevious = Model.HasPrevious,
+		HasNext = Model.HasNext,
+		TotalCount = Model.TotalCount,
+		Skip = Model.Skip,
+		PreviousSkip = Model.PreviousSkip,
+		NextSkip = Model.NextSkip,
+		CurrentCount = Model.Messages.Count,
+		PageSize = Model.PageSize,
+		RouteValues = routeValues
+	};
+}
+
+<div>
+	<a asp-action="Index">←</a>
+	<h2>@(Model.Conversation.IsGroup ? "👥" : "👤") @Model.DisplayTitle</h2>
+	<p>
+		@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count):
+		@foreach (var m in Model.Conversation.Members.Select((member, index) => new { member, index })) {
+					@if (m.index > 0) { <text>, </text> }
+					@if (m.member.User == null) { @SharedLocalizer["Common_UnknownUser"].Value }
+					else if (m.member.User.IsWithdrawn) { @(m.member.User.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") }
+					else { <text>@if (!m.member.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @m.member.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@m.member.User.Id">@m.member.User.UserName</a> }</text> }
+				}
+	</p>
+</div>
+
+<div>
+	<form asp-action="Details" method="get">
+		<input type="hidden" name="id" value="@Model.Conversation.Id" />
+		<label>@SharedLocalizer["Message_DateLabel"]</label>
+		<input type="date" name="date" value="@dateValue" />
+		<button type="submit">@SharedLocalizer["Common_Filter"]</button>
+		<a asp-action="Details" asp-route-id="@Model.Conversation.Id">@SharedLocalizer["Common_Clear"]</a>
+		<span>@string.Format(SharedLocalizer["Message_ChatDateFilterHintFormat"].Value, Model.PageSize / 2, Model.PageSize)</span>
+	</form>
+</div>
+
+<partial name="_Pagination" model="pager" />
+
+<div id="chatMessageContainer">
+	@if (!Model.Messages.Any()) {
+		<p>@SharedLocalizer["Message_NoMessagesForDate"]</p>
+	}
+	else {
+		@foreach (var msg in Model.Messages) {
+			var isMe = msg.SenderId == Model.CurrentUserId;
+			<div style="text-align: @(isMe ? "right" : "left"); margin: 8px 0;">
+				@if (!isMe) {
+					<div>👤 @if (msg.Sender == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (msg.Sender.IsWithdrawn) { @(msg.Sender.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") } else { <text>@if (!msg.Sender.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @msg.Sender.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@msg.Sender.Id">@msg.Sender.UserName</a> }</text> }</div>
+				}
+				<div style="display: inline-block; max-width: 85%; text-align: left; padding: 6px 10px; border: 1px solid #ccc; border-radius: 8px;">
+					@if (!string.IsNullOrEmpty(msg.Text)) {
+						<div style="white-space: pre-wrap;">@msg.Text</div>
+					}
+					@if (msg.MessageImages.Any()) {
+						<div>
+							@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder)) {
+								<a asp-controller="Image" asp-action="Details" asp-route-id="@mi.ImageId">
+									<img src="/Image/File/@mi.ImageId" style="max-width: 100%; max-height: 150px; object-fit: cover;" alt="" />
+								</a>
+							}
+						</div>
+					}
+					<small>@msg.CreatedAt.ToString("yyyy/MM/dd HH:mm")</small>
+					@if (isMe) {
+						<a asp-action="Edit" asp-route-id="@msg.Id">@SharedLocalizer["Common_Edit"]</a>
+					}
+				</div>
+				<div>
+					<partial name="_ReactionButtons" model='("Message", msg.Id, msg.Reactions.AsEnumerable())' />
+				</div>
+			</div>
+		}
+	}
+</div>
+
+<partial name="_Pagination" model="pager" />
+
+<div>
+	<form asp-action="SendMessage" method="post" enctype="multipart/form-data">
+		@Html.AntiForgeryToken()
+		<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
+		<div>
+			<textarea name="text" rows="2" placeholder="@SharedLocalizer["Message_InputPlaceholder"]" style="width: 100%;"></textarea>
+		</div>
+		<div>
+			<input type="file" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+			<button type="submit">🚀 @SharedLocalizer["Message_SendBtn"]</button>
+		</div>
+	</form>
+</div>

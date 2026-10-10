@@ -51,6 +51,16 @@ namespace Meguri.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("ExternalUrls")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("HeaderImageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsProfilePublic")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsWithdrawn")
                         .HasColumnType("boolean");
 
@@ -90,6 +100,10 @@ namespace Meguri.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActiveAvatarImageId");
+
+                    b.HasIndex("HeaderImageId");
+
+                    b.HasIndex("IsProfilePublic");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -984,7 +998,14 @@ namespace Meguri.Migrations
                         .HasForeignKey("ActiveAvatarImageId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Meguri.Models.Image", "HeaderImage")
+                        .WithMany()
+                        .HasForeignKey("HeaderImageId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("ActiveAvatarImage");
+
+                    b.Navigation("HeaderImage");
                 });
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>

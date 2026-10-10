@@ -79,10 +79,12 @@ namespace Meguri.Data {
             context.Users.AddRange(users);
             await context.SaveChangesAsync();
 
+            var parentMap = await context.Set<Fandom>().ToDictionaryAsync(f => f.Id, f => f.ParentFandomId);
+            var joined = new HashSet<(int FandomId, string UserId)>();
             foreach (var user in users) {
-                context.Set<FandomUser>().Add(new FandomUser { FandomId = 1, UserId = user.Id });
+                JoinWithAncestors(context, parentMap, joined, 1, user.Id);
                 foreach (var fandomId in FandomIds.OrderBy(_ => random.Next()).Take(3)) {
-                    context.Set<FandomUser>().Add(new FandomUser { FandomId = fandomId, UserId = user.Id });
+                    JoinWithAncestors(context, parentMap, joined, fandomId, user.Id);
                 }
             }
             await context.SaveChangesAsync();
@@ -90,7 +92,7 @@ namespace Meguri.Data {
             var pool = LoadImagePool(Path.Combine(contentRootPath, "Data", "TestImg"));
             var images = new ImageContext(storage, pool);
 
-            await SeedPostsAsync(context, users, random, now, images);
+            await SeedPostsAsync(context, users, random, now, images, parentMap, joined);
             await SeedCommentsAsync(context, users, random, now);
             await SeedMessagesAsync(context, users, random, now, images);
         }
@@ -224,14 +226,29 @@ namespace Meguri.Data {
             };
         }
 
-        private static async Task SeedPostsAsync(ApplicationDbContext context, List<ApplicationUser> users, Random random, DateTime now, ImageContext images) {
+        /// <summary>
+        /// 指定した界隈とその全祖先界隈にユーザーを参加させます（参加済みは無視）。
+        /// </summary>
+        private static void JoinWithAncestors(ApplicationDbContext context, Dictionary<int, int?> parentMap, HashSet<(int FandomId, string UserId)> joined, int fandomId, string userId) {
+            int? current = fandomId;
+            while (current.HasValue) {
+                if (joined.Add((current.Value, userId))) {
+                    context.Set<FandomUser>().Add(new FandomUser { FandomId = current.Value, UserId = userId });
+                }
+                current = parentMap.TryGetValue(current.Value, out var parent) ? parent : null;
+            }
+        }
+
+        private static async Task SeedPostsAsync(ApplicationDbContext context, List<ApplicationUser> users, Random random, DateTime now, ImageContext images, Dictionary<int, int?> parentMap, HashSet<(int FandomId, string UserId)> joined) {
             var imageIndex = 1;
             for (var i = 0; i < 100; i++) {
                 var user = users[random.Next(users.Count)];
                 var createdAt = now.AddHours(-random.Next(1, 24 * 60));
+                var postFandomId = FandomIds[random.Next(FandomIds.Length)];
+                JoinWithAncestors(context, parentMap, joined, postFandomId, user.Id);
                 var post = new Post {
                     User = user,
-                    FandomId = FandomIds[random.Next(FandomIds.Length)],
+                    FandomId = postFandomId,
                     Name = $"{Titles[random.Next(Titles.Length)]} #{i + 1}",
                     Text = Bodies[random.Next(Bodies.Length)],
                     IsPublic = true,

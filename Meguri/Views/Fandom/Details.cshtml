@@ -37,7 +37,7 @@
 		<img src="~/icons/users.svg" class="icon"/><span>参加者：@Model.FandomUsers.Count</span>
 	</div>
 	<div>
-		<img src="~/icons/files.svg" class="icon"/><span>投稿：@(ViewBag.FandomPostsTotalCount as int? ?? 0)</span>
+		<span>投稿：@(ViewBag.FandomPostsDescendantCount as int? ?? 0)</span>
 	</div>
 </div>
 
@@ -58,11 +58,13 @@
 				</form>
 			}
 		</li>
+		@if (isJoined) {
 		<li>
 			<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
 				@SharedLocalizer["Post_CreateNew"]
 			</a>
 		</li>
+		}
 		}
 	</ul>
 </nav>

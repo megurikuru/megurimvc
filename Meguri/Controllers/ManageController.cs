@@ -31,6 +31,7 @@ namespace Meguri.Controllers {
         private readonly IStringLocalizer<SharedResource> _localizer;
         private readonly ApplicationDbContext _context;
         private readonly IR2StorageService _r2StorageService;
+        private readonly IImageProcessingService _imageProcessingService;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
@@ -43,7 +44,9 @@ namespace Meguri.Controllers {
           UrlEncoder urlEncoder,
           IStringLocalizer<SharedResource> localizer,
           ApplicationDbContext context,
-          IR2StorageService r2StorageService) {
+          IR2StorageService r2StorageService,
+          IImageProcessingService imageProcessingService) {
+            _imageProcessingService = imageProcessingService;
             _context = context;
             _r2StorageService = r2StorageService;
             _userManager = userManager;
@@ -57,12 +60,21 @@ namespace Meguri.Controllers {
         [TempData]
         public string StatusMessage { get; set; }
 
+        // 存在しないユーザーの認証Cookieが残っている場合は、サインアウトしてログイン画面へ戻す
+        private async Task<IActionResult> SignOutAndRedirectToLoginAsync() {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(AccountController.Login), "Account");
+        }
+
         [HttpGet]
         public async Task<IActionResult> Index() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
+
+            var urls = user.ExternalUrls.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).Take(5).Cast<string?>().ToList();
+            while (urls.Count < 5) urls.Add(null);
 
             var model = new IndexViewModel {
                 Username = user.UserName,
@@ -71,6 +83,10 @@ namespace Meguri.Controllers {
                 DateOfBirth = user.DateOfBirth,
                 Bio = user.Bio,
                 IsEmailConfirmed = user.EmailConfirmed,
+                IsProfilePublic = user.IsProfilePublic,
+                AvatarImageId = user.ActiveAvatarImageId,
+                HeaderImageId = user.HeaderImageId,
+                ExternalUrls = urls,
                 StatusMessage = StatusMessage
             };
 
@@ -80,13 +96,31 @@ namespace Meguri.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(IndexViewModel model) {
-            if (!ModelState.IsValid) {
-                return View(model);
-            }
-
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
+            }
+
+            model.AvatarImageId = user.ActiveAvatarImageId;
+            model.HeaderImageId = user.HeaderImageId;
+
+            var urls = (model.ExternalUrls ?? new List<string?>())
+                .Select(u => u?.Trim())
+                .Where(u => !string.IsNullOrEmpty(u))
+                .Cast<string>()
+                .ToList();
+            if (urls.Count > 5) {
+                ModelState.AddModelError(nameof(model.ExternalUrls), "URLは最大5個までです。");
+            }
+            foreach (var u in urls) {
+                if (u.Length > 500 || !Uri.TryCreate(u, UriKind.Absolute, out var uri) || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)) {
+                    ModelState.AddModelError(nameof(model.ExternalUrls), $"URLの形式が正しくありません: {u}");
+                }
+            }
+            if (!ModelState.IsValid) {
+                model.ExternalUrls ??= new List<string?>();
+                while (model.ExternalUrls.Count < 5) model.ExternalUrls.Add(null);
+                return View(model);
             }
 
             bool isChanged = false;
@@ -124,6 +158,42 @@ namespace Meguri.Controllers {
                 isChanged = true;
             }
 
+            if (user.IsProfilePublic != model.IsProfilePublic) {
+                user.IsProfilePublic = model.IsProfilePublic;
+                isUserModified = true;
+                isChanged = true;
+            }
+
+            var joinedUrls = string.Join('\n', urls);
+            if (user.ExternalUrls != joinedUrls) {
+                user.ExternalUrls = joinedUrls;
+                isUserModified = true;
+                isChanged = true;
+            }
+
+            try {
+                if (model.RemoveAvatar && user.ActiveAvatarImageId != null) { user.ActiveAvatarImageId = null; isUserModified = isChanged = true; }
+                if (model.RemoveHeader && user.HeaderImageId != null) { user.HeaderImageId = null; isUserModified = isChanged = true; }
+                if (model.AvatarFile != null && model.AvatarFile.Length > 0) {
+                    user.ActiveAvatarImageId = (await SaveProfileImageAsync(user, model.AvatarFile)).Id;
+                    isUserModified = isChanged = true;
+                }
+                if (model.HeaderFile != null && model.HeaderFile.Length > 0) {
+                    user.HeaderImageId = (await SaveProfileImageAsync(user, model.HeaderFile)).Id;
+                    isUserModified = isChanged = true;
+                }
+            } catch (Exception ex) {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                while (model.ExternalUrls.Count < 5) model.ExternalUrls.Add(null);
+                return View(model);
+            }
+
+            var imageIds = new[] { user.ActiveAvatarImageId, user.HeaderImageId }.Where(i => i.HasValue).Select(i => i!.Value).ToList();
+            var profileImages = await _context.Images.Where(i => imageIds.Contains(i.Id)).ToListAsync();
+            foreach (var img in profileImages) {
+                img.IsPublic = user.IsProfilePublic;
+            }
+
             if (isUserModified) {
                 var updateResult = await _userManager.UpdateAsync(user);
                 if (!updateResult.Succeeded) {
@@ -144,7 +214,7 @@ namespace Meguri.Controllers {
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -160,7 +230,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> ChangePassword() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
@@ -181,7 +251,7 @@ namespace Meguri.Controllers {
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
@@ -201,7 +271,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> SetPassword() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
@@ -223,7 +293,7 @@ namespace Meguri.Controllers {
 
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
@@ -242,7 +312,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> ExternalLogins() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var model = new ExternalLoginsViewModel { CurrentLogins = await _userManager.GetLoginsAsync(user) };
@@ -271,7 +341,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> LinkLoginCallback() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var info = await _signInManager.GetExternalLoginInfoAsync(user.Id);
@@ -296,7 +366,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> RemoveLogin(RemoveLoginViewModel model) {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var result = await _userManager.RemoveLoginAsync(user, model.LoginProvider, model.ProviderKey);
@@ -313,7 +383,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> TwoFactorAuthentication() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var model = new TwoFactorAuthenticationViewModel {
@@ -329,7 +399,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Disable2faWarning() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             if (!user.TwoFactorEnabled) {
@@ -344,7 +414,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Disable2fa() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
@@ -360,7 +430,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> EnableAuthenticator() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var model = new EnableAuthenticatorViewModel();
@@ -374,7 +444,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> EnableAuthenticator(EnableAuthenticatorViewModel model) {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             if (!ModelState.IsValid) {
@@ -423,7 +493,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> ResetAuthenticator() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             await _userManager.SetTwoFactorEnabledAsync(user, false);
@@ -437,7 +507,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> GenerateRecoveryCodesWarning() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             if (!user.TwoFactorEnabled) {
@@ -452,7 +522,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> GenerateRecoveryCodes() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             if (!user.TwoFactorEnabled) {
@@ -471,7 +541,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Options() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             var currentCulture = HttpContext.Features.Get<IRequestCultureFeature>()?.RequestCulture.UICulture.Name ?? "ja";
@@ -497,7 +567,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Options(OptionsViewModel model) {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             if (!string.IsNullOrEmpty(model.Culture)) {
@@ -520,11 +590,38 @@ namespace Meguri.Controllers {
             return RedirectToAction(nameof(Options));
         }
 
+
+        private async Task<Image> SaveProfileImageAsync(ApplicationUser user, IFormFile file) {
+            var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
+            var storageKey = $"{user.Id}/{Guid.NewGuid():N}.webp";
+            using var uploadStream = new System.IO.MemoryStream(processed.Data);
+            await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
+
+            var image = new Image {
+                UserId = user.Id,
+                Name = System.IO.Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
+                StorageKey = storageKey,
+                ContentType = processed.ContentType,
+                FileSize = processed.FileSize,
+                Width = processed.Width,
+                Height = processed.Height,
+                Description = string.Empty,
+                Caption = string.Empty,
+                IsPublic = user.IsProfilePublic,
+                IsSexual = false,
+                IsViolence = false
+            };
+            image.UserImages.Add(new UserImage { UserId = user.Id, Image = image });
+            _context.Images.Add(image);
+            await _context.SaveChangesAsync();
+            return image;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Withdraw() {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             return View(new WithdrawViewModel {
@@ -537,7 +634,7 @@ namespace Meguri.Controllers {
         public async Task<IActionResult> Withdraw(WithdrawViewModel model) {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return await SignOutAndRedirectToLoginAsync();
             }
 
             model.HasPassword = await _userManager.HasPasswordAsync(user);
@@ -582,8 +679,10 @@ namespace Meguri.Controllers {
                 .ToList();
 
             user.ActiveAvatarImageId = null;
-            _context.Posts.RemoveRange(posts);
-            _context.Images.RemoveRange(images);
+            user.HeaderImageId = null;
+            user.IsProfilePublic = false;
+            user.ExternalUrls = string.Empty;
+            _context.Posts.RemoveRange(posts);            _context.Images.RemoveRange(images);
 
             // 論理削除（ユーザー名は残し、メールアドレスは再利用可能にする）
             user.IsWithdrawn = true;
