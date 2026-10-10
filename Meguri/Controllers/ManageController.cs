@@ -658,20 +658,10 @@ namespace Meguri.Controllers {
                 .Include(ui => ui.Image)
                 .ToListAsync();
 
-            var images = posts.SelectMany(p => p.PostImages).Select(pi => pi.Image)
-                .Concat(userImages.Select(ui => ui.Image))
-                .Where(i => i != null)
-                .GroupBy(i => i.Id)
-                .Select(g => g.First())
-                .ToList();
-
-            // メッセージで使用されている画像は削除しない
-            var imageIds = images.Select(i => i.Id).ToList();
-            var messageImageIds = await _context.MessageImages
-                .Where(mi => imageIds.Contains(mi.ImageId))
-                .Select(mi => mi.ImageId)
+            // 投稿・プロフィール・ヘッダー・メッセージ添付など、ユーザーがアップロードした全画像
+            var images = await _context.Images
+                .Where(i => i.UserId == user.Id)
                 .ToListAsync();
-            images = images.Where(i => !messageImageIds.Contains(i.Id)).ToList();
 
             var storageKeys = images
                 .Where(i => !string.IsNullOrEmpty(i.StorageKey))
@@ -723,6 +713,12 @@ namespace Meguri.Controllers {
                 } catch (Exception ex) {
                     _logger.LogWarning(ex, "Failed to delete storage file '{Key}' while withdrawing user '{UserId}'.", key, user.Id);
                 }
+            }
+
+            try {
+                await _r2StorageService.DeleteByPrefixAsync($"{user.Id}/");
+            } catch (Exception ex) {
+                _logger.LogWarning(ex, "Failed to delete storage folder for user '{UserId}'.", user.Id);
             }
 
             await _userManager.UpdateSecurityStampAsync(user);
