@@ -2,67 +2,82 @@
 @using System.Security.Claims
 
 @{
-		var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-		var isAuthor = Model.Comment.UserId == currentUserId || User.IsInRole("Admin");
-		var depthClass = Model.Depth == 1 ? "comment-reply-level-1" : (Model.Depth >= 2 ? "comment-reply-level-2" : "");
+	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+	var isAuthor = Model.Comment.UserId == currentUserId || User.IsInRole("Admin");
+	var depthClass = Model.Depth == 1 ? "comment-reply-level-1" : (Model.Depth >= 2 ? "comment-reply-level-2" : "");
 }
 
-<div  id="comment-@Model.Comment.Id">
+<div id="comment-@Model.Comment.Id">
+	<div>
 		<div>
-				<div>
-						<div>
-								<span >>>@Model.Comment.Number</span>
-								@if (Model.Comment.User == null) { <text>User</text> } else { <text>@if (!Model.Comment.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @Model.Comment.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.Comment.User.Id">@Model.Comment.User.UserName</a> }</text> }
-								<span >@Model.Comment.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
-						</div>
+			<div>
+				<span>>>@Model.Comment.Number</span>
+				@if (Model.Comment.User == null) {
+					<text>User</text>
+				} else {
 
-						<div>
-								@if (!Model.Comment.IsDeleted) {
-										<button type="button"  onclick="replyToComment(@Model.Comment.Id, @Model.Comment.Number, '@(Model.Comment.User?.UserName ?? "User")')">
-												↩️ @SharedLocalizer["Comment_Reply"]
-										</button>
-								}
+					<text>@if (!Model.Comment.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+						@Model.Comment.User.UserName
+					} else {
 
-								@if (isAuthor && !Model.Comment.IsDeleted) {
-										<form asp-controller="Comment" asp-action="Delete" asp-route-id="@Model.Comment.Id" method="post"  onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
-												@Html.AntiForgeryToken()
-												<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-												<button type="submit">
-														🗑️
-												</button>
-										</form>
-								}
-						</div>
-				</div>
-
-				@if (Model.Comment.IsDeleted) {
-						<p >@SharedLocalizer["Comment_DeletedText"]</p>
-				}
-				else {
-						<div>@Model.Comment.Text</div>
-
-						<!-- 添付画像 -->
-						@if (Model.Comment.CommentImages.Any()) {
-								<div>
-										@foreach (var ci in Model.Comment.CommentImages) {
-												<a asp-controller="Image" asp-action="Details" asp-route-id="@ci.ImageId">
-														<img src="/Image/File/@ci.ImageId" style="max-height: 120px; object-fit: cover;"  alt="Attached" />
-												</a>
-										}
-								</div>
-						}
-
-						<!-- リアクションバー -->
-						@await Html.PartialAsync("_ReactionButtons", ("Comment", Model.Comment.Id, Model.Comment.Reactions.AsEnumerable()))
-				}
+						<a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.Comment.User.Id">@Model.Comment.User.UserName</a>
+					}
+				</text>
+			}
+			<span>@Model.Comment.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
 		</div>
+
+		<div>
+			@if (!Model.Comment.IsDeleted && Model.Depth >= 3) {
+				<span>@SharedLocalizer["Comment_ReplyLimit"]</span>
+			} else if (!Model.Comment.IsDeleted) {
+				<button type="button" onclick="replyToComment(@Model.Comment.Id, @Model.Comment.Number, '@(Model.Comment.User?.UserName ?? "User")')">
+					↩️ @SharedLocalizer["Comment_ReplyTo", Model.Comment.Number]
+									</button>
+			}
+
+			@if (isAuthor && !Model.Comment.IsDeleted) {
+				<form asp-controller="Comment" asp-action="Delete" asp-route-id="@Model.Comment.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+					<button type="submit">
+						🗑️
+					</button>
+				</form>
+			}
+		</div>
+	</div>
+
+	@if (Model.Comment.IsDeleted) {
+		<p>@SharedLocalizer["Comment_DeletedText"]</p>
+	} else {
+		<div>@Model.Comment.Text</div>
+
+		<!-- 添付画像 -->
+		@if (Model.Comment.CommentImages.Any()) {
+			<div>
+				@foreach (var ci in Model.Comment.CommentImages) {
+					<a href="/Image/File/@ci.ImageId" target="_blank">
+						<img src="/Image/File/@ci.ImageId" style="max-height: 120px; object-fit: cover;" alt="Attached" />
+					</a>
+				}
+			</div>
+		}
+
+		<!-- リアクションバー -->
+		<button type="button" onclick="var p = document.getElementById('reaction-buttons-comment-@Model.Comment.Id'); p.hidden = !p.hidden; this.setAttribute('aria-expanded', !p.hidden);" aria-expanded="false" aria-controls="reaction-buttons-comment-@Model.Comment.Id">@SharedLocalizer["Reaction_React"]</button>
+		<div id="reaction-buttons-comment-@Model.Comment.Id" hidden>
+			@await Html.PartialAsync("_ReactionButtons", ("Comment", Model.Comment.Id, Model.Comment.Reactions.AsEnumerable()))
+		</div>
+	}
+</div>
 </div>
 
 <!-- 子返信（Replies）の再帰表示 -->
 @if (Model.Comment.Replies != null && Model.Comment.Replies.Any()) {
-		<div>
-				@foreach (var reply in Model.Comment.Replies.OrderBy(r => r.CreatedAt)) {
-						@await Html.PartialAsync("_CommentItem", (reply, Model.TargetType, Model.TargetId, Model.Depth + 1))
-				}
-		</div>
+	<div class="comment-replies" style="margin-left: 1.5rem; padding-left: 0.75rem; border-left: 2px solid #ccc;">
+		@foreach (var reply in Model.Comment.Replies.OrderBy(r => r.CreatedAt)) {
+			@await Html.PartialAsync("_CommentItem", (reply, Model.TargetType, Model.TargetId, Model.Depth + 1))
+		}
+	</div>
 }

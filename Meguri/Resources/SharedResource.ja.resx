@@ -1324,4 +1324,7 @@
   <data name="Account_InvalidLoginAttempt" xml:space="preserve">
     <value>ログインに失敗しました。</value>
   </data>
+  <data name="Comment_ReplyLimit" xml:space="preserve">
+    <value>これ以上は返信できません</value>
+  </data>
 </root>

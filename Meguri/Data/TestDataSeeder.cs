@@ -218,9 +218,7 @@ namespace Meguri.Data {
                 FileSize = file.Data.Length,
                 Width = file.Width,
                 Height = file.Height,
-                Description = $"テスト画像 {index}",
-                Caption = $"テスト画像 {index}",
-                IsPublic = true,
+                Alt = file.FileName,
                 CreatedAt = createdAt,
                 UpdatedAt = createdAt
             };

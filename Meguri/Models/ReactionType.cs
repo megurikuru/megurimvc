@@ -6,39 +6,26 @@ namespace Meguri.Models {
         /// ❤️ すき / いいね
         Like = 1,
 
-        /// 🙏 尊い / 神
-        Precious = 2,
-
-        /// 💘 刺さった
-        Heartstruck = 3,
-
         /// 😭 泣けた / エモい
-        Emotional = 4,
-
-        /// 📖 続き待機！
-        WantMore = 5,
+        Emotional = 2,
 
         /// 👏 すごい / 拍手
-        Bravo = 6,
+        Bravo = 3,
 
-        // --- 知的・考察・あいまい・ネタ系 ---
         /// 💡 なるほど（納得・理解）
-        Insight = 10,
+        Insight = 4,
 
         /// 🧐 ほぅ（興味・感銘・関心）
-        Impressed = 11,
-
-        /// 🌱 へぇ / 知見（新しい発見）
-        Learn = 12,
+        Impressed = 5,
 
         /// 👀 読了 / 見たよ（足あと）
-        Seen = 13,
+        Seen = 6 ,
 
         /// 🤔 考えさせられる（深考・考察）
-        Thinking = 14,
+        Thinking = 7,
 
         /// 😂 草 / ｗｗ（ユーモア・ギャグ）
-        Lol = 15
+        Lol = 8
     }
 
 }

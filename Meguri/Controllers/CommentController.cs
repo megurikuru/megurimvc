@@ -16,6 +16,7 @@ namespace Meguri.Controllers {
         private readonly ApplicationDbContext _context;
         private readonly IR2StorageService _r2StorageService;
         private readonly IImageProcessingService _imageProcessingService;
+        private const int MaxReplyDepth = 2;
 
         public CommentController(
             ApplicationDbContext context,
@@ -37,6 +38,22 @@ namespace Meguri.Controllers {
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId)) return Challenge();
+
+            if (parentId.HasValue) {
+                int parentDepth = 0;
+                var currentId = parentId;
+                while (currentId.HasValue && parentDepth <= MaxReplyDepth) {
+                    var grandParentId = await _context.Comments
+                        .Where(c => c.Id == currentId.Value)
+                        .Select(c => c.ParentId)
+                        .FirstOrDefaultAsync();
+                    if (grandParentId.HasValue) parentDepth++;
+                    currentId = grandParentId;
+                }
+                if (parentDepth > MaxReplyDepth) {
+                    return BadRequest();
+                }
+            }
 
             // スレッド内の通し番号を計算
             int nextNumber = 1;
@@ -82,10 +99,7 @@ namespace Meguri.Controllers {
                         ContentType = processed.ContentType,
                         FileSize = processed.FileSize,
                         Width = processed.Width,
-                        Height = processed.Height,
-                        Description = $"Comment >>{nextNumber} attachment",
-                        Caption = string.Empty,
-                        IsPublic = true
+                        Height = processed.Height
                     };
                     img.UserImages.Add(new UserImage {
                         UserId = userId,

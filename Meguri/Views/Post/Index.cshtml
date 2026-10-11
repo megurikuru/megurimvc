@@ -117,7 +117,7 @@ else {
 										@if (post.PostImages.Any()) {
 												<div>
 														@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder)) {
-																<a asp-controller="Image" asp-action="Details" asp-route-id="@pi.ImageId">
+																<a href="/Image/File/@pi.ImageId" target="_blank">
 																		<img src="/Image/File/@pi.ImageId"  style="width: 100px; height: 100px; object-fit: cover;" alt="@pi.Image.Name" />
 																</a>
 														}

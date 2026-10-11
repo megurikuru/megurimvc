@@ -68,7 +68,7 @@
 					@if (msg.MessageImages.Any()) {
 						<div>
 							@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder)) {
-								<a asp-controller="Image" asp-action="Details" asp-route-id="@mi.ImageId">
+								<a href="/Image/File/@mi.ImageId" target="_blank">
 									<img src="/Image/File/@mi.ImageId" style="max-width: 100%; max-height: 150px; object-fit: cover;" alt="" />
 								</a>
 							}

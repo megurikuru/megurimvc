@@ -188,12 +188,6 @@ namespace Meguri.Controllers {
                 return View(model);
             }
 
-            var imageIds = new[] { user.ActiveAvatarImageId, user.HeaderImageId }.Where(i => i.HasValue).Select(i => i!.Value).ToList();
-            var profileImages = await _context.Images.Where(i => imageIds.Contains(i.Id)).ToListAsync();
-            foreach (var img in profileImages) {
-                img.IsPublic = user.IsProfilePublic;
-            }
-
             if (isUserModified) {
                 var updateResult = await _userManager.UpdateAsync(user);
                 if (!updateResult.Succeeded) {
@@ -605,11 +599,7 @@ namespace Meguri.Controllers {
                 FileSize = processed.FileSize,
                 Width = processed.Width,
                 Height = processed.Height,
-                Description = string.Empty,
-                Caption = string.Empty,
-                IsPublic = user.IsProfilePublic,
-                IsSexual = false,
-                IsViolence = false
+                Alt = string.Empty
             };
             image.UserImages.Add(new UserImage { UserId = user.Id, Image = image });
             _context.Images.Add(image);
