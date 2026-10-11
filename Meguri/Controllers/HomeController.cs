@@ -119,10 +119,7 @@ namespace Meguri.Controllers {
                     Fandom = p.Fandom,
                     Reactions = p.Reactions,
                     PostTags = p.PostTags,
-                    PostImages = p.PostImages.Where(pi =>
-                        (!isAuthenticated ? (pi.Image.IsPublic && !pi.Image.IsSexual && !pi.Image.IsViolence) :
-                         !isAdult ? (!pi.Image.IsSexual && !pi.Image.IsViolence) : true)
-                    ).ToList()
+                    PostImages = p.PostImages.ToList()
                 })
                 .ToListAsync();
 

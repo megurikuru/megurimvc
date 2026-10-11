@@ -1032,6 +1032,9 @@
   <data name="Comment_ReplyTo" xml:space="preserve">
     <value>Reply to &gt;&gt;{0}</value>
   </data>
+  <data name="Comment_ReplyLimit" xml:space="preserve">
+    <value>You cannot reply any further. Please create a new post.</value>
+  </data>
   <data name="Comment_DeletedText" xml:space="preserve">
     <value>This comment has been deleted.</value>
   </data>

@@ -179,11 +179,7 @@ namespace Meguri.Controllers {
                                 FileSize = processed.FileSize,
                                 Width = processed.Width,
                                 Height = processed.Height,
-                                Description = model.Name,
-                                Caption = string.Empty,
-                                IsPublic = model.IsPublic,
-                                IsSexual = model.IsSexual,
-                                IsViolence = model.IsViolence
+                                Alt = Path.GetFileNameWithoutExtension(file.FileName)
                             };
                             image.UserImages.Add(new UserImage {
                                 UserId = userId,
@@ -332,11 +328,7 @@ namespace Meguri.Controllers {
                                 FileSize = processed.FileSize,
                                 Width = processed.Width,
                                 Height = processed.Height,
-                                Description = model.Name,
-                                Caption = string.Empty,
-                                IsPublic = model.IsPublic,
-                                IsSexual = model.IsSexual,
-                                IsViolence = model.IsViolence
+                                Alt = Path.GetFileNameWithoutExtension(file.FileName)
                             };
                             image.UserImages.Add(new UserImage {
                                 UserId = userId,

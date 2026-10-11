@@ -348,9 +348,7 @@ namespace Meguri.Controllers {
                                 FileSize = processed.FileSize,
                                 Width = processed.Width,
                                 Height = processed.Height,
-                                Description = "Message Attachment",
-                                Caption = string.Empty,
-                                IsPublic = false
+                                Alt = "Message Attachment"
                             };
                             img.UserImages.Add(new UserImage {
                                 UserId = senderId,

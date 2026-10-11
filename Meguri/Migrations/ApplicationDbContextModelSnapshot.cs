@@ -391,7 +391,7 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Caption")
+                    b.Property<string>("Alt")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -402,7 +402,7 @@ namespace Meguri.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Figcaption")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -411,15 +411,6 @@ namespace Meguri.Migrations
 
                     b.Property<int?>("Height")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsSexual")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsViolence")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -442,11 +433,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("CreatedAt");
 
-                    b.HasIndex("IsPublic");
-
                     b.HasIndex("UserId");
-
-                    b.HasIndex("IsPublic", "CreatedAt");
 
                     b.ToTable("Images");
                 });

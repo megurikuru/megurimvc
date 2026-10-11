@@ -117,7 +117,7 @@
 				<div>
 					@foreach (var pi in Model.PostImages.OrderBy(x => x.DisplayOrder)) {
 						<div>
-							<a asp-controller="Image" asp-action="Details" asp-route-id="@pi.ImageId">
+							<a href="/Image/File/@pi.ImageId" target="_blank">
 								<img src="/Image/File/@pi.ImageId" alt="@pi.Image.Name" />
 							</a>
 							<span>
@@ -146,8 +146,10 @@
 	
 		<!-- リアクションボタン -->
 		<div>
-			<div>@SharedLocalizer["Reaction_React"]</div>
-			@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
+			<button type="button" onclick="var p = document.getElementById('reaction-buttons-panel'); p.hidden = !p.hidden; this.setAttribute('aria-expanded', !p.hidden);" aria-expanded="false" aria-controls="reaction-buttons-panel">@SharedLocalizer["Reaction_React"]</button>
+			<div id="reaction-buttons-panel" hidden>
+				@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
+			</div>
 		</div>
 	</div>
 </div>
