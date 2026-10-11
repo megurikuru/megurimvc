@@ -116,7 +116,7 @@
 														@pt.Post.Name
 												</a>
 										</h3>
-										<small>@pt.Post.CreatedAt.ToString("yyyy/MM/dd")</small>
+										@pt.Post.CreatedAt.ToLocalTime(true)
 								</div>
 								<div>
 										<span class="icon-wrap">

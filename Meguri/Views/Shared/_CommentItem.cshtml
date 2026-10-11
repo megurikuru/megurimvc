@@ -24,7 +24,7 @@
 					}
 				</text>
 			}
-			<span>@Model.Comment.CreatedAt.ToString("yyyy/MM/dd HH:mm")</span>
+			@Model.Comment.CreatedAt.ToLocalTime()
 		</div>
 
 		<div>

@@ -169,3 +169,18 @@ function cancelReply() {
     $('#replyParentId').val('');
     $('#replyNotice').addClass('d-none').empty();
 }
+
+// UTC の <time> 要素をブラウザのタイムゾーン/ロケールで表示
+function localizeTimes() {
+    document.querySelectorAll('time.local-time').forEach(function (el) {
+        const d = new Date(el.getAttribute('datetime'));
+        if (isNaN(d)) return;
+        const opts = el.dataset.format === 'date'
+            ? { year: 'numeric', month: '2-digit', day: '2-digit' }
+            : { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+        el.textContent = d.toLocaleString(navigator.language, opts);
+        el.title = d.toISOString();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', localizeTimes);

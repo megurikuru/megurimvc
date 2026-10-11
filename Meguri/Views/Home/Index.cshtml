@@ -53,7 +53,7 @@
 				@* ファンダム名（未設定時はデフォルト名）と投稿日時 *@
 				<div class="space-between-wrap">
 					<h2>@post.Fandom?.Name</h2>
-					<small>@post.CreatedAt.ToString("yyyy/MM/dd HH:mm")</small>
+					@post.CreatedAt.ToLocalTime()
 				</div>
 
 				@* 投稿タイトル（詳細画面へのリンク） *@
