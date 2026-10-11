@@ -91,6 +91,14 @@ namespace Meguri.Controllers {
             // SQL から Posts のクエリを作成
             var postQuery = _context.Posts.FromSqlRaw(sql, parameters.ToArray());
 
+            // ログイン時は参加している界隈の投稿のみ、
+            if (isAuthenticated) {
+                var currentUserId = _userManager.GetUserId(User);
+                postQuery = postQuery.Where(p => _context.FandomUsers.Any(fu => fu.UserId == currentUserId && fu.FandomId == p.FandomId));
+            } else {
+                postQuery = postQuery.Where(p => p.IsPublic);
+            }
+
             // 2. 総件数取得とページネーションの調整
             var totalCount = await postQuery.CountAsync();
             if (totalCount > 0 && resolvedSkip >= totalCount) {

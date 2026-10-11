@@ -14,6 +14,10 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Globalization;
 using System.Net;
+using System.Threading.Tasks;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.Http;
 
 // ビルダーを作成
 var builder = WebApplication.CreateBuilder(args);
@@ -102,7 +106,43 @@ builder.Services.Configure<ForwardedHeadersOptions>(options => {
     }
 });
 
-// アプリケーションのビルド(サービス登録完了後、リクエスト処理パイプラインを構築するWebApplicationインスタンスを作成)
+// IPアドレス制限(一定時間内のアクセス回数超過で、そのIPを一定時間ブロック)
+var ipRateLimitConf = builder.Configuration.GetSection("IpRateLimiting").Get<IpRateLimitConf>() ?? new IpRateLimitConf();
+var ipBlockList = new IpBlockList();
+if (ipRateLimitConf.Enabled) {
+    var blockDuration = TimeSpan.FromMinutes(Math.Max(1, ipRateLimitConf.BlockMinutes));
+    builder.Services.AddRateLimiter(options => {
+        options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext => {
+            var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            if (ipBlockList.TryGetBlockedUntil(ip, out _)) {
+                // ブロック中は常に拒否
+                return RateLimitPartition.GetFixedWindowLimiter("block:" + ip, _ => new FixedWindowRateLimiterOptions {
+                    PermitLimit = 0,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueLimit = 0
+                });
+            }
+            return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions {
+                // MaxRequests回目のアクセスで制限に達するため、許可数は MaxRequests - 1
+                PermitLimit = Math.Max(1, ipRateLimitConf.MaxRequests - 1),
+                Window = TimeSpan.FromMinutes(Math.Max(1, ipRateLimitConf.WindowMinutes)),
+                QueueLimit = 0
+            });
+        });
+        options.OnRejected = (context, _) => {
+            var ip = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            ipBlockList.Block(ip, blockDuration);
+            if (ipBlockList.TryGetBlockedUntil(ip, out var until)) {
+                var retryAfter = (int)Math.Ceiling((until - DateTimeOffset.UtcNow).TotalSeconds);
+                context.HttpContext.Response.Headers.RetryAfter = Math.Max(retryAfter, 1).ToString();
+            }
+            return ValueTask.CompletedTask;
+        };
+    });
+}
+
+// アプリケーションのビルド(サービス登録完了後
 var app = builder.Build();
 
 var supportedCultures = new[] {
@@ -127,6 +167,10 @@ if (app.Environment.IsDevelopment()) {
     app.UseMigrationsEndPoint();
 } else {
     app.UseExceptionHandler("/Home/Error");
+}
+
+if (ipRateLimitConf.Enabled) {
+    app.UseRateLimiter();
 }
 
 app.UseRequestLocalization(localizationOptions);

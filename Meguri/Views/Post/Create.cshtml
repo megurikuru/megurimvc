@@ -1,7 +1,6 @@
 @model Meguri.Models.PostViewModels.PostCreateViewModel
 @{
 	ViewData["Title"] = SharedLocalizer["Post_CreateNew"];
-	var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
 }
 
 <h4>✏️ @SharedLocalizer["Post_CreateNew"]</h4>
@@ -9,17 +8,7 @@
 <form asp-action="Create" method="post" enctype="multipart/form-data">
 	<div asp-validation-summary="ModelOnly"></div>
 
-	<!-- 界隈選択 -->
-	<div class="attribute-wrap">
-		<label asp-for="FandomId">@SharedLocalizer["Post_SelectFandom"] *</label>
-		<select asp-for="FandomId" required>
-			@foreach (var f in fandoms)
-			{
-				<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
-			}
-		</select>
-		<span asp-validation-for="FandomId"></span>
-	</div>
+	<input asp-for="FandomId" type="hidden" />
 
 	<!-- タイトル -->
 	<div class="attribute-wrap">

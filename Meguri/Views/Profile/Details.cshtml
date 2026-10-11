@@ -57,7 +57,7 @@ else {
 					<a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId">@(post.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value)</a>
 					@if (post.IsSexual) { <span>R-18</span> }
 					@if (post.IsViolence) { <span>R-18G</span> }
-					<small>@post.CreatedAt.ToString("yyyy/MM/dd HH:mm")</small>
+					@post.CreatedAt.ToLocalTime()
 				</div>
 				<h4><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Name</a></h4>
 				<p>@(post.Text.Length > 150 ? post.Text.Substring(0, 150) + "..." : post.Text)</p>
