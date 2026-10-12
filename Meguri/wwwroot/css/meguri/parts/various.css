@@ -1,0 +1,123 @@
+﻿/* 各種パーツ */
+
+.top-link {
+	display: block;
+	width: fit-content;
+	margin: 0 auto;
+}
+
+#qrCode {
+	display: block;
+	width: fit-content;
+	margin: 1rem auto 0;
+	padding: 0.5rem;
+	border: 1px solid var(--color-border);
+}
+
+.user-name {
+	display: block;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: right;
+}
+
+.button-wrap {
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び・中央寄せ）で配置 */
+	padding: 0.5rem 0;
+	justify-content: center;
+	gap: 2rem;
+}
+
+button, .button-like {
+	width: max-content;
+	padding: 0.25rem 0.5rem;
+	cursor: pointer;
+	border: 3px solid var(--color-border);
+	background-color: white;
+	transition: background-color 0.3s ease;
+
+	&:hover {
+		background-color: var(--color-primary-hover);
+		color: white;
+	}
+}
+
+.attribute-wrap {
+	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+	padding: 0.5rem 0;
+
+	& label {
+		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+	}
+}
+
+/* フォーム部品 */
+.attribute-wrap input:not([type="checkbox"]),
+.attribute-wrap select,
+.attribute-wrap textarea {
+	display: block;
+	box-sizing: border-box;
+	margin: 0.25rem 0;
+	padding: 0.5rem;
+	width: 100%;
+	min-height: 44px;
+	font-size: 1rem;
+}
+
+.attribute-wrap button {
+	min-height: 44px;
+	margin-top: 0.25rem;
+}
+
+.check-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	min-height: 44px;
+}
+
+.check-row input {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+.description {
+	font-size: 0.75rem;
+	color: var(--color-text-muted);
+	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+}
+
+#post-list {
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（縦並び column）で配置 */
+	flex-direction: column;
+	gap: 0.5rem;
+	border: 1px dotted gray; /* 開発用 */
+}
+
+.space-between-wrap {
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（両端揃え space-between）で配置 */
+	justify-content: space-between;
+}
+
+/* 界隈のメタ情報 */
+.fandom-meta {
+	display: block flex; /* 自身：ブロック要素 / 子：Flexbox（横並び・上下中央揃え）で配置 */
+	justify-content: flex-end;
+	align-items: center; /* 上下中央揃え */
+	font-size: 0.75rem;
+	gap: 0.75rem;
+	border: 1px dotted red; /* 開発用 */
+	& > div {
+		display: block flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+	/* アイコン */
+	& img.icon {
+		height: 1rem;
+		width: 1rem;
+		border: 1px dotted blue; /* 開発用 */
+	}
+}

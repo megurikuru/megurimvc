@@ -104,15 +104,15 @@ dd {
  * 2. Show the overflow in Edge and IE.
  */
 
-/*hr {
-  box-sizing: content-box;*/ /* 1 */
-  /*height: 0;*/ /* 1 */
-  /*overflow: visible;*/ /* 2 */
-  /*border-top-width: 1px;
+hr {
+  box-sizing: content-box; /* 1 */
+  height: 0; /* 1 */
+  overflow: visible; /* 2 */
+  border-top-width: 1px;
   margin: 0;
   clear: both;
   color: inherit;
-}*/
+}
 
 /**
  * 1. Correct the inheritance and scaling of font size in all browsers.
@@ -224,12 +224,12 @@ iframe {
  * 2. Inherit text-transform from parent.
  */
 
-/*button,
+button,
 input,
 optgroup,
 select,
 textarea {
-  -webkit-appearance: none;  1 
+  -webkit-appearance: none; /* 1 */
   appearance: none;
   vertical-align: middle;
   color: inherit;
@@ -239,8 +239,8 @@ textarea {
   margin: 0;
   border-radius: 0;
   text-align: inherit;
-  text-transform: inherit;  2 
-}*/
+  text-transform: inherit; /* 2 */
+}
 
 /**
  * Correct cursors for clickable elements.

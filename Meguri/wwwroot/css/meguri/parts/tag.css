@@ -1,0 +1,39 @@
+﻿/* Tag/Index */
+.tag-page {
+	padding: 16px;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.tag-page h2 {
+	font-size: 1.25rem;
+	margin-bottom: 4px;
+}
+
+.tag-page p {
+	color: #666;
+	margin: 0 0 16px;
+}
+
+.tag-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	padding: 12px;
+	margin-bottom: 8px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+}
+
+.tag-item a {
+	min-height: 24px;
+}
+
+.tag-item span {
+	margin-left: 8px;
+	padding: 2px 8px;
+	border-radius: 12px;
+	background: #eee;
+	font-size: 0.85rem;
+}
