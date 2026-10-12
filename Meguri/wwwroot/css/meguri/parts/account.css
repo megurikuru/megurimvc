@@ -1,0 +1,66 @@
+﻿/* アカウント */
+.account {
+	display: block grid;
+	gap: 1rem;
+	padding: 1rem 0.5rem;
+
+	& > div {
+		display: block grid;
+		gap: 0.25rem;
+	}
+
+	& input, & textarea {
+		width: 100%;
+		padding: 0.75rem;
+		font-size: 1rem;
+		box-sizing: border-box;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+	}
+
+	& code {
+		display: block flow;
+	}
+
+	& a {
+		display: block flow;
+		padding: 0.75rem;
+		text-align: center;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+	}
+
+	& input[type="checkbox"], & input[type="radio"] {
+		width: auto;
+		margin-right: 0.5rem;
+	}
+
+	& .option-row {
+		display: block flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	& .option-row label {
+		margin: 0;
+	}
+
+	& .birth {
+		display: block flex;
+		align-items: center;
+		gap: 0.25rem;
+
+		& input {
+			flex: 1;
+			min-width: 0;
+			text-align: center;
+		}
+	}
+
+	& button[type="submit"] {
+		display: block flow;
+		margin: 0 auto;
+		padding: 0.75rem 2rem;
+		font-size: 1rem;
+	}
+}

@@ -1,0 +1,38 @@
+﻿/* パンくずリスト */
+.breadcrumb-nav {
+	/* リスト全体のレイアウト */
+	ol {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	/* 各要素（li） */
+	li {
+		margin: 0;
+		/* 隣接するliの前に区切り文字（/）を挿入 */
+		& + li::before {
+			content: "/";
+			margin: 0 0.5rem;
+			color: #888888;
+		}
+	}
+	/* リンクの基本スタイル */
+	a {
+		color: #0066cc;
+		text-decoration: none;
+		transition: color 0.2s ease, text-decoration 0.2s ease;
+
+		&:hover {
+			color: #004499;
+			text-decoration: underline;
+		}
+	}
+	/* 現在地（最末尾の要素）のスタイル */
+	[aria-current="page"] {
+		color: #333333;
+		font-weight: bold;
+	}
+}

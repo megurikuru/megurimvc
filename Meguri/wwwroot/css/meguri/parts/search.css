@@ -1,0 +1,24 @@
+﻿/* 検索フォーム */
+form.search {
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び）で配置 */
+	flex-direction: row;
+	gap: 0.5rem;
+	border: 1px solid orange; /* 開発用 */
+
+	& input[type="text"] {
+		flex: 1; /* 残りの横幅いっぱいに広がる */
+		padding: 0.5rem 0.75rem;
+		border: 1px solid purple; /* 開発用 */
+	}
+
+	& a {
+		display: inline flow-root; /* 自身：インラインとしてテキストの流れに並ぶ / 子：BFC（独自ブロック文脈）を形成 */
+	}
+
+	& button, & a {
+		width: max-content;
+		white-space: nowrap; /* テキストの意図しない改行を防止 */
+		padding: 0.5rem 0.75rem;
+		border: 1px solid var(--color-border);
+	}
+}
