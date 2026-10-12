@@ -81,8 +81,8 @@ namespace Meguri.Controllers {
                     p.""Text"" LIKE @search OR
                     t.""TagText"" LIKE @search OR
                     i.""Name"" LIKE @search OR
-                    i.""Caption"" LIKE @search OR
-                    i.""Description"" LIKE @search OR
+                    i.""Alt"" LIKE @search OR
+                    i.""Figcaption"" LIKE @search OR
                     itg.""TagText"" LIKE @search
                 )";
 

@@ -48,7 +48,6 @@ main {
 	border: 1px dotted blue; /* 開発用 */
 }
 
-
 footer {
 	margin: 0 auto;
 	font-size: 0.75rem;
@@ -58,7 +57,6 @@ footer {
 /* ------------------------------------------
     基本要素
    ------------------------------------------ */
-
 a {
 	color: var(--color-primary);
 }
@@ -95,22 +93,21 @@ ol {
 	}
 }
 
-#qrCode {
-	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
-	margin: 1rem auto 0;
-	padding: 0.5rem;
+#qrCode, .top-link {
+	display: block;
 	width: fit-content;
 	border: 1px solid var(--color-border);
 }
 
+#qrCode {
+	margin: 1rem auto 0;
+	padding: 0.5rem;
+}
 /* ------------------------------------------
     独自レイアウト要素
    ------------------------------------------ */
 .top-link {
-	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
 	margin: 0 auto;
-	width: fit-content;
-	border: 1px solid var(--color-border);
 }
 
 .user-name {
@@ -151,7 +148,6 @@ button, .button-like {
 		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
 	}
 }
-
 /* フォーム部品（スマホ向け：幅いっぱい・タップしやすい高さ・iOSのズーム防止で16px） */
 .attribute-wrap input:not([type="checkbox"]),
 .attribute-wrap select,
@@ -187,26 +183,22 @@ button, .button-like {
 	color: var(--color-text-muted);
 	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
 }
-
 /* ------------------------------------------
     パーツ
    ------------------------------------------ */
-
-
 /* ナビゲーション */
+:is(.nav-grid, .nav-sub) > a {
+	display: block;
+	margin: 0 auto;
+	padding: 0.75rem 1rem;
+	width: fit-content;
+	font-weight: bold;
+	border: 1px solid orange; /* 開発用 */
+}
+
 .nav-grid {
 	font-size: 1rem;
 	border: 1px solid red; /* 開発用 */
-
-	& > a {
-		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
-		margin: 0 auto;
-		padding: 0.75rem 1rem;
-		width: fit-content;
-		font-weight: bold;
-		border: 1px solid orange; /* 開発用 */
-	}
-
 	& ul {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（2均等列）で配置 */
 		grid-template-columns: 1fr 1fr;
@@ -237,21 +229,10 @@ button, .button-like {
 
 .nav-sub {
 	border: 1px solid purple; /* 開発用 */
-
-	& > a {
-		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
-		margin: 0 auto;
-		padding: 0.75rem 1rem;
-		width: fit-content;
-		font-weight: bold;
-		border: 1px solid orange; /* 開発用 */
-	}
-
 	& div {
 		padding: 0.5rem 0;
 	}
 }
-
 /* パンくずリスト */
 .breadcrumb-nav {
 	/* リスト全体のレイアウト */
@@ -290,7 +271,6 @@ button, .button-like {
 		font-weight: bold;
 	}
 }
-
 /* 検索フォーム */
 form.search {
 	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び）で配置 */
@@ -315,7 +295,6 @@ form.search {
 		border: 1px solid var(--color-border);
 	}
 }
-
 /* アカウント管理 */
 .account {
 	display: block grid; /* 自身：ブロック要素 / 子：Grid（縦1列）で配置 */
@@ -327,19 +306,10 @@ form.search {
 		gap: 0.25rem;
 	}
 
-	& input {
+	& input, & textarea {
 		width: 100%;
 		padding: 0.75rem;
 		font-size: 1rem; /* 16px未満だとiOSで自動ズームされるため */
-		box-sizing: border-box;
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-sm);
-	}
-
-	& textarea {
-		width: 100%;
-		padding: 0.75rem;
-		font-size: 1rem;
 		box-sizing: border-box;
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
@@ -409,7 +379,6 @@ form.search {
 	grid-template-columns: 1fr 1fr 1fr;
 	text-align: center;
 	border: 1px dotted gray; /* 開発用 */
-
 	& > * {
 		align-self: center;
 	}
@@ -418,22 +387,13 @@ form.search {
 		justify-self: end;
 	}
 }
-
-#image-list {
-	border: 1px dotted gray; /* 開発用 */
-}
-
-#image-list-pagination {
-	border: 1px dotted gray; /* 開発用 */
-}
-
 /* 界隈のメタ情報 */
 .fandom-meta {
 	display: block flex; /* 自身：ブロック要素 / 子：Flexbox（横並び・上下中央揃え）で配置 */
 	justify-content: flex-end;
 	align-items: center; /* 上下中央揃え */
 	font-size: 0.75rem;
-	gap:  0.75rem;
+	gap: 0.75rem;
 	border: 1px dotted red; /* 開発用 */
 	& > div {
 		display: block flex;
@@ -447,7 +407,6 @@ form.search {
 		border: 1px dotted blue; /* 開発用 */
 	}
 }
-
 /* Finderでのフォルダや投稿の表示 */
 .finder-item-wrap {
 	display: block flex; /* 2値構文: 外側=ブロック, 内側=Flexbox */
@@ -457,7 +416,6 @@ form.search {
 	align-items: center; /* 上下中央揃え */
 	gap: 0.5rem; /* アイコンとテキストの間隔 */
 	border: 1px dotted red; /* 開発用 */
-
 	/* アイコン */
 	& img.icon {
 		height: 1.25rem;
@@ -466,7 +424,7 @@ form.search {
 	}
 
 	& span.with-thumb {
-		width: calc(100% - 1.75rem); 
+		width: calc(100% - 1.75rem);
 		border: 1px dotted green; /* 開発用 */
 	}
 
@@ -474,7 +432,6 @@ form.search {
 		width: 100%; /* 横幅いっぱいに広げる */
 		border: 1px dotted orange; /* 開発用 */
 	}
-
 	/* サムネイル */
 	& img.thumb {
 		display: block; /* ブロック */
@@ -488,10 +445,41 @@ form.search {
 }
 
 /* Tag/Index */
-.tag-page { padding: 16px; max-width: 600px; margin: 0 auto; }
-.tag-page h2 { font-size: 1.25rem; margin-bottom: 4px; }
-.tag-page p { color: #666; margin: 0 0 16px; }
-.tag-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 8px; }
-.tag-item a { min-height: 24px; }
-.tag-item span { margin-left: 8px; padding: 2px 8px; border-radius: 12px; background: #eee; font-size: 0.85rem; }
+.tag-page {
+	padding: 16px;
+	max-width: 600px;
+	margin: 0 auto;
+}
 
+.tag-page h2 {
+	font-size: 1.25rem;
+	margin-bottom: 4px;
+}
+
+.tag-page p {
+	color: #666;
+	margin: 0 0 16px;
+}
+
+.tag-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+	padding: 12px;
+	margin-bottom: 8px;
+	border: 1px solid #ddd;
+	border-radius: 8px;
+}
+
+.tag-item a {
+	min-height: 24px;
+}
+
+.tag-item span {
+	margin-left: 8px;
+	padding: 2px 8px;
+	border-radius: 12px;
+	background: #eee;
+	font-size: 0.85rem;
+}
