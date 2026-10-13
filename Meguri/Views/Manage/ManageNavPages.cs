@@ -19,6 +19,8 @@ namespace Meguri.Views.Manage
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
+        public static string Passkeys => "Passkeys";
+
         public static string Options => "Options";
 
         public static string Withdraw => "Withdraw";

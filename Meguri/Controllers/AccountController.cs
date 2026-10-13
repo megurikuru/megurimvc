@@ -94,6 +94,46 @@ namespace Meguri.Controllers {
             return View(model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PasskeyRequestOptions() {
+            var optionsJson = await _signInManager.MakePasskeyRequestOptionsAsync(user: null);
+            return Content(optionsJson, "application/json");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PasskeyLogin(string credentialJson, bool rememberMe = false, string returnUrl = null) {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (string.IsNullOrEmpty(credentialJson)) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Login_PasskeyFailed"]);
+                return View(nameof(Login), new LoginViewModel());
+            }
+
+            var assertion = await _signInManager.PerformPasskeyAssertionAsync(credentialJson);
+            var user = assertion.Succeeded ? assertion.User : null;
+            if (user == null || user.IsWithdrawn) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Login_PasskeyFailed"]);
+                return View(nameof(Login), new LoginViewModel());
+            }
+
+            if (!await _signInManager.CanSignInAsync(user)) {
+                ModelState.AddModelError(string.Empty, "E-Mailアドレスの確認が完了していません。登録時に送信された確認メールをご確認ください。");
+                return View(nameof(Login), new LoginViewModel());
+            }
+            if (await _userManager.IsLockedOutAsync(user)) {
+                return RedirectToAction(nameof(Lockout));
+            }
+
+            // サインカウント等を更新してからサインイン（Passkeyは多要素認証済みのため2FAは求めない）
+            await _userManager.AddOrUpdatePasskeyAsync(user, assertion.Passkey);
+            await _signInManager.SignInAsync(user, rememberMe);
+            _logger.LogInformation("User logged in with a passkey.");
+            return RedirectToLocal(returnUrl);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> LoginWith2fa(bool rememberMe, string returnUrl = null) {

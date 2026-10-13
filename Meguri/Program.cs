@@ -41,6 +41,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(options => {
         options.SignIn.RequireConfirmedEmail = true;
+        options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;   // Passkeyテーブルを使用
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();                    // パスワードリセット、2要素認証用のトークン生成機能
