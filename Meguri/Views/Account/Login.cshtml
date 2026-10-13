@@ -45,8 +45,16 @@
 			</p>
 		</div>
 	</form>
+	<form class="account" asp-action="PasskeyLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+		<input type="hidden" name="credentialJson" />
+		<div>
+			<button type="button" data-passkey="login" data-options-url="@Url.Action("PasskeyRequestOptions", "Account")" data-error-text="@SharedLocalizer["Account_Login_PasskeyFailed"]">@SharedLocalizer["Account_Login_PasskeyButton"]</button>
+			<span data-passkey-message></span>
+		</div>
+	</form>
 </section>
 
 @section Scripts {
+	<script src="~/js/passkey.js" asp-append-version="true"></script>
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

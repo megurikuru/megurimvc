@@ -1,0 +1,40 @@
+@model PasskeysViewModel
+@{
+	ViewData["Title"] = SharedLocalizer["Manage_Passkeys_Title"];
+	ViewData.AddActivePage(ManageNavPages.Passkeys);
+}
+
+<h2>@ViewData["Title"]</h2>
+@await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
+
+<h3>@SharedLocalizer["Manage_Passkeys_Registered"]</h3>
+@if (Model.Passkeys.Count == 0) {
+	<p>@SharedLocalizer["Manage_Passkeys_None"]</p>
+} else {
+	foreach (var passkey in Model.Passkeys) {
+		<form asp-action="RemovePasskey" method="post" class="account">
+			<div>
+				<strong>@passkey.Name</strong>
+				<span>@passkey.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</span>
+				<input type="hidden" name="id" value="@passkey.Id" />
+				<button type="submit">@SharedLocalizer["Manage_Passkeys_Remove"]</button>
+			</div>
+		</form>
+	}
+}
+
+<form asp-action="AddPasskey" method="post" class="account">
+	<input type="hidden" name="credentialJson" />
+	<div>
+		<label for="passkeyName">@SharedLocalizer["Manage_Passkeys_Name"]</label>
+		<input id="passkeyName" name="name" maxlength="100" />
+	</div>
+	<div>
+		<button type="button" data-passkey="create" data-options-url="@Url.Action("PasskeyCreationOptions", "Manage")" data-error-text="@SharedLocalizer["Manage_Passkeys_Failed"]">@SharedLocalizer["Manage_Passkeys_Add"]</button>
+		<span data-passkey-message></span>
+	</div>
+</form>
+
+@section Scripts {
+	<script src="~/js/passkey.js" asp-append-version="true"></script>
+}

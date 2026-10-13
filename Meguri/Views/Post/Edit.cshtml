@@ -1,38 +1,38 @@
 ﻿@model Meguri.Models.PostViewModels.PostEditViewModel
 @{
 	ViewData["Title"] = SharedLocalizer["Post_EditTitle"];
-	var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
 }
 
 
+<style>
+	.post-edit input:not([type=checkbox]):not([type=hidden]), .post-edit select, .post-edit textarea { width: 100%; box-sizing: border-box; font-size: 16px; padding: 8px; }
+	.post-edit button, .post-edit a { min-height: 44px; min-width: 44px; padding: 8px 12px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+	.post-edit input[type=checkbox] { width: 24px; height: 24px; vertical-align: middle; }
+	.post-edit > div { margin-bottom: 1rem; }
+	@@media (max-width: 576px) {
+		.post-edit [type=submit] { width: 100%; margin-top: 8px; }
+	}
+</style>
+
 <h1>@SharedLocalizer["Post_EditTitle"]</h1>
 <div>
-	<form asp-action="Edit" method="post" enctype="multipart/form-data">
+	<form asp-action="Edit" method="post" enctype="multipart/form-data" class="post-edit">
 		<input type="hidden" asp-for="Id" />
 		<div asp-validation-summary="ModelOnly"></div>
 
-		<!-- 界隈選択 -->
-		<div>
-			<label asp-for="FandomId">@SharedLocalizer["Post_SelectFandom"] <span>*</span></label>
-			<select asp-for="FandomId" required>
-				@foreach (var f in fandoms) {
-					<option value="@f.Id">@f.Name @(f.ParentFandomId.HasValue ? "(子界隈)" : "")</option>
-				}
-			</select>
-			<span asp-validation-for="FandomId"></span>
-		</div>
+		<input type="hidden" asp-for="FandomId" />
 
 		<!-- タイトル -->
 		<div>
-			<label asp-for="Name">@SharedLocalizer["Post_PostName"] <span>*</span></label>
-			<input asp-for="Name" required />
+			<label asp-for="Name">@SharedLocalizer["Post_PostName"]</label>
+			<input asp-for="Name" />
 			<span asp-validation-for="Name"></span>
 		</div>
 
 		<!-- 本文 -->
 		<div>
-			<label asp-for="Text">@SharedLocalizer["Post_PostText"] <span>*</span></label>
-			<textarea asp-for="Text" rows="6" required></textarea>
+			<label asp-for="Text">@SharedLocalizer["Post_PostText"]</label>
+			<textarea asp-for="Text" rows="6"></textarea>
 			<span asp-validation-for="Text"></span>
 		</div>
 

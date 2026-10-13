@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Buffers.Text;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -64,6 +65,76 @@ namespace Meguri.Controllers {
         private async Task<IActionResult> SignOutAndRedirectToLoginAsync() {
             await _signInManager.SignOutAsync();
             return RedirectToAction(nameof(AccountController.Login), "Account");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Passkeys() {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                return await SignOutAndRedirectToLoginAsync();
+            }
+            var passkeys = await _userManager.GetPasskeysAsync(user);
+            var model = new PasskeysViewModel {
+                StatusMessage = StatusMessage,
+                Passkeys = passkeys.Select(p => new PasskeyItem {
+                    Id = Base64Url.EncodeToString(p.CredentialId),
+                    Name = p.Name,
+                    CreatedAt = p.CreatedAt
+                }).ToList()
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PasskeyCreationOptions() {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                return Unauthorized();
+            }
+            var userId = await _userManager.GetUserIdAsync(user);
+            var userName = await _userManager.GetUserNameAsync(user) ?? "User";
+            var optionsJson = await _signInManager.MakePasskeyCreationOptionsAsync(new PasskeyUserEntity {
+                Id = userId,
+                Name = userName,
+                DisplayName = userName
+            });
+            return Content(optionsJson, "application/json");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddPasskey(string credentialJson, string name) {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                return await SignOutAndRedirectToLoginAsync();
+            }
+            if (string.IsNullOrEmpty(credentialJson)) {
+                StatusMessage = _localizer["Manage_Passkeys_Failed"].Value;
+                return RedirectToAction(nameof(Passkeys));
+            }
+            var attestation = await _signInManager.PerformPasskeyAttestationAsync(credentialJson);
+            if (!attestation.Succeeded) {
+                _logger.LogWarning("Passkey registration failed: {Error}", attestation.Failure?.Message);
+                StatusMessage = _localizer["Manage_Passkeys_Failed"].Value;
+                return RedirectToAction(nameof(Passkeys));
+            }
+            attestation.Passkey.Name = string.IsNullOrWhiteSpace(name) ? _localizer["Manage_Passkeys_DefaultName"].Value : name.Trim();
+            var result = await _userManager.AddOrUpdatePasskeyAsync(user, attestation.Passkey);
+            StatusMessage = result.Succeeded ? _localizer["Manage_Passkeys_Added"].Value : _localizer["Manage_Passkeys_Failed"].Value;
+            return RedirectToAction(nameof(Passkeys));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemovePasskey(string id) {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                return await SignOutAndRedirectToLoginAsync();
+            }
+            var result = await _userManager.RemovePasskeyAsync(user, Base64Url.DecodeFromChars(id));
+            StatusMessage = result.Succeeded ? _localizer["Manage_Passkeys_Removed"].Value : _localizer["Manage_Passkeys_Failed"].Value;
+            return RedirectToAction(nameof(Passkeys));
         }
 
         [HttpGet]

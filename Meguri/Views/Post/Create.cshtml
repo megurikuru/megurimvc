@@ -12,15 +12,15 @@
 
 	<!-- タイトル -->
 	<div class="attribute-wrap">
-		<label asp-for="Name">@SharedLocalizer["Post_PostName"] *</label>
-		<input asp-for="Name" placeholder="投稿のタイトル" required />
+		<label asp-for="Name">@SharedLocalizer["Post_PostName"]</label>
+		<input asp-for="Name" placeholder="投稿のタイトル" />
 		<span asp-validation-for="Name"></span>
 	</div>
 
 	<!-- 本文 -->
 	<div class="attribute-wrap">
-		<label asp-for="Text">@SharedLocalizer["Post_PostText"] *</label>
-		<textarea asp-for="Text" rows="6" placeholder="作品の本文、感想、考察など" required></textarea>
+		<label asp-for="Text">@SharedLocalizer["Post_PostText"]</label>
+		<textarea asp-for="Text" rows="6" placeholder="作品の本文、感想、考察など"></textarea>
 		<span asp-validation-for="Text"></span>
 	</div>
 

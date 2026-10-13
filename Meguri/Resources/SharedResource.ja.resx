@@ -1032,6 +1032,9 @@
   <data name="Comment_ReplyTo" xml:space="preserve">
     <value>&gt;&gt; {0} に返信</value>
   </data>
+  <data name="Comment_ReplyLimit" xml:space="preserve">
+    <value>これ以上は返信できません</value>
+  </data>
   <data name="Comment_DeletedText" xml:space="preserve">
     <value>このコメントは削除されました。</value>
   </data>
@@ -1210,19 +1213,19 @@
     <value>リアクションを追加</value>
   </data>
   <data name="Manage_Nav_Withdraw" xml:space="preserve">
-    <value>退会</value>
+    <value>アカウント削除</value>
   </data>
   <data name="Manage_Withdraw_Title" xml:space="preserve">
-    <value>退会</value>
+    <value>アカウント削除</value>
   </data>
   <data name="Manage_Withdraw_Description" xml:space="preserve">
-    <value>退会すると、メールアドレス、投稿、投稿画像、プロフィール画像が削除されます。メッセージとユーザー名は残ります。この操作は取り消せません。</value>
+    <value>アカウントを削除すると、メールアドレス、投稿、投稿画像、プロフィール画像が削除されます。メッセージとユーザー名は残ります。この操作は取り消せません。</value>
   </data>
   <data name="Manage_Withdraw_Confirm" xml:space="preserve">
-    <value>本当に退会しますか？</value>
+    <value>本当にアカウントを削除しますか？</value>
   </data>
   <data name="Manage_Withdraw_Button" xml:space="preserve">
-    <value>退会する</value>
+    <value>アカウントを削除する</value>
   </data>
   <data name="Manage_Withdraw_InvalidPassword" xml:space="preserve">
     <value>パスワードが正しくありません。</value>
@@ -1324,7 +1327,43 @@
   <data name="Account_InvalidLoginAttempt" xml:space="preserve">
     <value>ログインに失敗しました。</value>
   </data>
-  <data name="Comment_ReplyLimit" xml:space="preserve">
-    <value>これ以上は返信できません</value>
+  <data name="Account_Login_PasskeyButton" xml:space="preserve">
+    <value>パスキーでログイン</value>
+  </data>
+  <data name="Account_Login_PasskeyFailed" xml:space="preserve">
+    <value>パスキーでのログインに失敗しました。</value>
+  </data>
+  <data name="Manage_Nav_Passkeys" xml:space="preserve">
+    <value>パスキー</value>
+  </data>
+  <data name="Manage_Passkeys_Title" xml:space="preserve">
+    <value>パスキー</value>
+  </data>
+  <data name="Manage_Passkeys_Registered" xml:space="preserve">
+    <value>登録済みのパスキー</value>
+  </data>
+  <data name="Manage_Passkeys_None" xml:space="preserve">
+    <value>登録済みのパスキーはありません。</value>
+  </data>
+  <data name="Manage_Passkeys_Name" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="Manage_Passkeys_Add" xml:space="preserve">
+    <value>パスキーを追加</value>
+  </data>
+  <data name="Manage_Passkeys_Remove" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Manage_Passkeys_DefaultName" xml:space="preserve">
+    <value>パスキー</value>
+  </data>
+  <data name="Manage_Passkeys_Added" xml:space="preserve">
+    <value>パスキーを追加しました。</value>
+  </data>
+  <data name="Manage_Passkeys_Removed" xml:space="preserve">
+    <value>パスキーを削除しました。</value>
+  </data>
+  <data name="Manage_Passkeys_Failed" xml:space="preserve">
+    <value>パスキーの操作に失敗しました。</value>
   </data>
 </root>
