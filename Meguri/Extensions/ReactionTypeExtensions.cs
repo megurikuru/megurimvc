@@ -14,12 +14,12 @@ namespace Meguri.Extensions {
             ReactionType.Like => "❤️",
             ReactionType.Emotional => "😭",
             ReactionType.Bravo => "👏",
-            ReactionType.Insight => "💡",
+            ReactionType.Insight => "😊",
             ReactionType.Impressed => "🧐",
-            ReactionType.Seen => "👀",
-            ReactionType.Thinking => "🤔",
+            ReactionType.Seen => "🙇",
             ReactionType.Lol => "😂",
-            _ => "👍"
+            ReactionType.Thinking => "🙆",
+            _ => string.Empty
         };
 
         /// <summary>
