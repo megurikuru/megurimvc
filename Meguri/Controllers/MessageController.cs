@@ -86,7 +86,7 @@ namespace Meguri.Controllers {
                     Id = conv.Id,
                     Title = title,
                     IsGroup = conv.IsGroup,
-                    LastMessageText = lastMsg?.Text ?? "(メッセージなし)",
+                    LastMessageText = lastMsg == null ? "(メッセージなし)" : (lastMsg.IsDeleted ? "削除されたメッセージ" : lastMsg.Body),
                     LastMessageTime = lastMsg?.CreatedAt ?? conv.CreatedAt,
                     MemberNames = conv.Members.Select(m => m.User?.UserName ?? "User").ToList()
                 });
@@ -138,40 +138,65 @@ namespace Meguri.Controllers {
                 displayTitle = otherMember?.User == null ? "ダイレクトメッセージ" : otherMember.User.UserName + (otherMember.User.IsWithdrawn ? "（存在しないユーザー）" : "");
             }
 
-            const int pageSize = 80;
+            const int pageSize = 10;
             const int halfWindow = pageSize / 2;
 
             var baseQuery = _context.Messages.Where(m => m.ConversationId == id);
-            var totalCount = await baseQuery.CountAsync();
+            var headers = await baseQuery
+                .Select(m => new { m.Id, m.ParentMessageId, m.CreatedAt })
+                .ToListAsync();
+
+            var rootOf = new Dictionary<long, long>();
+            var byId = headers.ToDictionary(h => h.Id);
+            long FindRoot(long messageId) {
+                if (rootOf.TryGetValue(messageId, out var cached)) return cached;
+                var current = messageId;
+                var guard = 0;
+                while (byId[current].ParentMessageId is long p && byId.ContainsKey(p) && guard++ < 10000) {
+                    current = p;
+                }
+                rootOf[messageId] = current;
+                return current;
+            }
+            var threads = headers
+                .GroupBy(h => FindRoot(h.Id))
+                .Select(g => new { RootId = g.Key, Latest = g.Max(x => x.CreatedAt) })
+                .OrderByDescending(t => t.Latest)
+                .ToList();
+            var totalCount = threads.Count;
 
             int resolvedSkip;
             if (skip.HasValue) {
                 resolvedSkip = skip.Value;
             } else if (date.HasValue) {
-                var anchorUtc = DateTime.SpecifyKind(date.Value.Date, DateTimeKind.Utc);
-                var beforeCount = await baseQuery.CountAsync(m => m.CreatedAt < anchorUtc);
-                resolvedSkip = Math.Max(0, beforeCount - halfWindow);
+                var anchorUtc = DateTime.SpecifyKind(date.Value.Date, DateTimeKind.Utc).AddDays(1);
+                var newerCount = threads.Count(t => t.Latest >= anchorUtc);
+                resolvedSkip = Math.Max(0, newerCount - halfWindow);
             } else {
-                resolvedSkip = Math.Max(0, totalCount - pageSize);
+                resolvedSkip = 0;
             }
 
-            if (totalCount == 0) {
+            if (totalCount == 0 || resolvedSkip < 0) {
                 resolvedSkip = 0;
             } else if (resolvedSkip >= totalCount) {
                 resolvedSkip = Math.Max(0, totalCount - pageSize);
             }
 
-            var messages = await baseQuery
+            var pageRootIds = threads.Skip(resolvedSkip).Take(pageSize).Select(t => t.RootId).ToHashSet();
+            var pageMessageIds = headers.Where(h => pageRootIds.Contains(FindRoot(h.Id))).Select(h => h.Id).ToList();
+
+            var messages = await _context.Messages
+                .Where(m => pageMessageIds.Contains(m.Id))
                 .Include(m => m.Sender)
                 .Include(m => m.MessageImages).ThenInclude(mi => mi.Image)
                 .Include(m => m.Reactions).ThenInclude(r => r.User)
                 .OrderBy(m => m.CreatedAt)
-                .Skip(resolvedSkip)
-                .Take(pageSize)
                 .ToListAsync();
 
+            messages = OrderRepliesUnderParents(messages);
+
             var hasPrevious = resolvedSkip > 0;
-            var hasNext = resolvedSkip + messages.Count < totalCount;
+            var hasNext = resolvedSkip + pageRootIds.Count < totalCount;
 
             var vm = new ChatRoomViewModel {
                 Conversation = conversation,
@@ -227,13 +252,12 @@ namespace Meguri.Controllers {
                     .FirstOrDefaultAsync();
 
                 if (existingConv != null) {
-                    await SendMessageInternal(existingConv.Id, currentUserId, model.InitialMessage, model.ImageFiles);
-                    return RedirectToAction(nameof(Details), new { id = existingConv.Id });
-                }
+                    await SendMessageInternal(existingConv.Id, currentUserId, model.InitialMessage, model.ImageFiles, model.Subject);
+                    return RedirectToAction(nameof(Details), new { id = existingConv.Id });                }
             }
 
             var conv = new Conversation {
-                Title = model.IsGroup ? (model.Title ?? "グループチャット") : string.Empty,
+                Title = model.IsGroup ? (model.Title ?? "グループメッセージ") : string.Empty,
                 IsGroup = model.IsGroup,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -249,7 +273,7 @@ namespace Meguri.Controllers {
             _context.Conversations.Add(conv);
             await _context.SaveChangesAsync();
 
-            await SendMessageInternal(conv.Id, currentUserId, model.InitialMessage, model.ImageFiles);
+            await SendMessageInternal(conv.Id, currentUserId, model.InitialMessage, model.ImageFiles, model.Subject);
 
             return RedirectToAction(nameof(Details), new { id = conv.Id });
         }
@@ -262,11 +286,13 @@ namespace Meguri.Controllers {
             var message = await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
             if (message == null) return NotFound();
             if (message.SenderId != currentUserId) return Forbid();
+            if (message.IsDeleted) return NotFound();
 
             return View(new EditMessageViewModel {
                 Id = message.Id,
                 ConversationId = message.ConversationId,
-                Text = message.Text
+                Subject = message.Subject,
+                                Body = message.Body
             });
         }
 
@@ -281,23 +307,56 @@ namespace Meguri.Controllers {
             var message = await _context.Messages.FirstOrDefaultAsync(m => m.Id == id);
             if (message == null) return NotFound();
             if (message.SenderId != currentUserId) return Forbid();
+            if (message.IsDeleted) return NotFound();
 
             if (!ModelState.IsValid) {
                 model.ConversationId = message.ConversationId;
                 return View(model);
             }
 
-            message.Text = model.Text;
+            message.Subject = model.Subject ?? string.Empty;
+                        message.Body = model.Body;
             message.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Details), new { id = message.ConversationId });
         }
 
+        // POST: /Message/Delete/5 (メッセージID)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(long id) {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId)) return Challenge();
+
+            var message = await _context.Messages
+                .Include(m => m.MessageImages)
+                .Include(m => m.Reactions)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (message == null) return NotFound();
+            if (message.SenderId != currentUserId) return Forbid();
+
+            var conversationId = message.ConversationId;
+
+            if (!message.IsDeleted) {
+                message.IsDeleted = true;
+                message.Subject = string.Empty;
+                message.Body = string.Empty;
+                message.UpdatedAt = DateTime.UtcNow;
+                _context.MessageImages.RemoveRange(message.MessageImages);
+                _context.Reactions.RemoveRange(message.Reactions);
+            }
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Details), new { id = conversationId });
+        }
+
+        private const int MaxRepliesPerParent = 100;
+
         // POST: /Message/SendMessage
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendMessage(long conversationId, string text, List<IFormFile>? imageFiles) {
+        public async Task<IActionResult> SendMessage(long conversationId, string subject, string text, List<IFormFile>? imageFiles, long? parentMessageId = null) {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
@@ -306,8 +365,15 @@ namespace Meguri.Controllers {
 
             if (!isMember) return Forbid();
 
-            if (!string.IsNullOrWhiteSpace(text) || (imageFiles != null && imageFiles.Count > 0)) {
-                await SendMessageInternal(conversationId, currentUserId, text, imageFiles);
+            if (!string.IsNullOrWhiteSpace(subject) && !string.IsNullOrWhiteSpace(text)) {
+                if (parentMessageId.HasValue && !await _context.Messages.AnyAsync(m => m.Id == parentMessageId.Value && m.ConversationId == conversationId)) {
+                    parentMessageId = null;
+                }
+                if (parentMessageId.HasValue && await _context.Messages.CountAsync(m => m.ParentMessageId == parentMessageId.Value) >= MaxRepliesPerParent) {
+                    TempData["Error"] = $"1つのメッセージへの返信は{MaxRepliesPerParent}件までです。";
+                    return RedirectToAction(nameof(Details), new { id = conversationId });
+                }
+                await SendMessageInternal(conversationId, currentUserId, text, imageFiles, subject, parentMessageId);
             }
 
             return RedirectToAction(nameof(Details), new { id = conversationId });
@@ -320,11 +386,46 @@ namespace Meguri.Controllers {
                 .ToListAsync();
         }
 
-        private async Task SendMessageInternal(long conversationId, string senderId, string text, List<IFormFile>? imageFiles) {
+        private static List<Message> OrderRepliesUnderParents(List<Message> messages) {
+            var ids = messages.Select(m => m.Id).ToHashSet();
+            var children = messages
+                .Where(m => m.ParentMessageId.HasValue && ids.Contains(m.ParentMessageId.Value))
+                .GroupBy(m => m.ParentMessageId!.Value)
+                .ToDictionary(g => g.Key, g => g.OrderByDescending(m => m.CreatedAt).ToList());
+            var result = new List<Message>(messages.Count);
+            DateTime LatestInThread(Message m) {
+                var latest = m.CreatedAt;
+                if (children.TryGetValue(m.Id, out var list)) {
+                    foreach (var c in list) {
+                        var t = LatestInThread(c);
+                        if (t > latest) latest = t;
+                    }
+                }
+                return latest;
+            }
+            void Add(Message m) {
+                result.Add(m);
+                if (children.TryGetValue(m.Id, out var list)) {
+                    foreach (var c in list) Add(c);
+                }
+            }
+            var roots = messages
+                .Where(m => !m.ParentMessageId.HasValue || !ids.Contains(m.ParentMessageId.Value))
+                .OrderByDescending(LatestInThread);
+            foreach (var m in roots) {
+                Add(m);
+            }
+            return result;
+        }
+
+        private async Task SendMessageInternal(long conversationId, string senderId, string text,
+        List<IFormFile>? imageFiles, string? subject = null, long? parentMessageId = null) {
             var message = new Message {
                 ConversationId = conversationId,
+                ParentMessageId = parentMessageId,
                 SenderId = senderId,
-                Text = text ?? string.Empty,
+                Subject = subject ?? string.Empty,
+                                Body = text ?? string.Empty,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

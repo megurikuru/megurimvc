@@ -37,10 +37,13 @@ namespace Meguri.Models.MessageViewModels {
         [Display(Name = "Message_SelectRecipient")]
         public List<string> SelectedUserIds { get; set; } = new List<string>();
 
+        [Required(ErrorMessage = "件名を入力してください。")]
+        [Display(Name = "Message_SubjectLabel")]
+        public string Subject { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "メッセージを入力してください。")]
         [Display(Name = "Message_InputPlaceholder")]
         public string InitialMessage { get; set; } = string.Empty;
-
         public List<IFormFile>? ImageFiles { get; set; }
 
         public List<ApplicationUser> AvailableUsers { get; set; } = new List<ApplicationUser>();
@@ -50,9 +53,13 @@ namespace Meguri.Models.MessageViewModels {
         public long Id { get; set; }
         public long ConversationId { get; set; }
 
+        [Required(ErrorMessage = "件名を入力してください。")]
+        [Display(Name = "Message_SubjectLabel")]
+        public string Subject { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "メッセージを入力してください。")]
         [Display(Name = "Message_InputPlaceholder")]
-        public string Text { get; set; } = string.Empty;
+        public string Body { get; set; } = string.Empty;
     }
 
     public class ChatRoomViewModel {

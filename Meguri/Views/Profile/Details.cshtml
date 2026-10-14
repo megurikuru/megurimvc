@@ -59,8 +59,8 @@ else {
 					@if (post.IsViolence) { <span>R-18G</span> }
 					@post.CreatedAt.ToLocalTime()
 				</div>
-				<h4><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Name</a></h4>
-				<p>@(post.Text.Length > 150 ? post.Text.Substring(0, 150) + "..." : post.Text)</p>
+				<h4><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Subject</a></h4>
+				<p>@(post.Body.Length > 150 ? post.Body.Substring(0, 150) + "..." : post.Body)</p>
 				@if (post.PostImages.Any()) {
 					<div>
 						@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder)) {

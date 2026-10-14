@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,28 +72,35 @@ namespace Meguri.Data {
             // 初期登録するFandom一覧
             var initialFandoms = new[] {
                 new Fandom { Id = rootFandomId, Name = "ルート", ParentFandomId = null },
-                new Fandom { Id = 2, Name = "公開界隈", ParentFandomId = rootFandomId },
-                new Fandom { Id = 3, Name = "つぶやき", ParentFandomId = rootFandomId },
-                new Fandom { Id = 4, Name = "創作", ParentFandomId = rootFandomId },
-                new Fandom { Id = 5, Name = "イラスト", ParentFandomId = 4 },
-                new Fandom { Id = 6, Name = "漫画", ParentFandomId = 4 },
-                new Fandom { Id = 7, Name = "小説", ParentFandomId = 4 },
-                new Fandom { Id = 8, Name = "コスプレ", ParentFandomId = rootFandomId },
-                new Fandom { Id = 9, Name = "車", ParentFandomId = rootFandomId },
-                new Fandom { Id = 10, Name = "国産車", ParentFandomId = 9 },
-                new Fandom { Id = 11, Name = "トヨタ", ParentFandomId = 10 },
-                new Fandom { Id = 12, Name = "ホンダ", ParentFandomId = 10 },
-                new Fandom { Id = 13, Name = "スバル", ParentFandomId = 10 },
-                new Fandom { Id = 14, Name = "日産", ParentFandomId = 10 },
-                new Fandom { Id = 15, Name = "スズキ", ParentFandomId = 10 },
-                new Fandom { Id = 16, Name = "ダイハツ", ParentFandomId = 10 },
-                new Fandom { Id = 17, Name = "輸入車", ParentFandomId = 9 },
-                new Fandom { Id = 18, Name = "漫画・アニメ", ParentFandomId = rootFandomId },
-                new Fandom { Id = 19, Name = "漫画", ParentFandomId = 18 },
-                new Fandom { Id = 20, Name = "アニメ", ParentFandomId = 18 },
-                new Fandom { Id = 21, Name = "ゲーム", ParentFandomId = rootFandomId },
-                new Fandom { Id = 22, Name = "プログラミング", ParentFandomId = rootFandomId },
-                new Fandom { Id = 23, Name = "運営", ParentFandomId = rootFandomId }
+                new Fandom { Id = 2, Name = "創作（イラスト・漫画等）", ParentFandomId = rootFandomId },
+                new Fandom { Id = 3, Name = "イラスト", ParentFandomId = 2 },
+                new Fandom { Id = 4, Name = "漫画", ParentFandomId = 2 },
+                new Fandom { Id = 5, Name = "小説", ParentFandomId = 2 },
+                new Fandom { Id = 6, Name = "見る・読む（アニメ・漫画等）", ParentFandomId = rootFandomId },
+                new Fandom { Id = 7, Name = "アニメ", ParentFandomId = 6 },
+                new Fandom { Id = 8, Name = "漫画", ParentFandomId = 6 },
+                new Fandom { Id = 9, Name = "ゲーム", ParentFandomId = rootFandomId },
+                new Fandom { Id = 10, Name = "コスプレ", ParentFandomId = rootFandomId },
+                new Fandom { Id = 11, Name = "音楽", ParentFandomId = rootFandomId },
+                new Fandom { Id = 12, Name = "アイドル", ParentFandomId = rootFandomId },
+                new Fandom { Id = 13, Name = "自動車", ParentFandomId = rootFandomId },
+                new Fandom { Id = 14, Name = "国産車", ParentFandomId = 13 },
+                new Fandom { Id = 15, Name = "トヨタ", ParentFandomId = 14 },
+                new Fandom { Id = 16, Name = "日産", ParentFandomId = 14 },
+                new Fandom { Id = 17, Name = "ホンダ", ParentFandomId = 14 },
+                new Fandom { Id = 18, Name = "マツダ", ParentFandomId = 14 },
+                new Fandom { Id = 19, Name = "スバル", ParentFandomId = 14 },
+                new Fandom { Id = 20, Name = "スズキ", ParentFandomId = 14 },
+                new Fandom { Id = 21, Name = "ダイハツ", ParentFandomId = 14 },
+                new Fandom { Id = 22, Name = "輸入車", ParentFandomId = 14 },
+                new Fandom { Id = 23, Name = "メルセデス・ベンツ", ParentFandomId = 22 },
+                new Fandom { Id = 24, Name = "BMW", ParentFandomId = 22 },
+                new Fandom { Id = 25, Name = "フォルクスワーゲン", ParentFandomId = 22 },
+                new Fandom { Id = 26, Name = "ポルシェ", ParentFandomId = 22 },
+                new Fandom { Id = 27, Name = "IT", ParentFandomId = rootFandomId },
+                new Fandom { Id = 28, Name = "社会", ParentFandomId = rootFandomId },
+                new Fandom { Id = 29, Name = "なんでも", ParentFandomId = rootFandomId },
+                new Fandom { Id = 30, Name = "運営", ParentFandomId = rootFandomId }
             };
 
             foreach (var fandom in initialFandoms) {
@@ -124,21 +131,37 @@ namespace Meguri.Data {
         private static async Task InitializeTagsAsync(ApplicationDbContext context) {
             // 初期登録するTag一覧
             var initialTagTexts = new[] {
-                "鬼滅の刃", "呪術廻戦", "水星の魔女", "推しの子", "フリーレン", "チェンソーマン", "ぼっち・ざ・ろっく", "SPY_FAMILY", "名探偵コナン", "shingeki",
-                "heroaca_a", "hq_anime", "ブルーロック", "gundam", "sao_anime", "アニメウマ娘", "ちいかわ", "リコリコ", "アニポケ", "エヴァ",
-                "トヨタ", "ホンダ", "日産", "スズキ", "マツダ", "スバル", "三菱", "ダイハツ", "フォルクスワーゲン", "テスラ",
-                "プリウス", "ヤリス", "カローラ", "クラウン", "アルファード", "N-BOX", "フィット", "ヴェゼル", "シビック", "ノート",
-                "セレナ", "スカイライン", "タント", "スペーシア", "ジムニー", "CX-5", "ロードスター", "フォレスター", "レヴォーグ", "デリカD:5",
-                "Snow Man", "SixTONES", "なにわ男子", "King & Prince", "乃木坂46", "櫻坂46", "日向坂46", "AKB48", "モーニング娘。'26", "FRUITS ZIPPER",
-                "超ときめき♡宣伝部", "＝LOVE", "NiziU", "ME:I", "JO1", "INI", "BTS", "SEVENTEEN", "Stray Kids", "TWICE",
-                "モンキー・D・ルフィ", "孫悟空", "江戸川コナン", "ピカチュウ", "ドラえもん", "野原しんのすけ", "竈門炭治郎", "五条悟", "リヴァイ・アッカーマン", "坂田銀時",
-                "ロイド・フォージャー", "アーニャ・フォージャー", "フリーレン", "後藤ひとり", "エレン・イェーガー", "うずまきナルト", "黒崎一護", "空条承太郎", "アムロ・レイ", "シャア・アズナブル",
-                "碇シンジ", "綾波レイ", "ルパン三世", "冴羽獠", "ケンシロウ", "矢吹丈", "古代進", "孫悟飯", "トランクス", "ベジータ",
-                "キリト", "アスナ", "リムル＝テンペスト", "佐藤和真", "上条当麻", "木之本桜", "鹿目まどか", "平沢唯", "涼宮ハルヒ", "月野うさぎ",
-                "スーパーマリオブラザーズ", "マリオカート", "ドラゴンクエスト", "ファイナルファンタジー", "ポケットモンスター", "ゼルダの伝説", "Minecraft", "グランド・セフト・オート", "Apex Legends", "フォートナイト",
-                "原神", "モンスターハンター", "大乱闘スマッシュブラザーズ", "スプラトゥーン", "どうぶつの森", "パズドラ", "モンスターストライク", "Fate/Grand Order", "ウマ娘 プリティーダービー", "バイオハザード",
-                "メタルギアソリッド", "ストリートファイター", "鉄拳", "キングダム ハーツ", "ペルソナ", "テイルズ オブ シリーズ", "ダークソウル", "エルデンリング", "Call of Duty", "オーバーウォッチ",
-                "League of Legends", "VALORANT", "サイバーパンク2077", "ウィッチャー3", "The Last of Us", "クロノ・トリガー", "マインクラフト", "テトリス", "パックマン", "スペースインベーダー"
+// イラスト・漫画・小説（創作）
+"オリジナル", "創作", "オリキャラ", "二次創作", "ファンアート", "落書き", "水彩", "デジタル絵", "ネーム", "4コマ漫画",
+"web漫画", "同人誌", "連載", "短編小説", "長編小説", "ファンタジー小説", "ミステリー", "ライトノベル", "プロット", "なろう系",
+// アニメ・漫画（見る・読む）
+"鬼滅の刃", "呪術廻戦", "推しの子", "フリーレン", "チェンソーマン", "ぼっち・ざ・ろっく", "SPY_FAMILY", "名探偵コナン", "ワンピース", "葬送のフリーレン",
+"ちいかわ", "リコリコ", "ガンダム", "進撃の巨人", "ブルーロック", "今期アニメ", "神作画", "原作漫画", "単行本", "アニメ化",
+// ゲーム
+"スーパーマリオブラザーズ", "マリオカート", "ドラゴンクエスト", "ファイナルファンタジー", "ポケットモンスター", "ゼルダの伝説", "Minecraft", "Apex Legends", "原神", "モンスターハンター",
+"大乱闘スマッシュブラザーズ", "スプラトゥーン", "どうぶつの森", "ウマ娘 プリティーダービー", "エルデンリング", "積みゲー", "ゲーム実況", "RPG", "FPS", "インディーゲーム",
+// コスプレ
+"コスプレ", "コスプレイヤー", "撮影会", "コミケ", "レイヤー", "衣装制作", "ウィッグ", "ロケ撮影", "コスプレイベント", "合わせ",
+// 音楽
+"ボカロ", "歌ってみた", "弾いてみた", "作業用BGM", "ライブ", "バンド", "作曲", "DTM", "アニソン", "J-POP",
+// アイドル
+"Snow Man", "SixTONES", "なにわ男子", "King & Prince", "乃木坂46", "櫻坂46", "日向坂46", "AKB48", "FRUITS ZIPPER", "＝LOVE",
+"NiziU", "JO1", "BTS", "SEVENTEEN", "Stray Kids", "TWICE", "推し活", "ライブ遠征", "ファンクラブ", "グッズ",
+// 自動車
+"ドライブ", "愛車", "洗車", "カスタム", "ツーリング", "車検", "中古車", "新型車", "試乗", "サーキット",
+"トヨタ", "プリウス", "カローラ", "クラウン", "アルファード", "ヤリス", "GR86", "スープラ",
+"日産", "スカイライン", "GT-R", "ノート", "セレナ", "フェアレディZ",
+"ホンダ", "N-BOX", "フィット", "シビック", "ヴェゼル", "NSX",
+"マツダ", "CX-5", "ロードスター", "MAZDA3",
+"スバル", "フォレスター", "レヴォーグ", "WRX",
+"スズキ", "ジムニー", "スイフト", "スペーシア", "アルト",
+"ダイハツ", "タント", "ムーヴ", "コペン",
+"メルセデス・ベンツ", "Gクラス", "Cクラス", "BMW", "M3", "3シリーズ",
+"フォルクスワーゲン", "ゴルフ", "ポロ", "ポルシェ", "911", "カイエン",
+// IT
+"プログラミング", "C#", "Python", "JavaScript", "生成AI", "ChatGPT", "個人開発", "Web開発", "Linux", "自作PC",
+// 社会・なんでも・運営
+"ニュース", "経済", "働き方", "雑談", "日常", "ひとりごと", "初投稿", "お知らせ", "不具合報告", "要望"
             };
 
             var distinctTagTexts = initialTagTexts

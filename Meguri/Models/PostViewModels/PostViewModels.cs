@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Http;
 
 namespace Meguri.Models.PostViewModels {
     public class PostCreateViewModel {
+        [Required(ErrorMessage = "件名を入力してください。")]
         [Display(Name = "Post_PostName")]
         [StringLength(200)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "本文を入力してください。")]
         [Display(Name = "Post_PostText")]
-        public string? Text { get; set; }
+        public string Text { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "界隈を選択してください。")]
         [Display(Name = "Post_SelectFandom")]
@@ -34,12 +36,14 @@ namespace Meguri.Models.PostViewModels {
     public class PostEditViewModel {
         public long Id { get; set; }
 
+        [Required(ErrorMessage = "件名を入力してください。")]
         [Display(Name = "Post_PostName")]
         [StringLength(200)]
-        public string? Name { get; set; }
+        public string Name { get; set; } = string.Empty;
 
+        [Required(ErrorMessage = "本文を入力してください。")]
         [Display(Name = "Post_PostText")]
-        public string? Text { get; set; }
+        public string Text { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "界隈を選択してください。")]
         [Display(Name = "Post_SelectFandom")]

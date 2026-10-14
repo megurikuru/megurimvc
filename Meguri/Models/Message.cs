@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -15,13 +16,19 @@ namespace Meguri.Models {
         // プロパティ
         public long Id { get; set; }                                                             // メッセージID（主キー）
         public long ConversationId { get; set; }                                                 // 所属する会話のID（外部キー）
+        public long? ParentMessageId { get; set; }                                               // 返信先メッセージのID（外部キー、返信でない場合はnull）
         public string SenderId { get; set; } = null!;                                            // メッセージ送信者のユーザーID（外部キー）
-        public string Text { get; set; } = string.Empty;                                         // メッセージの本文テキスト
+        [Required]
+        public string Subject { get; set; } = string.Empty; 
+        [Required]
+        public string Body { get; set; } = string.Empty;  
+        public bool IsDeleted { get; set; }                                                      // 論理削除フラグ
         public DateTime CreatedAt { get; set; }                                                  // メッセージの作成日時
         public DateTime UpdatedAt { get; set; }                                                  // メッセージの最終更新日時
 
         // リファレンス型（単数形）のナビゲーションプロパティ
         public Conversation Conversation { get; set; } = null!;                                  // 所属する会話のナビゲーションプロパティ
+        public Message? ParentMessage { get; set; }                                              // 返信先メッセージのナビゲーションプロパティ
         public ApplicationUser Sender { get; set; } = null!;                                     // メッセージ送信者のユーザー情報のナビゲーションプロパティ
 
         // コレクション型（複数形）のナビゲーションプロパティ

@@ -14,7 +14,7 @@ namespace Meguri.Models {
         /// グループ名（1対1 DMの場合はnull）
         public string Title { get; set; } = string.Empty;
 
-        /// 1対1 DMかグループチャットかの識別フラグ
+        /// 1対1 DMかグループメッセージかの識別フラグ
         public bool IsGroup { get; set; } = false;
 
         public DateTime CreatedAt { get; set; }

@@ -474,17 +474,27 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<long>("ConversationId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<long?>("ParentMessageId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("SenderId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Subject")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -496,6 +506,8 @@ namespace Meguri.Migrations
                     b.HasIndex("ConversationId");
 
                     b.HasIndex("CreatedAt");
+
+                    b.HasIndex("ParentMessageId");
 
                     b.HasIndex("SenderId");
 
@@ -539,6 +551,10 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("CommentCount")
                         .HasColumnType("integer");
 
@@ -566,10 +582,8 @@ namespace Meguri.Migrations
                     b.Property<DateTime?>("LastCommentedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Text")
+                    b.Property<string>("Subject")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -1151,6 +1165,10 @@ namespace Meguri.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Meguri.Models.Message", "ParentMessage")
+                        .WithMany()
+                        .HasForeignKey("ParentMessageId");
+
                     b.HasOne("Meguri.Models.ApplicationUser", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
@@ -1158,6 +1176,8 @@ namespace Meguri.Migrations
                         .IsRequired();
 
                     b.Navigation("Conversation");
+
+                    b.Navigation("ParentMessage");
 
                     b.Navigation("Sender");
                 });

@@ -22,8 +22,10 @@ namespace Meguri.Models {
         public long Id { get; set; }                                                    // 投稿ID
         public string UserId { get; set; } = string.Empty;                              // 投稿者ID
         public int FandomId { get; set; }                                               // 界隈ID
-        public string? Name { get; set; }               
-        public string? Text { get; set; }               
+        [Required]
+        public string Subject { get; set; } = string.Empty;
+        [Required]
+        public string Body { get; set; } = string.Empty;
         public bool IsPublic { get; set; } = false;                                     // 公開フラグ
         public bool IsSexual { get; set; } = false;                                     // 性的表現あり
         public bool IsViolence { get; set; } = false;                                   // 暴力表現あり

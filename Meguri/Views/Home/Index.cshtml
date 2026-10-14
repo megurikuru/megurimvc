@@ -57,11 +57,11 @@
 				</div>
 
 				@* 投稿タイトル（詳細画面へのリンク） *@
-				<h3><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Name</a></h3>
+				<h3><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Subject</a></h3>
 
 				@* 投稿本文プレビュー（120文字を超える場合は「...」で切り詰める） *@
 				<p>
-					@(post.Text.Length > 120 ? post.Text.Substring(0, 120) + "..." : post.Text)
+					@(post.Body.Length > 120 ? post.Body.Substring(0, 120) + "..." : post.Body)
 				</p>
 
 				@* 添付画像サムネイル一覧（DisplayOrder順にソートし、最大4枚まで表示） *@

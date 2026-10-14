@@ -1032,6 +1032,15 @@
   <data name="Comment_ReplyTo" xml:space="preserve">
     <value>&gt;&gt; {0} に返信</value>
   </data>
+  <data name="Message_Deleted" xml:space="preserve">
+    <value>削除されたメッセージ</value>
+  </data>
+  <data name="Message_ReactionBtn" xml:space="preserve">
+    <value>リアクション</value>
+  </data>
+  <data name="Message_ReplyBtn" xml:space="preserve">
+    <value>返信</value>
+  </data>
   <data name="Comment_ReplyLimit" xml:space="preserve">
     <value>これ以上は返信できません</value>
   </data>
@@ -1132,7 +1141,7 @@
     <value>未設定</value>
   </data>
   <data name="Message_SubTitle" xml:space="preserve">
-    <value>1対1のダイレクトメッセージやグループチャットができます。</value>
+    <value>1対1のダイレクトメッセージやグループメッセージができます。</value>
   </data>
   <data name="Message_DateLabel" xml:space="preserve">
     <value>日付</value>
@@ -1141,7 +1150,7 @@
     <value>指定した日付の前後最大10件（合計最大20件）の会話を表示します</value>
   </data>
   <data name="Message_ChatDateFilterHintFormat" xml:space="preserve">
-    <value>指定した日付の前後最大{0}件（合計最大{1}件）を表示します</value>
+    <value>指定した日付付近から、1ページあたり最大{0}スレッドを表示します。同じスレッドのメッセージは同じページに表示されます。</value>
   </data>
   <data name="Message_NoConversationsHint" xml:space="preserve">
     <value>新しいメッセージを作成して他のユーザーと交流してみましょう！</value>
@@ -1153,7 +1162,10 @@
     <value>開く →</value>
   </data>
   <data name="Message_ChatTypeLabel" xml:space="preserve">
-    <value>チャット種別</value>
+    <value>メッセージ種別</value>
+      </data>
+      <data name="Message_SubjectLabel" xml:space="preserve">
+        <value>件名</value>
   </data>
   <data name="Message_GroupNamePlaceholder" xml:space="preserve">
     <value>例: 漫画制作合宿、イラスト部</value>
@@ -1183,7 +1195,7 @@
     <value>ダイレクトメッセージ</value>
   </data>
   <data name="Message_Group" xml:space="preserve">
-    <value>グループチャット</value>
+    <value>グループメッセージ</value>
   </data>
   <data name="Message_SelectRecipient" xml:space="preserve">
     <value>宛先を選択</value>

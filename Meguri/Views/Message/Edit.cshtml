@@ -12,9 +12,15 @@
 		<div asp-validation-summary="ModelOnly"></div>
 
 		<div>
-			<label asp-for="Text">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
-			<textarea asp-for="Text" rows="4" required></textarea>
-			<span asp-validation-for="Text"></span>
+			<label asp-for="Subject"> <span>*</span></label>
+			<input asp-for="Subject" required />
+			<span asp-validation-for="Subject"></span>
+		</div>
+
+		<div>
+			<label asp-for="Body">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
+			<textarea asp-for="Body" rows="4" required></textarea>
+			<span asp-validation-for="Body"></span>
 		</div>
 
 		<div>
