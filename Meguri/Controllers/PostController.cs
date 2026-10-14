@@ -54,7 +54,7 @@ namespace Meguri.Controllers {
             }
 
             if (!string.IsNullOrEmpty(search)) {
-                query = query.Where(p => p.Name.Contains(search) || p.Text.Contains(search));
+                query = query.Where(p => p.Subject.Contains(search) || p.Body.Contains(search));
                 ViewBag.CurrentSearch = search;
             }
 
@@ -149,8 +149,8 @@ namespace Meguri.Controllers {
 
             var post = new Post {
                 UserId = userId,
-                Name = model.Name,
-                Text = model.Text,
+                Subject = model.Name,
+                Body = model.Text,
                 FandomId = model.FandomId,
                 IsSexual = model.IsSexual,
                 IsViolence = model.IsViolence,
@@ -232,8 +232,8 @@ namespace Meguri.Controllers {
 
             var vm = new PostEditViewModel {
                 Id = post.Id,
-                Name = post.Name,
-                Text = post.Text,
+                Name = post.Subject,
+                Text = post.Body,
                 FandomId = post.FandomId,
                 IsSexual = post.IsSexual,
                 IsViolence = post.IsViolence,
@@ -285,8 +285,8 @@ namespace Meguri.Controllers {
                 return Forbid();
             }
 
-            post.Name = model.Name;
-            post.Text = model.Text;
+            post.Subject = model.Name;
+            post.Body = model.Text;
             post.FandomId = model.FandomId;
             post.IsSexual = model.IsSexual;
             post.IsViolence = model.IsViolence;

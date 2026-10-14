@@ -1032,6 +1032,15 @@
   <data name="Comment_ReplyTo" xml:space="preserve">
     <value>Reply to &gt;&gt;{0}</value>
   </data>
+  <data name="Message_Deleted" xml:space="preserve">
+    <value>Deleted message</value>
+  </data>
+  <data name="Message_ReactionBtn" xml:space="preserve">
+    <value>Reactions</value>
+  </data>
+  <data name="Message_ReplyBtn" xml:space="preserve">
+    <value>Reply</value>
+  </data>
   <data name="Comment_ReplyLimit" xml:space="preserve">
     <value>You cannot reply any further. Please create a new post.</value>
   </data>
@@ -1132,7 +1141,7 @@
     <value>Not set</value>
   </data>
   <data name="Message_SubTitle" xml:space="preserve">
-    <value>You can send 1-on-1 direct messages or group chats.</value>
+    <value>You can send 1-on-1 direct messages or group messages.</value>
   </data>
   <data name="Message_DateLabel" xml:space="preserve">
     <value>Date</value>
@@ -1141,7 +1150,7 @@
     <value>Shows up to 10 conversations before and after the specified date (20 total).</value>
   </data>
   <data name="Message_ChatDateFilterHintFormat" xml:space="preserve">
-    <value>Shows up to {0} messages before and after the specified date ({1} total).</value>
+    <value>Shows up to {0} threads per page, starting around the specified date. All messages in a thread are shown on the same page.</value>
   </data>
   <data name="Message_NoConversationsHint" xml:space="preserve">
     <value>Start a new message to connect with other users!</value>
@@ -1153,7 +1162,10 @@
     <value>Open →</value>
   </data>
   <data name="Message_ChatTypeLabel" xml:space="preserve">
-    <value>Chat Type</value>
+    <value>Message Type</value>
+      </data>
+      <data name="Message_SubjectLabel" xml:space="preserve">
+        <value>Subject</value>
   </data>
   <data name="Message_GroupNamePlaceholder" xml:space="preserve">
     <value>e.g. Manga Creation Lodge, Illustration Club</value>
@@ -1183,7 +1195,7 @@
     <value>Direct Message</value>
   </data>
   <data name="Message_Group" xml:space="preserve">
-    <value>Group Chat</value>
+    <value>Group Message</value>
   </data>
   <data name="Message_SelectRecipient" xml:space="preserve">
     <value>Select Recipient</value>

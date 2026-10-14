@@ -23,12 +23,10 @@
 			<!-- 画像がある場合-->
 			@if (thumb != null) {
 				<img src="~/icons/image.svg" class="icon" />
-				<span>@post.Name</span>
-				<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image.Name" class="thumb" />
-			<!-- 画像がない場合-->
-			} else {
+				<span>@post.Subject</span>
+				<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image.Name" class="thumb" />			<!-- 画像がない場合-->			} else {
 				<img src="~/icons/file-text.svg" class="icon" />
-				<span>@post.Name</span>
+				<span>@post.Subject</span>
 			}
 		</a>
 	}

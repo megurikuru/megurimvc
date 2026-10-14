@@ -2,12 +2,12 @@
 @using System.Security.Claims
 
 @{
-	ViewData["Title"] = Model.Name;
+	ViewData["Title"] = Model.Subject;
 	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 	var isAuthor = Model.UserId == currentUserId || User.IsInRole("Admin");
 	var breadcrumbs = new List<Meguri.Models.BreadcrumbItem> {
 		new(Model.Fandom?.Name ?? "界隈", Url.Action("Details", "Fandom", new { id = Model.FandomId })),
-		new(Model.Name)
+		new(Model.Subject)
 	};
 }
 
@@ -93,7 +93,7 @@
 			}
 		</div>
 
-		<h2>@Model.Name</h2>
+		<h2>@Model.Subject</h2>
 
 		<div>
 			<div>
@@ -107,7 +107,7 @@
 
 		<!-- 本文 -->
 		<div>
-			@Model.Text
+			@Model.Body
 		</div>
 
 		<!-- 添付画像（順序付き） -->

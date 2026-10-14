@@ -77,8 +77,8 @@ namespace Meguri.Controllers {
             if (!string.IsNullOrWhiteSpace(search)) {
                 sql += @"
                 WHERE (
-                    p.""Name"" LIKE @search OR
-                    p.""Text"" LIKE @search OR
+                    p.""Subject"" LIKE @search OR
+                    p.""Body"" LIKE @search OR
                     t.""TagText"" LIKE @search OR
                     i.""Name"" LIKE @search OR
                     i.""Alt"" LIKE @search OR
@@ -120,8 +120,8 @@ namespace Meguri.Controllers {
                 .Take(pageSize)
                 .Select(p => new Post {
                     Id = p.Id,
-                    Name = p.Name,
-                    Text = p.Text,
+                    Subject = p.Subject,
+                    Body = p.Body,
                     CreatedAt = p.CreatedAt,
                     User = p.User,
                     Fandom = p.Fandom,

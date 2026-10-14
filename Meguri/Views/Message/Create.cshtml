@@ -41,6 +41,12 @@
 		</div>
 
 		<div>
+			<label asp-for="Subject">@SharedLocalizer["Message_SubjectLabel"] <span>*</span></label>
+			<input asp-for="Subject" required />
+			<span asp-validation-for="Subject"></span>
+		</div>
+
+		<div>
 			<label asp-for="InitialMessage">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
 			<textarea asp-for="InitialMessage" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
 			<span asp-validation-for="InitialMessage"></span>
