@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
 using Meguri.Models.PostViewModels;
@@ -14,20 +15,25 @@ using Meguri.Services;
 
 namespace Meguri.Controllers {
     public class PostController : Controller {
+        private const int MaxImagesPerPost = 16;
+
         private readonly ApplicationDbContext _context;
         private readonly ITagService _tagService;
         private readonly IR2StorageService _r2StorageService;
         private readonly IImageProcessingService _imageProcessingService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public PostController(
             ApplicationDbContext context,
             ITagService tagService,
             IR2StorageService r2StorageService,
-            IImageProcessingService imageProcessingService) {
+            IImageProcessingService imageProcessingService,
+            IStringLocalizer<SharedResource> localizer) {
             _context = context;
             _tagService = tagService;
             _r2StorageService = r2StorageService;
             _imageProcessingService = imageProcessingService;
+            _localizer = localizer;
         }
 
         // GET: /Post
@@ -141,6 +147,11 @@ namespace Meguri.Controllers {
             if (string.IsNullOrEmpty(userId)) return Challenge();
 
             if (!await IsJoinedAsync(model.FandomId, userId)) return Forbid();
+
+            var validCreateFiles = model.ImageFiles?.Where(f => f != null && f.Length > 0).ToList();
+            if (validCreateFiles != null && validCreateFiles.Count > MaxImagesPerPost) {
+                ModelState.AddModelError("ImageFiles", string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, MaxImagesPerPost));
+            }
 
             if (!ModelState.IsValid) {
                 ViewBag.Fandoms = await GetJoinedFandomsAsync(userId);
@@ -283,6 +294,15 @@ namespace Meguri.Controllers {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (post.UserId != userId && !User.IsInRole("Admin")) {
                 return Forbid();
+            }
+
+            var remainingExistingCount = post.PostImages.Count(pi =>
+                model.ExistingImages == null || !model.ExistingImages.Any(ei => ei.ImageId == pi.ImageId && ei.Remove));
+            var validNewFiles = model.NewImageFiles?.Where(f => f != null && f.Length > 0).ToList();
+            if (remainingExistingCount + (validNewFiles?.Count ?? 0) > MaxImagesPerPost) {
+                ModelState.AddModelError("NewImageFiles", string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, MaxImagesPerPost));
+                ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+                return View(model);
             }
 
             post.Subject = model.Name;

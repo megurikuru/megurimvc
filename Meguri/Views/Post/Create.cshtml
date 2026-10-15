@@ -24,10 +24,12 @@
 		<span asp-validation-for="Text"></span>
 	</div>
 
-	<!-- 添付画像（複数可） -->
+	<!-- 添付画像（複数可・最大16枚） -->
 	<div class="attribute-wrap">
-		<label asp-for="ImageFiles">🖼️ @SharedLocalizer["Post_AttachImages"]</label>
+		<label asp-for="ImageFiles">🖼️ @SharedLocalizer["Post_AttachImages"] <span id="imageCountDisplay">0/16</span></label>
 		<input asp-for="ImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+		<span asp-validation-for="ImageFiles"></span>
+		<div id="imagePreviewContainer" class="image-preview-list"></div>
 		<div class="description">@SharedLocalizer["Post_ImageUploadHint1"]</div>
 		<div class="description">@SharedLocalizer["Post_ImageUploadHint2"]</div>
 	</div>
@@ -61,6 +63,7 @@
 	<script>
 		$(document).ready(function () {
 			TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
+			ImageAttachmentManager.init('#ImageFiles', '#imagePreviewContainer', '#imageCountDisplay', 16);
 		});
 	</script>
 }

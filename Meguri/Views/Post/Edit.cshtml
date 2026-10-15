@@ -6,7 +6,7 @@
 
 <style>
 	.post-edit input:not([type=checkbox]):not([type=hidden]), .post-edit select, .post-edit textarea { width: 100%; box-sizing: border-box; font-size: 16px; padding: 8px; }
-	.post-edit button, .post-edit a { min-height: 44px; min-width: 44px; padding: 8px 12px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
+	.post-edit button:not(.image-preview-remove), .post-edit a { min-height: 44px; min-width: 44px; padding: 8px 12px; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box; }
 	.post-edit input[type=checkbox] { width: 24px; height: 24px; vertical-align: middle; }
 	.post-edit > div { margin-bottom: 1rem; }
 	@@media (max-width: 576px) {
@@ -43,13 +43,14 @@
 				<p>@SharedLocalizer["Post_ImageOrderHint"]</p>
 				<div id="imageOrderContainer">
 					@for (int i = 0; i < Model.ExistingImages.Count; i++) {
-						<div>
+						<div class="image-order-item">
 							<div>
-								<span>@(i + 1)</span>
+								<span class="order-number">@(i + 1)</span>
 								<img src="/Image/File/@Model.ExistingImages[i].ImageId" style="width: 50px; height: 50px; object-fit: cover;" />
 								<span style="max-width: 200px;">@Model.ExistingImages[i].ImageName</span>
 								<input type="hidden" name="ExistingImages[@i].ImageId" value="@Model.ExistingImages[i].ImageId" />
-								<input type="hidden" name="ExistingImages[@i].DisplayOrder" value="@Model.ExistingImages[i].DisplayOrder" />
+								<input type="hidden" name="ExistingImages[@i].ImageName" value="@Model.ExistingImages[i].ImageName" />
+								<input type="hidden" class="order-input" name="ExistingImages[@i].DisplayOrder" value="@Model.ExistingImages[i].DisplayOrder" />
 							</div>
 							<div>
 								<button type="button" onclick="moveImageOrder(this, 'up')" title="@SharedLocalizer["Common_MoveUp"]">▲</button>
@@ -65,11 +66,14 @@
 			</div>
 		}
 
-		<!-- 新規画像追加 -->
+		<!-- 新規画像追加（複数可・最大16枚） -->
 		<div>
-			<label asp-for="NewImageFiles">@SharedLocalizer["Post_AddMoreImagesLabel"]</label>
+			<label asp-for="NewImageFiles">@SharedLocalizer["Post_AddMoreImagesLabel"] <span id="imageCountDisplay">0/16</span></label>
 			<input asp-for="NewImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+			<span asp-validation-for="NewImageFiles"></span>
+			<div id="imagePreviewContainer" class="image-preview-list"></div>
 			<div>@SharedLocalizer["Post_ImageUploadHint1"]</div>
+			<div>@SharedLocalizer["Post_ImageUploadHint2"]</div>
 		</div>
 
 		<!-- タグ編集コンポーネント (最大10個) -->
@@ -135,7 +139,8 @@
 	<partial name="_ValidationScriptsPartial" />
 	<script>
 		$(document).ready(function () {
-				TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
+			TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
+			ImageAttachmentManager.init('#NewImageFiles', '#imagePreviewContainer', '#imageCountDisplay', 16);
 		});
 	</script>
 }

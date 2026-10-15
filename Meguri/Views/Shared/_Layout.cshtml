@@ -24,6 +24,7 @@
 	<script>
 		window.MeguriI18n = {
 			maxTagsAlertFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_MaxTagsAlertFormat"].Value)),
+			maxImagesAlertFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_MaxImagesAlertFormat"].Value)),
 			replyNoticeFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_ReplyNoticeFormat"].Value)),
 			removeLabel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Common_Remove"].Value)),
 			cancelLabel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Common_Cancel"].Value))

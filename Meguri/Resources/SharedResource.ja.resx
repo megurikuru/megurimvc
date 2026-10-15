@@ -1667,7 +1667,7 @@
     <value>PNG/JPEG形式（最大5MB/枚）、WebPに自動変換され250KB以下に最適化されます。</value>
   </data>
   <data name="Post_ImageUploadHint2" xml:space="preserve">
-    <value>複数枚の画像を選択できます。投稿後に詳細または編集画面で並び順の変更が可能です。</value>
+    <value>複数枚の画像を選択できます（最大16枚）。投稿後に詳細または編集画面で並び順の変更が可能です。</value>
   </data>
   <data name="Post_ThreadLockedMessage" xml:space="preserve">
     <value>この投稿のスレッドはロックされており、新しいコメントは投稿できません。</value>
@@ -1713,6 +1713,9 @@
   </data>
   <data name="Js_MaxTagsAlertFormat" xml:space="preserve">
     <value>タグは最大{0}個まで設定できます。</value>
+  </data>
+  <data name="Js_MaxImagesAlertFormat" xml:space="preserve">
+    <value>画像は最大{0}枚まで添付できます。</value>
   </data>
   <data name="Js_ReplyNoticeFormat" xml:space="preserve">
     <value>&lt;strong&gt;&gt;&gt;{0} ({1})&lt;/strong&gt; への返信</value>

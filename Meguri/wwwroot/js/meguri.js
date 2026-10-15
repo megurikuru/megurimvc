@@ -157,6 +157,143 @@ const TagManager = {
     }
 };
 
+// 添付画像管理＆プレビューコンポーネント (最大16枚)
+const ImageAttachmentManager = {
+    selectedFiles: [],
+    objectUrls: [],
+    maxImages: 16,
+    inputEl: null,
+    previewSelector: '#imagePreviewContainer',
+    countSelector: '#imageCountDisplay',
+
+    init: function (inputSelector, previewSelector, countSelector, maxImages) {
+        const input = $(inputSelector);
+        if (input.length === 0) return;
+
+        this.inputEl = input[0];
+        this.previewSelector = previewSelector || '#imagePreviewContainer';
+        this.countSelector = countSelector || '#imageCountDisplay';
+        this.maxImages = maxImages || 16;
+        this.selectedFiles = [];
+        this.clearObjectUrls();
+
+        const self = this;
+        input.off('change.meguriPreview').on('change.meguriPreview', function () {
+            const incoming = Array.from(self.inputEl.files || []);
+            if (incoming.length === 0) {
+                self.syncInputFiles();
+                self.render();
+                return;
+            }
+
+            let exceeded = false;
+            for (const file of incoming) {
+                const isDuplicate = self.selectedFiles.some(f =>
+                    f.name === file.name &&
+                    f.size === file.size &&
+                    f.lastModified === file.lastModified
+                );
+                if (isDuplicate) continue;
+
+                if (self.getExistingActiveCount() + self.selectedFiles.length >= self.maxImages) {
+                    exceeded = true;
+                    break;
+                }
+                self.selectedFiles.push(file);
+            }
+
+            if (exceeded) {
+                self.alertMaxImages();
+            }
+
+            self.syncInputFiles();
+            self.render();
+        });
+
+        $(document).off('change.meguriExistingImages', 'input[name^="ExistingImages"][name$=".Remove"]')
+            .on('change.meguriExistingImages', 'input[name^="ExistingImages"][name$=".Remove"]', function () {
+                if (!this.checked && self.getExistingActiveCount() + self.selectedFiles.length > self.maxImages) {
+                    this.checked = true;
+                    self.alertMaxImages();
+                }
+                self.render();
+            });
+
+        this.render();
+    },
+
+    getExistingActiveCount: function () {
+        const totalExisting = $('input[name^="ExistingImages"][name$=".ImageId"]').length;
+        const removedExisting = $('input[name^="ExistingImages"][name$=".Remove"]:checked').length;
+        return Math.max(0, totalExisting - removedExisting);
+    },
+
+    alertMaxImages: function () {
+        const fmt = (window.MeguriI18n && window.MeguriI18n.maxImagesAlertFormat) || '画像は最大{0}枚まで添付できます。';
+        alert(fmt.replace('{0}', this.maxImages));
+    },
+
+    removeFile: function (index) {
+        if (index < 0 || index >= this.selectedFiles.length) return;
+        this.selectedFiles.splice(index, 1);
+        this.syncInputFiles();
+        this.render();
+    },
+
+    syncInputFiles: function () {
+        if (!this.inputEl || typeof DataTransfer === 'undefined') return;
+        const dt = new DataTransfer();
+        this.selectedFiles.forEach(file => dt.items.add(file));
+        this.inputEl.files = dt.files;
+        if (this.selectedFiles.length === 0) {
+            this.inputEl.value = '';
+        }
+    },
+
+    clearObjectUrls: function () {
+        this.objectUrls.forEach(url => URL.revokeObjectURL(url));
+        this.objectUrls = [];
+    },
+
+    render: function () {
+        this.clearObjectUrls();
+        const container = $(this.previewSelector);
+        container.empty();
+
+        const existingActive = this.getExistingActiveCount();
+        const totalCount = existingActive + this.selectedFiles.length;
+        $(this.countSelector).text(`${totalCount}/${this.maxImages}`);
+
+        const removeLabel = (window.MeguriI18n && window.MeguriI18n.removeLabel) || '削除';
+
+        this.selectedFiles.forEach((file, idx) => {
+            const url = URL.createObjectURL(file);
+            this.objectUrls.push(url);
+
+            const item = $('<div class="image-preview-item"></div>');
+            const header = $('<div class="image-preview-header"></div>');
+            header.append($('<span class="image-preview-order"></span>').text(`#${existingActive + idx + 1}`));
+
+            const removeBtn = $('<button type="button" class="image-preview-remove">×</button>')
+                .attr('aria-label', removeLabel)
+                .attr('title', removeLabel)
+                .on('click', () => this.removeFile(idx));
+            header.append(removeBtn);
+
+            const img = $('<img />')
+                .attr('src', url)
+                .attr('alt', file.name);
+
+            const nameSpan = $('<span class="image-preview-name"></span>')
+                .text(file.name)
+                .attr('title', file.name);
+
+            item.append(header, img, nameSpan);
+            container.append(item);
+        });
+    }
+};
+
 // コメント返信機能
 function replyToComment(commentId, commentNumber, userName) {
     $('#replyParentId').val(commentId);
