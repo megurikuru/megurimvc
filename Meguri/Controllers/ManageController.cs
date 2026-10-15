@@ -17,7 +17,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Meguri.Data;
 using Meguri.Models;
-using Meguri.Models.ManageViewModels;
+using Meguri.ViewModels.Manage;
 using Meguri.Services;
 
 namespace Meguri.Controllers {

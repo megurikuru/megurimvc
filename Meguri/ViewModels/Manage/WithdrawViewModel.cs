@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Meguri.Models.ManageViewModels {
+namespace Meguri.ViewModels.Manage {
     public class WithdrawViewModel {
         public bool HasPassword { get; set; }
 

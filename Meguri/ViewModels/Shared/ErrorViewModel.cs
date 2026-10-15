@@ -1,6 +1,6 @@
 using System;
 
-namespace Meguri.Models {
+namespace Meguri.ViewModels.Shared {
     public class ErrorViewModel {
         public string RequestId { get; set; }
 

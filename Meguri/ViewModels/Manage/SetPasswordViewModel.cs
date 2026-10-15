@@ -4,21 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Meguri.Models.ManageViewModels {
-    public class ChangePasswordViewModel {
-        [Required(ErrorMessage = "Validation_Required")]
-        [DataType(DataType.Password)]
-        [Display(Name = "Account_Field_Password")]
-        public string OldPassword { get; set; }
-
+namespace Meguri.ViewModels.Manage {
+    public class SetPasswordViewModel {
         [Required(ErrorMessage = "Validation_Required")]
         [StringLength(100, ErrorMessage = "Validation_StringLength", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Manage_ChangePassword_NewPassword")]
+        [Display(Name = "Manage_SetPassword_NewPassword")]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Manage_ChangePassword_ConfirmPassword")]
+        [Display(Name = "Manage_SetPassword_ConfirmPassword")]
         [Compare("NewPassword", ErrorMessage = "Validation_Compare")]
         public string ConfirmPassword { get; set; }
 

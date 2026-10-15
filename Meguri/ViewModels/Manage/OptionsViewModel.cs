@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Meguri.Models.ManageViewModels {
+namespace Meguri.ViewModels.Manage {
     public class OptionsViewModel {
         [Display(Name = "Manage_Options_Language")]
         public string Culture { get; set; }

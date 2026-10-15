@@ -1,6 +1,6 @@
-namespace Meguri.Models {
+namespace Meguri.ViewModels.Shared {
     /// <summary>共通検索フォーム（Shared/_SearchForm）用のモデル</summary>
-    public class SearchFormModel {
+    public class SearchFormViewModel {
         /// <summary>送信先アクション名</summary>
         public string Action { get; set; } = "Index";
 

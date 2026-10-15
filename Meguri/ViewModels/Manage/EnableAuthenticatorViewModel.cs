@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace Meguri.Models.ManageViewModels {
+namespace Meguri.ViewModels.Manage {
     public class EnableAuthenticatorViewModel {
         [Required(ErrorMessage = "Validation_Required")]
         [StringLength(7, ErrorMessage = "Validation_StringLength", MinimumLength = 6)]

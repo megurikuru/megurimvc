@@ -13,7 +13,7 @@ using Microsoft.Extensions.Options;
 using Meguri.Models;
 using Meguri.Data;
 using Microsoft.EntityFrameworkCore;
-using Meguri.Models.AccountViewModels;
+using Meguri.ViewModels.Account;
 using Microsoft.Extensions.Localization;
 
 namespace Meguri.Controllers {

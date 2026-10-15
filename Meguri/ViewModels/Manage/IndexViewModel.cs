@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Meguri.Models.ManageViewModels {
+namespace Meguri.ViewModels.Manage {
     public class IndexViewModel {
         [Required(ErrorMessage = "Validation_Required")]
         [StringLength(256, ErrorMessage = "Validation_StringLengthMax")]

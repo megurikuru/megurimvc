@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Meguri.Models.ManageViewModels {
+namespace Meguri.ViewModels.Manage {
     public class PasskeysViewModel {
         public IList<PasskeyItem> Passkeys { get; set; } = new List<PasskeyItem>();
 

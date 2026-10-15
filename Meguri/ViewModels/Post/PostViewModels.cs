@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace Meguri.Models.PostViewModels {
+namespace Meguri.ViewModels.Post {
     public class PostCreateViewModel {
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_PostName")]

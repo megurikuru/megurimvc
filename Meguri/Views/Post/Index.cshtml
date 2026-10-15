@@ -15,7 +15,7 @@
 		if (!string.IsNullOrEmpty(currentSearch)) {
 			postRouteValues["search"] = currentSearch;
 		}
-		var pager = new Meguri.ViewModels.PaginationViewModel {
+		var pager = new PaginationViewModel {
 			Controller = "Post",
 			Action = "Index",
 			HasPrevious = ViewBag.HasPrevious as bool? ?? false,

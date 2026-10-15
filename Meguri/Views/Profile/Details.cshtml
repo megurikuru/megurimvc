@@ -4,7 +4,7 @@
 	var isOwner = ViewBag.IsOwner as bool? ?? false;
 	var urls = ViewBag.ExternalUrls as List<string> ?? new List<string>();
 	ViewData["Title"] = profile.UserName;
-	var pager = new Meguri.ViewModels.PaginationViewModel {
+	var pager = new PaginationViewModel {
 		Controller = "Profile",
 		Action = "Details",
 		HasPrevious = ViewBag.HasPrevious as bool? ?? false,

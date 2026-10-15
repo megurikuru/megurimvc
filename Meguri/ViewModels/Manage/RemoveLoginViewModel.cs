@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Meguri.Models.ManageViewModels {
+namespace Meguri.ViewModels.Manage {
     public class RemoveLoginViewModel {
         public string LoginProvider { get; set; }
         public string ProviderKey { get; set; }
