@@ -2,7 +2,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	@if (ViewData["IsHomePage"] as bool? == true) {
-		<title>meguri - 『好き』がめぐるSNS</title>
+		<title>@SharedLocalizer["Head_HomeTitle"]</title>
 	} else if (!string.IsNullOrEmpty(ViewData["Title"] as string)) {
 		<title>@ViewData["Title"] - meguri</title>
 	} else {

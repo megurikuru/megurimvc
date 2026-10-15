@@ -26,7 +26,7 @@
 
 @if (foundUsers != null && foundUsers.Any()) {
 	<div id="user-list">
-		<h1>ユーザー</h1>
+		<h1>@SharedLocalizer["Home_UsersHeading"]</h1>
 		<ul>
 			@foreach (var u in foundUsers) {
 				<li>
@@ -46,7 +46,7 @@
 <div id="post-list">
 	@* 投稿データが存在する場合 *@
 	@if (posts.Any()) {
-		<h1>新着投稿</h1>
+		<h1>@SharedLocalizer["Home_LatestPostsHeading"]</h1>
 		@* 投稿リストをループして描画 *@
 		@foreach (var post in posts) {
 			<div>

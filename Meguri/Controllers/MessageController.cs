@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
 using Meguri.Models.MessageViewModels;
@@ -21,16 +22,19 @@ namespace Meguri.Controllers {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IR2StorageService _r2StorageService;
         private readonly IImageProcessingService _imageProcessingService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         public MessageController(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             IR2StorageService r2StorageService,
-            IImageProcessingService imageProcessingService) {
+            IImageProcessingService imageProcessingService,
+            IStringLocalizer<SharedResource> localizer) {
             _context = context;
             _userManager = userManager;
             _r2StorageService = r2StorageService;
             _imageProcessingService = imageProcessingService;
+            _localizer = localizer;
         }
 
         // GET: /Message
@@ -79,16 +83,16 @@ namespace Meguri.Controllers {
                 string title = conv.Title;
                 if (!conv.IsGroup || string.IsNullOrEmpty(title)) {
                     var otherMember = conv.Members.FirstOrDefault(m => m.UserId != currentUserId);
-                    title = otherMember?.User == null ? "ダイレクトメッセージ" : otherMember.User.UserName + (otherMember.User.IsWithdrawn ? "（存在しないユーザー）" : "");
+                    title = otherMember?.User == null ? _localizer["Message_Direct"].Value : otherMember.User.UserName + (otherMember.User.IsWithdrawn ? _localizer["Message_WithdrawnUserSuffix"].Value : "");
                 }
 
                 vmList.Add(new ConversationItemViewModel {
                     Id = conv.Id,
                     Title = title,
                     IsGroup = conv.IsGroup,
-                    LastMessageText = lastMsg == null ? "(メッセージなし)" : (lastMsg.IsDeleted ? "削除されたメッセージ" : lastMsg.Body),
+                    LastMessageText = lastMsg == null ? _localizer["Message_NoMessagesInConv"].Value : (lastMsg.IsDeleted ? _localizer["Message_Deleted"].Value : lastMsg.Body),
                     LastMessageTime = lastMsg?.CreatedAt ?? conv.CreatedAt,
-                    MemberNames = conv.Members.Select(m => m.User?.UserName ?? "User").ToList()
+                    MemberNames = conv.Members.Select(m => m.User?.UserName ?? _localizer["Common_UnknownUser"].Value).ToList()
                 });
             }
 
@@ -135,7 +139,7 @@ namespace Meguri.Controllers {
             string displayTitle = conversation.Title;
             if (!conversation.IsGroup || string.IsNullOrEmpty(displayTitle)) {
                 var otherMember = conversation.Members.FirstOrDefault(m => m.UserId != currentUserId);
-                displayTitle = otherMember?.User == null ? "ダイレクトメッセージ" : otherMember.User.UserName + (otherMember.User.IsWithdrawn ? "（存在しないユーザー）" : "");
+                displayTitle = otherMember?.User == null ? _localizer["Message_Direct"].Value : otherMember.User.UserName + (otherMember.User.IsWithdrawn ? _localizer["Message_WithdrawnUserSuffix"].Value : "");
             }
 
             const int pageSize = 10;
@@ -235,7 +239,7 @@ namespace Meguri.Controllers {
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
             if (model.SelectedUserIds == null || model.SelectedUserIds.Count == 0) {
-                ModelState.AddModelError("SelectedUserIds", "宛先を1人以上選択してください。");
+                ModelState.AddModelError("SelectedUserIds", _localizer["Message_Error_SelectRecipientRequired"]);
             }
 
             if (!ModelState.IsValid) {
@@ -257,7 +261,7 @@ namespace Meguri.Controllers {
             }
 
             var conv = new Conversation {
-                Title = model.IsGroup ? (model.Title ?? "グループメッセージ") : string.Empty,
+                Title = model.IsGroup ? (model.Title ?? _localizer["Message_Group"].Value) : string.Empty,
                 IsGroup = model.IsGroup,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -370,7 +374,7 @@ namespace Meguri.Controllers {
                     parentMessageId = null;
                 }
                 if (parentMessageId.HasValue && await _context.Messages.CountAsync(m => m.ParentMessageId == parentMessageId.Value) >= MaxRepliesPerParent) {
-                    TempData["Error"] = $"1つのメッセージへの返信は{MaxRepliesPerParent}件までです。";
+                    TempData["Error"] = string.Format(_localizer["Message_Error_MaxRepliesPerParentFormat"].Value, MaxRepliesPerParent);
                     return RedirectToAction(nameof(Details), new { id = conversationId });
                 }
                 await SendMessageInternal(conversationId, currentUserId, text, imageFiles, subject, parentMessageId);
@@ -449,7 +453,7 @@ namespace Meguri.Controllers {
                                 FileSize = processed.FileSize,
                                 Width = processed.Width,
                                 Height = processed.Height,
-                                Alt = "Message Attachment"
+                                Alt = _localizer["Message_AttachmentAlt"].Value
                             };
                             img.UserImages.Add(new UserImage {
                                 UserId = senderId,

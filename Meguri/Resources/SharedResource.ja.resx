@@ -1378,4 +1378,382 @@
   <data name="Manage_Passkeys_Failed" xml:space="preserve">
     <value>パスキーの操作に失敗しました。</value>
   </data>
+  <data name="Email_ConfirmAccount_Subject" xml:space="preserve">
+    <value>アカウントの確認</value>
+  </data>
+  <data name="Email_ConfirmAccount_Body" xml:space="preserve">
+    <value>以下のリンクをクリックして、アカウントを確定してください。
+
+{0}</value>
+  </data>
+  <data name="Email_ResetPassword_Subject" xml:space="preserve">
+    <value>パスワードのリセット</value>
+  </data>
+  <data name="Email_ResetPassword_Body" xml:space="preserve">
+    <value>以下のリンクをクリックして、パスワードをリセットしてください。
+
+{0}</value>
+  </data>
+  <data name="Email_ResetPasswordCode_Subject" xml:space="preserve">
+    <value>パスワードリセットコード</value>
+  </data>
+  <data name="Email_ResetPasswordCode_Body" xml:space="preserve">
+    <value>リセットコードは次の通りです:
+
+{0}</value>
+  </data>
+  <data name="Image_Error_EmptyFile" xml:space="preserve">
+    <value>画像ファイルが空です。</value>
+  </data>
+  <data name="Image_Error_MaxSizeExceeded" xml:space="preserve">
+    <value>画像サイズが上限の5MBを超えています (現在: {0:F2}MB)。</value>
+  </data>
+  <data name="Image_Error_EmptyData" xml:space="preserve">
+    <value>画像データが空です。</value>
+  </data>
+  <data name="Image_Error_UnsupportedExtension" xml:space="preserve">
+    <value>画像の形式はJPEGまたはPNGのみ対応しています。</value>
+  </data>
+  <data name="Image_Error_InvalidSignature" xml:space="preserve">
+    <value>無効な画像ファイル形式です。JPEGまたはPNGファイルのみアップロード可能です。</value>
+  </data>
+  <data name="Image_Error_DecodeFailed" xml:space="preserve">
+    <value>画像を読み込めませんでした。</value>
+  </data>
+  <data name="Image_Error_InvalidDimension" xml:space="preserve">
+    <value>画像の解像度が制限範囲外です。</value>
+  </data>
+  <data name="Image_Error_ResizeFailed" xml:space="preserve">
+    <value>画像のリサイズに失敗しました。</value>
+  </data>
+  <data name="Image_Error_WebpConversionFailed" xml:space="preserve">
+    <value>WebPへの変換に失敗しました。</value>
+  </data>
+  <data name="Reaction_Like_Label" xml:space="preserve">
+    <value>すき</value>
+  </data>
+  <data name="Reaction_Emotional_Label" xml:space="preserve">
+    <value>エモい</value>
+  </data>
+  <data name="Reaction_Bravo_Label" xml:space="preserve">
+    <value>すごい</value>
+  </data>
+  <data name="Reaction_Insight_Label" xml:space="preserve">
+    <value>なるほど</value>
+  </data>
+  <data name="Reaction_Impressed_Label" xml:space="preserve">
+    <value>ほぅ</value>
+  </data>
+  <data name="Reaction_Seen_Label" xml:space="preserve">
+    <value>見たよ</value>
+  </data>
+  <data name="Reaction_Thinking_Label" xml:space="preserve">
+    <value>考えさせられる</value>
+  </data>
+  <data name="Reaction_Lol_Label" xml:space="preserve">
+    <value>草</value>
+  </data>
+  <data name="Reaction_Like_Desc" xml:space="preserve">
+    <value>すき・いいね</value>
+  </data>
+  <data name="Reaction_Emotional_Desc" xml:space="preserve">
+    <value>泣けた・エモい・感動した</value>
+  </data>
+  <data name="Reaction_Bravo_Desc" xml:space="preserve">
+    <value>すごい・拍手・素晴らしい完成度</value>
+  </data>
+  <data name="Reaction_Insight_Desc" xml:space="preserve">
+    <value>なるほど・納得・理解</value>
+  </data>
+  <data name="Reaction_Impressed_Desc" xml:space="preserve">
+    <value>ほぅ・興味深い・感銘</value>
+  </data>
+  <data name="Reaction_Seen_Desc" xml:space="preserve">
+    <value>読了・見たよ・足あと</value>
+  </data>
+  <data name="Reaction_Thinking_Desc" xml:space="preserve">
+    <value>考えさせられる・深いテーマ</value>
+  </data>
+  <data name="Reaction_Lol_Desc" xml:space="preserve">
+    <value>草・面白い・ｗｗ</value>
+  </data>
+  <data name="Account_Error_UserWithdrawn" xml:space="preserve">
+    <value>存在しないユーザーです。</value>
+  </data>
+  <data name="Account_Error_EmailNotConfirmed" xml:space="preserve">
+    <value>E-Mailアドレスの確認が完了していません。登録時に送信された確認メールをご確認ください。</value>
+  </data>
+  <data name="Account_Error_InvalidAuthenticatorCode" xml:space="preserve">
+    <value>認証コードが正しくありません。</value>
+  </data>
+  <data name="Account_Error_InvalidRecoveryCode" xml:space="preserve">
+    <value>回復コードが正しくありません。</value>
+  </data>
+  <data name="Account_Error_UnavailableUserName" xml:space="preserve">
+    <value>使用できないユーザー名です。</value>
+  </data>
+  <data name="Account_Error_ExternalProvider" xml:space="preserve">
+    <value>外部プロバイダーでエラーが発生しました: {0}</value>
+  </data>
+  <data name="Manage_Error_MaxUrls" xml:space="preserve">
+    <value>URLは最大5個までです。</value>
+  </data>
+  <data name="Manage_Error_InvalidUrl" xml:space="preserve">
+    <value>URLの形式が正しくありません: {0}</value>
+  </data>
+  <data name="Manage_VerificationEmailSent" xml:space="preserve">
+    <value>確認メールを送信しました。メールをご確認ください。</value>
+  </data>
+  <data name="Manage_PasswordChanged" xml:space="preserve">
+    <value>パスワードを変更しました。</value>
+  </data>
+  <data name="Manage_PasswordSet" xml:space="preserve">
+    <value>パスワードを設定しました。</value>
+  </data>
+  <data name="Manage_ExternalLoginAdded" xml:space="preserve">
+    <value>外部ログインを追加しました。</value>
+  </data>
+  <data name="Manage_ExternalLoginRemoved" xml:space="preserve">
+    <value>外部ログインを削除しました。</value>
+  </data>
+  <data name="Manage_Error_InvalidVerificationCode" xml:space="preserve">
+    <value>確認コードが正しくありません。</value>
+  </data>
+  <data name="Fandom_Error_NameRequired" xml:space="preserve">
+    <value>界隈名を入力してください。</value>
+  </data>
+  <data name="Fandom_Error_ParentNotFound" xml:space="preserve">
+    <value>指定された親界隈が存在しません。</value>
+  </data>
+  <data name="Message_WithdrawnUserSuffix" xml:space="preserve">
+    <value>（存在しないユーザー）</value>
+  </data>
+  <data name="Message_NoMessagesInConv" xml:space="preserve">
+    <value>(メッセージなし)</value>
+  </data>
+  <data name="Message_Error_SelectRecipientRequired" xml:space="preserve">
+    <value>メンバーを1名以上選択してください。</value>
+  </data>
+  <data name="Message_Error_MaxRepliesPerParentFormat" xml:space="preserve">
+    <value>1つのメッセージへの返信は{0}件までです。</value>
+  </data>
+  <data name="Message_AttachmentAlt" xml:space="preserve">
+    <value>添付画像</value>
+  </data>
+  <data name="Reaction_Error_InvalidTargetType" xml:space="preserve">
+    <value>無効な対象種別です。</value>
+  </data>
+  <data name="Validation_StringLengthMax" xml:space="preserve">
+    <value>{0} は {1} 文字以下で入力してください。</value>
+  </data>
+  <data name="Validation_InvalidPhone" xml:space="preserve">
+    <value>有効な電話番号を入力してください。</value>
+  </data>
+  <data name="Validation_ValueMustNotBeNull" xml:space="preserve">
+    <value>値を入力してください。</value>
+  </data>
+  <data name="Validation_AttemptedValueIsInvalid" xml:space="preserve">
+    <value>{1} に '{0}' は無効な値です。</value>
+  </data>
+  <data name="Validation_UnknownValueIsInvalid" xml:space="preserve">
+    <value>{0} の値が無効です。</value>
+  </data>
+  <data name="Validation_ValueIsInvalid" xml:space="preserve">
+    <value>'{0}' は無効な値です。</value>
+  </data>
+  <data name="Validation_ValueMustBeANumber" xml:space="preserve">
+    <value>{0} は数値で入力してください。</value>
+  </data>
+  <data name="Validation_MissingBindRequiredValue" xml:space="preserve">
+    <value>'{0}' の値が必要です。</value>
+  </data>
+  <data name="Validation_MissingKeyOrValue" xml:space="preserve">
+    <value>値が必要です。</value>
+  </data>
+  <data name="Identity_DefaultError" xml:space="preserve">
+    <value>不明なエラーが発生しました。</value>
+  </data>
+  <data name="Identity_ConcurrencyFailure" xml:space="preserve">
+    <value>データが既に変更されています。再度お試しください。</value>
+  </data>
+  <data name="Identity_PasswordMismatch" xml:space="preserve">
+    <value>パスワードが正しくありません。</value>
+  </data>
+  <data name="Identity_InvalidToken" xml:space="preserve">
+    <value>トークンが無効です。</value>
+  </data>
+  <data name="Identity_RecoveryCodeRedemptionFailed" xml:space="preserve">
+    <value>回復コードの使用に失敗しました。</value>
+  </data>
+  <data name="Identity_LoginAlreadyAssociated" xml:space="preserve">
+    <value>この外部ログインは既に他のユーザーに関連付けられています。</value>
+  </data>
+  <data name="Identity_InvalidUserName" xml:space="preserve">
+    <value>ユーザー名 '{0}' は無効です。半角英数字のみ使用できます。</value>
+  </data>
+  <data name="Identity_InvalidEmail" xml:space="preserve">
+    <value>メールアドレス '{0}' は無効です。</value>
+  </data>
+  <data name="Identity_DuplicateUserName" xml:space="preserve">
+    <value>ユーザー名 '{0}' は既に使用されています。</value>
+  </data>
+  <data name="Identity_DuplicateEmail" xml:space="preserve">
+    <value>メールアドレス '{0}' は既に使用されています。</value>
+  </data>
+  <data name="Identity_InvalidRoleName" xml:space="preserve">
+    <value>ロール名 '{0}' は無効です。</value>
+  </data>
+  <data name="Identity_DuplicateRoleName" xml:space="preserve">
+    <value>ロール名 '{0}' は既に使用されています。</value>
+  </data>
+  <data name="Identity_UserAlreadyHasPassword" xml:space="preserve">
+    <value>ユーザーには既にパスワードが設定されています。</value>
+  </data>
+  <data name="Identity_UserLockoutNotEnabled" xml:space="preserve">
+    <value>このユーザーはロックアウトが有効になっていません。</value>
+  </data>
+  <data name="Identity_UserAlreadyInRole" xml:space="preserve">
+    <value>ユーザーは既にロール '{0}' に属しています。</value>
+  </data>
+  <data name="Identity_UserNotInRole" xml:space="preserve">
+    <value>ユーザーはロール '{0}' に属していません。</value>
+  </data>
+  <data name="Identity_PasswordTooShort" xml:space="preserve">
+    <value>パスワードは {0} 文字以上である必要があります。</value>
+  </data>
+  <data name="Identity_PasswordRequiresUniqueChars" xml:space="preserve">
+    <value>パスワードには {0} 種類以上の異なる文字を含める必要があります。</value>
+  </data>
+  <data name="Identity_PasswordRequiresNonAlphanumeric" xml:space="preserve">
+    <value>パスワードには記号（英数字以外の文字）を1文字以上含める必要があります。</value>
+  </data>
+  <data name="Identity_PasswordRequiresDigit" xml:space="preserve">
+    <value>パスワードには数字 ('0'-'9') を1文字以上含める必要があります。</value>
+  </data>
+  <data name="Identity_PasswordRequiresLower" xml:space="preserve">
+    <value>パスワードには小文字 ('a'-'z') を1文字以上含める必要があります。</value>
+  </data>
+  <data name="Identity_PasswordRequiresUpper" xml:space="preserve">
+    <value>パスワードには大文字 ('A'-'Z') を1文字以上含める必要があります。</value>
+  </data>
+  <data name="Home_UsersHeading" xml:space="preserve">
+    <value>ユーザー</value>
+  </data>
+  <data name="Home_LatestPostsHeading" xml:space="preserve">
+    <value>新着投稿</value>
+  </data>
+  <data name="Manage_Profile_AvatarLabel" xml:space="preserve">
+    <value>プロフィール画像</value>
+  </data>
+  <data name="Manage_Profile_HeaderLabel" xml:space="preserve">
+    <value>ヘッダー画像</value>
+  </data>
+  <data name="Manage_Profile_RemoveImage" xml:space="preserve">
+    <value>画像を削除</value>
+  </data>
+  <data name="Manage_Profile_ExternalUrlsLabel" xml:space="preserve">
+    <value>他のSNS・ホームページ等のURL（最大5個）</value>
+  </data>
+  <data name="Manage_Profile_IsProfilePublicLabel" xml:space="preserve">
+    <value>マイページを外部に公開する</value>
+  </data>
+  <data name="Post_TitlePlaceholder" xml:space="preserve">
+    <value>投稿のタイトル</value>
+  </data>
+  <data name="Post_BodyPlaceholder" xml:space="preserve">
+    <value>作品の本文、感想、考察など</value>
+  </data>
+  <data name="Post_ImageUploadHint1" xml:space="preserve">
+    <value>PNG/JPEG形式（最大5MB/枚）、WebPに自動変換され250KB以下に最適化されます。</value>
+  </data>
+  <data name="Post_ImageUploadHint2" xml:space="preserve">
+    <value>複数枚の画像を選択できます。投稿後に詳細または編集画面で並び順の変更が可能です。</value>
+  </data>
+  <data name="Post_ThreadLockedMessage" xml:space="preserve">
+    <value>この投稿のスレッドはロックされており、新しいコメントは投稿できません。</value>
+  </data>
+  <data name="Post_ManageImagesLabel" xml:space="preserve">
+    <value>🖼️ 添付画像の並び順・管理</value>
+  </data>
+  <data name="Post_AddMoreImagesLabel" xml:space="preserve">
+    <value>➕ 画像を追加添付</value>
+  </data>
+  <data name="Profile_PrivateBadge" xml:space="preserve">
+    <value>（非公開）</value>
+  </data>
+  <data name="Profile_PostListHeading" xml:space="preserve">
+    <value>投稿一覧</value>
+  </data>
+  <data name="Header_MyPageTitle" xml:space="preserve">
+    <value>マイページ</value>
+  </data>
+  <data name="Head_HomeTitle" xml:space="preserve">
+    <value>meguri - 『好き』がめぐるSNS</value>
+  </data>
+  <data name="Error_Title" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="Error_Heading" xml:space="preserve">
+    <value>エラーが発生しました。</value>
+  </data>
+  <data name="Error_SubHeading" xml:space="preserve">
+    <value>リクエストの処理中にエラーが発生しました。</value>
+  </data>
+  <data name="Error_RequestIdLabel" xml:space="preserve">
+    <value>リクエスト ID:</value>
+  </data>
+  <data name="Error_DevModeHeading" xml:space="preserve">
+    <value>開発モード</value>
+  </data>
+  <data name="Error_DevModeP1" xml:space="preserve">
+    <value><strong>Development</strong> 環境に切り替えると、発生したエラーの詳細情報が表示されます。</value>
+  </data>
+  <data name="Error_DevModeP2" xml:space="preserve">
+    <value><strong>デプロイされたアプリケーションでは Development 環境を有効にしないでください。</strong>例外の機密情報がエンドユーザーに表示される可能性があります。ローカルデバッグでは、環境変数 <strong>ASPNETCORE_ENVIRONMENT</strong> を <strong>Development</strong> に設定してアプリケーションを再起動してください。</value>
+  </data>
+  <data name="Js_MaxTagsAlertFormat" xml:space="preserve">
+    <value>タグは最大{0}個まで設定できます。</value>
+  </data>
+  <data name="Js_ReplyNoticeFormat" xml:space="preserve">
+    <value>&lt;strong&gt;&gt;&gt;{0} ({1})&lt;/strong&gt; への返信</value>
+  </data>
+  <data name="Js_Validate_Required" xml:space="preserve">
+    <value>この項目は必須です。</value>
+  </data>
+  <data name="Js_Validate_Email" xml:space="preserve">
+    <value>有効なメールアドレスを入力してください。</value>
+  </data>
+  <data name="Js_Validate_Url" xml:space="preserve">
+    <value>有効なURLを入力してください。</value>
+  </data>
+  <data name="Js_Validate_Date" xml:space="preserve">
+    <value>有効な日付を入力してください。</value>
+  </data>
+  <data name="Js_Validate_Number" xml:space="preserve">
+    <value>有効な数値を入力してください。</value>
+  </data>
+  <data name="Js_Validate_Digits" xml:space="preserve">
+    <value>数字のみを入力してください。</value>
+  </data>
+  <data name="Js_Validate_EqualTo" xml:space="preserve">
+    <value>同じ値をもう一度入力してください。</value>
+  </data>
+  <data name="Js_Validate_MaxLength" xml:space="preserve">
+    <value>{0} 文字以下で入力してください。</value>
+  </data>
+  <data name="Js_Validate_MinLength" xml:space="preserve">
+    <value>{0} 文字以上で入力してください。</value>
+  </data>
+  <data name="Js_Validate_RangeLength" xml:space="preserve">
+    <value>{0} 文字から {1} 文字の間で入力してください。</value>
+  </data>
+  <data name="Js_Validate_Range" xml:space="preserve">
+    <value>{0} から {1} の間の値を入力してください。</value>
+  </data>
+  <data name="Js_Validate_Max" xml:space="preserve">
+    <value>{0} 以下の値を入力してください。</value>
+  </data>
+  <data name="Js_Validate_Min" xml:space="preserve">
+    <value>{0} 以上の値を入力してください。</value>
+  </data>
 </root>

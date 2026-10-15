@@ -39,7 +39,7 @@
 		<!-- 既存の添付画像の並び替え & 削除 -->
 		@if (Model.ExistingImages != null && Model.ExistingImages.Any()) {
 			<div>
-				<label>🖼️ @SharedLocalizer["Post_AttachImages"] の並び順・管理</label>
+				<label>@SharedLocalizer["Post_ManageImagesLabel"]</label>
 				<p>@SharedLocalizer["Post_ImageOrderHint"]</p>
 				<div id="imageOrderContainer">
 					@for (int i = 0; i < Model.ExistingImages.Count; i++) {
@@ -67,9 +67,9 @@
 
 		<!-- 新規画像追加 -->
 		<div>
-			<label asp-for="NewImageFiles">➕ 画像を追加添付</label>
+			<label asp-for="NewImageFiles">@SharedLocalizer["Post_AddMoreImagesLabel"]</label>
 			<input asp-for="NewImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
-			<div>PNG/JPEG形式（最大5MB/枚）、WebPに自動変換され250KB以下に最適化されます。</div>
+			<div>@SharedLocalizer["Post_ImageUploadHint1"]</div>
 		</div>
 
 		<!-- タグ編集コンポーネント (最大10個) -->
@@ -132,6 +132,7 @@
 
 
 @section Scripts {
+	<partial name="_ValidationScriptsPartial" />
 	<script>
 		$(document).ready(function () {
 				TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));

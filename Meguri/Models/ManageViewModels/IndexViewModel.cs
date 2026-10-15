@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Meguri.Models.ManageViewModels {
     public class IndexViewModel {
         [Required(ErrorMessage = "Validation_Required")]
-        [StringLength(256, ErrorMessage = "Validation_StringLength")]
+        [StringLength(256, ErrorMessage = "Validation_StringLengthMax")]
         [Display(Name = "Manage_Profile_Username")]
         public string Username { get; set; }
 
@@ -18,7 +18,7 @@ namespace Meguri.Models.ManageViewModels {
         [Display(Name = "Manage_Profile_Email")]
         public string Email { get; set; }
 
-        [Phone]
+        [Phone(ErrorMessage = "Validation_InvalidPhone")]
         [Display(Name = "Manage_Profile_PhoneNumber")]
         public string? PhoneNumber { get; set; }
 
@@ -27,7 +27,7 @@ namespace Meguri.Models.ManageViewModels {
         public DateOnly DateOfBirth { get; set; }
 
         [Display(Name = "Manage_Profile_Bio")]
-        [StringLength(1000, ErrorMessage = "Validation_StringLength")]
+        [StringLength(1000, ErrorMessage = "Validation_StringLengthMax")]
         public string Bio { get; set; } = string.Empty;
 
         public bool IsProfilePublic { get; set; }

@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Resources;
 using Meguri.Models;
 
 namespace Meguri.Extensions {
@@ -6,6 +8,10 @@ namespace Meguri.Extensions {
     /// <see cref="ReactionType"/> に対応する絵文字や表示ラベル、説明文を取得するための拡張メソッド
     /// </summary>
     public static class ReactionTypeExtensions {
+        private static readonly ResourceManager ResourceManager = new("Meguri.Resources.SharedResource", typeof(SharedResource).Assembly);
+
+        private static string GetResourceString(string key) =>
+            ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? string.Empty;
 
         /// <summary>
         /// リアクションに対応する絵文字を取得します。
@@ -26,14 +32,14 @@ namespace Meguri.Extensions {
         /// リアクションに対応する短縮表示ラベルを取得します。
         /// </summary>
         public static string GetLabel(this ReactionType type) => type switch {
-            ReactionType.Like => "すき",
-            ReactionType.Emotional => "エモい",
-            ReactionType.Bravo => "すごい",
-            ReactionType.Insight => "なるほど",
-            ReactionType.Impressed => "ほぅ",
-            ReactionType.Seen => "見たよ",
-            ReactionType.Thinking => "考えさせられる",
-            ReactionType.Lol => "草",
+            ReactionType.Like => GetResourceString("Reaction_Like_Label"),
+            ReactionType.Emotional => GetResourceString("Reaction_Emotional_Label"),
+            ReactionType.Bravo => GetResourceString("Reaction_Bravo_Label"),
+            ReactionType.Insight => GetResourceString("Reaction_Insight_Label"),
+            ReactionType.Impressed => GetResourceString("Reaction_Impressed_Label"),
+            ReactionType.Seen => GetResourceString("Reaction_Seen_Label"),
+            ReactionType.Thinking => GetResourceString("Reaction_Thinking_Label"),
+            ReactionType.Lol => GetResourceString("Reaction_Lol_Label"),
             _ => string.Empty
         };
 
@@ -49,14 +55,14 @@ namespace Meguri.Extensions {
         /// リアクションの意味や説明文（ツールチップ等用）を取得します。
         /// </summary>
         public static string GetDescription(this ReactionType type) => type switch {
-            ReactionType.Like => "すき・いいね",
-            ReactionType.Emotional => "泣けた・エモい・感動した",
-            ReactionType.Bravo => "すごい・拍手・素晴らしい完成度",
-            ReactionType.Insight => "なるほど・納得・理解",
-            ReactionType.Impressed => "ほぅ・興味深い・感銘",
-            ReactionType.Seen => "読了・見たよ・足あと",
-            ReactionType.Thinking => "考えさせられる・深いテーマ",
-            ReactionType.Lol => "草・面白い・ｗｗ",
+            ReactionType.Like => GetResourceString("Reaction_Like_Desc"),
+            ReactionType.Emotional => GetResourceString("Reaction_Emotional_Desc"),
+            ReactionType.Bravo => GetResourceString("Reaction_Bravo_Desc"),
+            ReactionType.Insight => GetResourceString("Reaction_Insight_Desc"),
+            ReactionType.Impressed => GetResourceString("Reaction_Impressed_Desc"),
+            ReactionType.Seen => GetResourceString("Reaction_Seen_Desc"),
+            ReactionType.Thinking => GetResourceString("Reaction_Thinking_Desc"),
+            ReactionType.Lol => GetResourceString("Reaction_Lol_Desc"),
             _ => string.Empty
         };
     }

@@ -10,12 +10,12 @@
 <form method="post" enctype="multipart/form-data" class="account">
 	<div asp-validation-summary="All"></div>
 	<div>
-		<label asp-for="Username">ユーザー名</label>
+		<label asp-for="Username">@SharedLocalizer["Manage_Profile_Username"]</label>
 		<input asp-for="Username" />
 		<span asp-validation-for="Username"></span>
 	</div>
 	<div>
-		<label asp-for="Email">メールアドレス</label>
+		<label asp-for="Email">@SharedLocalizer["Manage_Profile_Email"]</label>
 		<input asp-for="Email" />
 		@if (Model.IsEmailConfirmed) {
 			<span aria-hidden="true">✓</span>
@@ -40,30 +40,30 @@
 		<span asp-validation-for="Bio"></span>
 	</div>
 	<div>
-		<label>プロフィール画像</label>
+		<label>@SharedLocalizer["Manage_Profile_AvatarLabel"]</label>
 		@if (Model.AvatarImageId.HasValue) {
 			<img src="/Image/File/@Model.AvatarImageId" alt="" style="width: 100px; height: 100px; object-fit: cover;" />
-			<label><input type="checkbox" asp-for="RemoveAvatar" /> 画像を削除</label>
+			<label><input type="checkbox" asp-for="RemoveAvatar" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
 		}
 		<input type="file" asp-for="AvatarFile" accept="image/*" />
 	</div>
 	<div>
-		<label>ヘッダー画像</label>
+		<label>@SharedLocalizer["Manage_Profile_HeaderLabel"]</label>
 		@if (Model.HeaderImageId.HasValue) {
 			<img src="/Image/File/@Model.HeaderImageId" alt="" style="max-width: 100%; max-height: 150px; object-fit: cover;" />
-			<label><input type="checkbox" asp-for="RemoveHeader" /> 画像を削除</label>
+			<label><input type="checkbox" asp-for="RemoveHeader" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
 		}
 		<input type="file" asp-for="HeaderFile" accept="image/*" />
 	</div>
 	<div>
-		<label>他のSNS・ホームページ等のURL（最大5個）</label>
+		<label>@SharedLocalizer["Manage_Profile_ExternalUrlsLabel"]</label>
 		@for (var i = 0; i < 5; i++) {
 			<input type="url" name="ExternalUrls[@i]" value="@Model.ExternalUrls[i]" maxlength="500" placeholder="https://" />
 		}
 		<span asp-validation-for="ExternalUrls"></span>
 	</div>
 	<div>
-		<label><input type="checkbox" asp-for="IsProfilePublic" /> マイページを外部に公開する</label>
+		<label><input type="checkbox" asp-for="IsProfilePublic" /> @SharedLocalizer["Manage_Profile_IsProfilePublicLabel"]</label>
 	</div>
 	<button type="submit">@SharedLocalizer["Manage_Profile_Save"]</button>
 </form>

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 namespace Meguri.Models.AccountViewModels {
     public class RegisterViewModel : IValidatableObject {
         [Required(ErrorMessage = "Validation_Required")]
-        [StringLength(256, ErrorMessage = "Validation_StringLength")]
+        [StringLength(256, ErrorMessage = "Validation_StringLengthMax")]
         [Display(Name = "Account_Field_UserName")]
         public string UserName { get; set; }
 

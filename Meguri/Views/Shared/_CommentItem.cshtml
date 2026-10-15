@@ -13,7 +13,7 @@
 			<div>
 				<span>>>@Model.Comment.Number</span>
 				@if (Model.Comment.User == null) {
-					<text>User</text>
+					<text>@SharedLocalizer["Common_UnknownUser"]</text>
 				} else {
 
 					<text>@if (!Model.Comment.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
@@ -31,7 +31,7 @@
 			@if (!Model.Comment.IsDeleted && Model.Depth >= 3) {
 				<span>@SharedLocalizer["Comment_ReplyLimit"]</span>
 			} else if (!Model.Comment.IsDeleted) {
-				<button type="button" onclick="replyToComment(@Model.Comment.Id, @Model.Comment.Number, '@(Model.Comment.User?.UserName ?? "User")')">
+				<button type="button" onclick="replyToComment(@Model.Comment.Id, @Model.Comment.Number, @(System.Text.Json.JsonSerializer.Serialize(Model.Comment.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)))">
 					↩️ @SharedLocalizer["Comment_ReplyTo", Model.Comment.Number]
 									</button>
 			}
@@ -58,7 +58,7 @@
 			<div>
 				@foreach (var ci in Model.Comment.CommentImages) {
 					<a href="/Image/File/@ci.ImageId" target="_blank">
-						<img src="/Image/File/@ci.ImageId" style="max-height: 120px; object-fit: cover;" alt="Attached" />
+						<img src="/Image/File/@ci.ImageId" style="max-height: 120px; object-fit: cover;" alt="@SharedLocalizer["Message_AttachmentAlt"]" />
 					</a>
 				}
 			</div>

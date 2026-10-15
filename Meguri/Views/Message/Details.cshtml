@@ -92,7 +92,7 @@
 					@msg.CreatedAt.ToLocalTime()
 					@if (isMe && !msg.IsDeleted) {
 						<a asp-action="Edit" asp-route-id="@msg.Id">@SharedLocalizer["Common_Edit"]</a>
-						<form asp-action="Delete" asp-route-id="@msg.Id" method="post" style="display: inline;" onsubmit="return confirm('@SharedLocalizer["Common_Delete"].Value?');">
+						<form asp-action="Delete" asp-route-id="@msg.Id" method="post" style="display: inline;" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
 							<button type="submit">@SharedLocalizer["Common_Delete"]</button>
 						</form>
 					}

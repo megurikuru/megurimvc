@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using SkiaSharp;
 
@@ -12,6 +13,7 @@ namespace Meguri.Services {
     /// </summary>
     public class ImageProcessingService : IImageProcessingService {
         private readonly ILogger<ImageProcessingService> _logger;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
         // 最大受け取りサイズ: 5MB
         private const long MaxInputSizeBytes = 5 * 1024 * 1024;
@@ -26,17 +28,18 @@ namespace Meguri.Services {
         private static readonly byte[] JpegHeader = new byte[] { 0xFF, 0xD8, 0xFF };
         private static readonly byte[] PngHeader = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
 
-        public ImageProcessingService(ILogger<ImageProcessingService> logger) {
+        public ImageProcessingService(ILogger<ImageProcessingService> logger, IStringLocalizer<SharedResource> localizer) {
             _logger = logger;
+            _localizer = localizer;
         }
 
         public async Task<ProcessedImageResult> ProcessAndOptimizeImageAsync(IFormFile file, CancellationToken cancellationToken = default) {
             if (file == null || file.Length == 0) {
-                throw new ArgumentException("画像ファイルが空です。");
+                throw new ArgumentException(_localizer["Image_Error_EmptyFile"].Value);
             }
 
             if (file.Length > MaxInputSizeBytes) {
-                throw new InvalidOperationException($"画像サイズが上限の5MBを超えています (現在: {file.Length / 1024.0 / 1024.0:F2}MB)。");
+                throw new InvalidOperationException(string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, file.Length / 1024.0 / 1024.0));
             }
 
             using var stream = file.OpenReadStream();
@@ -54,35 +57,35 @@ namespace Meguri.Services {
             var rawBytes = memoryStream.ToArray();
 
             if (rawBytes.Length == 0) {
-                throw new InvalidOperationException("画像データが空です。");
+                throw new InvalidOperationException(_localizer["Image_Error_EmptyData"].Value);
             }
 
             if (rawBytes.Length > MaxInputSizeBytes) {
-                throw new InvalidOperationException($"画像サイズが上限の5MBを超えています (現在: {rawBytes.Length / 1024.0 / 1024.0:F2}MB)。");
+                throw new InvalidOperationException(string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, rawBytes.Length / 1024.0 / 1024.0));
             }
 
             // 1. ファイル拡張子・MIMEチェック
             var extension = Path.GetExtension(fileName)?.ToLowerInvariant();
             if (extension != ".jpg" && extension != ".jpeg" && extension != ".png") {
-                throw new InvalidOperationException("画像の形式はJPEGまたはPNGのみ対応しています。");
+                throw new InvalidOperationException(_localizer["Image_Error_UnsupportedExtension"].Value);
             }
 
             // 2. セキュリティチェック: Magic bytes検証 (ファイルシグネチャ)
             if (!IsValidImageSignature(rawBytes)) {
                 _logger.LogWarning("Invalid magic bytes for file: {FileName}", fileName);
-                throw new InvalidOperationException("無効な画像ファイル形式です。JPEGまたはPNGファイルのみアップロード可能です。");
+                throw new InvalidOperationException(_localizer["Image_Error_InvalidSignature"].Value);
             }
 
             // 3. 画像のデコード & セキュリティ検証 (悪意のあるヘッダー/破損検出)
             SKBitmap? image = SKBitmap.Decode(rawBytes);
             if (image == null) {
-                throw new InvalidOperationException("画像を読み込めませんでした。");
+                throw new InvalidOperationException(_localizer["Image_Error_DecodeFailed"].Value);
             }
             try {
 
             if (image.Width <= 0 || image.Height <= 0 || image.Width > MaxAllowedDimension || image.Height > MaxAllowedDimension) {
                 _logger.LogWarning("Image dimension out of allowed bounds: {Width}x{Height}", image.Width, image.Height);
-                throw new InvalidOperationException("画像の解像度が制限範囲外です。");
+                throw new InvalidOperationException(_localizer["Image_Error_InvalidDimension"].Value);
             }
 
             // 4. 初回リサイズ (巨大画像の場合は最大辺を2048pxに抑える)
@@ -108,16 +111,16 @@ namespace Meguri.Services {
             }
         }
 
-        private static SKBitmap ResizeBitmap(SKBitmap source, int width, int height) {
+        private SKBitmap ResizeBitmap(SKBitmap source, int width, int height) {
             var resized = source.Resize(new SKImageInfo(width, height), new SKSamplingOptions(SKCubicResampler.Mitchell));
-            return resized ?? throw new InvalidOperationException("画像のリサイズに失敗しました。");
+            return resized ?? throw new InvalidOperationException(_localizer["Image_Error_ResizeFailed"].Value);
         }
 
-        private static byte[] EncodeWebp(SKBitmap bitmap, int quality) {
+        private byte[] EncodeWebp(SKBitmap bitmap, int quality) {
             using var skImage = SKImage.FromBitmap(bitmap);
             using var data = skImage.Encode(SKEncodedImageFormat.Webp, quality);
             if (data == null) {
-                throw new InvalidOperationException("WebPへの変換に失敗しました。");
+                throw new InvalidOperationException(_localizer["Image_Error_WebpConversionFailed"].Value);
             }
             return data.ToArray();
         }
