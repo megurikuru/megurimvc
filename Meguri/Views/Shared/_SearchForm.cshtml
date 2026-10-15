@@ -13,9 +13,7 @@
 
 		@* 検索キーワードがある場合のみリセットボタンを表示 *@
 		@if (!string.IsNullOrWhiteSpace(Model.Value)) {
-			<div>
-				<a asp-controller="@Model.Controller" asp-action="@Model.Action">@SharedLocalizer["Common_Clear"]</a>
-			</div>
+			<a asp-controller="@Model.Controller" asp-action="@Model.Action" class="button-like">@SharedLocalizer["Common_Clear"]</a>
 		}
 	</form>
 	@* データがない場合のみメッセージを表示 *@

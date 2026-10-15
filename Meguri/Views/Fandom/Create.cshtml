@@ -14,13 +14,13 @@
 								<form asp-action="Create" method="post">
 										<div asp-validation-summary="ModelOnly" ></div>
 
-										<div>
+										<div class="attribute-wrap">
 												<label asp-for="Name" >@SharedLocalizer["Fandom_Name"] <span >*</span></label>
 												<input asp-for="Name"  placeholder="@SharedLocalizer["Fandom_NamePlaceholder"]" required />
 												<span asp-validation-for="Name" ></span>
 										</div>
 
-										<div>
+										<div class="attribute-wrap">
 												<label asp-for="ParentFandomId" >@SharedLocalizer["Fandom_Parent"]</label>
 												<select asp-for="ParentFandomId">
 														<option value="">-- @SharedLocalizer["Fandom_NoParent"] --</option>
@@ -28,11 +28,11 @@
 																<option value="@p.Id">@p.Name</option>
 														}
 												</select>
-												<div >@SharedLocalizer["Fandom_ParentHelp"]</div>
+												<div class="description">@SharedLocalizer["Fandom_ParentHelp"]</div>
 										</div>
 
-										<div>
-												<a asp-action="Index" >@SharedLocalizer["Common_Back"]</a>
+										<div class="button-wrap">
+												<a asp-action="Index" class="button-like">@SharedLocalizer["Common_Back"]</a>
 												<button type="submit" >@SharedLocalizer["Common_Create"]</button>
 										</div>
 								</form>

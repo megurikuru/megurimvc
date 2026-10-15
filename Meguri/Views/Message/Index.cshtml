@@ -26,18 +26,20 @@
 		<h1><img src="~/icons/mail.svg" class="icon" />@SharedLocalizer["Message_Title"]</h1>
 		<p>@SharedLocalizer["Message_SubTitle"]</p>
 	</div>
-	<a asp-action="Create"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</a>
+	<div class="button-wrap">
+		<a asp-action="Create" class="button-like icon-wrap"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</a>
+	</div>
 </div>
 
-<div>
+<div class="attribute-wrap">
 	<form asp-action="Index" method="get">
-		<div>
-			<label>@SharedLocalizer["Message_DateLabel"]</label>
+		<label>@SharedLocalizer["Message_DateLabel"]</label>
+		<div class="input-group">
 			<input type="date" name="date" value="@dateValue" />
+			<button type="submit">@SharedLocalizer["Common_Filter"]</button>
+			<a asp-action="Index" class="button-like">@SharedLocalizer["Common_Clear"]</a>
 		</div>
-		<button type="submit">@SharedLocalizer["Common_Filter"]</button>
-		<a asp-action="Index">@SharedLocalizer["Common_Clear"]</a>
-		<span>@SharedLocalizer["Message_DateFilterHint"]</span>
+		<span class="description">@SharedLocalizer["Message_DateFilterHint"]</span>
 	</form>
 </div>
 
@@ -45,7 +47,9 @@
 	<div>
 		<h4>@SharedLocalizer["Message_NoConversations"]</h4>
 		<p>@SharedLocalizer["Message_NoConversationsHint"]</p>
-		<a asp-action="Create"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</a>
+		<div class="button-wrap">
+			<a asp-action="Create" class="button-like icon-wrap"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</a>
+		</div>
 	</div>
 } else {
 	<div>

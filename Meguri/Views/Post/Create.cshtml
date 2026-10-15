@@ -37,8 +37,10 @@
 	<!-- タグ入力コンポーネント (最大10個) -->
 	<div class="attribute-wrap">
 		<label><img src="~/icons/tag.svg" class="icon" />@SharedLocalizer["Post_Tags"] <span id="tagCountDisplay">0/10</span></label>
-		<input type="text" id="tagInput" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
-		<button type="button" onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
+		<div class="input-group">
+			<input type="text" id="tagInput" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
+			<button type="button" onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
+		</div>
 		<div id="tagSuggestions" style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
 		<div id="selectedTagsContainer"></div>
 		<div id="hiddenTagsInputs"></div>

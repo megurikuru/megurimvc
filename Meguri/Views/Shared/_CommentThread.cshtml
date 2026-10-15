@@ -18,11 +18,11 @@
 		}
 
 		<!-- コメント投稿フォーム -->
-		<div  id="commentForm">
+		<div id="commentForm">
 				<h6 ><img src="~/icons/message-circle.svg" class="icon" />@SharedLocalizer["Comment_WriteTitle"]</h6>
 
 				<!-- 返信先インジケーター -->
-				<div id="replyNotice" ></div>
+				<div id="replyNotice" class="inline-actions"></div>
 
 				<form asp-controller="Comment" asp-action="Create" method="post" enctype="multipart/form-data">
 						@Html.AntiForgeryToken()
@@ -36,15 +36,16 @@
 								<input type="hidden" name="imageId" value="@Model.TargetId" />
 						}
 
-						<div>
-								<textarea name="text" id="commentTextInput" rows="3"  placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
+						<div class="attribute-wrap">
+								<textarea name="text" id="commentTextInput" rows="3" placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
 						</div>
 
-						<div>
-								<div>
-										<input type="file" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png"  style="max-width: 250px;" />
-								</div>
-								<button type="submit">
+						<div class="attribute-wrap">
+								<input type="file" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+						</div>
+
+						<div class="button-wrap">
+								<button type="submit" class="btn-block">
 										@SharedLocalizer["Comment_Submit"]
 								</button>
 						</div>

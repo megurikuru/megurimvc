@@ -105,7 +105,7 @@ const TagManager = {
             const badge = $(`
                 <span>
                     #${tag}
-                    <button type="button"  style="font-size:0.6rem;" aria-label="${removeLabel}"></button>
+                    <button type="button" aria-label="${removeLabel}">×</button>
                 </span>
             `);
             badge.find('button').on('click', () => this.removeTag(tag));
@@ -301,7 +301,7 @@ function replyToComment(commentId, commentNumber, userName) {
     const cancelLabel = (window.MeguriI18n && window.MeguriI18n.cancelLabel) || 'Cancel';
     const safeUser = $('<div>').text(userName).html();
     const noticeText = fmt.replace('{0}', commentNumber).replace('{1}', safeUser);
-    $('#replyNotice').html(`${noticeText} <button type="button" aria-label="${cancelLabel}" onclick="cancelReply()"></button>`).removeClass('d-none');
+    $('#replyNotice').html(`${noticeText} <button type="button" class="btn-sm" aria-label="${cancelLabel}" onclick="cancelReply()">×</button>`).removeClass('d-none');
     $('html, body').animate({
         scrollTop: $('#commentForm').offset().top - 100
     }, 300);

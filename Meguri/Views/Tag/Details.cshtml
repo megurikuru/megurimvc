@@ -22,11 +22,11 @@
 						</small>
 				</div>
 
-				<div>
-						<a asp-action="Disambiguation" asp-route-id="@Model.Id">
+				<div class="button-wrap">
+						<a asp-action="Disambiguation" asp-route-id="@Model.Id" class="button-like icon-wrap">
 								<img src="~/icons/scale.svg" class="icon" />@SharedLocalizer["Tag_DisambiguationBtn"]
 						</a>
-						<a asp-controller="Post" asp-action="Index" asp-route-tag="@primaryTag">
+						<a asp-controller="Post" asp-action="Index" asp-route-tag="@primaryTag" class="button-like icon-wrap">
 								<img src="~/icons/file-text.svg" class="icon" />@SharedLocalizer["Post_ListTitle"]
 						</a>
 				</div>

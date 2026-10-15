@@ -10,12 +10,12 @@
 	<h3>@SharedLocalizer["Manage_ExternalLogins_Registered"]</h3>
 	@foreach (var login in Model.CurrentLogins) {
 		<form asp-action="RemoveLogin" method="post" class="account">
-			<div>
+			<div class="inline-actions">
 				<strong>@login.LoginProvider</strong>
 				@if (Model.ShowRemoveButton) {
 					<input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
 					<input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
-					<button type="submit" title="@string.Format(SharedLocalizer["Manage_ExternalLogins_RemoveButtonTitle"].Value, login.LoginProvider)">@SharedLocalizer["Manage_ExternalLogins_Remove"]</button>
+					<button type="submit" class="btn-sm" title="@string.Format(SharedLocalizer["Manage_ExternalLogins_RemoveButtonTitle"].Value, login.LoginProvider)">@SharedLocalizer["Manage_ExternalLogins_Remove"]</button>
 				}
 			</div>
 		</form>

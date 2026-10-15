@@ -2,8 +2,8 @@
 
 @if (!String.IsNullOrEmpty(Model)) {
     var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
-    <div  role="alert">
-        <button type="button"  data-bs-dismiss="alert" aria-label="@SharedLocalizer["Common_Close"]"></button>
-        @Model
+    <div class="inline-actions" role="alert">
+        <span>@Model</span>
+        <button type="button" class="btn-sm" onclick="this.parentElement.remove()" aria-label="@SharedLocalizer["Common_Close"]">×</button>
     </div>
 }
