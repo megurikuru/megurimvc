@@ -100,6 +100,15 @@ namespace Meguri.Controllers {
             return View(fandom);
         }
 
+        // GET: /Fandom/Join/5
+        // 未ログイン時に「入る」を押してログイン画面経由でリダイレクトされた場合に対応
+        [HttpGet]
+        [Authorize]
+        [ActionName(nameof(Join))]
+        public Task<IActionResult> JoinGet(int id, string? returnUrl) {
+            return Join(id, returnUrl);
+        }
+
         // POST: /Fandom/Join/5
         // 子界隈に参加したら、親界隈にも自動的に参加する
         [HttpPost]
