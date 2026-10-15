@@ -35,49 +35,49 @@
 				<p >@SharedLocalizer["Post_SubTitle"]</p>
 		</div>
 		@if (ViewBag.CanPostToCurrentFandom is true) {
-		<a asp-action="Create" asp-route-fandomId="@currentFandom?.Id">
-				<img src="~/icons/square-pen.svg" class="icon" />@SharedLocalizer["Post_CreateNew"]
-		</a>
+		<div class="button-wrap">
+			<a asp-action="Create" asp-route-fandomId="@currentFandom?.Id" class="button-like icon-wrap">
+					<img src="~/icons/square-pen.svg" class="icon" />@SharedLocalizer["Post_CreateNew"]
+			</a>
+		</div>
 		}
 </div>
 
 
 <div>
 		<div>
-				<form asp-action="Index" method="get">
+				<form asp-action="Index" method="get" class="attribute-wrap">
 						<div>
-								<select name="fandomId"  onchange="this.form.submit()">
+								<select name="fandomId" onchange="this.form.submit()">
 										<option value="">@SharedLocalizer["Fandom_AllOption"]</option>
 										@foreach (var f in fandoms) {
 												<!option value="@f.Id" @(currentFandom?.Id == f.Id ? "selected" : "")>@f.Name</!option>
 										}
 								</select>
 						</div>
-						<div>
-								<input type="text" name="search" value="@currentSearch"  placeholder="@SharedLocalizer["Post_SearchPlaceholder"]" />
-						</div>
-						<div>
-								<button type="submit" >@SharedLocalizer["Common_Search"]</button>
+						<div class="input-group">
+								<input type="text" name="search" value="@currentSearch" placeholder="@SharedLocalizer["Post_SearchPlaceholder"]" />
+								<button type="submit">@SharedLocalizer["Common_Search"]</button>
 						</div>
 				</form>
 		</div>
 </div>
 
 @if (!string.IsNullOrEmpty(currentTag)) {
-		<div>
+		<div class="inline-actions">
 				<span>@Html.Raw(string.Format(SharedLocalizer["Post_ShowingTagFormat"].Value, $"<strong>#{currentTag}</strong>"))</span>
-				<a asp-action="Index" >@SharedLocalizer["Common_All"]</a>
+				<a asp-action="Index" class="button-like btn-sm">@SharedLocalizer["Common_All"]</a>
 		</div>
 }
 
 @if (!Model.Any()) {
 		<div>
 				<h4>@SharedLocalizer["Common_NoItems"]</h4>
-				<div>
-						@if (ViewBag.CanPostToCurrentFandom is true) {
-						<a asp-action="Create" >@SharedLocalizer["Post_CreateNew"]</a>
-						}
+				@if (ViewBag.CanPostToCurrentFandom is true) {
+				<div class="button-wrap">
+						<a asp-action="Create" class="button-like">@SharedLocalizer["Post_CreateNew"]</a>
 				</div>
+				}
 		</div>
 }
 else {

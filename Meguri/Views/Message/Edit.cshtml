@@ -11,20 +11,20 @@
 		<input type="hidden" asp-for="ConversationId" />
 		<div asp-validation-summary="ModelOnly"></div>
 
-		<div>
+		<div class="attribute-wrap">
 			<label asp-for="Subject">@SharedLocalizer["Message_SubjectLabel"] <span>*</span></label>
 			<input asp-for="Subject" required />
 			<span asp-validation-for="Subject"></span>
 		</div>
 
-		<div>
+		<div class="attribute-wrap">
 			<label asp-for="Body">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
 			<textarea asp-for="Body" rows="4" required></textarea>
 			<span asp-validation-for="Body"></span>
 		</div>
 
-		<div>
-			<a asp-action="Details" asp-route-id="@Model.ConversationId">@SharedLocalizer["Common_Cancel"]</a>
+		<div class="button-wrap">
+			<a asp-action="Details" asp-route-id="@Model.ConversationId" class="button-like">@SharedLocalizer["Common_Cancel"]</a>
 			<button type="submit">@SharedLocalizer["Common_Save"]</button>
 		</div>
 	</form>

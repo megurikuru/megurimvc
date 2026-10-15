@@ -25,27 +25,108 @@
 
 .button-wrap {
 	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び・中央寄せ）で配置 */
+	flex-wrap: wrap;
 	padding: 0.5rem 0;
 	justify-content: center;
-	gap: 2rem;
-}
+	align-items: center;
+	gap: 0.75rem;
 
-button, .button-like {
-	width: max-content;
-	padding: 0.25rem 0.5rem;
-	cursor: pointer;
-	border: 3px solid var(--color-border);
-	background-color: white;
-	transition: background-color 0.3s ease;
+	& > button,
+	& > .button-like,
+	& > form {
+		flex: 1 1 0;
+		min-width: 7rem;
+	}
 
-	&:hover {
-		background-color: var(--color-primary-hover);
-		color: white;
+	& > form > button {
+		width: 100%;
 	}
 }
 
+button, .button-like {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.35rem;
+	box-sizing: border-box;
+	width: max-content;
+	min-height: var(--control-height);
+	padding: 0.5rem 1.25rem;
+	font-size: 1rem;
+	line-height: 1.25;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	border: 2px solid var(--color-border);
+	border-radius: var(--radius-sm);
+	background-color: white;
+	color: var(--color-text);
+	transition: background-color 0.2s ease, color 0.2s ease;
+
+	&:hover:not(:disabled) {
+		background-color: var(--color-primary-hover);
+		color: white;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+/* フォーム送信などの幅広メインボタン */
+.btn-block {
+	display: flex;
+	width: 100%;
+}
+
+/* 補助・インライン操作用のコンパクトボタン */
+button.btn-sm, .button-like.btn-sm {
+	min-height: var(--control-height-sm);
+	padding: 0.25rem 0.65rem;
+	font-size: 0.875rem;
+	width: max-content;
+}
+
+.icon-wrap {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+/* 入力欄＋ボタンの横並びグループ */
+.input-group {
+	display: block flex;
+	align-items: stretch;
+	gap: 0.5rem;
+
+	& > input,
+	& > select {
+		flex: 1;
+		min-width: 0;
+		margin: 0;
+	}
+
+	& > button,
+	& > .button-like {
+		flex-shrink: 0;
+		width: max-content;
+		margin: 0;
+	}
+}
+
+/* 補助ボタン等の横並びラッパー */
+.inline-actions {
+	display: block flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.25rem 0;
+}
+
 .attribute-wrap {
-	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+	display: block grid; /* 自身：ブロック要素 / 子：縦並びで余白を統一 */
+	gap: 0.35rem;
 	padding: 0.5rem 0;
 
 	& label {
@@ -54,33 +135,110 @@ button, .button-like {
 }
 
 /* フォーム部品 */
-.attribute-wrap input:not([type="checkbox"]),
+.attribute-wrap input:not([type="checkbox"]):not([type="radio"]),
 .attribute-wrap select,
 .attribute-wrap textarea {
 	display: block;
 	box-sizing: border-box;
-	margin: 0.25rem 0;
-	padding: 0.5rem;
+	margin: 0;
+	padding: 0.5rem 0.75rem;
 	width: 100%;
-	min-height: 44px;
+	min-height: var(--control-height);
 	font-size: 1rem;
 }
 
-.attribute-wrap button {
-	min-height: 44px;
+.attribute-wrap > button:not(.btn-sm) {
+	min-height: var(--control-height);
+	width: 100%;
 	margin-top: 0.25rem;
 }
 
 .check-row {
-	display: flex;
+	display: flex !important;
 	align-items: center;
 	gap: 0.5rem;
-	min-height: 44px;
+	min-height: var(--control-height);
+	padding: 0.25rem 0;
+	cursor: pointer;
 }
 
-.check-row input {
-	width: 1.5rem;
-	height: 1.5rem;
+.check-row input[type="checkbox"],
+.check-row input[type="radio"] {
+	width: 1.35rem;
+	height: 1.35rem;
+	margin: 0;
+	flex-shrink: 0;
+}
+
+.check-row label {
+	margin: 0;
+	cursor: pointer;
+}
+
+/* リアクションボタン一覧 */
+.reaction-list {
+	display: block flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	padding: 0.25rem 0;
+
+	& button {
+		min-height: var(--control-height-sm);
+		padding: 0.25rem 0.6rem;
+		font-size: 0.875rem;
+
+		&.reacted {
+			background-color: var(--color-primary);
+			color: white;
+			border-color: var(--color-primary);
+		}
+	}
+}
+
+/* 既存画像の並び替えアイテム */
+.image-order-item {
+	display: block flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	margin-bottom: 0.5rem;
+
+	& > div {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+}
+
+/* 選択済みタグバッジ一覧 */
+#selectedTagsContainer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+
+	&:empty {
+		display: none;
+	}
+
+	& > span {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.25rem 0.5rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		background-color: var(--color-bg-sub);
+		font-size: 0.875rem;
+	}
+}
+
+#tagSuggestions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	padding: 0.25rem 0;
 }
 
 .description {

@@ -4,7 +4,9 @@
 	grid-template-columns: auto 1fr; /* アイコン | 名前 */
 	align-items: center; /* 上下中央揃え */
 	gap: 0.5rem; /* アイコンとテキストの間隔 */
-	padding: 0.5rem;
+	min-height: var(--control-height);
+	padding: 0.5rem 0.75rem;
+	box-sizing: border-box;
 	/* 偶数行は薄いグレー */
 	&:nth-child(even) {
 		background-color: #F2F0FC;

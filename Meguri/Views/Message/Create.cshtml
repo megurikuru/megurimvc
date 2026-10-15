@@ -9,57 +9,61 @@
 	<form asp-action="Create" method="post" enctype="multipart/form-data">
 		<div asp-validation-summary="ModelOnly"></div>
 
-		<div>
+		<div class="attribute-wrap">
 			<label>@SharedLocalizer["Message_ChatTypeLabel"]</label>
-			<div>
-				<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" onchange="document.getElementById('groupTitleContainer').style.display = 'none'" />
-				<label for="typeDirect">@SharedLocalizer["Message_Direct"]</label>
-				<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" onchange="document.getElementById('groupTitleContainer').style.display = ''" />
-				<label for="typeGroup">@SharedLocalizer["Message_Group"]</label>
+			<div class="inline-actions">
+				<label class="check-row" for="typeDirect">
+					<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" onchange="document.getElementById('groupTitleContainer').style.display = 'none'" />
+					@SharedLocalizer["Message_Direct"]
+				</label>
+				<label class="check-row" for="typeGroup">
+					<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" onchange="document.getElementById('groupTitleContainer').style.display = ''" />
+					@SharedLocalizer["Message_Group"]
+				</label>
 			</div>
 		</div>
 
-		<div id="groupTitleContainer" style="display: @(Model.IsGroup ? "" : "none");">
+		<div id="groupTitleContainer" class="attribute-wrap" style="display: @(Model.IsGroup ? "" : "none");">
 			<label asp-for="Title">@SharedLocalizer["Message_GroupName"]</label>
 			<input asp-for="Title" placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
 		</div>
 
-		<div>
+		<div class="attribute-wrap">
 			<label>@SharedLocalizer["Message_SelectRecipient"] <span>*</span></label>
-			<div style="max-height: 150px; overflow-y: auto;">
+			<div style="max-height: 180px; overflow-y: auto;">
 				@if (!Model.AvailableUsers.Any()) {
 					<p>@SharedLocalizer["Message_NoOtherUsers"]</p>
 				}
 				@foreach (var user in Model.AvailableUsers) {
-					<div>
+					<label class="check-row" for="user_@user.Id">
 						<input type="checkbox" name="SelectedUserIds" value="@user.Id" id="user_@user.Id" checked="@Model.SelectedUserIds.Contains(user.Id)" />
-						<label for="user_@user.Id"><img src="~/icons/user.svg" class="icon" />@user.UserName</label>
-					</div>
+						<img src="~/icons/user.svg" class="icon" />@user.UserName
+					</label>
 				}
 			</div>
 			<span asp-validation-for="SelectedUserIds"></span>
 		</div>
 
-		<div>
+		<div class="attribute-wrap">
 			<label asp-for="Subject">@SharedLocalizer["Message_SubjectLabel"] <span>*</span></label>
 			<input asp-for="Subject" required />
 			<span asp-validation-for="Subject"></span>
 		</div>
 
-		<div>
+		<div class="attribute-wrap">
 			<label asp-for="InitialMessage">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
 			<textarea asp-for="InitialMessage" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
 			<span asp-validation-for="InitialMessage"></span>
 		</div>
 
-		<div>
+		<div class="attribute-wrap">
 			<label><img src="~/icons/image.svg" class="icon" />@SharedLocalizer["Message_ImageAttachLabel"]</label>
 			<input type="file" name="ImageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
 		</div>
 
-		<div>
-			<a asp-action="Index">@SharedLocalizer["Common_Cancel"]</a>
-			<button type="submit">@SharedLocalizer["Message_SendBtn"]</button>
+		<div class="button-wrap">
+			<a asp-action="Index" class="button-like">@SharedLocalizer["Common_Cancel"]</a>
+			<button type="submit"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
 		</div>
 	</form>
 </div>

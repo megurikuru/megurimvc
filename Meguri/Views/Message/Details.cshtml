@@ -37,14 +37,16 @@
 	</p>
 </div>
 
-<div>
+<div class="attribute-wrap">
 	<form asp-action="Details" method="get">
 		<input type="hidden" name="id" value="@Model.Conversation.Id" />
 		<label>@SharedLocalizer["Message_DateLabel"]</label>
-		<input type="date" name="date" value="@dateValue" />
-		<button type="submit">@SharedLocalizer["Common_Filter"]</button>
-		<a asp-action="Details" asp-route-id="@Model.Conversation.Id">@SharedLocalizer["Common_Clear"]</a>
-		<span>@string.Format(SharedLocalizer["Message_ChatDateFilterHintFormat"].Value, Model.PageSize)</span>
+		<div class="input-group">
+			<input type="date" name="date" value="@dateValue" />
+			<button type="submit">@SharedLocalizer["Common_Filter"]</button>
+			<a asp-action="Details" asp-route-id="@Model.Conversation.Id" class="button-like">@SharedLocalizer["Common_Clear"]</a>
+		</div>
+		<span class="description">@string.Format(SharedLocalizer["Message_ChatDateFilterHintFormat"].Value, Model.PageSize)</span>
 	</form>
 </div>
 
@@ -89,20 +91,22 @@
 							}
 						</div>
 					}
-					@msg.CreatedAt.ToLocalTime()
-					@if (isMe && !msg.IsDeleted) {
-						<a asp-action="Edit" asp-route-id="@msg.Id">@SharedLocalizer["Common_Edit"]</a>
-						<form asp-action="Delete" asp-route-id="@msg.Id" method="post" style="display: inline;" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
-							<button type="submit">@SharedLocalizer["Common_Delete"]</button>
-						</form>
-					}
-					@if (User.Identity?.IsAuthenticated == true) {
-						<button type="button" data-reply-subject="@msg.Subject" data-reply-id="@msg.Id" onclick="document.getElementById('parentMessageId').value = this.dataset.replyId; var f = document.getElementById('messageSubject'); var s = this.dataset.replySubject || ''; f.value = s.startsWith('Re: ') ? s : 'Re: ' + s; document.getElementById('messageText').focus();"><img src="~/icons/reply.svg" class="icon" />@SharedLocalizer["Message_ReplyBtn"]</button>
-					}
+					<div class="inline-actions">
+						<span>@msg.CreatedAt.ToLocalTime()</span>
+						@if (isMe && !msg.IsDeleted) {
+							<a asp-action="Edit" asp-route-id="@msg.Id" class="button-like btn-sm">@SharedLocalizer["Common_Edit"]</a>
+							<form asp-action="Delete" asp-route-id="@msg.Id" method="post" style="display: inline;" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
+								<button type="submit" class="btn-sm">@SharedLocalizer["Common_Delete"]</button>
+							</form>
+						}
+						@if (User.Identity?.IsAuthenticated == true) {
+							<button type="button" class="btn-sm" data-reply-subject="@msg.Subject" data-reply-id="@msg.Id" onclick="document.getElementById('parentMessageId').value = this.dataset.replyId; var f = document.getElementById('messageSubject'); var s = this.dataset.replySubject || ''; f.value = s.startsWith('Re: ') ? s : 'Re: ' + s; document.getElementById('messageText').focus();"><img src="~/icons/reply.svg" class="icon" />@SharedLocalizer["Message_ReplyBtn"]</button>
+						}
+					</div>
 				</div>
 				@if (!msg.IsDeleted) {
 				<div>
-					<button type="button" onclick="var t = this.nextElementSibling; t.hidden = !t.hidden;">@SharedLocalizer["Message_ReactionBtn"]</button>
+					<button type="button" class="btn-sm" onclick="var t = this.nextElementSibling; t.hidden = !t.hidden;">@SharedLocalizer["Message_ReactionBtn"]</button>
 					<div hidden>
 						<partial name="_ReactionButtons" model='("Message", msg.Id, msg.Reactions.AsEnumerable())' />
 					</div>
@@ -120,15 +124,17 @@
 		@Html.AntiForgeryToken()
 		<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
 		<input type="hidden" id="parentMessageId" name="parentMessageId" value="" autocomplete="off" />
-		<div>
+		<div class="attribute-wrap">
 			<input type="text" id="messageSubject" name="subject" placeholder="@SharedLocalizer["Message_SubjectLabel"]" />
 		</div>
-		<div>
+		<div class="attribute-wrap">
 			<textarea id="messageText" name="text" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
 		</div>
-		<div>
+		<div class="attribute-wrap">
 			<input type="file" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
-			<button type="submit"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
+		</div>
+		<div class="button-wrap">
+			<button type="submit" class="btn-block"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
 		</div>
 	</form>
 </div>
