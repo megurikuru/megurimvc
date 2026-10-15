@@ -81,9 +81,9 @@ else {
 					</div>
 				}
 				<div>
-					@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)
-					@string.Format(SharedLocalizer["Post_ViewCountSuffix"].Value, post.ViewCount)
-					@string.Format(SharedLocalizer["Post_ReactionCountSuffix"].Value, post.Reactions.Count)
+					<img src="~/icons/message-circle.svg" class="icon" />@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)
+					<img src="~/icons/eye.svg" class="icon" />@string.Format(SharedLocalizer["Post_ViewCountSuffix"].Value, post.ViewCount)
+					<img src="~/icons/heart.svg" class="icon" />@string.Format(SharedLocalizer["Post_ReactionCountSuffix"].Value, post.Reactions.Count)
 				</div>
 			</div>
 		}

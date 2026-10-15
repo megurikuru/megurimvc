@@ -16,7 +16,7 @@
 <div>
 		<div>
 				<div class="space-between-wrap">
-						<h2>🏷️ #@primaryTag</h2>
+						<h2><img src="~/icons/tag.svg" class="icon" />#@primaryTag</h2>
 						<small>
 								@string.Format(SharedLocalizer["Tag_CreatorInfoFormat"].Value, Model.User?.UserName ?? SharedLocalizer["Common_SystemLabel"].Value, postTagsTotalCount, imageTagsTotalCount)
 						</small>
@@ -24,10 +24,10 @@
 
 				<div>
 						<a asp-action="Disambiguation" asp-route-id="@Model.Id">
-								⚖️ @SharedLocalizer["Tag_DisambiguationBtn"]
+								<img src="~/icons/scale.svg" class="icon" />@SharedLocalizer["Tag_DisambiguationBtn"]
 						</a>
 						<a asp-controller="Post" asp-action="Index" asp-route-tag="@primaryTag">
-								@SharedLocalizer["Post_ListTitle"]
+								<img src="~/icons/file-text.svg" class="icon" />@SharedLocalizer["Post_ListTitle"]
 						</a>
 				</div>
 		</div>
@@ -37,7 +37,7 @@
 				<!-- 同義語 -->
 				@if (Model.Tags.Count > 1) {
 						<div>
-								<h6>🔄 @SharedLocalizer["Tag_SynonymTerms"]</h6>
+								<h6><img src="~/icons/refresh-cw.svg" class="icon" />@SharedLocalizer["Tag_SynonymTerms"]</h6>
 								<div>
 										@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag)) {
 												<span class="icon-wrap">#@t.TagText</span>
@@ -49,7 +49,7 @@
 				<!-- 上位語 -->
 				@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader")) {
 						<div>
-								<h6>⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h6>
+								<h6><img src="~/icons/arrow-up.svg" class="icon" />@SharedLocalizer["Tag_BroaderTerms"]</h6>
 								<div>
 										@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader")) {
 												var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
@@ -64,7 +64,7 @@
 				<!-- 下位語 -->
 				@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader")) {
 						<div>
-								<h6>⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h6>
+								<h6><img src="~/icons/arrow-down.svg" class="icon" />@SharedLocalizer["Tag_NarrowerTerms"]</h6>
 								<div>
 										@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader")) {
 												var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
@@ -79,7 +79,7 @@
 				<!-- 関連語 -->
 				@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related")) {
 						<div>
-								<h6>🔗 @SharedLocalizer["Tag_RelatedTerms"]</h6>
+								<h6><img src="~/icons/link.svg" class="icon" />@SharedLocalizer["Tag_RelatedTerms"]</h6>
 								<div>
 										@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related")) {
 												var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
@@ -103,7 +103,7 @@
 @* 2. 関連投稿一覧エリア                              *@
 @* ================================================== *@
 <div id="post-list">
-		<h1>@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, postTagsTotalCount)</h1>
+		<h1><img src="~/icons/file-text.svg" class="icon" />@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, postTagsTotalCount)</h1>
 		@if (!postTags.Any()) {
 				<p>@SharedLocalizer["Post_NoPostsFound"]</p>
 		}

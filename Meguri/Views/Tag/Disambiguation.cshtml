@@ -7,7 +7,7 @@
 		<div>
 				<div>
 						<div>
-								<h4 >⚖️ @string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h4>
+								<h4 ><img src="~/icons/scale.svg" class="icon" />@string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h4>
 								<a asp-action="Details" asp-route-conceptId="@Model.TagConceptId" >@SharedLocalizer["Common_Back"]</a>
 						</div>
 						<div>
@@ -25,7 +25,7 @@
 										<!-- 同義語 (Synonyms) -->
 										<div>
 												<div>
-														<h5 >🔄 @SharedLocalizer["Tag_SynonymTerms"]</h5>
+														<h5 ><img src="~/icons/refresh-cw.svg" class="icon" />@SharedLocalizer["Tag_SynonymTerms"]</h5>
 														<p >@SharedLocalizer["Tag_SynonymHelp"]</p>
 
 														<div>
@@ -51,7 +51,7 @@
 										<!-- 上位語 (Broader) -->
 										<div>
 												<div>
-														<h5 >⬆️ @SharedLocalizer["Tag_BroaderTerms"]</h5>
+														<h5 ><img src="~/icons/arrow-up.svg" class="icon" />@SharedLocalizer["Tag_BroaderTerms"]</h5>
 														<p >@SharedLocalizer["Tag_BroaderHelp"]</p>
 
 														<div>
@@ -66,7 +66,7 @@
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@b.RelationshipId" />
 																								<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-																								<button type="submit" >✕</button>
+																								<button type="submit" ><img src="~/icons/x.svg" class="icon" /></button>
 																						</form>
 																				}
 																		</div>
@@ -90,7 +90,7 @@
 										<!-- 下位語 (Narrower) -->
 										<div>
 												<div>
-														<h5 >⬇️ @SharedLocalizer["Tag_NarrowerTerms"]</h5>
+														<h5 ><img src="~/icons/arrow-down.svg" class="icon" />@SharedLocalizer["Tag_NarrowerTerms"]</h5>
 														<p >@SharedLocalizer["Tag_NarrowerHelp"]</p>
 
 														<div>
@@ -105,7 +105,7 @@
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@n.RelationshipId" />
 																								<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-																								<button type="submit" >✕</button>
+																								<button type="submit" ><img src="~/icons/x.svg" class="icon" /></button>
 																						</form>
 																				}
 																		</div>
@@ -129,7 +129,7 @@
 										<!-- 関連語 (Related) -->
 										<div>
 												<div>
-														<h5 >🔗 @SharedLocalizer["Tag_RelatedTerms"]</h5>
+														<h5 ><img src="~/icons/link.svg" class="icon" />@SharedLocalizer["Tag_RelatedTerms"]</h5>
 														<p >@SharedLocalizer["Tag_RelatedHelp"]</p>
 
 														<div>
@@ -144,7 +144,7 @@
 																								@Html.AntiForgeryToken()
 																								<input type="hidden" name="relationshipId" value="@r.RelationshipId" />
 																								<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-																								<button type="submit" >✕</button>
+																								<button type="submit" ><img src="~/icons/x.svg" class="icon" /></button>
 																						</form>
 																				}
 																		</div>

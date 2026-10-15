@@ -31,12 +31,12 @@
 
 <div>
 		<div>
-				<h2 >📝 @SharedLocalizer["Post_Title"]</h2>
+				<h2 ><img src="~/icons/file-text.svg" class="icon" />@SharedLocalizer["Post_Title"]</h2>
 				<p >@SharedLocalizer["Post_SubTitle"]</p>
 		</div>
 		@if (ViewBag.CanPostToCurrentFandom is true) {
 		<a asp-action="Create" asp-route-fandomId="@currentFandom?.Id">
-				✏️ @SharedLocalizer["Post_CreateNew"]
+				<img src="~/icons/square-pen.svg" class="icon" />@SharedLocalizer["Post_CreateNew"]
 		</a>
 		}
 </div>
@@ -91,7 +91,7 @@ else {
 																@(post.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value)
 														</a>
 														@if (post.IsPinned) {
-																<span >@SharedLocalizer["Post_PinnedBadge"]</span>
+																<span ><img src="~/icons/pin.svg" class="icon" />@SharedLocalizer["Post_PinnedBadge"]</span>
 														}
 														@if (post.IsSexual) {
 																<span >R-18</span>
@@ -147,9 +147,9 @@ else {
 														}
 												</div>
 												<div>
-														@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)
-														@string.Format(SharedLocalizer["Post_ViewCountSuffix"].Value, post.ViewCount)
-														@string.Format(SharedLocalizer["Post_ReactionCountSuffix"].Value, post.Reactions.Count)
+														<img src="~/icons/message-circle.svg" class="icon" />@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)
+														<img src="~/icons/eye.svg" class="icon" />@string.Format(SharedLocalizer["Post_ViewCountSuffix"].Value, post.ViewCount)
+														<img src="~/icons/heart.svg" class="icon" />@string.Format(SharedLocalizer["Post_ReactionCountSuffix"].Value, post.Reactions.Count)
 												</div>
 										</div>
 								</div>

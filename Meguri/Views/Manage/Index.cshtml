@@ -18,7 +18,7 @@
 		<label asp-for="Email">@SharedLocalizer["Manage_Profile_Email"]</label>
 		<input asp-for="Email" />
 		@if (Model.IsEmailConfirmed) {
-			<span aria-hidden="true">✓</span>
+			<img src="~/icons/check.svg" class="icon" aria-hidden="true" />
 		}
 		else {
 			<button asp-action="SendVerificationEmail">@SharedLocalizer["Manage_Profile_SendVerificationEmail"]</button>

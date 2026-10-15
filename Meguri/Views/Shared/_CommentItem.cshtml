@@ -32,7 +32,7 @@
 				<span>@SharedLocalizer["Comment_ReplyLimit"]</span>
 			} else if (!Model.Comment.IsDeleted) {
 				<button type="button" onclick="replyToComment(@Model.Comment.Id, @Model.Comment.Number, @(System.Text.Json.JsonSerializer.Serialize(Model.Comment.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)))">
-					↩️ @SharedLocalizer["Comment_ReplyTo", Model.Comment.Number]
+					<img src="~/icons/reply.svg" class="icon" />@SharedLocalizer["Comment_ReplyTo", Model.Comment.Number]
 									</button>
 			}
 
@@ -41,7 +41,7 @@
 					@Html.AntiForgeryToken()
 					<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
 					<button type="submit">
-						🗑️
+						<img src="~/icons/trash.svg" class="icon" />
 					</button>
 				</form>
 			}
