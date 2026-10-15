@@ -4,6 +4,10 @@
 	gap: 1rem;
 	padding: 1rem 0.5rem;
 
+	& + .account {
+		padding-top: 0;
+	}
+
 	& > div {
 		display: block grid;
 		gap: 0.25rem;
@@ -57,10 +61,18 @@
 		}
 	}
 
-	& button[type="submit"] {
+	& button:not([hidden]) {
 		display: block flow;
 		margin: 0 auto;
 		padding: 0.75rem 2rem;
 		font-size: 1rem;
+	}
+
+	& [data-passkey-message] {
+		text-align: center;
+
+		&:empty {
+			display: none;
+		}
 	}
 }
