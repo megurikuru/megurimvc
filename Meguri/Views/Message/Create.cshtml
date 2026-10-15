@@ -3,7 +3,7 @@
 	ViewData["Title"] = SharedLocalizer["Message_NewConversation"];
 }
 
-<h2>💬 @SharedLocalizer["Message_NewConversation"]</h2>
+<h2><img src="~/icons/message-circle.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</h2>
 
 <div>
 	<form asp-action="Create" method="post" enctype="multipart/form-data">
@@ -33,7 +33,7 @@
 				@foreach (var user in Model.AvailableUsers) {
 					<div>
 						<input type="checkbox" name="SelectedUserIds" value="@user.Id" id="user_@user.Id" checked="@Model.SelectedUserIds.Contains(user.Id)" />
-						<label for="user_@user.Id">👤 @user.UserName</label>
+						<label for="user_@user.Id"><img src="~/icons/user.svg" class="icon" />@user.UserName</label>
 					</div>
 				}
 			</div>
@@ -53,7 +53,7 @@
 		</div>
 
 		<div>
-			<label>@SharedLocalizer["Message_ImageAttachLabel"]</label>
+			<label><img src="~/icons/image.svg" class="icon" />@SharedLocalizer["Message_ImageAttachLabel"]</label>
 			<input type="file" name="ImageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
 		</div>
 

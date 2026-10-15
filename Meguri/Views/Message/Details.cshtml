@@ -24,10 +24,10 @@
 }
 
 <div>
-	<a asp-action="Index">←</a>
-	<h2>@(Model.Conversation.IsGroup ? "👥" : "👤") @Model.DisplayTitle</h2>
+	<a asp-action="Index"><img src="~/icons/arrow-left.svg" class="icon" /></a>
+	<h2><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h2>
 	<p>
-		@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count):
+		<img src="~/icons/users.svg" class="icon" />@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count):
 		@foreach (var m in Model.Conversation.Members.Select((member, index) => new { member, index })) {
 					@if (m.index > 0) { <text>, </text> }
 					@if (m.member.User == null) { @SharedLocalizer["Common_UnknownUser"].Value }
@@ -68,7 +68,7 @@
 			var indent = depth > 0 ? $"margin-left: {depth * 1.5}rem;" : string.Empty;
 			<div style="text-align: left; margin: 8px 0; @indent">
 				@if (!isMe) {
-					<div>👤 @if (msg.Sender == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (msg.Sender.IsWithdrawn) { @(msg.Sender.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") } else { <text>@if (!msg.Sender.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @msg.Sender.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@msg.Sender.Id">@msg.Sender.UserName</a> }</text> }</div>
+					<div><img src="~/icons/user.svg" class="icon" />@if (msg.Sender == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (msg.Sender.IsWithdrawn) { @(msg.Sender.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") } else { <text>@if (!msg.Sender.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @msg.Sender.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@msg.Sender.Id">@msg.Sender.UserName</a> }</text> }</div>
 				}
 				<div style="display: block; text-align: left; padding: 6px 10px; border: 1px solid #ccc; border-radius: 8px;">
 					@if (msg.IsDeleted) {
@@ -97,7 +97,7 @@
 						</form>
 					}
 					@if (User.Identity?.IsAuthenticated == true) {
-						<button type="button" data-reply-subject="@msg.Subject" data-reply-id="@msg.Id" onclick="document.getElementById('parentMessageId').value = this.dataset.replyId; var f = document.getElementById('messageSubject'); var s = this.dataset.replySubject || ''; f.value = s.startsWith('Re: ') ? s : 'Re: ' + s; document.getElementById('messageText').focus();">↩️ @SharedLocalizer["Message_ReplyBtn"]</button>
+						<button type="button" data-reply-subject="@msg.Subject" data-reply-id="@msg.Id" onclick="document.getElementById('parentMessageId').value = this.dataset.replyId; var f = document.getElementById('messageSubject'); var s = this.dataset.replySubject || ''; f.value = s.startsWith('Re: ') ? s : 'Re: ' + s; document.getElementById('messageText').focus();"><img src="~/icons/reply.svg" class="icon" />@SharedLocalizer["Message_ReplyBtn"]</button>
 					}
 				</div>
 				@if (!msg.IsDeleted) {
@@ -128,7 +128,7 @@
 		</div>
 		<div>
 			<input type="file" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
-			<button type="submit">🚀 @SharedLocalizer["Message_SendBtn"]</button>
+			<button type="submit"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
 		</div>
 	</form>
 </div>

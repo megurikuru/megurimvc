@@ -39,7 +39,7 @@
 		<!-- 既存の添付画像の並び替え & 削除 -->
 		@if (Model.ExistingImages != null && Model.ExistingImages.Any()) {
 			<div>
-				<label>@SharedLocalizer["Post_ManageImagesLabel"]</label>
+				<label><img src="~/icons/image.svg" class="icon" />@SharedLocalizer["Post_ManageImagesLabel"]</label>
 				<p>@SharedLocalizer["Post_ImageOrderHint"]</p>
 				<div id="imageOrderContainer">
 					@for (int i = 0; i < Model.ExistingImages.Count; i++) {
@@ -53,8 +53,8 @@
 								<input type="hidden" class="order-input" name="ExistingImages[@i].DisplayOrder" value="@Model.ExistingImages[i].DisplayOrder" />
 							</div>
 							<div>
-								<button type="button" onclick="moveImageOrder(this, 'up')" title="@SharedLocalizer["Common_MoveUp"]">▲</button>
-								<button type="button" onclick="moveImageOrder(this, 'down')" title="@SharedLocalizer["Common_MoveDown"]">▼</button>
+								<button type="button" onclick="moveImageOrder(this, 'up')" title="@SharedLocalizer["Common_MoveUp"]"><img src="~/icons/chevron-up.svg" class="icon" /></button>
+								<button type="button" onclick="moveImageOrder(this, 'down')" title="@SharedLocalizer["Common_MoveDown"]"><img src="~/icons/chevron-down.svg" class="icon" /></button>
 								<div>
 									<input type="checkbox" name="ExistingImages[@i].Remove" value="true" id="remove_@i" />
 									<label for="remove_@i">@SharedLocalizer["Common_Delete"]</label>
@@ -68,7 +68,7 @@
 
 		<!-- 新規画像追加（複数可・最大16枚） -->
 		<div>
-			<label asp-for="NewImageFiles">@SharedLocalizer["Post_AddMoreImagesLabel"] <span id="imageCountDisplay">0/16</span></label>
+			<label asp-for="NewImageFiles"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Post_AddMoreImagesLabel"] <span id="imageCountDisplay">0/16</span></label>
 			<input asp-for="NewImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
 			<span asp-validation-for="NewImageFiles"></span>
 			<div id="imagePreviewContainer" class="image-preview-list"></div>
@@ -79,7 +79,7 @@
 		<!-- タグ編集コンポーネント (最大10個) -->
 		<div>
 			<div>
-				<label>🏷️ @SharedLocalizer["Post_Tags"]</label>
+				<label><img src="~/icons/tag.svg" class="icon" />@SharedLocalizer["Post_Tags"]</label>
 				<span id="tagCountDisplay">0/10</span>
 			</div>
 			<div>

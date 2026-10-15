@@ -739,7 +739,7 @@
     <value>件</value>
   </data>
   <data name="Message_MembersCountFormat" xml:space="preserve">
-    <value>👥 参加者 ({0})</value>
+    <value>参加者 ({0})</value>
   </data>
   <data name="Common_UnknownUser" xml:space="preserve">
     <value>User</value>
@@ -757,7 +757,7 @@
     <value>コメントはまだありません。最初のコメントを投稿してみましょう！</value>
   </data>
   <data name="Comment_WriteTitle" xml:space="preserve">
-    <value>💬 コメントを投稿する</value>
+    <value>コメントを投稿する</value>
   </data>
   <data name="Tag_CreatorInfoFormat" xml:space="preserve">
     <value>作成者: {0} | 投稿: {1} 件 | 画像: {2} 件</value>
@@ -766,19 +766,19 @@
     <value>System</value>
   </data>
   <data name="Post_ListTitle" xml:space="preserve">
-    <value>📝 投稿一覧</value>
+    <value>投稿一覧</value>
   </data>
   <data name="Image_ListTitle" xml:space="preserve">
-    <value>🖼️ 画像一覧</value>
+    <value>画像一覧</value>
   </data>
   <data name="Tag_RelatedPostsTitleFormat" xml:space="preserve">
-    <value>📝 関連する投稿 ({0})</value>
+    <value>関連する投稿 ({0})</value>
   </data>
   <data name="Post_NoPostsFound" xml:space="preserve">
     <value>投稿はありません。</value>
   </data>
   <data name="Tag_RelatedImagesTitleFormat" xml:space="preserve">
-    <value>🖼️ 関連する画像 ({0})</value>
+    <value>関連する画像 ({0})</value>
   </data>
   <data name="Image_NoImagesFound" xml:space="preserve">
     <value>画像はありません。</value>
@@ -796,16 +796,16 @@
     <value>タグ: #{0} の投稿を表示中</value>
   </data>
   <data name="Post_PinnedBadge" xml:space="preserve">
-    <value>📌 固定</value>
+    <value>固定</value>
   </data>
   <data name="Post_CommentCountSuffix" xml:space="preserve">
-    <value>💬 {0} コメント</value>
+    <value>{0} コメント</value>
   </data>
   <data name="Post_ViewCountSuffix" xml:space="preserve">
-    <value>👁️ {0} 閲覧</value>
+    <value>{0} 閲覧</value>
   </data>
   <data name="Post_ReactionCountSuffix" xml:space="preserve">
-    <value>❤️ {0} リアクション</value>
+    <value>{0} リアクション</value>
   </data>
   <data name="Image_ShowingTagFormat" xml:space="preserve">
     <value>#{0} の画像を表示中</value>
@@ -1174,13 +1174,13 @@
     <value>他のユーザーが見つかりません。</value>
   </data>
   <data name="Message_ImageAttachLabel" xml:space="preserve">
-    <value>🖼️ 画像を添付</value>
+    <value>画像を添付</value>
   </data>
   <data name="Message_TextPlaceholder" xml:space="preserve">
     <value>メッセージを入力してください...</value>
   </data>
   <data name="Message_MembersLabel" xml:space="preserve">
-    <value>🧑‍🤝‍🧑 参加者</value>
+    <value>参加者</value>
   </data>
   <data name="Message_NoMessagesForDate" xml:space="preserve">
     <value>該当するメッセージがありません</value>
@@ -1673,10 +1673,10 @@
     <value>この投稿のスレッドはロックされており、新しいコメントは投稿できません。</value>
   </data>
   <data name="Post_ManageImagesLabel" xml:space="preserve">
-    <value>🖼️ 添付画像の並び順・管理</value>
+    <value>添付画像の並び順・管理</value>
   </data>
   <data name="Post_AddMoreImagesLabel" xml:space="preserve">
-    <value>➕ 画像を追加添付</value>
+    <value>画像を追加添付</value>
   </data>
   <data name="Profile_PrivateBadge" xml:space="preserve">
     <value>（非公開）</value>

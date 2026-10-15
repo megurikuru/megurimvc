@@ -80,13 +80,13 @@
 				<div class="button-wrap">
 					<div class="button-like">
 						<a asp-action="Edit" asp-route-id="@Model.Id" class="icon-wrap">
-							<img src="~/icons/square-pen.svg" alt="@SharedLocalizer["Common_Edit"]" />@SharedLocalizer["Common_Edit"]
+							<img src="~/icons/square-pen.svg" class="icon" alt="@SharedLocalizer["Common_Edit"]" />@SharedLocalizer["Common_Edit"]
 						</a>
 					</div>
 					<form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
 						@Html.AntiForgeryToken()
 						<button type="submit" class="icon-wrap">
-							<img src="~/icons/delete.svg" alt="@SharedLocalizer["Common_Delete"]" />@SharedLocalizer["Common_Delete"]
+							<img src="~/icons/delete.svg" class="icon" alt="@SharedLocalizer["Common_Delete"]" />@SharedLocalizer["Common_Delete"]
 						</button>
 					</form>
 				</div>
@@ -136,7 +136,7 @@
 					var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText ?? SharedLocalizer["Tag_Title"].Value;
 					<div>
 						<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="icon-wrap">
-							<img src="~/icons/tag.svg">@tagText
+							<img src="~/icons/tag.svg" class="icon" />@tagText
 						</a>
 						<a asp-controller="Tag" asp-action="Disambiguation" asp-route-id="@pt.TagConceptId">@SharedLocalizer["Tag_DisambiguationBtn"]</a>
 					</div>
@@ -159,7 +159,7 @@
 	<div>
 		<h2>@SharedLocalizer["Comment_Header"] (@Model.CommentCount)</h2>
 		@if (Model.IsLocked) {
-			<span>🔒 @SharedLocalizer["Post_Locked"]</span>
+			<span><img src="~/icons/lock.svg" class="icon" />@SharedLocalizer["Post_Locked"]</span>
 		}
 	</div>
 	<div>

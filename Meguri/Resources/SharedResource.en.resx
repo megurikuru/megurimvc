@@ -739,7 +739,7 @@
     <value>items</value>
   </data>
   <data name="Message_MembersCountFormat" xml:space="preserve">
-    <value>👥 Members ({0})</value>
+    <value>Members ({0})</value>
   </data>
   <data name="Common_UnknownUser" xml:space="preserve">
     <value>User</value>
@@ -757,7 +757,7 @@
     <value>No comments yet. Be the first to comment!</value>
   </data>
   <data name="Comment_WriteTitle" xml:space="preserve">
-    <value>💬 Write a Comment</value>
+    <value>Write a Comment</value>
   </data>
   <data name="Tag_CreatorInfoFormat" xml:space="preserve">
     <value>Creator: {0} | Posts: {1} | Images: {2}</value>
@@ -766,19 +766,19 @@
     <value>System</value>
   </data>
   <data name="Post_ListTitle" xml:space="preserve">
-    <value>📝 Post List</value>
+    <value>Post List</value>
   </data>
   <data name="Image_ListTitle" xml:space="preserve">
-    <value>🖼️ Image List</value>
+    <value>Image List</value>
   </data>
   <data name="Tag_RelatedPostsTitleFormat" xml:space="preserve">
-    <value>📝 Related Posts ({0})</value>
+    <value>Related Posts ({0})</value>
   </data>
   <data name="Post_NoPostsFound" xml:space="preserve">
     <value>No posts found.</value>
   </data>
   <data name="Tag_RelatedImagesTitleFormat" xml:space="preserve">
-    <value>🖼️ Related Images ({0})</value>
+    <value>Related Images ({0})</value>
   </data>
   <data name="Image_NoImagesFound" xml:space="preserve">
     <value>No images found.</value>
@@ -796,16 +796,16 @@
     <value>Tag: #{0} - Showing posts</value>
   </data>
   <data name="Post_PinnedBadge" xml:space="preserve">
-    <value>📌 Pinned</value>
+    <value>Pinned</value>
   </data>
   <data name="Post_CommentCountSuffix" xml:space="preserve">
-    <value>💬 {0} comments</value>
+    <value>{0} comments</value>
   </data>
   <data name="Post_ViewCountSuffix" xml:space="preserve">
-    <value>👁️ {0} views</value>
+    <value>{0} views</value>
   </data>
   <data name="Post_ReactionCountSuffix" xml:space="preserve">
-    <value>❤️ {0} reactions</value>
+    <value>{0} reactions</value>
   </data>
   <data name="Image_ShowingTagFormat" xml:space="preserve">
     <value>Showing images for #{0}</value>
@@ -1174,13 +1174,13 @@
     <value>No other users found.</value>
   </data>
   <data name="Message_ImageAttachLabel" xml:space="preserve">
-    <value>🖼️ Attach Image</value>
+    <value>Attach Image</value>
   </data>
   <data name="Message_TextPlaceholder" xml:space="preserve">
     <value>Enter your message...</value>
   </data>
   <data name="Message_MembersLabel" xml:space="preserve">
-    <value>🧑‍🤝‍🧑 Members</value>
+    <value>Members</value>
   </data>
   <data name="Message_NoMessagesForDate" xml:space="preserve">
     <value>No matching messages</value>
@@ -1647,10 +1647,10 @@
     <value>This thread is locked and new comments cannot be posted.</value>
   </data>
   <data name="Post_ManageImagesLabel" xml:space="preserve">
-    <value>🖼️ Manage &amp; Reorder Attached Images</value>
+    <value>Manage &amp; Reorder Attached Images</value>
   </data>
   <data name="Post_AddMoreImagesLabel" xml:space="preserve">
-    <value>➕ Attach Additional Images</value>
+    <value>Attach Additional Images</value>
   </data>
   <data name="Profile_PrivateBadge" xml:space="preserve">
     <value>(Private)</value>
