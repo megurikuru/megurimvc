@@ -1,4 +1,4 @@
-@model Meguri.Models.MessageViewModels.ConversationListViewModel
+@model Meguri.ViewModels.Message.ConversationListViewModel
 @{
 	ViewData["Title"] = SharedLocalizer["Message_Title"];
 	var dateValue = Model.FilterDate?.ToString("yyyy-MM-dd");
@@ -6,7 +6,7 @@
 	if (!string.IsNullOrEmpty(dateValue)) {
 		routeValues["date"] = dateValue;
 	}
-	var pager = new Meguri.ViewModels.PaginationViewModel {
+	var pager = new PaginationViewModel {
 		Controller = "Message",
 		Action = "Index",
 		HasPrevious = Model.HasPrevious,
@@ -23,7 +23,7 @@
 
 <div>
 	<div>
-		<h1><img src="~/icons/mail.svg" class="icon"/>@SharedLocalizer["Message_Title"]</h1>
+		<h1><img src="~/icons/mail.svg" class="icon" />@SharedLocalizer["Message_Title"]</h1>
 		<p>@SharedLocalizer["Message_SubTitle"]</p>
 	</div>
 	<a asp-action="Create">➕ @SharedLocalizer["Message_NewConversation"]</a>
@@ -47,8 +47,7 @@
 		<p>@SharedLocalizer["Message_NoConversationsHint"]</p>
 		<a asp-action="Create">➕ @SharedLocalizer["Message_NewConversation"]</a>
 	</div>
-}
-else {
+} else {
 	<div>
 		@foreach (var c in Model.Conversations) {
 			<div>

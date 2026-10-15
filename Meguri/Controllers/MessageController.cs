@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
-using Meguri.Models.MessageViewModels;
+using Meguri.ViewModels.Message;
 using Meguri.Services;
 
 namespace Meguri.Controllers {

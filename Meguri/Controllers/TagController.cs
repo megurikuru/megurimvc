@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Meguri.Data;
 using Meguri.Models;
-using Meguri.Models.TagViewModels;
+using Meguri.ViewModels.Tag;
 using Meguri.Services;
 
 namespace Meguri.Controllers {

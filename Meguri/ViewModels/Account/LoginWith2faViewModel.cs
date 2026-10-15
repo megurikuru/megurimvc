@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Meguri.Models.AccountViewModels {
+namespace Meguri.ViewModels.Account {
     public class LoginWith2faViewModel {
         [Required(ErrorMessage = "Validation_Required")]
         [StringLength(7, ErrorMessage = "Validation_StringLength", MinimumLength = 6)]

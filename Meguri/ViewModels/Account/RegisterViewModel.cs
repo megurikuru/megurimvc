@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
-namespace Meguri.Models.AccountViewModels {
+namespace Meguri.ViewModels.Account {
     public class RegisterViewModel : IValidatableObject {
         [Required(ErrorMessage = "Validation_Required")]
         [StringLength(256, ErrorMessage = "Validation_StringLengthMax")]

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Meguri.Models.AccountViewModels {
+namespace Meguri.ViewModels.Account {
     public class ForgotPasswordViewModel {
         [Required(ErrorMessage = "Validation_Required")]
         [EmailAddress(ErrorMessage = "Validation_InvalidEmail")]

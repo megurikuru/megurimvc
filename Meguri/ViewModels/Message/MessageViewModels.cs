@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Meguri.Models;
 
-namespace Meguri.Models.MessageViewModels {
+namespace Meguri.ViewModels.Message {
     public class ConversationListViewModel {
         public List<ConversationItemViewModel> Conversations { get; set; } = new List<ConversationItemViewModel>();
         public List<ApplicationUser> AvailableUsers { get; set; } = new List<ApplicationUser>();
@@ -67,7 +67,7 @@ namespace Meguri.Models.MessageViewModels {
         public string CurrentUserId { get; set; } = string.Empty;
         public string DisplayTitle { get; set; } = string.Empty;
 
-        public List<Message> Messages { get; set; } = new List<Message>();
+        public List<Meguri.Models.Message> Messages { get; set; } = new List<Meguri.Models.Message>();
         public int PageSize { get; set; } = 80;
         public int TotalCount { get; set; }
         public int Skip { get; set; }

@@ -1,4 +1,4 @@
-﻿@model Meguri.Models.MessageViewModels.ChatRoomViewModel
+﻿@model Meguri.ViewModels.Message.ChatRoomViewModel
 @{
 	ViewData["Title"] = Model.DisplayTitle;
 	var dateValue = Model.FilterDate?.ToString("yyyy-MM-dd");
@@ -8,7 +8,7 @@
 	if (!string.IsNullOrEmpty(dateValue)) {
 		routeValues["date"] = dateValue;
 	}
-	var pager = new Meguri.ViewModels.PaginationViewModel {
+	var pager = new PaginationViewModel {
 		Controller = "Message",
 		Action = "Details",
 		HasPrevious = Model.HasPrevious,

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Data.SqlClient;
 using Meguri.Data;
 using Meguri.Models;
+using Meguri.ViewModels.Shared;
 
 namespace Meguri.Controllers {
     // ホーム画面および共通的な機能（言語設定、アバウト、問い合わせ等）を提供するコントローラー

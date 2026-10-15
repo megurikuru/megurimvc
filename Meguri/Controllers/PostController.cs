@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
-using Meguri.Models.PostViewModels;
+using Meguri.ViewModels.Post;
 using Meguri.Services;
 
 namespace Meguri.Controllers {

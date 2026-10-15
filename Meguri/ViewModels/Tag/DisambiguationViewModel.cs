@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Meguri.Models;
 
-namespace Meguri.Models.TagViewModels {
+namespace Meguri.ViewModels.Tag {
     public class DisambiguationViewModel {
         public long TagConceptId { get; set; }
         public string PrimaryTagText { get; set; } = string.Empty;

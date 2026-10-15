@@ -19,7 +19,7 @@
 @* 2. タグ検索フォームエリア                           *@
 @* ================================================== *@
 @{
-	var searchForm = new Meguri.Models.SearchFormModel {
+	var searchForm = new SearchFormViewModel {
 		Controller = "Tag",
 		Action = "Index",
 		ParameterName = "q",
@@ -69,7 +69,7 @@
 		if (!string.IsNullOrWhiteSpace(searchQuery)) {
 			routeValues["q"] = searchQuery;
 		}
-		var pager = new Meguri.ViewModels.PaginationViewModel {
+		var pager = new PaginationViewModel {
 			Controller = "Tag",
 			Action = "Index",
 			HasPrevious = ViewBag.HasPrevious as bool? ?? false,

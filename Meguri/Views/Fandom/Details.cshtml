@@ -3,7 +3,7 @@
 	ViewData["Title"] = Model.Name;
 	bool isJoined = ViewBag.IsJoined is true;
 	var fandomPosts = ViewBag.FandomPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
-	var breadcrumbs = new List<Meguri.Models.BreadcrumbItem>();
+	var breadcrumbs = new List<BreadcrumbItemViewModel>();
 	if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
 		foreach (var ancestor in ancestors) {
 			breadcrumbs.Add(new(ancestor.Name, Url.Action("Details", "Fandom", new { id = ancestor.Id })));
@@ -12,7 +12,7 @@
 		breadcrumbs.Add(new(Model.ParentFandom.Name, Url.Action("Details", "Fandom", new { id = Model.ParentFandom.Id })));
 	}
 	breadcrumbs.Add(new(Model.Name));
-	var pager = new Meguri.ViewModels.PaginationViewModel {
+	var pager = new PaginationViewModel {
 		Controller = "Fandom",
 		Action = "Details",
 		HasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false,
@@ -70,7 +70,7 @@
 </nav>
 
 
-<partial name="_Finder" model="new Meguri.ViewModels.FinderViewModel { ParentFandomId = Model.ParentFandomId, ChildFandoms = Model.ChildFandoms, Posts = fandomPosts }" />
+<partial name="_Finder" model="new FinderViewModel { ParentFandomId = Model.ParentFandomId, ChildFandoms = Model.ChildFandoms, Posts = fandomPosts }" />
 
 <!-- ページネーション -->	
 <div>
