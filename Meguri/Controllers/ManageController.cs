@@ -93,7 +93,7 @@ namespace Meguri.Controllers {
                 return Unauthorized();
             }
             var userId = await _userManager.GetUserIdAsync(user);
-            var userName = await _userManager.GetUserNameAsync(user) ?? "User";
+            var userName = await _userManager.GetUserNameAsync(user) ?? _localizer["Common_UnknownUser"].Value;
             var optionsJson = await _signInManager.MakePasskeyCreationOptionsAsync(new PasskeyUserEntity {
                 Id = userId,
                 Name = userName,
@@ -181,11 +181,11 @@ namespace Meguri.Controllers {
                 .Cast<string>()
                 .ToList();
             if (urls.Count > 5) {
-                ModelState.AddModelError(nameof(model.ExternalUrls), "URLは最大5個までです。");
+                ModelState.AddModelError(nameof(model.ExternalUrls), _localizer["Manage_Error_MaxUrls"]);
             }
             foreach (var u in urls) {
                 if (u.Length > 500 || !Uri.TryCreate(u, UriKind.Absolute, out var uri) || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)) {
-                    ModelState.AddModelError(nameof(model.ExternalUrls), $"URLの形式が正しくありません: {u}");
+                    ModelState.AddModelError(nameof(model.ExternalUrls), string.Format(_localizer["Manage_Error_InvalidUrl"].Value, u));
                 }
             }
             if (!ModelState.IsValid) {
@@ -287,7 +287,7 @@ namespace Meguri.Controllers {
             var email = user.Email;
             await _emailSender.SendConfirmationLinkAsync(user, email, callbackUrl);
 
-            StatusMessage = "Verification email sent. Please check your email.";
+            StatusMessage = _localizer["Manage_VerificationEmailSent"].Value;
             return RedirectToAction(nameof(Index));
         }
 
@@ -327,7 +327,7 @@ namespace Meguri.Controllers {
 
             await _signInManager.SignInAsync(user, isPersistent: false);
             _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            StatusMessage = _localizer["Manage_PasswordChanged"].Value;
 
             return RedirectToAction(nameof(ChangePassword));
         }
@@ -368,7 +368,7 @@ namespace Meguri.Controllers {
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
-            StatusMessage = "Your password has been set.";
+            StatusMessage = _localizer["Manage_PasswordSet"].Value;
 
             return RedirectToAction(nameof(SetPassword));
         }
@@ -422,7 +422,7 @@ namespace Meguri.Controllers {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            StatusMessage = "The external login was added.";
+            StatusMessage = _localizer["Manage_ExternalLoginAdded"].Value;
             return RedirectToAction(nameof(ExternalLogins));
         }
 
@@ -440,7 +440,7 @@ namespace Meguri.Controllers {
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
-            StatusMessage = "The external login was removed.";
+            StatusMessage = _localizer["Manage_ExternalLoginRemoved"].Value;
             return RedirectToAction(nameof(ExternalLogins));
         }
 
@@ -524,7 +524,7 @@ namespace Meguri.Controllers {
                 user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
 
             if (!is2faTokenValid) {
-                ModelState.AddModelError("Code", "Verification code is invalid.");
+                ModelState.AddModelError("Code", _localizer["Manage_Error_InvalidVerificationCode"]);
                 await LoadSharedKeyAndQrCodeUriAsync(user, model);
                 return View(model);
             }

@@ -33,16 +33,16 @@ namespace Meguri.Models.MessageViewModels {
         [Display(Name = "Message_GroupName")]
         public string? Title { get; set; }
 
-        [Required(ErrorMessage = "メンバーを1名以上選択してください。")]
+        [Required(ErrorMessage = "Message_Error_SelectRecipientRequired")]
         [Display(Name = "Message_SelectRecipient")]
         public List<string> SelectedUserIds { get; set; } = new List<string>();
 
-        [Required(ErrorMessage = "件名を入力してください。")]
+        [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Message_SubjectLabel")]
         public string Subject { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "メッセージを入力してください。")]
-        [Display(Name = "Message_InputPlaceholder")]
+        [Required(ErrorMessage = "Validation_Required")]
+        [Display(Name = "Message_Title")]
         public string InitialMessage { get; set; } = string.Empty;
         public List<IFormFile>? ImageFiles { get; set; }
 
@@ -53,12 +53,12 @@ namespace Meguri.Models.MessageViewModels {
         public long Id { get; set; }
         public long ConversationId { get; set; }
 
-        [Required(ErrorMessage = "件名を入力してください。")]
+        [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Message_SubjectLabel")]
         public string Subject { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "メッセージを入力してください。")]
-        [Display(Name = "Message_InputPlaceholder")]
+        [Required(ErrorMessage = "Validation_Required")]
+        [Display(Name = "Message_Title")]
         public string Body { get; set; } = string.Empty;
     }
 

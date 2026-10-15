@@ -1,2 +1,21 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+	if (window.jQuery && $.validator) {
+		$.extend($.validator.messages, {
+			required: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Required"].Value)),
+			email: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Email"].Value)),
+			url: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Url"].Value)),
+			date: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Date"].Value)),
+			number: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Number"].Value)),
+			digits: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Digits"].Value)),
+			equalTo: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_EqualTo"].Value)),
+			maxlength: $.validator.format(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_MaxLength"].Value))),
+			minlength: $.validator.format(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_MinLength"].Value))),
+			rangelength: $.validator.format(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_RangeLength"].Value))),
+			range: $.validator.format(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Range"].Value))),
+			max: $.validator.format(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Max"].Value))),
+			min: $.validator.format(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_Validate_Min"].Value)))
+		});
+	}
+</script>

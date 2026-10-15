@@ -77,7 +77,8 @@ const TagManager = {
         tagText = tagText.trim();
         if (!tagText) return;
         if (this.selectedTags.length >= this.maxTags) {
-            alert('タグは最大' + this.maxTags + '個まで設定できます。');
+            const fmt = (window.MeguriI18n && window.MeguriI18n.maxTagsAlertFormat) || 'Up to {0} tags.';
+            alert(fmt.replace('{0}', this.maxTags));
             return;
         }
         if (!this.selectedTags.includes(tagText)) {
@@ -99,11 +100,12 @@ const TagManager = {
         container.empty();
         hiddenInputsContainer.empty();
 
+        const removeLabel = (window.MeguriI18n && window.MeguriI18n.removeLabel) || 'Remove';
         this.selectedTags.forEach((tag, idx) => {
             const badge = $(`
                 <span>
                     #${tag}
-                    <button type="button"  style="font-size:0.6rem;" aria-label="Remove"></button>
+                    <button type="button"  style="font-size:0.6rem;" aria-label="${removeLabel}"></button>
                 </span>
             `);
             badge.find('button').on('click', () => this.removeTag(tag));
@@ -158,7 +160,11 @@ const TagManager = {
 // コメント返信機能
 function replyToComment(commentId, commentNumber, userName) {
     $('#replyParentId').val(commentId);
-    $('#replyNotice').html(`<strong>>>${commentNumber} (${userName})</strong> への返信 <button type="button"  onclick="cancelReply()"></button>`).removeClass('d-none');
+    const fmt = (window.MeguriI18n && window.MeguriI18n.replyNoticeFormat) || '<strong>>>{0} ({1})</strong>';
+    const cancelLabel = (window.MeguriI18n && window.MeguriI18n.cancelLabel) || 'Cancel';
+    const safeUser = $('<div>').text(userName).html();
+    const noticeText = fmt.replace('{0}', commentNumber).replace('{1}', safeUser);
+    $('#replyNotice').html(`${noticeText} <button type="button" aria-label="${cancelLabel}" onclick="cancelReply()"></button>`).removeClass('d-none');
     $('html, body').animate({
         scrollTop: $('#commentForm').offset().top - 100
     }, 300);

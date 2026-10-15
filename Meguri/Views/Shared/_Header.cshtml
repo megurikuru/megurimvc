@@ -6,7 +6,7 @@
 	<span class="user-name">
 			@if (User.Identity?.IsAuthenticated == true)
 			{
-				<a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" title="マイページ">@User.Identity.Name</a>
+				<a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" title="@SharedLocalizer["Header_MyPageTitle"]">@User.Identity.Name</a>
 			}
 		</span>
 </header>

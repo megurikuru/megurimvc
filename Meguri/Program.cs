@@ -43,6 +43,7 @@ builder.Services
         options.SignIn.RequireConfirmedEmail = true;
         options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;   // Passkeyテーブルを使用
     })
+    .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();                    // パスワードリセット、2要素認証用のトークン生成機能
 
@@ -68,8 +69,21 @@ builder.Services.AddScoped<IImageProcessingService, ImageProcessingService>();
 
 // MVC機能を有効化(コントローラーとビューのサポートを追加)
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+var sharedResManager = new System.Resources.ResourceManager("Meguri.Resources.SharedResource", typeof(SharedResource).Assembly);
 builder.Services
-    .AddControllersWithViews()
+    .AddControllersWithViews(options => {
+        var p = options.ModelBindingMessageProvider;
+        p.SetValueIsInvalidAccessor(x => string.Format(sharedResManager.GetString("Validation_ValueIsInvalid", CultureInfo.CurrentUICulture) ?? "'{0}' is invalid.", x));
+        p.SetValueMustBeANumberAccessor(x => string.Format(sharedResManager.GetString("Validation_ValueMustBeANumber", CultureInfo.CurrentUICulture) ?? "The field {0} must be a number.", x));
+        p.SetMissingBindRequiredValueAccessor(x => string.Format(sharedResManager.GetString("Validation_MissingBindRequiredValue", CultureInfo.CurrentUICulture) ?? "A value for the '{0}' parameter or property was not provided.", x));
+        p.SetAttemptedValueIsInvalidAccessor((x, y) => string.Format(sharedResManager.GetString("Validation_AttemptedValueIsInvalid", CultureInfo.CurrentUICulture) ?? "The value '{0}' is not valid for {1}.", x, y));
+        p.SetMissingKeyOrValueAccessor(() => sharedResManager.GetString("Validation_MissingKeyOrValue", CultureInfo.CurrentUICulture) ?? "A value is required.");
+        p.SetUnknownValueIsInvalidAccessor(x => string.Format(sharedResManager.GetString("Validation_UnknownValueIsInvalid", CultureInfo.CurrentUICulture) ?? "The supplied value is invalid for {0}.", x));
+        p.SetValueMustNotBeNullAccessor(x => sharedResManager.GetString("Validation_ValueMustNotBeNull", CultureInfo.CurrentUICulture) ?? "The value is invalid.");
+        p.SetNonPropertyAttemptedValueIsInvalidAccessor(x => string.Format(sharedResManager.GetString("Validation_ValueIsInvalid", CultureInfo.CurrentUICulture) ?? "'{0}' is invalid.", x));
+        p.SetNonPropertyUnknownValueIsInvalidAccessor(() => sharedResManager.GetString("Validation_ValueMustNotBeNull", CultureInfo.CurrentUICulture) ?? "The value is invalid.");
+        p.SetNonPropertyValueMustBeANumberAccessor(() => string.Format(sharedResManager.GetString("Validation_ValueMustBeANumber", CultureInfo.CurrentUICulture) ?? "The field {0} must be a number.", ""));
+    })
     .AddViewLocalization()
     .AddDataAnnotationsLocalization(options => {
         options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(SharedResource));

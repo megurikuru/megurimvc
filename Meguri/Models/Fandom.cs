@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,6 +11,9 @@ namespace Meguri.Models {
     [Index(nameof(Name))]
     public class Fandom {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Validation_Required")]
+        [Display(Name = "Fandom_Name")]
         public string Name { get; set; } = string.Empty;
 
         /// eFandom‚ÌIDiÅãˆÊŠK‘w‚Ìê‡‚Ínullj

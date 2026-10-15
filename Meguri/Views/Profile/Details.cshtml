@@ -29,7 +29,7 @@
 		<h2>@profile.UserName</h2>
 		@if (isOwner) {
 			@if (!profile.IsProfilePublic) {
-				<small>（非公開）</small>
+				<small>@SharedLocalizer["Profile_PrivateBadge"]</small>
 			}
 		}
 	</div>
@@ -45,7 +45,7 @@
 	}
 </div>
 
-<h3>投稿一覧</h3>
+<h3>@SharedLocalizer["Profile_PostListHeading"]</h3>
 @if (!Model.Any()) {
 	<h4>@SharedLocalizer["Common_NoItems"]</h4>
 }

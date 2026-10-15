@@ -64,7 +64,7 @@ namespace Meguri.Controllers {
                 // UserNameベースでログインする
                 var existingUser = await _userManager.FindByNameAsync(model.UserName);
                 if (existingUser != null && existingUser.IsWithdrawn) {
-                    ModelState.AddModelError(string.Empty, "存在しないユーザーです。");
+                    ModelState.AddModelError(string.Empty, _localizer["Account_Error_UserWithdrawn"]);
                     return View(model);
                 }
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
@@ -81,7 +81,7 @@ namespace Meguri.Controllers {
                 }
                 if (result.IsNotAllowed) {
                     // E-Mail未確認のユーザーがログインしようとした場合
-                    ModelState.AddModelError(string.Empty, "E-Mailアドレスの確認が完了していません。登録時に送信された確認メールをご確認ください。");
+                    ModelState.AddModelError(string.Empty, _localizer["Account_Error_EmailNotConfirmed"]);
                     return View(model);
                 }
                 else {
@@ -120,7 +120,7 @@ namespace Meguri.Controllers {
             }
 
             if (!await _signInManager.CanSignInAsync(user)) {
-                ModelState.AddModelError(string.Empty, "E-Mailアドレスの確認が完了していません。登録時に送信された確認メールをご確認ください。");
+                ModelState.AddModelError(string.Empty, _localizer["Account_Error_EmailNotConfirmed"]);
                 return View(nameof(Login), new LoginViewModel());
             }
             if (await _userManager.IsLockedOutAsync(user)) {
@@ -175,7 +175,7 @@ namespace Meguri.Controllers {
                 return RedirectToAction(nameof(Lockout));
             } else {
                 _logger.LogWarning("Invalid authenticator code entered for user with ID {UserId}.", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
+                ModelState.AddModelError(string.Empty, _localizer["Account_Error_InvalidAuthenticatorCode"]);
                 return View();
             }
         }
@@ -220,7 +220,7 @@ namespace Meguri.Controllers {
                 return RedirectToAction(nameof(Lockout));
             } else {
                 _logger.LogWarning("Invalid recovery code entered for user with ID {UserId}", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid recovery code entered.");
+                ModelState.AddModelError(string.Empty, _localizer["Account_Error_InvalidRecoveryCode"]);
                 return View();
             }
         }
@@ -246,7 +246,7 @@ namespace Meguri.Controllers {
             if (ModelState.IsValid) {
                 var withdrawnUser = await _userManager.FindByNameAsync(model.UserName);
                 if (withdrawnUser != null && withdrawnUser.IsWithdrawn) {
-                    ModelState.AddModelError(nameof(model.UserName), "使用できないユーザー名です。");
+                    ModelState.AddModelError(nameof(model.UserName), _localizer["Account_Error_UnavailableUserName"]);
                     return View(model);
                 }
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, DateOfBirth = model.DateOfBirth };
@@ -299,7 +299,7 @@ namespace Meguri.Controllers {
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null) {
             if (remoteError != null) {
-                ErrorMessage = $"Error from external provider: {remoteError}";
+                ErrorMessage = string.Format(_localizer["Account_Error_ExternalProvider"].Value, remoteError);
                 return RedirectToAction(nameof(Login));
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
@@ -309,7 +309,7 @@ namespace Meguri.Controllers {
 
             var externalUser = await _userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
             if (externalUser != null && externalUser.IsWithdrawn) {
-                ErrorMessage = "存在しないユーザーです。";
+                ErrorMessage = _localizer["Account_Error_UserWithdrawn"].Value;
                 return RedirectToAction(nameof(Login));
             }
 

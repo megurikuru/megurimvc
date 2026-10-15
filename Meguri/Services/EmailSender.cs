@@ -1,6 +1,7 @@
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -14,29 +15,33 @@ namespace Meguri.Services;
 public class EmailSender : IEmailSender<ApplicationUser> {
 
     private readonly ILogger _logger;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
     public EmailSender(
-        IOptions<SMTPServerConf> optionsAccessor, ILogger<EmailSender> logger
+        IOptions<SMTPServerConf> optionsAccessor,
+        ILogger<EmailSender> logger,
+        IStringLocalizer<SharedResource> localizer
     ) {
         Options = optionsAccessor.Value;
         _logger = logger;
+        _localizer = localizer;
     }
 
     public SMTPServerConf Options { get; }
 
     public async Task SendConfirmationLinkAsync(ApplicationUser user, string email, string confirmationLink) {
-        var textMessage = $"以下のリンクをクリックして、アカウントを確定してください。\n\n{confirmationLink}";
-        await Execute("アカウントの確認", textMessage, email);
+        var textMessage = string.Format(_localizer["Email_ConfirmAccount_Body"].Value, confirmationLink);
+        await Execute(_localizer["Email_ConfirmAccount_Subject"].Value, textMessage, email);
     }
 
     public async Task SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink) {
-        var textMessage = $"以下のリンクをクリックして、パスワードをリセットしてください。\n\n{resetLink}";
-        await Execute("パスワードのリセット", textMessage, email);
+        var textMessage = string.Format(_localizer["Email_ResetPassword_Body"].Value, resetLink);
+        await Execute(_localizer["Email_ResetPassword_Subject"].Value, textMessage, email);
     }
 
     public async Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode) {
-        var textMessage = $"リセットコードは次の通りです:\n\n{resetCode}";
-        await Execute("パスワードリセットコード", textMessage, email);
+        var textMessage = string.Format(_localizer["Email_ResetPasswordCode_Body"].Value, resetCode);
+        await Execute(_localizer["Email_ResetPasswordCode_Subject"].Value, textMessage, email);
     }
 
     public async Task Execute(string subject, string message, string toEmail) {

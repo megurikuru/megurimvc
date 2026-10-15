@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
 
 namespace Meguri.Controllers {
     public class FandomController : Controller {
         private readonly ApplicationDbContext _context;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
-        public FandomController(ApplicationDbContext context) {
+        public FandomController(ApplicationDbContext context, IStringLocalizer<SharedResource> localizer) {
             _context = context;
+            _localizer = localizer;
         }
 
         // GET: /Fandom/Details/5
@@ -193,12 +196,12 @@ namespace Meguri.Controllers {
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name,ParentFandomId")] Fandom fandom) {
             if (string.IsNullOrWhiteSpace(fandom.Name)) {
-                ModelState.AddModelError("Name", "界隈名を入力してください。");
+                ModelState.AddModelError("Name", _localizer["Fandom_Error_NameRequired"]);
             }
 
             if (fandom.ParentFandomId.HasValue &&
                 !await _context.Fandoms.AnyAsync(f => f.Id == fandom.ParentFandomId.Value)) {
-                ModelState.AddModelError("ParentFandomId", "指定された親界隈が存在しません。");
+                ModelState.AddModelError("ParentFandomId", _localizer["Fandom_Error_ParentNotFound"]);
             }
 
             if (ModelState.IsValid) {

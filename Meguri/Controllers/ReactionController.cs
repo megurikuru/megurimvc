@@ -5,15 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
 
 namespace Meguri.Controllers {
     public class ReactionController : Controller {
         private readonly ApplicationDbContext _context;
+        private readonly IStringLocalizer<SharedResource> _localizer;
 
-        public ReactionController(ApplicationDbContext context) {
+        public ReactionController(ApplicationDbContext context, IStringLocalizer<SharedResource> localizer) {
             _context = context;
+            _localizer = localizer;
         }
 
         // POST: /Reaction/Toggle
@@ -44,7 +47,7 @@ namespace Meguri.Controllers {
                 query = query.Where(r => r.MessageId == targetId);
                 existingReaction = await query.FirstOrDefaultAsync(r => r.UserId == userId);
             } else {
-                return BadRequest("Invalid target type");
+                return BadRequest(_localizer["Reaction_Error_InvalidTargetType"].Value);
             }
 
             bool hasReacted;
