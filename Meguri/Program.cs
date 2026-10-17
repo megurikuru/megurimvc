@@ -66,6 +66,11 @@ builder.Services.AddScoped<IR2StorageService, R2StorageService>();
 // 画像検証・変換・圧縮サービス
 builder.Services.AddScoped<IImageProcessingService, ImageProcessingService>();
 
+// Cloudflare Turnstile 設定とサービス
+var turnstileConf = builder.Configuration.GetSection("Turnstile");
+builder.Services.Configure<TurnstileConf>(turnstileConf);
+builder.Services.AddHttpClient<ITurnstileService, TurnstileService>();
+
 
 // MVC機能を有効化(コントローラーとビューのサポートを追加)
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
