@@ -42,33 +42,32 @@
 </div>
 
 <!-- 界隈メニュー -->
-<nav class="nav-grid">
-	<ul>
-		@if (Model.Id != 1) {
-		<li>
+@if (Model.Id != 1) {
+	<nav class="nav-grid">
+		<ul>
+			<li>
+				@if (isJoined) {
+					<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
+						@Html.AntiForgeryToken()
+						<button type="submit">@SharedLocalizer["Fandom_Leave"]</button>
+					</form>
+				} else {
+					<form asp-action="Join" asp-route-id="@Model.Id" method="post">
+						@Html.AntiForgeryToken()
+						<button type="submit">@SharedLocalizer["Fandom_Join"]</button>
+					</form>
+				}
+			</li>
 			@if (isJoined) {
-				<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
-					@Html.AntiForgeryToken()
-					<button type="submit">@SharedLocalizer["Fandom_Leave"]</button>
-				</form>
-			} else {
-				<form asp-action="Join" asp-route-id="@Model.Id" method="post">
-					@Html.AntiForgeryToken()
-					<button type="submit">@SharedLocalizer["Fandom_Join"]</button>
-				</form>
+			<li>
+				<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
+					@SharedLocalizer["Post_CreateNew"]
+				</a>
+			</li>
 			}
-		</li>
-		@if (isJoined) {
-		<li>
-			<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
-				@SharedLocalizer["Post_CreateNew"]
-			</a>
-		</li>
-		}
-		}
-	</ul>
-</nav>
-
+		</ul>
+	</nav>
+}
 
 <partial name="_Finder" model="new FinderViewModel { ParentFandomId = Model.ParentFandomId, ChildFandoms = Model.ChildFandoms, Posts = fandomPosts }" />
 

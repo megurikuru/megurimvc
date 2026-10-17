@@ -1096,7 +1096,7 @@
     <value>Thesaurus relationships updated successfully.</value>
   </data>
   <data name="Tag_SubTitle" xml:space="preserve">
-    <value>A list of tags and thesaurus concepts attached to posts and images.</value>
+    <value>This is a list of the tags assigned to the post.</value>
   </data>
   <data name="Tag_NoTagsFound" xml:space="preserve">
     <value>No matching tags found.</value>
@@ -1163,9 +1163,9 @@
   </data>
   <data name="Message_ChatTypeLabel" xml:space="preserve">
     <value>Message Type</value>
-      </data>
-      <data name="Message_SubjectLabel" xml:space="preserve">
-        <value>Subject</value>
+  </data>
+  <data name="Message_SubjectLabel" xml:space="preserve">
+    <value>Subject</value>
   </data>
   <data name="Message_GroupNamePlaceholder" xml:space="preserve">
     <value>e.g. Manga Creation Lodge, Illustration Club</value>
@@ -1339,19 +1339,45 @@
   <data name="Account_InvalidLoginAttempt" xml:space="preserve">
     <value>Invalid login attempt.</value>
   </data>
-  <data name="Account_Login_PasskeyButton" xml:space="preserve"><value>Log in with a passkey</value></data>
-  <data name="Account_Login_PasskeyFailed" xml:space="preserve"><value>Passkey login failed.</value></data>
-  <data name="Manage_Nav_Passkeys" xml:space="preserve"><value>Passkeys</value></data>
-  <data name="Manage_Passkeys_Title" xml:space="preserve"><value>Passkeys</value></data>
-  <data name="Manage_Passkeys_Registered" xml:space="preserve"><value>Registered passkeys</value></data>
-  <data name="Manage_Passkeys_None" xml:space="preserve"><value>No passkeys registered.</value></data>
-  <data name="Manage_Passkeys_Name" xml:space="preserve"><value>Name</value></data>
-  <data name="Manage_Passkeys_Add" xml:space="preserve"><value>Add a passkey</value></data>
-  <data name="Manage_Passkeys_Remove" xml:space="preserve"><value>Remove</value></data>
-  <data name="Manage_Passkeys_DefaultName" xml:space="preserve"><value>Passkey</value></data>
-  <data name="Manage_Passkeys_Added" xml:space="preserve"><value>Passkey added.</value></data>
-  <data name="Manage_Passkeys_Removed" xml:space="preserve"><value>Passkey removed.</value></data>
-  <data name="Manage_Passkeys_Failed" xml:space="preserve"><value>Passkey operation failed.</value></data>
+  <data name="Account_Login_PasskeyButton" xml:space="preserve">
+    <value>Log in with a passkey</value>
+  </data>
+  <data name="Account_Login_PasskeyFailed" xml:space="preserve">
+    <value>Passkey login failed.</value>
+  </data>
+  <data name="Manage_Nav_Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="Manage_Passkeys_Title" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="Manage_Passkeys_Registered" xml:space="preserve">
+    <value>Registered passkeys</value>
+  </data>
+  <data name="Manage_Passkeys_None" xml:space="preserve">
+    <value>No passkeys registered.</value>
+  </data>
+  <data name="Manage_Passkeys_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Manage_Passkeys_Add" xml:space="preserve">
+    <value>Add a passkey</value>
+  </data>
+  <data name="Manage_Passkeys_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Manage_Passkeys_DefaultName" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Manage_Passkeys_Added" xml:space="preserve">
+    <value>Passkey added.</value>
+  </data>
+  <data name="Manage_Passkeys_Removed" xml:space="preserve">
+    <value>Passkey removed.</value>
+  </data>
+  <data name="Manage_Passkeys_Failed" xml:space="preserve">
+    <value>Passkey operation failed.</value>
+  </data>
   <data name="Email_ConfirmAccount_Subject" xml:space="preserve">
     <value>Confirm your account</value>
   </data>
@@ -1680,10 +1706,10 @@
     <value>Development Mode</value>
   </data>
   <data name="Error_DevModeP1" xml:space="preserve">
-    <value>Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.</value>
+    <value />
   </data>
   <data name="Error_DevModeP2" xml:space="preserve">
-    <value><strong>Development environment should not be enabled in deployed applications</strong>, as it can result in sensitive information from exceptions being displayed to end users. For local debugging, development environment can be enabled by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>, and restarting the application.</value>
+    <value />
   </data>
   <data name="Js_MaxTagsAlertFormat" xml:space="preserve">
     <value>You can add up to {0} tags.</value>

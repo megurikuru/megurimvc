@@ -15,12 +15,12 @@ namespace Meguri.Controllers {
             _context = context;
         }
 
-        // GET: /Profile/Details/{userId}
+        // GET: /Profile/Details/{userName}
         public async Task<IActionResult> Details(string? id, int? skip) {
             if (string.IsNullOrEmpty(id)) return NotFound();
             const int pageSize = 10;
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id && !u.IsWithdrawn);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == id && !u.IsWithdrawn);
             if (user == null) return NotFound();
 
             var isOwner = User.FindFirstValue(ClaimTypes.NameIdentifier) == user.Id;

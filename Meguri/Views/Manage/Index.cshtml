@@ -19,8 +19,7 @@
 		<input asp-for="Email" />
 		@if (Model.IsEmailConfirmed) {
 			<img src="~/icons/check.svg" class="icon" aria-hidden="true" />
-		}
-		else {
+		} else {
 			<button asp-action="SendVerificationEmail" class="btn-sm">@SharedLocalizer["Manage_Profile_SendVerificationEmail"]</button>
 		}
 		<span asp-validation-for="Email"></span>
@@ -46,6 +45,7 @@
 			<label class="check-row"><input type="checkbox" asp-for="RemoveAvatar" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
 		}
 		<input type="file" asp-for="AvatarFile" accept="image/*" />
+		<div id="avatarPreviewContainer" class="image-preview-list"></div>
 	</div>
 	<div>
 		<label>@SharedLocalizer["Manage_Profile_HeaderLabel"]</label>
@@ -54,6 +54,7 @@
 			<label class="check-row"><input type="checkbox" asp-for="RemoveHeader" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
 		}
 		<input type="file" asp-for="HeaderFile" accept="image/*" />
+		<div id="headerPreviewContainer" class="image-preview-list image-preview-wide"></div>
 	</div>
 	<div>
 		<label>@SharedLocalizer["Manage_Profile_ExternalUrlsLabel"]</label>
@@ -70,4 +71,10 @@
 
 @section Scripts {
 	@await Html.PartialAsync("_ValidationScriptsPartial")
+	<script>
+		$(document).ready(function () {
+			ImageAttachmentManager.createInstance('#AvatarFile', '#avatarPreviewContainer', null, 1);
+			ImageAttachmentManager.createInstance('#HeaderFile', '#headerPreviewContainer', null, 1);
+		});
+	</script>
 }

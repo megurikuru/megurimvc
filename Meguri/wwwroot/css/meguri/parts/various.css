@@ -100,7 +100,7 @@ button.btn-sm, .button-like.btn-sm {
 	align-items: stretch;
 	gap: 0.5rem;
 
-	& > input,
+	& > input:not([type="hidden"]),
 	& > select {
 		flex: 1;
 		min-width: 0;
@@ -135,7 +135,7 @@ button.btn-sm, .button-like.btn-sm {
 }
 
 /* フォーム部品 */
-.attribute-wrap input:not([type="checkbox"]):not([type="radio"]),
+.attribute-wrap input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
 .attribute-wrap select,
 .attribute-wrap textarea {
 	display: block;
@@ -332,9 +332,20 @@ button.btn-sm, .button-like.btn-sm {
 	& button.image-preview-remove {
 		min-height: 24px;
 		min-width: 24px;
+		width: auto;
 		padding: 0 0.35rem;
-		margin: 0;
+		margin-top: 0.25rem;
 		font-size: 0.75rem;
 		line-height: 1;
+	}
+}
+
+.image-preview-wide .image-preview-item {
+	width: 100%;
+
+	& img {
+		width: 100%;
+		height: auto;
+		max-height: 150px;
 	}
 }

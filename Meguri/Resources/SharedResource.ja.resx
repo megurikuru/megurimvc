@@ -1096,7 +1096,7 @@
     <value>シソーラスの関係性を更新しました。</value>
   </data>
   <data name="Tag_SubTitle" xml:space="preserve">
-    <value>投稿や画像に付与されているタグとシソーラス概念の一覧です。</value>
+    <value>投稿に付与されているタグの一覧です。</value>
   </data>
   <data name="Tag_NoTagsFound" xml:space="preserve">
     <value>該当するタグが見つかりませんでした。</value>
@@ -1163,9 +1163,9 @@
   </data>
   <data name="Message_ChatTypeLabel" xml:space="preserve">
     <value>メッセージ種別</value>
-      </data>
-      <data name="Message_SubjectLabel" xml:space="preserve">
-        <value>件名</value>
+  </data>
+  <data name="Message_SubjectLabel" xml:space="preserve">
+    <value>件名</value>
   </data>
   <data name="Message_GroupNamePlaceholder" xml:space="preserve">
     <value>例: 漫画制作合宿、イラスト部</value>
@@ -1706,10 +1706,10 @@
     <value>開発モード</value>
   </data>
   <data name="Error_DevModeP1" xml:space="preserve">
-    <value><strong>Development</strong> 環境に切り替えると、発生したエラーの詳細情報が表示されます。</value>
+    <value />
   </data>
   <data name="Error_DevModeP2" xml:space="preserve">
-    <value><strong>デプロイされたアプリケーションでは Development 環境を有効にしないでください。</strong>例外の機密情報がエンドユーザーに表示される可能性があります。ローカルデバッグでは、環境変数 <strong>ASPNETCORE_ENVIRONMENT</strong> を <strong>Development</strong> に設定してアプリケーションを再起動してください。</value>
+    <value />
   </data>
   <data name="Js_MaxTagsAlertFormat" xml:space="preserve">
     <value>タグは最大{0}個まで設定できます。</value>
