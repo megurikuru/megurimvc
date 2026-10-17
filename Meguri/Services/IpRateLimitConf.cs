@@ -23,7 +23,9 @@ namespace Meguri.Services {
         private readonly ConcurrentDictionary<string, DateTimeOffset> _blocked = new();
 
         public void Block(string ip, TimeSpan duration) {
-            _blocked.TryAdd(ip, DateTimeOffset.UtcNow.Add(duration));
+            var newUntil = DateTimeOffset.UtcNow.Add(duration);
+            _blocked.AddOrUpdate(ip, newUntil, (_, existingUntil) =>
+                existingUntil > DateTimeOffset.UtcNow ? existingUntil : newUntil);
         }
 
         public bool TryGetBlockedUntil(string ip, out DateTimeOffset until) {
