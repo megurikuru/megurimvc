@@ -48,7 +48,7 @@
 		<div>
 				<form asp-action="Index" method="get" class="attribute-wrap">
 						<div>
-								<select name="fandomId" onchange="this.form.submit()">
+								<select name="fandomId" data-auto-submit>
 										<option value="">@SharedLocalizer["Fandom_AllOption"]</option>
 										@foreach (var f in fandoms) {
 												<!option value="@f.Id" @(currentFandom?.Id == f.Id ? "selected" : "")>@f.Name</!option>
