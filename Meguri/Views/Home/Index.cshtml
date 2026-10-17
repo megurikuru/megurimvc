@@ -40,9 +40,7 @@
 	</div>
 }
 
-@* ================================================== *@
-@* 2. 新着投稿一覧エリア                            *@
-@* ================================================== *@
+@* 新着投稿一覧 *@
 <div id="post-list">
 	@* 投稿データが存在する場合 *@
 	@if (posts.Any()) {
@@ -50,9 +48,9 @@
 		@* 投稿リストをループして描画 *@
 		@foreach (var post in posts) {
 			<div>
-				@* ファンダム名（未設定時はデフォルト名）と投稿日時 *@
+				@* 界隈と投稿日時 *@
 				<div class="space-between-wrap">
-					<h2>@post.Fandom?.Name</h2>
+					<h2><a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId">@post.Fandom?.Name</a></h2>
 					@post.CreatedAt.ToLocalTime()
 				</div>
 
@@ -79,9 +77,7 @@
 	}
 </div>
 
-@* ================================================== *@
-@* 3. 投稿一覧のページネーション                      *@
-@* ================================================== *@
+@* ページネーション *@	
 @{
 	// 投稿用ページネーション情報の取得
 	var postsHasPrevious = ViewBag.PostsHasPrevious as bool? ?? false;
@@ -111,6 +107,3 @@
 		}
 	</nav>
 }
-
-@* 	}
-} *@

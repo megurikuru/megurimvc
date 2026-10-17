@@ -125,6 +125,7 @@ namespace Meguri.Controllers {
                     Body = p.Body,
                     CreatedAt = p.CreatedAt,
                     User = p.User,
+                    FandomId = p.FandomId,
                     Fandom = p.Fandom,
                     Reactions = p.Reactions,
                     PostTags = p.PostTags,
