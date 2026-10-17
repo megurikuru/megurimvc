@@ -12,7 +12,7 @@ body {
 	font-family: system-ui, -apple-system, "BlinkMacSystemFont", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
 	font-size: 1rem;
 	padding: 0.5rem;
-	width: 375px; /* 開発用 */
+	/*width: 375px;*/ /* 開発用 */
 	border: 1px solid blue; /* 開発用 */
 	background-color: var(--color-bg);
 }
