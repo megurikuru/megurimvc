@@ -35,8 +35,8 @@
 						<div class="image-order-item">
 							<div>
 								<span class="order-number">@(i + 1)</span>
-								<img src="/Image/File/@Model.ExistingImages[i].ImageId" style="width: 50px; height: 50px; object-fit: cover;" />
-								<span style="max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@Model.ExistingImages[i].ImageName</span>
+								<img src="/Image/File/@Model.ExistingImages[i].ImageId" />
+								<span class="image-order-name">@Model.ExistingImages[i].ImageName</span>
 								<input type="hidden" name="ExistingImages[@i].ImageId" value="@Model.ExistingImages[i].ImageId" />
 								<input type="hidden" name="ExistingImages[@i].ImageName" value="@Model.ExistingImages[i].ImageName" />
 								<input type="hidden" class="order-input" name="ExistingImages[@i].DisplayOrder" value="@Model.ExistingImages[i].DisplayOrder" />
@@ -72,7 +72,7 @@
 				<input type="text" id="tagInput" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
 				<button type="button" onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
 			</div>
-			<div id="tagSuggestions" style="display:none; z-index:1000; max-height:200px; overflow-y:auto;"></div>
+			<div id="tagSuggestions"></div>
 
 			<div id="selectedTagsContainer"></div>
 			<div id="hiddenTagsInputs"></div>

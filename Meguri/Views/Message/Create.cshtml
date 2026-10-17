@@ -13,24 +13,24 @@
 			<label>@SharedLocalizer["Message_ChatTypeLabel"]</label>
 			<div class="inline-actions">
 				<label class="check-row" for="typeDirect">
-					<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" onchange="document.getElementById('groupTitleContainer').style.display = 'none'" />
+					<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" onchange="document.getElementById('groupTitleContainer').hidden = true" />
 					@SharedLocalizer["Message_Direct"]
 				</label>
 				<label class="check-row" for="typeGroup">
-					<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" onchange="document.getElementById('groupTitleContainer').style.display = ''" />
+					<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" onchange="document.getElementById('groupTitleContainer').hidden = false" />
 					@SharedLocalizer["Message_Group"]
 				</label>
 			</div>
 		</div>
 
-		<div id="groupTitleContainer" class="attribute-wrap" style="display: @(Model.IsGroup ? "" : "none");">
+		<div id="groupTitleContainer" class="attribute-wrap" hidden="@(!Model.IsGroup)">
 			<label asp-for="Title">@SharedLocalizer["Message_GroupName"]</label>
 			<input asp-for="Title" placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
 		</div>
 
 		<div class="attribute-wrap">
 			<label>@SharedLocalizer["Message_SelectRecipient"] <span>*</span></label>
-			<div style="max-height: 180px; overflow-y: auto;">
+			<div class="recipient-list">
 				@if (!Model.AvailableUsers.Any()) {
 					<p>@SharedLocalizer["Message_NoOtherUsers"]</p>
 				}

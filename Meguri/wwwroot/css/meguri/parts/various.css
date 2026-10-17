@@ -122,6 +122,10 @@ button.btn-sm, .button-like.btn-sm {
 	align-items: center;
 	gap: 0.5rem;
 	padding: 0.25rem 0;
+
+	& form {
+		display: inline;
+	}
 }
 
 .attribute-wrap {
@@ -210,6 +214,19 @@ button.btn-sm, .button-like.btn-sm {
 		align-items: center;
 		gap: 0.5rem;
 	}
+
+	& img:not(.icon) {
+		width: 50px;
+		height: 50px;
+		object-fit: cover;
+	}
+
+	& .image-order-name {
+		max-width: 160px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 }
 
 /* 選択済みタグバッジ一覧 */
@@ -239,6 +256,13 @@ button.btn-sm, .button-like.btn-sm {
 	flex-wrap: wrap;
 	gap: 0.35rem;
 	padding: 0.25rem 0;
+	z-index: 1000;
+	max-height: 200px;
+	overflow-y: auto;
+
+	&:empty {
+		display: none;
+	}
 }
 
 .description {
@@ -348,4 +372,107 @@ button.btn-sm, .button-like.btn-sm {
 		height: auto;
 		max-height: 150px;
 	}
+}
+
+/* チャットメッセージ一覧 */
+#chatMessageContainer {
+	& .chat-message-item {
+		text-align: left;
+		margin: 8px 0;
+
+		&.chat-indent-1 {
+			margin-left: 1.5rem;
+		}
+
+		&.chat-indent-2 {
+			margin-left: 3rem;
+		}
+
+		&.chat-indent-3 {
+			margin-left: 4.5rem;
+		}
+	}
+
+	& .chat-message-box {
+		display: block;
+		text-align: left;
+		padding: 6px 10px;
+		border: 1px solid #ccc;
+		border-radius: 8px;
+	}
+
+	& .chat-message-body {
+		white-space: pre-wrap;
+	}
+
+	& .chat-message-image {
+		max-width: 100%;
+		max-height: 150px;
+		object-fit: cover;
+	}
+}
+
+/* トップページ ユーザー検索結果のアバター */
+#user-list img {
+	width: 40px;
+	height: 40px;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+/* メッセージ新規作成の宛先リスト */
+.recipient-list {
+	max-height: 180px;
+	overflow-y: auto;
+}
+
+/* プロフィール詳細 */
+.profile-banner {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.profile-avatar {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.profile-header {
+	flex: 1;
+	min-width: 0;
+	height: 100px;
+	object-fit: cover;
+}
+
+.profile-bio {
+	white-space: pre-wrap;
+}
+
+/* 投稿サムネイル・管理画面画像 */
+.post-thumb-img {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+}
+
+.manage-header-img {
+	max-width: 100%;
+	max-height: 150px;
+	object-fit: cover;
+}
+
+/* コメント添付画像・返信スレッド */
+.comment-attachment-img {
+	max-height: 120px;
+	object-fit: cover;
+}
+
+.comment-replies {
+	margin-left: 1.5rem;
+	padding-left: 0.75rem;
+	border-left: 2px solid #ccc;
 }

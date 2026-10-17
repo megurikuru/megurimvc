@@ -58,7 +58,7 @@
 			<div>
 				@foreach (var ci in Model.Comment.CommentImages) {
 					<a href="/Image/File/@ci.ImageId" target="_blank">
-						<img src="/Image/File/@ci.ImageId" style="max-height: 120px; object-fit: cover;" alt="@SharedLocalizer["Message_AttachmentAlt"]" />
+						<img src="/Image/File/@ci.ImageId" class="comment-attachment-img" alt="@SharedLocalizer["Message_AttachmentAlt"]" />
 					</a>
 				}
 			</div>
@@ -75,7 +75,7 @@
 
 <!-- 子返信（Replies）の再帰表示 -->
 @if (Model.Comment.Replies != null && Model.Comment.Replies.Any()) {
-	<div class="comment-replies" style="margin-left: 1.5rem; padding-left: 0.75rem; border-left: 2px solid #ccc;">
+	<div class="comment-replies">
 		@foreach (var reply in Model.Comment.Replies.OrderBy(r => r.CreatedAt)) {
 			@await Html.PartialAsync("_CommentItem", (reply, Model.TargetType, Model.TargetId, Model.Depth + 1))
 		}
