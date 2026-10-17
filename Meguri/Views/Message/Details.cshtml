@@ -67,12 +67,12 @@
 				depth++;
 				parentId = parent.ParentMessageId;
 			}
-			var indent = depth > 0 ? $"margin-left: {depth * 1.5}rem;" : string.Empty;
-			<div style="text-align: left; margin: 8px 0; @indent">
+			var indentClass = depth > 0 ? $"chat-indent-{depth}" : null;
+			<div class="chat-message-item @indentClass">
 				@if (!isMe) {
 					<div><img src="~/icons/user.svg" class="icon" />@if (msg.Sender == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (msg.Sender.IsWithdrawn) { @(msg.Sender.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") } else { <text>@if (!msg.Sender.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @msg.Sender.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@msg.Sender.UserName">@msg.Sender.UserName</a> }</text> }</div>
 				}
-				<div style="display: block; text-align: left; padding: 6px 10px; border: 1px solid #ccc; border-radius: 8px;">
+				<div class="chat-message-box">
 					@if (msg.IsDeleted) {
 						<div><em>@SharedLocalizer["Message_Deleted"]</em></div>
 					}
@@ -80,13 +80,13 @@
 						<div><strong>@msg.Subject</strong></div>
 					}
 					@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Body)) {
-						<div style="white-space: pre-wrap;">@msg.Body</div>
+						<div class="chat-message-body">@msg.Body</div>
 					}
 					@if (!msg.IsDeleted && msg.MessageImages.Any()) {
 						<div>
 							@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder)) {
 								<a href="/Image/File/@mi.ImageId" target="_blank">
-									<img src="/Image/File/@mi.ImageId" style="max-width: 100%; max-height: 150px; object-fit: cover;" alt="" />
+									<img src="/Image/File/@mi.ImageId" class="chat-message-image" alt="" />
 								</a>
 							}
 						</div>
@@ -95,7 +95,7 @@
 						<span>@msg.CreatedAt.ToLocalTime()</span>
 						@if (isMe && !msg.IsDeleted) {
 							<a asp-action="Edit" asp-route-id="@msg.Id" class="button-like btn-sm">@SharedLocalizer["Common_Edit"]</a>
-							<form asp-action="Delete" asp-route-id="@msg.Id" method="post" style="display: inline;" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
+							<form asp-action="Delete" asp-route-id="@msg.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
 								<button type="submit" class="btn-sm">@SharedLocalizer["Common_Delete"]</button>
 							</form>
 						}

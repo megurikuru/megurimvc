@@ -31,7 +31,7 @@
 			@foreach (var u in foundUsers) {
 				<li>
 					@if (u.ActiveAvatarImageId.HasValue) {
-						<img src="/Image/File/@u.ActiveAvatarImageId" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;" />
+						<img src="/Image/File/@u.ActiveAvatarImageId" alt="" />
 					}
 					<text>@if (!u.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @u.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@u.UserName">@u.UserName</a> }</text>
 				</li>

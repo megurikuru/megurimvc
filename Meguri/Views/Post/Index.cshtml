@@ -118,7 +118,7 @@ else {
 												<div>
 														@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder)) {
 																<a href="/Image/File/@pi.ImageId" target="_blank">
-																		<img src="/Image/File/@pi.ImageId"  style="width: 100px; height: 100px; object-fit: cover;" alt="@pi.Image.Name" />
+																		<img src="/Image/File/@pi.ImageId" class="post-thumb-img" alt="@pi.Image.Name" />
 																</a>
 														}
 												</div>
