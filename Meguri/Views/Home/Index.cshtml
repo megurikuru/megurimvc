@@ -47,7 +47,7 @@
 		<h1>@SharedLocalizer["Home_LatestPostsHeading"]</h1>
 		@* 投稿リストをループして描画 *@
 		@foreach (var post in posts) {
-			<div>
+			<article>
 				@* 界隈と投稿日時 *@
 				<div class="space-between-wrap">
 					<h2><a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId">@post.Fandom?.Name</a></h2>
@@ -55,12 +55,10 @@
 				</div>
 
 				@* 投稿タイトル（詳細画面へのリンク） *@
-				<h3><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Subject</a></h3>
+				<h2><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Subject</a></h2>
 
 				@* 投稿本文プレビュー（120文字を超える場合は「...」で切り詰める） *@
-				<p>
-					@(post.Body.Length > 120 ? post.Body.Substring(0, 120) + "..." : post.Body)
-				</p>
+				<p>@(post.Body.Length > 120 ? post.Body.Substring(0, 120) + "..." : post.Body)</p>
 
 				@* 添付画像サムネイル一覧（DisplayOrder順にソートし、最大4枚まで表示） *@
 				@if (post.PostImages.Any()) {
@@ -72,7 +70,7 @@
 						}
 					</div>
 				}
-			</div>
+			</article>
 		}
 	}
 </div>

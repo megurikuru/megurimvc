@@ -274,8 +274,6 @@ button.btn-sm, .button-like.btn-sm {
 #post-list {
 	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（縦並び column）で配置 */
 	flex-direction: column;
-	gap: 0.5rem;
-	/*border: 1px dotted gray;*/ /* 開発用 */
 }
 
 .space-between-wrap {

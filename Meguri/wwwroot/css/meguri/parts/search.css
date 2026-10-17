@@ -1,11 +1,11 @@
 ﻿/* 検索フォーム */
-form.search {
+.search {
 	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び）で配置 */
 	flex-direction: row;
 	flex-wrap: wrap;
+	padding: 0 0.5rem;
 	align-items: stretch;
 	gap: 0.5rem;
-	/*border: 1px solid orange;*/ /* 開発用 */
 
 	& input[type="text"],
 	& input[type="date"],
@@ -15,7 +15,7 @@ form.search {
 		min-height: var(--control-height);
 		padding: 0.5rem 0.75rem;
 		font-size: 1rem;
-		/*border: 1px solid purple;*/ /* 開発用 */
+		border: 1px solid var(--color-border);
 	}
 
 	& a {
@@ -29,7 +29,7 @@ form.search {
 		width: max-content;
 		min-height: var(--control-height);
 		white-space: nowrap; /* テキストの意図しない改行を防止 */
-		padding: 0.5rem 0.85rem;
+		padding: 0.5rem 1rem;
 		font-size: 0.9375rem;
 		border: 2px solid var(--color-border);
 		border-radius: var(--radius-sm);
