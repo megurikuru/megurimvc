@@ -1,32 +1,23 @@
 ﻿
 /* ナビゲーション */
-:is(.nav-grid, .nav-sub) > a {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0 auto;
-	min-height: var(--control-height);
-	padding: 0.5rem 1rem;
-	width: fit-content;
-	font-weight: bold;
-}
-
 .nav-grid {
 	font-size: 1rem;
-	& ul {
+	background-color: var(--color-primary);
+	
+	ul {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（2均等列）で配置 */
 		grid-template-columns: 1fr 1fr;
 		list-style: none;
 
-		& li {
+		li {
 			display: block; /* 自身：ブロック要素 */
 			border: 1px solid #ccc;
 
-			& form {
+			form {
 				margin: 0;
 			}
 
-			& a, & button {
+			a, button {
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -40,6 +31,7 @@
 				cursor: pointer;
 				text-align: center;
 				box-sizing: border-box;
+				color: var(--color-text-reverse);
 
 				&:hover {
 					background-color: var(--color-primary-hover);
