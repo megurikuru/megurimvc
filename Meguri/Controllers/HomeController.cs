@@ -136,8 +136,9 @@ namespace Meguri.Controllers {
             // View へ渡すデータの設定
             ViewBag.Posts = posts;
             ViewBag.TopFandoms = await _context.Fandoms
-                .Include(f => f.ChildFandoms)
+                .Include(f => f.ChildFandoms.OrderBy(c => c.Id))
                 .Where(f => f.ParentFandomId == null)
+                .OrderBy(f => f.Id)
                 .ToListAsync();
             ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
 

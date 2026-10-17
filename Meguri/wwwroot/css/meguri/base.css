@@ -14,7 +14,7 @@ textarea {
 :root {
 	/* --- カラー関連 --- */
 	--color-primary: #70608A; /* くすんだ落ち着いた紫色 */
-	--color-primary-hover: #1d4ed8; /* 鮮やかな青色 */
+	--color-primary-hover: #8272A0; /* 青みを含んだやわらかな紫色 */
 	--color-text: #1f2937; /* わずかに青みがかったダークグレー */
 	--color-text-reverse: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
 	--color-text-muted: #6b7280; /* 落ち着いたミディアムグレー */
@@ -31,17 +31,24 @@ textarea {
 }
 
 /* 基本要素 */
-div {
-	/*border: 1px solid pink;*/ /* 開発用 */
-}
-
 a {
 	color: var(--color-primary);
 }
 
 h1, h2, h3, h4, h5, h6 {
 	text-align: center;
-	/*border: 1px dotted orange;*/ /* 開発用 */
+}
+
+h1 {
+	font-size: 1.3rem;
+}
+
+h2 {
+	font-size: 1.2rem;
+}
+
+h3 {
+	font-size: 1.1rem;
 }
 
 img {
