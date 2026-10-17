@@ -9,12 +9,10 @@
 	padding: 0.5rem 1rem;
 	width: fit-content;
 	font-weight: bold;
-	border: 1px solid orange; /* 開発用 */
 }
 
 .nav-grid {
 	font-size: 1rem;
-	border: 1px solid red; /* 開発用 */
 	& ul {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（2均等列）で配置 */
 		grid-template-columns: 1fr 1fr;
@@ -49,12 +47,5 @@
 				}
 			}
 		}
-	}
-}
-
-.nav-sub {
-	border: 1px solid purple; /* 開発用 */
-	& div {
-		padding: 0.5rem 0;
 	}
 }
