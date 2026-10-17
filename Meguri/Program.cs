@@ -130,14 +130,6 @@ if (ipRateLimitConf.Enabled) {
         options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
         options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext => {
             var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-            if (ipBlockList.TryGetBlockedUntil(ip, out _)) {
-                // ブロック中は常に拒否
-                return RateLimitPartition.GetFixedWindowLimiter("block:" + ip, _ => new FixedWindowRateLimiterOptions {
-                    PermitLimit = 0,
-                    Window = TimeSpan.FromMinutes(1),
-                    QueueLimit = 0
-                });
-            }
             return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions {
                 // MaxRequests回目のアクセスで制限に達するため、許可数は MaxRequests - 1
                 PermitLimit = Math.Max(1, ipRateLimitConf.MaxRequests - 1),
@@ -185,6 +177,16 @@ if (app.Environment.IsDevelopment()) {
 }
 
 if (ipRateLimitConf.Enabled) {
+    app.Use(async (context, next) => {
+        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        if (ipBlockList.TryGetBlockedUntil(ip, out var until)) {
+            var retryAfter = (int)Math.Ceiling((until - DateTimeOffset.UtcNow).TotalSeconds);
+            context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+            context.Response.Headers.RetryAfter = Math.Max(retryAfter, 1).ToString();
+            return;
+        }
+        await next();
+    });
     app.UseRateLimiter();
 }
 
