@@ -44,7 +44,7 @@
 			<img src="/Image/File/@Model.AvatarImageId" alt="" class="post-thumb-img" />
 			<label class="check-row"><input type="checkbox" asp-for="RemoveAvatar" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
 		}
-		<input type="file" asp-for="AvatarFile" accept="image/*" />
+		<input type="file" asp-for="AvatarFile" accept="image/*" data-image-preview="#avatarPreviewContainer" data-max-images="1" />
 		<div id="avatarPreviewContainer" class="image-preview-list"></div>
 	</div>
 	<div>
@@ -53,7 +53,7 @@
 			<img src="/Image/File/@Model.HeaderImageId" alt="" class="manage-header-img" />
 			<label class="check-row"><input type="checkbox" asp-for="RemoveHeader" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
 		}
-		<input type="file" asp-for="HeaderFile" accept="image/*" />
+		<input type="file" asp-for="HeaderFile" accept="image/*" data-image-preview="#headerPreviewContainer" data-max-images="1" />
 		<div id="headerPreviewContainer" class="image-preview-list image-preview-wide"></div>
 	</div>
 	<div>
@@ -71,10 +71,4 @@
 
 @section Scripts {
 	@await Html.PartialAsync("_ValidationScriptsPartial")
-	<script>
-		$(document).ready(function () {
-			ImageAttachmentManager.createInstance('#AvatarFile', '#avatarPreviewContainer', null, 1);
-			ImageAttachmentManager.createInstance('#HeaderFile', '#headerPreviewContainer', null, 1);
-		});
-	</script>
 }

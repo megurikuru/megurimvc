@@ -27,7 +27,7 @@
 	<!-- 添付画像（複数可・最大16枚） -->
 	<div class="attribute-wrap">
 		<label asp-for="ImageFiles"><img src="~/icons/image.svg" class="icon" />@SharedLocalizer["Post_AttachImages"] <span id="imageCountDisplay">0/16</span></label>
-		<input asp-for="ImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+		<input asp-for="ImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#imagePreviewContainer" data-image-count="#imageCountDisplay" data-max-images="16" />
 		<span asp-validation-for="ImageFiles"></span>
 		<div id="imagePreviewContainer" class="image-preview-list"></div>
 		<div class="description">@SharedLocalizer["Post_ImageUploadHint1"]</div>
@@ -38,8 +38,8 @@
 	<div class="attribute-wrap">
 		<label><img src="~/icons/tag.svg" class="icon" />@SharedLocalizer["Post_Tags"] <span id="tagCountDisplay">0/10</span></label>
 		<div class="input-group">
-			<input type="text" id="tagInput" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" />
-			<button type="button" onclick="TagManager.addTag($('#tagInput').val())">@SharedLocalizer["Common_Add"]</button>
+			<input type="text" id="tagInput" placeholder="@SharedLocalizer["Tag_SearchPlaceholder"]" data-initial-tags="@(System.Text.Json.JsonSerializer.Serialize(Model.Tags))" />
+			<button type="button" data-add-tag>@SharedLocalizer["Common_Add"]</button>
 		</div>
 		<div id="tagSuggestions"></div>
 		<div id="selectedTagsContainer"></div>
@@ -62,10 +62,4 @@
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
-	<script>
-		$(document).ready(function () {
-			TagManager.init(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Tags)));
-			ImageAttachmentManager.init('#ImageFiles', '#imagePreviewContainer', '#imageCountDisplay', 16);
-		});
-	</script>
 }

@@ -27,7 +27,9 @@
 		<button type="button"
 						class="btn-sm @(hasReacted ? "reacted" : "")"
 						title="@type.GetDescription()"
-						onclick="toggleReaction('@Model.TargetType', @Model.TargetId, @((int)type), this)">
+						data-reaction-target-type="@Model.TargetType"
+						data-reaction-target-id="@Model.TargetId"
+						data-reaction-type="@((int)type)">
 			<span>@type.GetEmoji()</span>
 			<span class="reaction-count">@count</span>
 		</button>

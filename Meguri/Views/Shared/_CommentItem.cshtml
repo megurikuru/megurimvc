@@ -31,13 +31,13 @@
 			@if (!Model.Comment.IsDeleted && Model.Depth >= 3) {
 				<span>@SharedLocalizer["Comment_ReplyLimit"]</span>
 			} else if (!Model.Comment.IsDeleted) {
-				<button type="button" class="btn-sm" onclick="replyToComment(@Model.Comment.Id, @Model.Comment.Number, @(System.Text.Json.JsonSerializer.Serialize(Model.Comment.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)))">
+				<button type="button" class="btn-sm" data-reply-comment-id="@Model.Comment.Id" data-reply-comment-number="@Model.Comment.Number" data-reply-user="@(Model.Comment.User?.UserName ?? SharedLocalizer["Common_UnknownUser"].Value)">
 					<img src="~/icons/reply.svg" class="icon" />@SharedLocalizer["Comment_ReplyTo", Model.Comment.Number]
 				</button>
 			}
 
 			@if (isAuthor && !Model.Comment.IsDeleted) {
-				<form asp-controller="Comment" asp-action="Delete" asp-route-id="@Model.Comment.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
+				<form asp-controller="Comment" asp-action="Delete" asp-route-id="@Model.Comment.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
 					@Html.AntiForgeryToken()
 					<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
 					<button type="submit" class="btn-sm">
@@ -65,7 +65,7 @@
 		}
 
 		<!-- リアクションバー -->
-		<button type="button" class="btn-sm" onclick="var p = document.getElementById('reaction-buttons-comment-@Model.Comment.Id'); p.hidden = !p.hidden; this.setAttribute('aria-expanded', !p.hidden);" aria-expanded="false" aria-controls="reaction-buttons-comment-@Model.Comment.Id">@SharedLocalizer["Reaction_React"]</button>
+		<button type="button" class="btn-sm" data-toggle-panel="reaction-buttons-comment-@Model.Comment.Id" aria-expanded="false" aria-controls="reaction-buttons-comment-@Model.Comment.Id">@SharedLocalizer["Reaction_React"]</button>
 		<div id="reaction-buttons-comment-@Model.Comment.Id" hidden>
 			@await Html.PartialAsync("_ReactionButtons", ("Comment", Model.Comment.Id, Model.Comment.Reactions.AsEnumerable()))
 		</div>

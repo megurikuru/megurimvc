@@ -4,6 +4,6 @@
     var statusMessageClass = Model.StartsWith("Error") ? "danger" : "success";
     <div class="inline-actions" role="alert">
         <span>@Model</span>
-        <button type="button" class="btn-sm" onclick="this.parentElement.remove()" aria-label="@SharedLocalizer["Common_Close"]">×</button>
+        <button type="button" class="btn-sm" data-dismiss-parent aria-label="@SharedLocalizer["Common_Close"]">×</button>
     </div>
 }

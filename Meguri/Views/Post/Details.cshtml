@@ -81,7 +81,7 @@
 					<a asp-action="Edit" asp-route-id="@Model.Id" class="button-like icon-wrap">
 						<img src="~/icons/square-pen.svg" class="icon" alt="@SharedLocalizer["Common_Edit"]" />@SharedLocalizer["Common_Edit"]
 					</a>
-					<form asp-action="Delete" asp-route-id="@Model.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
+					<form asp-action="Delete" asp-route-id="@Model.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
 						@Html.AntiForgeryToken()
 						<button type="submit" class="icon-wrap">
 							<img src="~/icons/delete.svg" class="icon" alt="@SharedLocalizer["Common_Delete"]" />@SharedLocalizer["Common_Delete"]
@@ -144,7 +144,7 @@
 
 		<!-- リアクションボタン -->
 		<div>
-			<button type="button" class="btn-sm" onclick="var p = document.getElementById('reaction-buttons-panel'); p.hidden = !p.hidden; this.setAttribute('aria-expanded', !p.hidden);" aria-expanded="false" aria-controls="reaction-buttons-panel">@SharedLocalizer["Reaction_React"]</button>
+			<button type="button" class="btn-sm" data-toggle-panel="reaction-buttons-panel" aria-expanded="false" aria-controls="reaction-buttons-panel">@SharedLocalizer["Reaction_React"]</button>
 			<div id="reaction-buttons-panel" hidden>
 				@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
 			</div>

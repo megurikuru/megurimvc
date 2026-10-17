@@ -13,11 +13,11 @@
 			<label>@SharedLocalizer["Message_ChatTypeLabel"]</label>
 			<div class="inline-actions">
 				<label class="check-row" for="typeDirect">
-					<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" onchange="document.getElementById('groupTitleContainer').hidden = true" />
+					<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" />
 					@SharedLocalizer["Message_Direct"]
 				</label>
 				<label class="check-row" for="typeGroup">
-					<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" onchange="document.getElementById('groupTitleContainer').hidden = false" />
+					<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" />
 					@SharedLocalizer["Message_Group"]
 				</label>
 			</div>

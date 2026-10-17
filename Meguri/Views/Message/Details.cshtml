@@ -95,18 +95,18 @@
 						<span>@msg.CreatedAt.ToLocalTime()</span>
 						@if (isMe && !msg.IsDeleted) {
 							<a asp-action="Edit" asp-route-id="@msg.Id" class="button-like btn-sm">@SharedLocalizer["Common_Edit"]</a>
-							<form asp-action="Delete" asp-route-id="@msg.Id" method="post" onsubmit="return confirm('@SharedLocalizer["Common_ConfirmDelete"]');">
+							<form asp-action="Delete" asp-route-id="@msg.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
 								<button type="submit" class="btn-sm">@SharedLocalizer["Common_Delete"]</button>
 							</form>
 						}
 						@if (User.Identity?.IsAuthenticated == true) {
-							<button type="button" class="btn-sm" data-reply-subject="@msg.Subject" data-reply-id="@msg.Id" onclick="document.getElementById('parentMessageId').value = this.dataset.replyId; var f = document.getElementById('messageSubject'); var s = this.dataset.replySubject || ''; f.value = s.startsWith('Re: ') ? s : 'Re: ' + s; document.getElementById('messageText').focus();"><img src="~/icons/reply.svg" class="icon" />@SharedLocalizer["Message_ReplyBtn"]</button>
+							<button type="button" class="btn-sm" data-reply-subject="@msg.Subject" data-reply-id="@msg.Id"><img src="~/icons/reply.svg" class="icon" />@SharedLocalizer["Message_ReplyBtn"]</button>
 						}
 					</div>
 				</div>
 				@if (!msg.IsDeleted) {
 				<div>
-					<button type="button" class="btn-sm" onclick="var t = this.nextElementSibling; t.hidden = !t.hidden;">@SharedLocalizer["Message_ReactionBtn"]</button>
+					<button type="button" class="btn-sm" data-toggle-next>@SharedLocalizer["Message_ReactionBtn"]</button>
 					<div hidden>
 						<partial name="_ReactionButtons" model='("Message", msg.Id, msg.Reactions.AsEnumerable())' />
 					</div>
