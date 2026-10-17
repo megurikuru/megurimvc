@@ -5,7 +5,7 @@ form.search {
 	flex-wrap: wrap;
 	align-items: stretch;
 	gap: 0.5rem;
-	border: 1px solid orange; /* 開発用 */
+	/*border: 1px solid orange;*/ /* 開発用 */
 
 	& input[type="text"],
 	& input[type="date"],
@@ -15,7 +15,7 @@ form.search {
 		min-height: var(--control-height);
 		padding: 0.5rem 0.75rem;
 		font-size: 1rem;
-		border: 1px solid purple; /* 開発用 */
+		/*border: 1px solid purple;*/ /* 開発用 */
 	}
 
 	& a {
