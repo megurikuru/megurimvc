@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Meguri.Models;
 using Meguri.Data;
+using Meguri.Services;
 using Microsoft.EntityFrameworkCore;
 using Meguri.ViewModels.Account;
 using Microsoft.Extensions.Localization;
@@ -26,6 +27,7 @@ namespace Meguri.Controllers {
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
         private readonly IStringLocalizer<SharedResource> _localizer;
+        private readonly ITurnstileService _turnstileService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -33,13 +35,15 @@ namespace Meguri.Controllers {
             IEmailSender<ApplicationUser> emailSender,
             ILogger<AccountController> logger,
             ApplicationDbContext context,
-            IStringLocalizer<SharedResource> localizer) {
+            IStringLocalizer<SharedResource> localizer,
+            ITurnstileService turnstileService) {
             _localizer = localizer;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
+            _turnstileService = turnstileService;
         }
 
         [TempData]
@@ -58,8 +62,12 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null) {
+        public async Task<IActionResult> Login(LoginViewModel model, [FromForm(Name = "cf-turnstile-response")] string? turnstileToken = null, string returnUrl = null) {
             ViewData["ReturnUrl"] = returnUrl;
+            if (!await _turnstileService.VerifyAsync(turnstileToken, "login", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Error_TurnstileFailed"]);
+                return View(model);
+            }
             if (ModelState.IsValid) {
                 // UserNameベースでログインする
                 var existingUser = await _userManager.FindByNameAsync(model.UserName);
@@ -241,8 +249,12 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null) {
+        public async Task<IActionResult> Register(RegisterViewModel model, [FromForm(Name = "cf-turnstile-response")] string? turnstileToken = null, string returnUrl = null) {
             ViewData["ReturnUrl"] = returnUrl;
+            if (!await _turnstileService.VerifyAsync(turnstileToken, "signup", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Error_TurnstileFailed"]);
+                return View(model);
+            }
             if (ModelState.IsValid) {
                 var withdrawnUser = await _userManager.FindByNameAsync(model.UserName);
                 if (withdrawnUser != null && withdrawnUser.IsWithdrawn) {
@@ -382,7 +394,11 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model) {
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model, [FromForm(Name = "cf-turnstile-response")] string? turnstileToken = null) {
+            if (!await _turnstileService.VerifyAsync(turnstileToken, "forgot_password", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Error_TurnstileFailed"]);
+                return View(model);
+            }
             if (ModelState.IsValid) {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user))) {

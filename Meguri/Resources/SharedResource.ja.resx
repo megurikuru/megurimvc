@@ -1495,6 +1495,9 @@
   <data name="Account_Error_ExternalProvider" xml:space="preserve">
     <value>外部プロバイダーでエラーが発生しました: {0}</value>
   </data>
+  <data name="Account_Error_TurnstileFailed" xml:space="preserve">
+    <value>ボット検証に失敗しました。もう一度お試しください。</value>
+  </data>
   <data name="Manage_Error_MaxUrls" xml:space="preserve">
     <value>URLは最大5個までです。</value>
   </data>

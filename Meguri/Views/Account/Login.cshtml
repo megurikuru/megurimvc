@@ -4,9 +4,12 @@
 @using Meguri.Models
 @using Meguri.ViewModels.Account
 @using Meguri.ViewModels.Manage
+@using Meguri.Services
 @using Microsoft.AspNetCore.Http
+@using Microsoft.Extensions.Options
 @model LoginViewModel
 @inject SignInManager<ApplicationUser> SignInManager
+@inject IOptions<TurnstileConf> TurnstileOptions
 
 @{
 	ViewData["Title"] = SharedLocalizer["Account_Login_Title"];
@@ -34,6 +37,8 @@
 			@Html.DisplayNameFor(m => m.RememberMe)
 		</label>
 
+		<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="login"></div>
+
 		<button type="submit">@SharedLocalizer["Account_Login_Button"]</button>
 
 		<div class="account-links">
@@ -56,6 +61,7 @@
 </section>
 
 @section Scripts {
+	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 	<script src="~/js/passkey.js" asp-append-version="true"></script>
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 }
