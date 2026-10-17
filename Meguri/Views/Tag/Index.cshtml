@@ -5,19 +5,15 @@
 	var searchQuery = ViewBag.SearchQuery as string;
 }
 
-@* ================================================== *@
-@* 1. ヘッダーエリア                                   *@
-@* ================================================== *@
+@* ヘッダー *@
 <div class="tag-page">
 	<div>
-		<h2><img src="~/icons/tag.svg" class="icon" />@SharedLocalizer["Tag_Title"] & @SharedLocalizer["Tag_Thesaurus"]</h2>
+		<h2><img src="~/icons/tag.svg" class="icon" />@SharedLocalizer["Tag_Title"]</h2>
 		<p>@SharedLocalizer["Tag_SubTitle"]</p>
 	</div>
 </div>
 
-@* ================================================== *@
-@* 2. タグ検索フォームエリア                           *@
-@* ================================================== *@
+@* タグ検索フォームエリア	*@
 @{
 	var searchForm = new SearchFormViewModel {
 		Controller = "Tag",
@@ -29,9 +25,7 @@
 }
 <partial name="_SearchForm" model="searchForm" />
 
-@* ================================================== *@
-@* 3. タグ一覧表示エリア                               *@
-@* ================================================== *@
+@* タグ一覧表示エリア *@
 <div>
 	<div>
 		<div>
@@ -60,9 +54,7 @@
 		}
 	</div>
 
-	@* ================================================== *@
-	@* 4. ページネーションエリア                           *@
-	@* ================================================== *@
+	@* ページネーションエリア *@
 	@{
 		// ViewBagからページネーション用パラメータを展開
 		var routeValues = new Dictionary<string, string>();

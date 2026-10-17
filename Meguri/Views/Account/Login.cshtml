@@ -16,26 +16,27 @@
 <section>
 	<form class="account" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
 		<div asp-validation-summary="All"></div>
+
 		<div>
 			<label asp-for="UserName"></label>
 			<input asp-for="UserName" />
 			<span asp-validation-for="UserName"></span>
 		</div>
+
 		<div>
 			<label asp-for="Password"></label>
 			<input asp-for="Password" />
 			<span asp-validation-for="Password"></span>
 		</div>
-		<div>
-			<label asp-for="RememberMe" class="check-row">
-				<input asp-for="RememberMe" />
-				@Html.DisplayNameFor(m => m.RememberMe)
-			</label>
-		</div>
-		<div>
-			<button type="submit">@SharedLocalizer["Account_Login_Button"]</button>
-		</div>
-		<div>
+
+		<label asp-for="RememberMe" class="check-row">
+			<input asp-for="RememberMe" />
+			@Html.DisplayNameFor(m => m.RememberMe)
+		</label>
+
+		<button type="submit">@SharedLocalizer["Account_Login_Button"]</button>
+
+		<div class="account-links">
 			<p>
 				<a asp-action="ForgotPassword">@SharedLocalizer["Account_Login_ForgotPassword"]</a>
 			</p>
@@ -44,6 +45,7 @@
 			</p>
 		</div>
 	</form>
+
 	<form class="account" asp-action="PasskeyLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
 		<input type="hidden" name="credentialJson" />
 		<div>

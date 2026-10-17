@@ -32,7 +32,7 @@
 					@if (m.index > 0) { <text>, </text> }
 					@if (m.member.User == null) { @SharedLocalizer["Common_UnknownUser"].Value }
 					else if (m.member.User.IsWithdrawn) { @(m.member.User.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") }
-					else { <text>@if (!m.member.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @m.member.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@m.member.User.Id">@m.member.User.UserName</a> }</text> }
+					else { <text>@if (!m.member.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @m.member.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@m.member.User.UserName">@m.member.User.UserName</a> }</text> }
 				}
 	</p>
 </div>
@@ -70,7 +70,7 @@
 			var indent = depth > 0 ? $"margin-left: {depth * 1.5}rem;" : string.Empty;
 			<div style="text-align: left; margin: 8px 0; @indent">
 				@if (!isMe) {
-					<div><img src="~/icons/user.svg" class="icon" />@if (msg.Sender == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (msg.Sender.IsWithdrawn) { @(msg.Sender.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") } else { <text>@if (!msg.Sender.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @msg.Sender.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@msg.Sender.Id">@msg.Sender.UserName</a> }</text> }</div>
+					<div><img src="~/icons/user.svg" class="icon" />@if (msg.Sender == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (msg.Sender.IsWithdrawn) { @(msg.Sender.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") } else { <text>@if (!msg.Sender.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @msg.Sender.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@msg.Sender.UserName">@msg.Sender.UserName</a> }</text> }</div>
 				}
 				<div style="display: block; text-align: left; padding: 6px 10px; border: 1px solid #ccc; border-radius: 8px;">
 					@if (msg.IsDeleted) {

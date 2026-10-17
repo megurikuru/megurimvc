@@ -143,7 +143,7 @@ else {
 														} else if (post.User.IsWithdrawn) {
 															@SharedLocalizer["Common_WithdrawnUser"].Value
 														} else {
-															<text>@if (!post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @post.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@post.User.Id">@post.User.UserName</a> }</text>
+															<text>@if (!post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @post.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@post.User.UserName">@post.User.UserName</a> }</text>
 														}
 												</div>
 												<div>

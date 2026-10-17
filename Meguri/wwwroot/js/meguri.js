@@ -166,21 +166,35 @@ const ImageAttachmentManager = {
     previewSelector: '#imagePreviewContainer',
     countSelector: '#imageCountDisplay',
 
+    createInstance: function (inputSelector, previewSelector, countSelector, maxImages) {
+        const instance = Object.create(ImageAttachmentManager);
+        instance.init(inputSelector, previewSelector, countSelector, maxImages);
+        return instance;
+    },
+
     init: function (inputSelector, previewSelector, countSelector, maxImages) {
         const input = $(inputSelector);
         if (input.length === 0) return;
 
         this.inputEl = input[0];
         this.previewSelector = previewSelector || '#imagePreviewContainer';
-        this.countSelector = countSelector || '#imageCountDisplay';
+        this.countSelector = countSelector !== undefined ? countSelector : '#imageCountDisplay';
         this.maxImages = maxImages || 16;
         this.selectedFiles = [];
+        this.objectUrls = this.objectUrls || [];
         this.clearObjectUrls();
 
         const self = this;
         input.off('change.meguriPreview').on('change.meguriPreview', function () {
             const incoming = Array.from(self.inputEl.files || []);
             if (incoming.length === 0) {
+                self.syncInputFiles();
+                self.render();
+                return;
+            }
+
+            if (self.maxImages === 1) {
+                self.selectedFiles = [incoming[0]];
                 self.syncInputFiles();
                 self.render();
                 return;
@@ -210,19 +224,22 @@ const ImageAttachmentManager = {
             self.render();
         });
 
-        $(document).off('change.meguriExistingImages', 'input[name^="ExistingImages"][name$=".Remove"]')
-            .on('change.meguriExistingImages', 'input[name^="ExistingImages"][name$=".Remove"]', function () {
-                if (!this.checked && self.getExistingActiveCount() + self.selectedFiles.length > self.maxImages) {
-                    this.checked = true;
-                    self.alertMaxImages();
-                }
-                self.render();
-            });
+        if (this.maxImages > 1) {
+            $(document).off('change.meguriExistingImages', 'input[name^="ExistingImages"][name$=".Remove"]')
+                .on('change.meguriExistingImages', 'input[name^="ExistingImages"][name$=".Remove"]', function () {
+                    if (!this.checked && self.getExistingActiveCount() + self.selectedFiles.length > self.maxImages) {
+                        this.checked = true;
+                        self.alertMaxImages();
+                    }
+                    self.render();
+                });
+        }
 
         this.render();
     },
 
     getExistingActiveCount: function () {
+        if (this.maxImages === 1) return 0;
         const totalExisting = $('input[name^="ExistingImages"][name$=".ImageId"]').length;
         const removedExisting = $('input[name^="ExistingImages"][name$=".Remove"]:checked').length;
         return Math.max(0, totalExisting - removedExisting);
@@ -251,7 +268,9 @@ const ImageAttachmentManager = {
     },
 
     clearObjectUrls: function () {
-        this.objectUrls.forEach(url => URL.revokeObjectURL(url));
+        if (this.objectUrls && this.objectUrls.length > 0) {
+            this.objectUrls.forEach(url => URL.revokeObjectURL(url));
+        }
         this.objectUrls = [];
     },
 
@@ -262,7 +281,9 @@ const ImageAttachmentManager = {
 
         const existingActive = this.getExistingActiveCount();
         const totalCount = existingActive + this.selectedFiles.length;
-        $(this.countSelector).text(`${totalCount}/${this.maxImages}`);
+        if (this.countSelector) {
+            $(this.countSelector).text(`${totalCount}/${this.maxImages}`);
+        }
 
         const removeLabel = (window.MeguriI18n && window.MeguriI18n.removeLabel) || '削除';
 
@@ -271,14 +292,11 @@ const ImageAttachmentManager = {
             this.objectUrls.push(url);
 
             const item = $('<div class="image-preview-item"></div>');
-            const header = $('<div class="image-preview-header"></div>');
-            header.append($('<span class="image-preview-order"></span>').text(`#${existingActive + idx + 1}`));
-
-            const removeBtn = $('<button type="button" class="image-preview-remove">×</button>')
-                .attr('aria-label', removeLabel)
-                .attr('title', removeLabel)
-                .on('click', () => this.removeFile(idx));
-            header.append(removeBtn);
+            if (this.maxImages > 1) {
+                const header = $('<div class="image-preview-header"></div>');
+                header.append($('<span class="image-preview-order"></span>').text(`#${existingActive + idx + 1}`));
+                item.append(header);
+            }
 
             const img = $('<img />')
                 .attr('src', url)
@@ -288,7 +306,12 @@ const ImageAttachmentManager = {
                 .text(file.name)
                 .attr('title', file.name);
 
-            item.append(header, img, nameSpan);
+            const removeBtn = $('<button type="button" class="image-preview-remove">削除</button>')
+                .attr('aria-label', removeLabel)
+                .attr('title', removeLabel)
+                .on('click', () => this.removeFile(idx));
+
+            item.append(img, nameSpan, removeBtn);
             container.append(item);
         });
     }

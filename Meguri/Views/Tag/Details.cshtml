@@ -120,7 +120,7 @@
 								</div>
 								<div>
 										<span class="icon-wrap">
-												@if (pt.Post.User == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (pt.Post.User.IsWithdrawn) { @SharedLocalizer["Common_WithdrawnUser"].Value } else { <text>@if (!pt.Post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @pt.Post.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@pt.Post.User.Id">@pt.Post.User.UserName</a> }</text> }
+												@if (pt.Post.User == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (pt.Post.User.IsWithdrawn) { @SharedLocalizer["Common_WithdrawnUser"].Value } else { <text>@if (!pt.Post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @pt.Post.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@pt.Post.User.UserName">@pt.Post.User.UserName</a> }</text> }
 										</span>
 								</div>
 						</div>

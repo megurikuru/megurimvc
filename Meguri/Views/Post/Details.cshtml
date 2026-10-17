@@ -95,7 +95,7 @@
 
 		<div>
 			<div>
-				@if (Model.User == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (Model.User.IsWithdrawn) { @SharedLocalizer["Common_WithdrawnUser"].Value } else { <text>@if (!Model.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @Model.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.User.Id">@Model.User.UserName</a> }</text> }
+				@if (Model.User == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (Model.User.IsWithdrawn) { @SharedLocalizer["Common_WithdrawnUser"].Value } else { <text>@if (!Model.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @Model.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.User.UserName">@Model.User.UserName</a> }</text> }
 				@Model.CreatedAt.ToLocalTime()
 			</div>
 			<div>

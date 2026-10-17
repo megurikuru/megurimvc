@@ -14,18 +14,22 @@
 		PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
 		NextSkip = ViewBag.NextSkip as int? ?? 0,
 		CurrentCount = Model.Count(),
-		RouteValues = new Dictionary<string, string> { ["id"] = profile.Id }
+		RouteValues = new Dictionary<string, string> { ["id"] = profile.UserName ?? "" }
 	};
 }
 
 <div>
-	@if (profile.HeaderImageId.HasValue) {
-		<img src="/Image/File/@profile.HeaderImageId" alt="" style="width: 100%; max-height: 200px; object-fit: cover;" />
+	@if (profile.ActiveAvatarImageId.HasValue || profile.HeaderImageId.HasValue) {
+		<div style="display: flex; align-items: center; gap: 0.5rem;">
+			@if (profile.ActiveAvatarImageId.HasValue) {
+				<img src="/Image/File/@profile.ActiveAvatarImageId" alt="@profile.UserName" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; flex-shrink: 0;" />
+			}
+			@if (profile.HeaderImageId.HasValue) {
+				<img src="/Image/File/@profile.HeaderImageId" alt="" style="flex: 1; min-width: 0; height: 100px; object-fit: cover;" />
+			}
+		</div>
 	}
 	<div>
-		@if (profile.ActiveAvatarImageId.HasValue) {
-			<img src="/Image/File/@profile.ActiveAvatarImageId" alt="@profile.UserName" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" />
-		}
 		<h2>@profile.UserName</h2>
 		@if (isOwner) {
 			@if (!profile.IsProfilePublic) {
