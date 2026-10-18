@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Meguri.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Meguri.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Meguri.Data {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser> {
@@ -69,8 +70,10 @@ namespace Meguri.Data {
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
 
-            builder.Entity<Post>(entity =>
-            {
+            // デフォルトのスキーマを public に指定
+            builder.HasDefaultSchema("public");
+
+            builder.Entity<Post>(entity => {
                 entity.HasOne(d => d.User)
                     .WithMany(u => u.Posts)
                     .HasForeignKey(d => d.UserId)
@@ -93,8 +96,7 @@ namespace Meguri.Data {
                 .HasForeignKey(dt => dt.TagConceptId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Tag>(entity =>
-            {
+            builder.Entity<Tag>(entity => {
                 entity.HasKey(t => t.Id);
                 entity.HasIndex(t => t.NormalizedText)
                     .IsUnique();
@@ -105,16 +107,14 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<TagConcept>(entity =>
-            {
+            builder.Entity<TagConcept>(entity => {
                 entity.HasOne(tc => tc.User)
                     .WithMany(u => u.TagConcepts)
                     .HasForeignKey(tc => tc.UserId)
                     .OnDelete(DeleteBehavior.SetNull);
             });
 
-            builder.Entity<TagRelationship>(entity =>
-            {
+            builder.Entity<TagRelationship>(entity => {
                 entity.HasKey(tr => tr.Id);
 
                 entity.HasIndex(tr => new { tr.SubjectConceptId, tr.ObjectConceptId, tr.Predicate })
@@ -163,8 +163,7 @@ namespace Meguri.Data {
                 .HasForeignKey(it => it.TagConceptId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Fandom>(entity =>
-            {
+            builder.Entity<Fandom>(entity => {
                 entity.HasOne(f => f.ParentFandom)
                     .WithMany(f => f.ChildFandoms)
                     .HasForeignKey(f => f.ParentFandomId)
@@ -183,15 +182,13 @@ namespace Meguri.Data {
                             .WithMany(f => f.FandomUsers)
                             .HasForeignKey(fu => fu.FandomId)
                             .OnDelete(DeleteBehavior.Cascade),
-                        j =>
-                        {
+                        j => {
                             j.HasKey(fu => new { fu.FandomId, fu.UserId });
                             j.ToTable("FandomUsers");
                         });
             });
 
-            builder.Entity<Comment>(entity =>
-            {
+            builder.Entity<Comment>(entity => {
                 entity.HasOne(c => c.User)
                     .WithMany(u => u.Comments)
                     .HasForeignKey(c => c.UserId)
@@ -213,8 +210,7 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-            builder.Entity<CommentImage>(entity =>
-            {
+            builder.Entity<CommentImage>(entity => {
                 entity.HasOne(ci => ci.Comment)
                     .WithMany(c => c.CommentImages)
                     .HasForeignKey(ci => ci.CommentId)
@@ -226,8 +222,7 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<ConversationMember>(entity =>
-            {
+            builder.Entity<ConversationMember>(entity => {
                 entity.HasOne(cm => cm.Conversation)
                     .WithMany(c => c.Members)
                     .HasForeignKey(cm => cm.ConversationId)
@@ -239,8 +234,7 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<Message>(entity =>
-            {
+            builder.Entity<Message>(entity => {
                 entity.HasOne(m => m.Conversation)
                     .WithMany(c => c.Messages)
                     .HasForeignKey(m => m.ConversationId)
@@ -252,8 +246,7 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<MessageImage>(entity =>
-            {
+            builder.Entity<MessageImage>(entity => {
                 entity.HasOne(mi => mi.Message)
                     .WithMany(m => m.MessageImages)
                     .HasForeignKey(mi => mi.MessageId)
@@ -265,8 +258,7 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<Reaction>(entity =>
-            {
+            builder.Entity<Reaction>(entity => {
                 entity.HasOne(r => r.User)
                     .WithMany(u => u.Reactions)
                     .HasForeignKey(r => r.UserId)
@@ -293,8 +285,7 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<UserImage>(entity =>
-            {
+            builder.Entity<UserImage>(entity => {
                 entity.HasOne(ui => ui.User)
                     .WithMany(u => u.UserImages)
                     .HasForeignKey(ui => ui.UserId)
@@ -306,8 +297,7 @@ namespace Meguri.Data {
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<Image>(entity =>
-            {
+            builder.Entity<Image>(entity => {
                 entity.HasOne(i => i.User)
                     .WithMany()
                     .HasForeignKey(i => i.UserId)
@@ -318,8 +308,7 @@ namespace Meguri.Data {
                     .IsUnique(false);
             });
 
-            builder.Entity<ApplicationUser>(entity =>
-            {
+            builder.Entity<ApplicationUser>(entity => {
                 entity.HasOne(u => u.ActiveAvatarImage)
                     .WithMany()
                     .HasForeignKey(u => u.ActiveAvatarImageId)
