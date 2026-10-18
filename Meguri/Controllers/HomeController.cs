@@ -92,10 +92,10 @@ namespace Meguri.Controllers {
             // SQL から Posts のクエリを作成
             var postQuery = _context.Posts.FromSqlRaw(sql, parameters.ToArray());
 
-            // ログイン時は参加している界隈の投稿のみ、
+            // 未ログイン時は外部公開の投稿のみ、ログイン時は外部公開の投稿または参加している界隈の投稿のみ
             if (isAuthenticated) {
                 var currentUserId = _userManager.GetUserId(User);
-                postQuery = postQuery.Where(p => _context.FandomUsers.Any(fu => fu.UserId == currentUserId && fu.FandomId == p.FandomId));
+                postQuery = postQuery.Where(p => p.IsPublic || _context.FandomUsers.Any(fu => fu.UserId == currentUserId && fu.FandomId == p.FandomId));
             } else {
                 postQuery = postQuery.Where(p => p.IsPublic);
             }
