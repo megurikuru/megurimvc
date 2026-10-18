@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Meguri.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260924041655_InitialCreate")]
+    [Migration("20261017214918_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -20,7 +20,8 @@ namespace Meguri.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasDefaultSchema("public")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -54,6 +55,19 @@ namespace Meguri.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("ExternalUrls")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<long?>("HeaderImageId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsProfilePublic")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsWithdrawn")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 
@@ -72,7 +86,8 @@ namespace Meguri.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
@@ -91,6 +106,10 @@ namespace Meguri.Migrations
 
                     b.HasIndex("ActiveAvatarImageId");
 
+                    b.HasIndex("HeaderImageId");
+
+                    b.HasIndex("IsProfilePublic");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -98,7 +117,7 @@ namespace Meguri.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AspNetUsers", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>
@@ -155,7 +174,7 @@ namespace Meguri.Migrations
                     b.HasIndex("DocId", "Number")
                         .IsUnique();
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.CommentImage", b =>
@@ -182,7 +201,7 @@ namespace Meguri.Migrations
                     b.HasIndex("CommentId", "ImageId")
                         .IsUnique();
 
-                    b.ToTable("CommentImages");
+                    b.ToTable("CommentImages", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.Conversation", b =>
@@ -212,7 +231,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("UpdatedAt");
 
-                    b.ToTable("Conversations");
+                    b.ToTable("Conversations", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.ConversationMember", b =>
@@ -243,7 +262,7 @@ namespace Meguri.Migrations
                     b.HasIndex("ConversationId", "UserId")
                         .IsUnique();
 
-                    b.ToTable("ConversationMembers");
+                    b.ToTable("ConversationMembers", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.Fandom", b =>
@@ -267,7 +286,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("ParentFandomId");
 
-                    b.ToTable("Fandoms");
+                    b.ToTable("Fandoms", "public");
 
                     b.HasData(
                         new
@@ -366,7 +385,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("FandomUsers", (string)null);
+                    b.ToTable("FandomUsers", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.Image", b =>
@@ -377,7 +396,7 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Caption")
+                    b.Property<string>("Alt")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -388,7 +407,7 @@ namespace Meguri.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Figcaption")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -397,15 +416,6 @@ namespace Meguri.Migrations
 
                     b.Property<int?>("Height")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("IsPublic")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsSexual")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsViolence")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -428,13 +438,9 @@ namespace Meguri.Migrations
 
                     b.HasIndex("CreatedAt");
 
-                    b.HasIndex("IsPublic");
-
                     b.HasIndex("UserId");
 
-                    b.HasIndex("IsPublic", "CreatedAt");
-
-                    b.ToTable("Images");
+                    b.ToTable("Images", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.ImageTag", b =>
@@ -461,7 +467,7 @@ namespace Meguri.Migrations
                     b.HasIndex("ImageId", "TagConceptId")
                         .IsUnique();
 
-                    b.ToTable("ImageTags");
+                    b.ToTable("ImageTags", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.Message", b =>
@@ -472,17 +478,27 @@ namespace Meguri.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<long>("ConversationId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<long?>("ParentMessageId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("SenderId")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Text")
+                    b.Property<string>("Subject")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -495,11 +511,13 @@ namespace Meguri.Migrations
 
                     b.HasIndex("CreatedAt");
 
+                    b.HasIndex("ParentMessageId");
+
                     b.HasIndex("SenderId");
 
                     b.HasIndex("ConversationId", "CreatedAt");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.MessageImage", b =>
@@ -526,7 +544,7 @@ namespace Meguri.Migrations
                     b.HasIndex("MessageId", "ImageId")
                         .IsUnique();
 
-                    b.ToTable("MessageImages");
+                    b.ToTable("MessageImages", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.Post", b =>
@@ -536,6 +554,10 @@ namespace Meguri.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("CommentCount")
                         .HasColumnType("integer");
@@ -564,11 +586,7 @@ namespace Meguri.Migrations
                     b.Property<DateTime?>("LastCommentedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Text")
+                    b.Property<string>("Subject")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -602,7 +620,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("FandomId", "LastCommentedAt");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.PostImage", b =>
@@ -629,7 +647,7 @@ namespace Meguri.Migrations
                     b.HasIndex("PostId", "ImageId")
                         .IsUnique();
 
-                    b.ToTable("PostImages");
+                    b.ToTable("PostImages", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.PostTag", b =>
@@ -656,7 +674,7 @@ namespace Meguri.Migrations
                     b.HasIndex("PostId", "TagConceptId")
                         .IsUnique();
 
-                    b.ToTable("PostTags");
+                    b.ToTable("PostTags", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.Reaction", b =>
@@ -721,7 +739,7 @@ namespace Meguri.Migrations
                     b.HasIndex("UserId", "PostId", "Type")
                         .IsUnique();
 
-                    b.ToTable("Reactions");
+                    b.ToTable("Reactions", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.Tag", b =>
@@ -759,7 +777,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("TagText");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.TagConcept", b =>
@@ -784,7 +802,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TagConcepts");
+                    b.ToTable("TagConcepts", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.TagRelationship", b =>
@@ -812,7 +830,7 @@ namespace Meguri.Migrations
                     b.HasIndex("SubjectConceptId", "ObjectConceptId", "Predicate")
                         .IsUnique();
 
-                    b.ToTable("TagRelationships");
+                    b.ToTable("TagRelationships", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.UserImage", b =>
@@ -842,7 +860,7 @@ namespace Meguri.Migrations
                     b.HasIndex("UserId", "ImageId")
                         .IsUnique();
 
-                    b.ToTable("UserImages");
+                    b.ToTable("UserImages", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -868,7 +886,7 @@ namespace Meguri.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -893,7 +911,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -918,16 +936,18 @@ namespace Meguri.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -940,7 +960,24 @@ namespace Meguri.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", "public");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserPasskey<string>", b =>
+                {
+                    b.Property<byte[]>("CredentialId")
+                        .HasMaxLength(1024)
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("CredentialId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserPasskeys", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -955,7 +992,7 @@ namespace Meguri.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", "public");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -964,17 +1001,19 @@ namespace Meguri.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", "public");
                 });
 
             modelBuilder.Entity("Meguri.Models.ApplicationUser", b =>
@@ -984,7 +1023,14 @@ namespace Meguri.Migrations
                         .HasForeignKey("ActiveAvatarImageId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.HasOne("Meguri.Models.Image", "HeaderImage")
+                        .WithMany()
+                        .HasForeignKey("HeaderImageId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("ActiveAvatarImage");
+
+                    b.Navigation("HeaderImage");
                 });
 
             modelBuilder.Entity("Meguri.Models.Comment", b =>
@@ -1123,6 +1169,10 @@ namespace Meguri.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Meguri.Models.Message", "ParentMessage")
+                        .WithMany()
+                        .HasForeignKey("ParentMessageId");
+
                     b.HasOne("Meguri.Models.ApplicationUser", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
@@ -1130,6 +1180,8 @@ namespace Meguri.Migrations
                         .IsRequired();
 
                     b.Navigation("Conversation");
+
+                    b.Navigation("ParentMessage");
 
                     b.Navigation("Sender");
                 });
@@ -1332,6 +1384,57 @@ namespace Meguri.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserPasskey<string>", b =>
+                {
+                    b.HasOne("Meguri.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Microsoft.AspNetCore.Identity.IdentityPasskeyData", "Data", b1 =>
+                        {
+                            b1.Property<byte[]>("IdentityUserPasskeyCredentialId");
+
+                            b1.Property<byte[]>("AttestationObject")
+                                .IsRequired();
+
+                            b1.Property<byte[]>("ClientDataJson")
+                                .IsRequired();
+
+                            b1.Property<DateTimeOffset>("CreatedAt");
+
+                            b1.Property<bool>("IsBackedUp");
+
+                            b1.Property<bool>("IsBackupEligible");
+
+                            b1.Property<bool>("IsUserVerified");
+
+                            b1.Property<string>("Name");
+
+                            b1.Property<byte[]>("PublicKey")
+                                .IsRequired();
+
+                            b1.Property<long>("SignCount");
+
+                            b1.PrimitiveCollection<string>("Transports");
+
+                            b1.HasKey("IdentityUserPasskeyCredentialId");
+
+                            b1.ToTable("AspNetUserPasskeys", "public");
+
+                            b1
+                                .ToJson("Data")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("IdentityUserPasskeyCredentialId");
+                        });
+
+                    b.Navigation("Data")
                         .IsRequired();
                 });
 
