@@ -1,6 +1,6 @@
 @model IEnumerable<Meguri.ViewModels.Shared.BreadcrumbItemViewModel>
 
-<nav class="breadcrumb-nav">
+<nav class="breadcrumb">
 	<ol>
 		@foreach (var item in Model) {
 			if (string.IsNullOrEmpty(item.Url)) {

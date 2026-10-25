@@ -1,5 +1,13 @@
 ﻿/* パンくずリスト */
-.breadcrumb-nav {
+.breadcrumb {
+	padding: 0.5rem 0.5rem 0 0.5rem;
+	border-top: 1px solid var(--color-border);
+	background-color: var(--color-bg-title);
+
+	main[data-controller="Post" i][data-action="Details" i] & {
+		padding-bottom: 0.5rem;
+	}
+
 	/* リスト全体のレイアウト */
 	ol {
 		display: flex;
@@ -16,23 +24,22 @@
 		& + li::before {
 			content: "/";
 			margin: 0 0.5rem;
-			color: #888888;
+			color: var(--color-separator);
 		}
 	}
 	/* リンクの基本スタイル */
 	a {
-		color: #0066cc;
+		color: var(--color-link);
 		text-decoration: none;
 		transition: color 0.2s ease, text-decoration 0.2s ease;
 
 		&:hover {
-			color: #004499;
+			color: var(--color-link-hover);
 			text-decoration: underline;
 		}
 	}
 	/* 現在地（最末尾の要素）のスタイル */
 	[aria-current="page"] {
-		color: #333333;
-		font-weight: bold;
+		color: var(--color-text-current);
 	}
 }

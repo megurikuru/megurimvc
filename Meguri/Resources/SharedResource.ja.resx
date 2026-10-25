@@ -871,7 +871,7 @@
     <value>子界隈</value>
   </data>
   <data name="Fandom_Join" xml:space="preserve">
-    <value>入る</value>
+    <value>参加</value>
   </data>
   <data name="Fandom_Joined" xml:space="preserve">
     <value>入ってる</value>
@@ -879,20 +879,14 @@
   <data name="Fandom_JoinedBadge" xml:space="preserve">
     <value>入ってる</value>
   </data>
-  <data name="Fandom_JoinShort" xml:space="preserve">
-    <value>入る</value>
-  </data>
   <data name="Fandom_Leave" xml:space="preserve">
-    <value>出る</value>
+    <value>退出</value>
   </data>
   <data name="Fandom_MembersCount" xml:space="preserve">
     <value>参加者: {0}人</value>
   </data>
   <data name="Fandom_PostsCount" xml:space="preserve">
     <value>投稿: {0}件</value>
-  </data>
-  <data name="Fandom_CascadeNote" xml:space="preserve">
-    <value>※親の界隈に入ると子の界隈にもそのまま入ります。子界隈から出たい場合、その界隈で「出る」を選択してください。</value>
   </data>
   <data name="Fandom_CreateNew" xml:space="preserve">
     <value>新しい界隈を作成</value>

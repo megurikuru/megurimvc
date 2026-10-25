@@ -1,0 +1,56 @@
+<div class="attribute-wrap">
+	<!-- 公開ステータス -->
+	@if (Model.IsPublic) {
+		<label title="@SharedLocalizer["Post_Public"]">
+			<input type="checkbox" checked disabled />@SharedLocalizer["Post_Public"]
+		</label>
+	} else {
+		<label title="@SharedLocalizer["Post_Public"]">
+			<input type="checkbox" disabled />@SharedLocalizer["Post_Public"]
+		</label>
+	}
+
+	<!-- ピン留め -->
+	@if (Model.IsPinned) {
+		<label title="@SharedLocalizer["Post_Pinned"]">
+			<input type="checkbox" checked disabled />@SharedLocalizer["Post_Pinned"]
+		</label>
+	} else {
+		<label title="@SharedLocalizer["Post_Pinned"]">
+			<input type="checkbox" disabled />@SharedLocalizer["Post_Pinned"]
+		</label>
+	}
+
+	<!-- ロック状態 -->
+	@if (Model.IsLocked) {
+		<label title="@SharedLocalizer["Post_Locked"]">
+			<input type="checkbox" checked disabled />@SharedLocalizer["Post_Locked"]
+		</label>
+	} else {
+		<label title="@SharedLocalizer["Post_Locked"]">
+			<input type="checkbox" disabled />@SharedLocalizer["Post_Locked"]
+		</label>
+	}
+
+	<!-- 性的コンテンツ (R-18) -->
+	@if (Model.IsSexual) {
+		<label title="@SharedLocalizer["Post_NSFW_Sexual"]">
+			<input type="checkbox" checked disabled />@SharedLocalizer["Post_NSFW_Sexual"]
+		</label>
+	} else {
+		<label title="@SharedLocalizer["Post_NSFW_Sexual"]">
+			<input type="checkbox" disabled /> @SharedLocalizer["Post_NSFW_Sexual"]
+		</label>
+	}
+
+	<!-- 暴力コンテンツ (R-18G) -->
+	@if (Model.IsViolence) {
+		<label title="@SharedLocalizer["Post_NSFW_Violence"]">
+			<input type="checkbox" checked disabled />@SharedLocalizer["Post_NSFW_Violence"]
+		</label>
+	} else {
+		<label title="@SharedLocalizer["Post_NSFW_Violence"]">
+			<input type="checkbox" disabled />@SharedLocalizer["Post_NSFW_Violence"]
+		</label>
+	}
+</div>

@@ -45,11 +45,15 @@
 		<span asp-validation-for="BirthMonth"></span>
 		<span asp-validation-for="BirthDay"></span>
 	</div>
-	<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="signup"></div>
+	@if (TurnstileOptions.Value.Enabled) {
+		<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="signup"></div>
+	}
 	<button type="submit">@SharedLocalizer["Account_Register_Button"]</button>
 </form>
 
 @section Scripts {
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	@if (TurnstileOptions.Value.Enabled) {
+		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	}
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

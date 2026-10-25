@@ -11,7 +11,7 @@
 	@if (isHomePage) {
 		@await Html.PartialAsync("_NavMain")
 	}
-	<main>
+	<main data-controller="@ViewContext.RouteData.Values["controller"]" data-action="@ViewContext.RouteData.Values["action"]">
 		@RenderBody()
 	</main>
 	@if (isHomePage) {

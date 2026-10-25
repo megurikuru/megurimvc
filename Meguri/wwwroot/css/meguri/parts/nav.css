@@ -1,17 +1,31 @@
-﻿
-/* ナビゲーション */
+﻿/* ナビゲーション */
+main + nav {
+	margin-top: 0.5rem;
+}
+
 .nav-grid {
 	font-size: 1rem;
-	background-color: var(--color-primary);
-	
 	ul {
-		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（2均等列）で配置 */
-		grid-template-columns: 1fr 1fr;
+		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（3均等列）で配置 */
+		grid-template-columns: repeat(3, 1fr);
 		list-style: none;
+
+		&:has(> li:only-child) {
+			grid-template-columns: 1fr;
+		}
+
+		&:has(> li:nth-child(2):last-child) {
+			grid-template-columns: repeat(2, 1fr);
+		}
 
 		li {
 			display: block; /* 自身：ブロック要素 */
-			border: 1px solid #ccc;
+
+			border-top: 1px solid var(--color-border);
+			/* 右端（2の倍数）に左枠線を表示 */
+			&:nth-child(2), &:nth-child(3), &:nth-child(5), &:nth-child(6) {
+				border-left: 1px solid var(--color-border);
+			}
 
 			form {
 				margin: 0;
@@ -22,7 +36,7 @@
 				align-items: center;
 				justify-content: center;
 				min-height: var(--control-height);
-				padding: 0.5rem;
+				padding: 0;
 				width: 100%;
 				font-size: 1rem;
 				text-decoration: none;
@@ -31,13 +45,24 @@
 				cursor: pointer;
 				text-align: center;
 				box-sizing: border-box;
-				color: var(--color-text-reverse);
+				background-color: var(--color-nav-main);
 
 				&:hover {
-					background-color: var(--color-primary-hover);
-					color: white;
+					background-color: var(--color-nav-main-hover);
 				}
 			}
 		}
+	}
+}
+
+.nav-sub {
+	margin-top: 0.5rem;
+	border-top: 1px solid var(--color-border);
+
+	& > .title {
+		padding: 0.5rem 0;
+		font-size: 1.1rem;
+		text-align: center;
+		background-color: var(--color-bg-title);
 	}
 }

@@ -39,6 +39,6 @@
 	margin-left: 0.5rem;
 	padding: 0.125rem 0.5rem;
 	border-radius: var(--radius-full);
-	background: var(--color-bg-sub);
+	background: var(--color-bg-title);
 	font-size: 0.85rem;
 }

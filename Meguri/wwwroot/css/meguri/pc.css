@@ -1,8 +1,8 @@
 ﻿/* 画面幅が 768px 以上の場合（タブレット・デスクトップ向け） */
 @media (min-width: 768px) {
-	/* ==================== 全体レイアウト ==================== */
+	/* 全体レイアウト */
 	body {
-		grid-template-columns: minmax(0, 1fr) 220px;
+		grid-template-columns: minmax(0, 1fr) 260px;
 		align-items: start;
 		max-width: 1200px;
 		margin: 0 auto;
@@ -16,7 +16,6 @@
 	}
 
 	footer {
-		margin-top: 1rem;
 	}
 
 	main {
@@ -25,48 +24,15 @@
 		width: 100%;
 		max-width: 900px;
 		min-width: 0;
-		gap: 1rem;
 	}
 
-	/* ==================== ホーム画面 ==================== */
-	body:has(> .nav-sub) {
-		& #main-nav {
-			grid-column: 1 / -1;
-			grid-row: 2;
 
-			& ul {
-				grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-			}
-		}
-
-		& main {
-			grid-column: 1;
-			grid-row: 3;
-		}
-
-		& .nav-sub {
-			grid-column: 2;
-			grid-row: 3;
-			position: sticky;
-			top: 1rem;
-		}
+	article {
+		border-right: 1px solid var(--color-border);
+		border-left: 1px solid var(--color-border);
 	}
 
-	/* ==================== ホーム画面以外 ==================== */
-	body:not(:has(> .nav-sub)) {
-		& #main-nav {
-			grid-column: 2;
-			grid-row: 2;
-			position: sticky;
-			top: 1rem;
-
-			& ul {
-				grid-template-columns: 1fr;
-			}
-		}
-	}
-
-	/* ==================== 各種パーツ調整 ==================== */
+	/* 各種パーツ調整 */
 	/* フォーム・アカウント関連：横幅が広がりすぎないように制限 */
 	.account {
 		width: 100%;
@@ -108,6 +74,13 @@
 	}
 
 	/* FinderサムネイルやプロフィールバナーをPC画面向けに調整 */
+	.finder {
+		border-left: 1px solid var(--color-border);
+		border-right: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+	}
+
+
 	.finder-item-wrap .thumb {
 		max-height: 16rem;
 	}
@@ -124,5 +97,61 @@
 	.image-order-item .image-order-name {
 		max-width: 360px;
 	}
-}
 
+	/* ホーム画面 */
+	body:has(> .nav-sub) {
+		& #nav-main {
+			grid-column: 1 / -1;
+			grid-row: 2;
+
+			& ul {
+				grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+			}
+		}
+
+		& main {
+			grid-column: 1;
+			grid-row: 3;
+		}
+
+		& .nav-sub {
+			grid-column: 2;
+			grid-row: 3;
+			position: sticky;
+			top: 1rem;
+		}
+		/* 右端（6の倍数）に右枠線を表示 */
+		#nav-main li {
+			border-left: 1px solid var(--color-border);
+			border-right: none;
+
+			&:nth-child(6n) {
+				border-right: 1px solid var(--color-border);
+			}
+		}
+	}
+
+	/* ホーム画面以外 */
+	body:not(:has(> .nav-sub)) {
+		& #nav-main {
+			grid-column: 2;
+			grid-row: 2;
+			position: sticky;
+			top: 1rem;
+
+			& ul {
+				grid-template-columns: 1fr;
+
+				/* 右端（6の倍数）に右枠線を表示 */
+				li {
+					border-left: 1px solid var(--color-border);
+					border-right: 1px solid var(--color-border);
+
+					&:nth-child(6n) {
+						border-right: 1px solid var(--color-border);
+					}
+				}
+			}
+		}
+	}
+}

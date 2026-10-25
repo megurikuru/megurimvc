@@ -30,6 +30,10 @@ namespace Meguri.Services {
         }
 
         public async Task<bool> VerifyAsync(string? token, string expectedAction, string? remoteIp = null, CancellationToken cancellationToken = default) {
+            if (!_conf.Enabled) {
+                return true;
+            }
+
             var expectedHostnames = new HashSet<string>(
                 (_conf.Hostnames ?? Array.Empty<string>())
                     .Select(h => h.Trim())

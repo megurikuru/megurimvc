@@ -36,7 +36,7 @@
 	& code {
 		display: block flow;
 		padding: 0.25rem 0.5rem;
-		background-color: var(--color-bg-sub);
+		background-color: var(--color-bg-title);
 		border-radius: var(--radius-sm);
 	}
 

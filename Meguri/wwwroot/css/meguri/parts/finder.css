@@ -1,16 +1,18 @@
-﻿/* Finderでのフォルダや投稿の表示 */
+﻿/* Finder */
+.finder {
+}
+
+/* Finderでのフォルダや投稿の表示 */
 .finder-item-wrap {
 	display: block grid;
-	grid-template-columns: auto 1fr; /* アイコン | 名前 */
-	align-items: center; /* 上下中央揃え */
-	gap: 0.5rem; /* アイコンとテキストの間隔 */
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	gap: 0.5rem;
 	min-height: var(--control-height);
 	padding: 0.5rem 0.75rem;
 	box-sizing: border-box;
-	/* 偶数行は薄いグレー */
-	&:nth-child(even) {
-		background-color: #F2F0FC;
-	}
+	border-top: 1px solid var(--color-border);
+
 	/* アイコン */
 	.icon {
 		width: 1.25rem;
