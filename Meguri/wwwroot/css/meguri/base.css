@@ -13,43 +13,75 @@ textarea {
 /* 変数 */
 :root {
 	/* --- カラー関連 --- */
-	--color-primary: #70608A; /* くすんだ落ち着いた紫色 */
-	--color-primary-hover: #8272A0; /* 青みを含んだやわらかな紫色 */
+
+
+	--color-nav-main: #E9E4F0; /* 紫 */
+	--color-nav-main-hover: #D8CFE8; /* 紫 */
+	--color-border: #B9AFBE; /* 紫 */
+
+	--color-bg-base: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
+	--color-bg-title: #E2E2E2; /* 灰色 */
+
 	--color-text: #1f2937; /* わずかに青みがかったダークグレー */
 	--color-text-reverse: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
+
 	--color-text-muted: #6b7280; /* 落ち着いたミディアムグレー */
-	--color-bg: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
-	--color-bg-sub: #f9fafb; /* ごくわずかに青みのある明るいグレー */
-	--color-border: #B9AFBE; /* グレーがかった淡い紫色 */
+	--color-text-current: #333333; /* ダークグレー */
+	--color-separator: #888888; /* グレー */
+
+	--color-link: #0066cc; /* 青 */
+	--color-link-hover: #004499; /* 濃い青 */
+
+	--color-border-light: #ccc; /* 明るいグレー */
 	/* --- 角丸・シャドウ --- */
 	--radius-sm: 4px;
 	--radius-md: 8px;
 	--radius-full: 9999px;
 	/* --- サイズ・余白 --- */
-	--control-height: 44px;
-	--control-height-sm: 36px;
+	--control-height: 2.5rem;
+	--control-height-sm: 2rem;
 }
 
 /* 基本要素 */
+article {
+	padding: 0 0 0.5rem 0;
+}
+
 a {
 	color: var(--color-primary);
 }
 
-h1, h2, h3, h4, h5, h6 {
-	text-align: center;
+.felt-bg {
 }
 
 h1 {
-	font-size: 1.3rem;
-}
-
-h2 {
-	font-size: 1.2rem;
-}
-
-h3 {
 	font-size: 1.1rem;
+	text-align: center;
+	padding: 0.5rem;
+	background-color: var(--color-bg-title);
+	border-top: 1px solid var(--color-border);
 }
+
+h2, h3, h4, h5, h6 {
+	font-size: 1.1rem;
+	padding: 0.5rem 0.5rem 0 0.5rem;
+	border-top: 1px solid var(--color-border);
+}
+
+/*h2, h3, h4, h5, h6 {
+	display: block flex;
+	align-items: center;
+	padding: 0.5rem 0.5rem 0 0.5rem;
+
+
+	img.icon {
+		margin-right: 0.5rem;
+		width: 1.25rem;
+		height: 1.25rem;
+	}
+}*/
+
+
 
 img {
 	max-width: 100%;
@@ -62,14 +94,16 @@ img {
 	}
 }
 
+h1 .icon {
+	filter: invert(100%);
+}
+
 label {
 	display: inline-block;
 	line-height: 1.4;
-	/*border: 1px dotted green;*/ /* 開発用 */
 }
 
 input {
-	/*border: 1px dotted purple;*/ /* 開発用 */
 }
 
 input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),

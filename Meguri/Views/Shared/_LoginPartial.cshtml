@@ -8,15 +8,15 @@
 @inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User)) {
-		<li>
-				<a  asp-area="" asp-controller="Manage" asp-action="Index" title="@SharedLocalizer["Auth_ManageTitle"]">@SharedLocalizer["Auth_ManageTitle"]</a>
-		</li>
-		<li>
-				<form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
-						<button type="submit" >@SharedLocalizer["Auth_Logout"]</button>
-				</form>
-		</li>
+	<li>
+		<a asp-area="" asp-controller="Manage" asp-action="Index" title="@SharedLocalizer["Auth_ManageTitle"]">@SharedLocalizer["Auth_ManageTitle"]</a>
+	</li>
+	<li>		
+		<form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm">
+			<button type="submit">@SharedLocalizer["Auth_Logout"]</button>
+		</form>
+	</li>
 } else {
-		<li ><a  asp-area="" asp-controller="Account" asp-action="Register">@SharedLocalizer["Auth_Register"]</a></li>
-		<li ><a  asp-area="" asp-controller="Account" asp-action="Login">@SharedLocalizer["Auth_Login"]</a></li>
+	<li><a asp-area="" asp-controller="Account" asp-action="Register">@SharedLocalizer["Auth_Register"]</a></li>
+	<li><a asp-area="" asp-controller="Account" asp-action="Login">@SharedLocalizer["Auth_Login"]</a></li>
 }

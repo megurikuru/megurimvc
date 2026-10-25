@@ -37,7 +37,9 @@
 			@Html.DisplayNameFor(m => m.RememberMe)
 		</label>
 
-		<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="login"></div>
+		@if (TurnstileOptions.Value.Enabled) {
+			<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="login"></div>
+		}
 
 		<button type="submit">@SharedLocalizer["Account_Login_Button"]</button>
 
@@ -61,7 +63,9 @@
 </section>
 
 @section Scripts {
-	<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	@if (TurnstileOptions.Value.Enabled) {
+		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+	}
 	<script src="~/js/passkey.js" asp-append-version="true"></script>
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

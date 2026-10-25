@@ -7,6 +7,6 @@
 
 <!-- サイドバー：界隈（Fandom）一覧 -->
 <nav class="nav-sub">
-	<h2>@SharedLocalizer["Nav_Fandom"]</h2>
+	<div class="title">@SharedLocalizer["Nav_Fandom"]</div>
 	<partial name="_Finder" model="new FinderViewModel { ChildFandoms = rootFandom?.ChildFandoms.OrderBy(f => f.Id).ToList() ?? [] }" />
 </nav>

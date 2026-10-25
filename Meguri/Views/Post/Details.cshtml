@@ -11,146 +11,105 @@
 	};
 }
 
-
+<!-- パンくず -->
+<partial name="_Breadcrumb" model="breadcrumbs" />
+<!-- ヘッダー情報 -->
 <div>
-	<div>
-		<!-- パンくず -->
-		<partial name="_Breadcrumb" model="breadcrumbs" />
-		<!-- ヘッダー情報 -->
-		<div>
-			<a asp-controller="Fandom" asp-action="Details" asp-route-id="@Model.FandomId">@Model.Fandom?.Name</a>
-			<div class="attribute-wrap">
-				<!-- 公開ステータス -->
-				@if (Model.IsPublic) {
-					<label title="@SharedLocalizer["Post_Public"]">
-						<input type="checkbox" checked disabled />@SharedLocalizer["Post_Public"]
-					</label>
-				} else {
-					<label title="@SharedLocalizer["Post_Public"]">
-						<input type="checkbox" disabled />@SharedLocalizer["Post_Public"]
-					</label>
-				}
-
-				<!-- ピン留め -->
-				@if (Model.IsPinned) {
-					<label title="@SharedLocalizer["Post_Pinned"]">
-						<input type="checkbox" checked disabled />@SharedLocalizer["Post_Pinned"]
-					</label>
-				} else {
-					<label title="@SharedLocalizer["Post_Pinned"]">
-						<input type="checkbox" disabled />@SharedLocalizer["Post_Pinned"]
-					</label>
-				}
-
-				<!-- ロック状態 -->
-				@if (Model.IsLocked) {
-					<label title="@SharedLocalizer["Post_Locked"]">
-						<input type="checkbox" checked disabled />@SharedLocalizer["Post_Locked"]
-					</label>
-				} else {
-					<label title="@SharedLocalizer["Post_Locked"]">
-						<input type="checkbox" disabled />@SharedLocalizer["Post_Locked"]
-					</label>
-				}
-
-				<!-- 性的コンテンツ (R-18) -->
-				@if (Model.IsSexual) {
-					<label title="@SharedLocalizer["Post_NSFW_Sexual"]">
-						<input type="checkbox" checked disabled />@SharedLocalizer["Post_NSFW_Sexual"]
-					</label>
-				} else {
-					<label title="@SharedLocalizer["Post_NSFW_Sexual"]">
-						<input type="checkbox" disabled /> @SharedLocalizer["Post_NSFW_Sexual"]
-					</label>
-				}
-
-				<!-- 暴力コンテンツ (R-18G) -->
-				@if (Model.IsViolence) {
-					<label title="@SharedLocalizer["Post_NSFW_Violence"]">
-						<input type="checkbox" checked disabled />@SharedLocalizer["Post_NSFW_Violence"]
-					</label>
-				} else {
-					<label title="@SharedLocalizer["Post_NSFW_Violence"]">
-						<input type="checkbox" disabled />@SharedLocalizer["Post_NSFW_Violence"]
-					</label>
-				}
-			</div>
-
-			@if (isAuthor) {
-				<div class="button-wrap">
-					<a asp-action="Edit" asp-route-id="@Model.Id" class="button-like icon-wrap">
-						<img src="~/icons/square-pen.svg" class="icon" alt="@SharedLocalizer["Common_Edit"]" />@SharedLocalizer["Common_Edit"]
+	@if (isAuthor) {
+		<partial name="_Attribute" model="Model" />
+		<nav class="nav-grid">
+			<ul>
+				<li>
+					<a asp-action="Edit" asp-route-id="@Model.Id" class="button-like">
+						@SharedLocalizer["Common_Edit"]
 					</a>
+				</li>
+				<li>
 					<form asp-action="Delete" asp-route-id="@Model.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
 						@Html.AntiForgeryToken()
-						<button type="submit" class="icon-wrap">
-							<img src="~/icons/delete.svg" class="icon" alt="@SharedLocalizer["Common_Delete"]" />@SharedLocalizer["Common_Delete"]
+						<button type="submit">
+							@SharedLocalizer["Common_Delete"]
 						</button>
 					</form>
-				</div>
-			}
-		</div>
+				</li>
+			</ul>
+		</nav>
+	}
 
-		<h2>@Model.Subject</h2>
+	<h2>@Model.Subject</h2>
 
-		<div>
-			<div>
-				@if (Model.User == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (Model.User.IsWithdrawn) { @SharedLocalizer["Common_WithdrawnUser"].Value } else { <text>@if (!Model.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @Model.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.User.UserName">@Model.User.UserName</a> }</text> }
-				@Model.CreatedAt.ToLocalTime()
-			</div>
-			<div>
-				<span>@string.Format(SharedLocalizer["Post_ViewsCount"].Value, Model.ViewCount)</span>
-			</div>
-		</div>
+	<div>
+		@if (Model.User == null) {
+			@SharedLocalizer["Common_UnknownUser"].Value
+		} else if (Model.User.IsWithdrawn) {
 
-		<!-- 本文 -->
-		<div>
-			@Model.Body
-		</div>
+			@SharedLocalizer["Common_WithdrawnUser"].Value
+		} else {
 
-		<!-- 添付画像（順序付き） -->
-		@if (Model.PostImages.Any()) {
-			<div>
-				<h2>@SharedLocalizer["Post_AttachImages"] (@Model.PostImages.Count)</h2>
-				<div>
-					@foreach (var pi in Model.PostImages.OrderBy(x => x.DisplayOrder)) {
-						<div>
-							<a href="/Image/File/@pi.ImageId" target="_blank">
-								<img src="/Image/File/@pi.ImageId" alt="@pi.Image.Name" />
-							</a>
-							<span>
-								#@(pi.DisplayOrder + 1)
-							</span>
-						</div>
-					}
-				</div>
-			</div>
+			<text>
+				@if (!Model.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+					@Model.User.UserName
+				} else {
+
+					<a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.User.UserName">@Model.User.UserName</a>
+				}
+			</text>
 		}
+		@Model.CreatedAt.ToLocalTime()
+		<div>
+			<span>@string.Format(SharedLocalizer["Post_ViewsCount"].Value, Model.ViewCount)</span>
+		</div>
+	</div>
 
-		<!-- タグ一覧 & あいまいさ回避 -->
-			@if (Model.PostTags.Any()) {
-				<div><span>@SharedLocalizer["Post_Tags"]</span>
-				@foreach (var pt in Model.PostTags) {
-					var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText ?? SharedLocalizer["Tag_Title"].Value;
+	<!-- 本文 -->
+	<div>
+		@Model.Body
+	</div>
+
+	<!-- 添付画像（順序付き） -->
+	@if (Model.PostImages.Any()) {
+		<div>
+			<h2>@SharedLocalizer["Post_AttachImages"] (@Model.PostImages.Count)</h2>
+			<div>
+				@foreach (var pi in Model.PostImages.OrderBy(x => x.DisplayOrder)) {
 					<div>
-						<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="icon-wrap">
-							<img src="~/icons/tag.svg" class="icon" />@tagText
+						<a href="/Image/File/@pi.ImageId" target="_blank">
+							<img src="/Image/File/@pi.ImageId" alt="@pi.Image.Name" />
 						</a>
-						<a asp-controller="Tag" asp-action="Disambiguation" asp-route-id="@pt.TagConceptId">@SharedLocalizer["Tag_DisambiguationBtn"]</a>
+						<span>
+							#@(pi.DisplayOrder + 1)
+						</span>
 					</div>
 				}
 			</div>
-			}
+		</div>
+	}
 
-		<!-- リアクションボタン -->
+	<!-- タグ一覧 & あいまいさ回避 -->
+	@if (Model.PostTags.Any()) {
 		<div>
-			<button type="button" class="btn-sm" data-toggle-panel="reaction-buttons-panel" aria-expanded="false" aria-controls="reaction-buttons-panel">@SharedLocalizer["Reaction_React"]</button>
-			<div id="reaction-buttons-panel" hidden>
-				@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
-			</div>
+			<span>@SharedLocalizer["Post_Tags"]</span>
+			@foreach (var pt in Model.PostTags) {
+				var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText ?? SharedLocalizer["Tag_Title"].Value;
+				<div>
+					<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="icon-wrap">
+						<img src="~/icons/tag.svg" class="icon" />@tagText
+					</a>
+					<a asp-controller="Tag" asp-action="Disambiguation" asp-route-id="@pt.TagConceptId">@SharedLocalizer["Tag_DisambiguationBtn"]</a>
+				</div>
+			}
+		</div>
+	}
+
+	<!-- リアクションボタン -->
+	<div>
+		<button type="button" class="btn-sm" data-toggle-panel="reaction-buttons-panel" aria-expanded="false" aria-controls="reaction-buttons-panel">@SharedLocalizer["Reaction_React"]</button>
+		<div id="reaction-buttons-panel" hidden>
+			@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
 		</div>
 	</div>
 </div>
+
 
 <!-- スレッド式コメント一覧 & 投稿フォーム -->
 <div>

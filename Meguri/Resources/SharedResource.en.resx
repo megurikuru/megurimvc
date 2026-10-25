@@ -879,9 +879,6 @@
   <data name="Fandom_JoinedBadge" xml:space="preserve">
     <value>Joined</value>
   </data>
-  <data name="Fandom_JoinShort" xml:space="preserve">
-    <value>Join</value>
-  </data>
   <data name="Fandom_Leave" xml:space="preserve">
     <value>Leave</value>
   </data>
@@ -890,9 +887,6 @@
   </data>
   <data name="Fandom_PostsCount" xml:space="preserve">
     <value>Posts: {0}</value>
-  </data>
-  <data name="Fandom_CascadeNote" xml:space="preserve">
-    <value>*Joining a parent fandom will automatically join all of its sub-fandoms.</value>
   </data>
   <data name="Fandom_CreateNew" xml:space="preserve">
     <value>Create New Fandom</value>

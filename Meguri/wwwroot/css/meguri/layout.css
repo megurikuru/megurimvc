@@ -2,32 +2,30 @@
 header {
 	display: block grid; /* 外部：block（改行する） / 内部：grid（Gridレイアウト） */
 	grid-template-columns: repeat(3, 1fr); /* 3等分 */
+	margin-bottom: 0.5rem;
+	padding: 0.5rem 0.5rem 0 0.5rem;
 	gap: 0.5rem;
-	/*border: 1px dotted blue;*/ /* 開発用 */
 }
 
 body {
 	display: block grid; /* 自身：ブロック要素として改行 / 子：Gridレイアウト（縦1列）で配置 */
-	gap: 0.5rem;
 	font-family: system-ui, -apple-system, "BlinkMacSystemFont", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
 	font-size: 1rem;
-	padding: 0.5rem 0;
-	background-color: var(--color-bg);
+	background-color: var(--color-bg-base);
 }
 
 main {
 	display: block grid; /* 自身：ブロック要素として改行 / 子：Gridレイアウト（縦1列）で配置 */
-	gap: 0.5rem;
-	/*border: 1px dotted blue;*/ /* 開発用 */
 }
 
-article {
-	padding: 0.5rem;
+#search-box {
+	padding-top: 0.5rem;
 	border-top: 1px solid var(--color-border);
 }
 
 footer {
-	margin: 0 auto;
-	font-size: 0.75rem;
-	border: 1px dotted blue; /* 開発用 */
+	font-size: 0.9rem;
+	padding: 0.5rem;
+	border-top: 1px solid var(--color-border);
+	text-align: center;
 }
