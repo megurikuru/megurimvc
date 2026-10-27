@@ -2,13 +2,18 @@
 @using System.Security.Claims
 
 @{
-	ViewData["Title"] = Model.Subject;
+	var displayTitle = string.IsNullOrWhiteSpace(Model.Subject) ? SharedLocalizer["Post_Untitled"].Value : Model.Subject;
+	ViewData["Title"] = displayTitle;
 	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 	var isAuthor = Model.UserId == currentUserId || User.IsInRole("Admin");
-	var breadcrumbs = new List<BreadcrumbItemViewModel> {
-		new(Model.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value, Url.Action("Details", "Fandom", new { id = Model.FandomId })),
-		new(Model.Subject)
-	};
+	var breadcrumbs = new List<BreadcrumbItemViewModel>();
+	if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors) {
+		foreach (var ancestor in ancestors) {
+			breadcrumbs.Add(new(ancestor.Name, Url.Action("Details", "Fandom", new { id = ancestor.Id })));
+		}
+	}
+	breadcrumbs.Add(new(Model.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value, Url.Action("Details", "Fandom", new { id = Model.FandomId })));
+	breadcrumbs.Add(new(displayTitle));
 }
 
 <!-- パンくず -->
@@ -36,7 +41,7 @@
 		</nav>
 	}
 
-	<h2>@Model.Subject</h2>
+	<h2>@displayTitle</h2>
 
 	<div>
 		@if (Model.User == null) {

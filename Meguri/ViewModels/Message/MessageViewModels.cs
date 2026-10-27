@@ -37,9 +37,8 @@ namespace Meguri.ViewModels.Message {
         [Display(Name = "Message_SelectRecipient")]
         public List<string> SelectedUserIds { get; set; } = new List<string>();
 
-        [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Message_SubjectLabel")]
-        public string Subject { get; set; } = string.Empty;
+        public string? Subject { get; set; }
 
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Message_Title")]

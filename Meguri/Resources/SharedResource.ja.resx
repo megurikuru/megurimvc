@@ -939,8 +939,20 @@
   <data name="Post_PostName" xml:space="preserve">
     <value>タイトル</value>
   </data>
+  <data name="Post_OptionalTitle" xml:space="preserve">
+    <value>タイトル（任意）</value>
+  </data>
+  <data name="Post_Untitled" xml:space="preserve">
+    <value>無題</value>
+  </data>
   <data name="Post_PostText" xml:space="preserve">
     <value>本文</value>
+  </data>
+  <data name="Post_OptionalBody" xml:space="preserve">
+    <value>本文（任意）</value>
+  </data>
+  <data name="Post_ContentRequired" xml:space="preserve">
+    <value>タイトル、本文、添付画像のいずれか1つ以上を入力してください。</value>
   </data>
   <data name="Post_SelectFandom" xml:space="preserve">
     <value>投稿先の界隈</value>

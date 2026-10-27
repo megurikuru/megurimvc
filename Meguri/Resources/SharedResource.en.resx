@@ -939,8 +939,20 @@
   <data name="Post_PostName" xml:space="preserve">
     <value>Title</value>
   </data>
+  <data name="Post_OptionalTitle" xml:space="preserve">
+    <value>Title (optional)</value>
+  </data>
+  <data name="Post_Untitled" xml:space="preserve">
+    <value>Untitled</value>
+  </data>
   <data name="Post_PostText" xml:space="preserve">
     <value>Content</value>
+  </data>
+  <data name="Post_OptionalBody" xml:space="preserve">
+    <value>Content (optional)</value>
+  </data>
+  <data name="Post_ContentRequired" xml:space="preserve">
+    <value>Enter at least one of the following: a title, content, or an attached image.</value>
   </data>
   <data name="Post_SelectFandom" xml:space="preserve">
     <value>Target Fandom</value>

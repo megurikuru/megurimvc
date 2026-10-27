@@ -108,6 +108,20 @@ namespace Meguri.Controllers {
 
             if (post == null) return NotFound();
 
+            // 多階層パンくず用：投稿先の界隈の祖先を最上位から順に取得する。
+            var ancestors = new List<Fandom>();
+            var parentId = post.Fandom?.ParentFandomId;
+            var visited = new HashSet<int> { post.FandomId };
+            while (parentId.HasValue && visited.Add(parentId.Value)) {
+                var ancestor = await _context.Fandoms
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(f => f.Id == parentId.Value);
+                if (ancestor == null) break;
+                ancestors.Insert(0, ancestor);
+                parentId = ancestor.ParentFandomId;
+            }
+            ViewBag.Ancestors = ancestors;
+
             // 閲覧カウントアップ
             post.ViewCount++;
             await _context.SaveChangesAsync();
@@ -149,6 +163,9 @@ namespace Meguri.Controllers {
             if (!await IsJoinedAsync(model.FandomId, userId)) return Forbid();
 
             var validCreateFiles = model.ImageFiles?.Where(f => f != null && f.Length > 0).ToList();
+            if (string.IsNullOrWhiteSpace(model.Name) && string.IsNullOrWhiteSpace(model.Text) && (validCreateFiles?.Count ?? 0) == 0) {
+                ModelState.AddModelError(string.Empty, _localizer["Post_ContentRequired"]);
+            }
             if (validCreateFiles != null && validCreateFiles.Count > MaxImagesPerPost) {
                 ModelState.AddModelError("ImageFiles", string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, MaxImagesPerPost));
             }
@@ -160,8 +177,8 @@ namespace Meguri.Controllers {
 
             var post = new Post {
                 UserId = userId,
-                Subject = model.Name,
-                Body = model.Text,
+                Subject = model.Name ?? string.Empty,
+                Body = model.Text ?? string.Empty,
                 FandomId = model.FandomId,
                 IsSexual = model.IsSexual,
                 IsViolence = model.IsViolence,
@@ -279,11 +296,6 @@ namespace Meguri.Controllers {
             if (id != model.Id) return NotFound();
             if (model.FandomId == 1) return BadRequest();
 
-            if (!ModelState.IsValid) {
-                ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
-                return View(model);
-            }
-
             var post = await _context.Posts
                 .Include(p => p.PostImages)
                 .Include(p => p.PostTags)
@@ -299,14 +311,19 @@ namespace Meguri.Controllers {
             var remainingExistingCount = post.PostImages.Count(pi =>
                 model.ExistingImages == null || !model.ExistingImages.Any(ei => ei.ImageId == pi.ImageId && ei.Remove));
             var validNewFiles = model.NewImageFiles?.Where(f => f != null && f.Length > 0).ToList();
+            if (string.IsNullOrWhiteSpace(model.Name) && string.IsNullOrWhiteSpace(model.Text) && remainingExistingCount + (validNewFiles?.Count ?? 0) == 0) {
+                ModelState.AddModelError(string.Empty, _localizer["Post_ContentRequired"]);
+            }
             if (remainingExistingCount + (validNewFiles?.Count ?? 0) > MaxImagesPerPost) {
                 ModelState.AddModelError("NewImageFiles", string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, MaxImagesPerPost));
+            }
+            if (!ModelState.IsValid) {
                 ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
                 return View(model);
             }
 
-            post.Subject = model.Name;
-            post.Body = model.Text;
+            post.Subject = model.Name ?? string.Empty;
+            post.Body = model.Text ?? string.Empty;
             post.FandomId = model.FandomId;
             post.IsSexual = model.IsSexual;
             post.IsViolence = model.IsViolence;

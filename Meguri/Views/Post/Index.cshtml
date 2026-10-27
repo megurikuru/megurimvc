@@ -105,7 +105,7 @@ else {
 
 										<h4>
 												<a asp-action="Details" asp-route-id="@post.Id">
-														@post.Subject
+														@(string.IsNullOrWhiteSpace(post.Subject) ? SharedLocalizer["Post_Untitled"].Value : post.Subject)
 												</a>
 										</h4>
 
