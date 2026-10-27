@@ -4,6 +4,13 @@
 
     // リアクション送信 (Fetch API)
     async function toggleReaction(targetType, targetId, reactionType, btn) {
+        const matchingButtons = Array.from(document.querySelectorAll('[data-reaction-target-type]')).filter(function (button) {
+            return button.dataset.reactionTargetType === targetType
+                && button.dataset.reactionTargetId === String(targetId)
+                && button.dataset.reactionType === String(reactionType);
+        });
+        if (matchingButtons.some(function (button) { return button.disabled; })) return;
+        matchingButtons.forEach(function (button) { button.disabled = true; });
         const tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
         const token = tokenInput ? tokenInput.value : '';
 
@@ -34,14 +41,18 @@
 
             const res = await response.json();
             if (res && res.success) {
-                const countSpan = btn.querySelector('.reaction-count');
-                if (countSpan) {
-                    countSpan.textContent = res.count;
-                }
-                btn.classList.toggle('reacted', Boolean(res.hasReacted));
+                matchingButtons.forEach(function (button) {
+                    const countSpan = button.querySelector('.reaction-count');
+                    if (countSpan) countSpan.textContent = res.count;
+                    button.classList.toggle('reacted', Boolean(res.hasReacted));
+                    button.setAttribute('aria-pressed', String(Boolean(res.hasReacted)));
+                    if (button.closest('.chat-reaction-summary')) button.hidden = Number(res.count) === 0;
+                });
             }
         } catch (err) {
             console.error('Reaction error:', err);
+        } finally {
+            matchingButtons.forEach(function (button) { button.disabled = false; });
         }
     }
 
@@ -580,6 +591,21 @@
                 return;
             }
 
+            const cancelMessageReplyBtn = target.closest('[data-cancel-message-reply]');
+            if (cancelMessageReplyBtn) {
+                const parentInput = document.getElementById('parentMessageId');
+                if (parentInput) parentInput.value = '';
+                const notice = document.getElementById('chatReplyNotice');
+                if (notice) notice.hidden = true;
+                const label = document.getElementById('chatReplyLabel');
+                if (label) label.textContent = '';
+                const preview = document.getElementById('chatReplyPreview');
+                if (preview) preview.textContent = '';
+                const textInput = document.getElementById('messageText');
+                if (textInput) textInput.focus();
+                return;
+            }
+
             // メッセージ返信ボタン
             const replyMsgBtn = target.closest('[data-reply-id]');
             if (replyMsgBtn) {
@@ -587,11 +613,12 @@
                 if (parentInput) {
                     parentInput.value = replyMsgBtn.dataset.replyId || '';
                 }
-                const subjectInput = document.getElementById('messageSubject');
-                if (subjectInput) {
-                    const s = replyMsgBtn.dataset.replySubject || '';
-                    subjectInput.value = s.startsWith('Re: ') ? s : 'Re: ' + s;
-                }
+                const label = document.getElementById('chatReplyLabel');
+                if (label) label.textContent = replyMsgBtn.dataset.replyLabel || '';
+                const preview = document.getElementById('chatReplyPreview');
+                if (preview) preview.textContent = replyMsgBtn.dataset.replyPreview || '';
+                const notice = document.getElementById('chatReplyNotice');
+                if (notice) notice.hidden = false;
                 const textInput = document.getElementById('messageText');
                 if (textInput) {
                     textInput.focus();
@@ -602,9 +629,24 @@
 
     // UTC の <time> 要素をブラウザのタイムゾーン/ロケールで表示
     function localizeTimes() {
+        let previousChatDate = null;
         document.querySelectorAll('time.local-time').forEach(function (el) {
             const d = new Date(el.getAttribute('datetime'));
             if (isNaN(d)) return;
+            if (el.dataset.format === 'chat') {
+                const item = el.closest('.chat-message-item');
+                if (item && previousChatDate !== d.toDateString()) {
+                    const divider = document.createElement('div');
+                    divider.className = 'chat-date-divider';
+                    divider.textContent = d.toLocaleDateString(navigator.language, { year: 'numeric', month: 'long', day: 'numeric' });
+                    item.before(divider);
+                    previousChatDate = d.toDateString();
+                }
+                el.textContent = d.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' });
+                el.title = d.toLocaleString(navigator.language);
+                el.setAttribute('aria-label', el.title);
+                return;
+            }
             const opts = el.dataset.format === 'date'
                 ? { year: 'numeric', month: '2-digit', day: '2-digit' }
                 : { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };

@@ -53,9 +53,8 @@ namespace Meguri.ViewModels.Message {
         public long Id { get; set; }
         public long ConversationId { get; set; }
 
-        [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Message_SubjectLabel")]
-        public string Subject { get; set; } = string.Empty;
+        public string? Subject { get; set; }
 
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Message_Title")]

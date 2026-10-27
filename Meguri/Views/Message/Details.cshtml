@@ -1,6 +1,15 @@
 ﻿@model Meguri.ViewModels.Message.ChatRoomViewModel
+@using Meguri.Extensions
 @{
 	ViewData["Title"] = Model.DisplayTitle;
+	var messagesById = Model.Messages.ToDictionary(m => m.Id);
+	string SenderName(Message message) => message.Sender == null
+		? SharedLocalizer["Common_UnknownUser"].Value
+		: message.Sender.UserName + (message.Sender.IsWithdrawn ? "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")" : "");
+	string Preview(Message message) => message.IsDeleted ? SharedLocalizer["Message_Deleted"].Value
+		: !string.IsNullOrWhiteSpace(message.Body) ? new string(message.Body.Take(80).ToArray())
+		: !string.IsNullOrWhiteSpace(message.Subject) ? new string(message.Subject.Take(80).ToArray())
+		: SharedLocalizer["Message_ImageAttachLabel"].Value;
 	var breadcrumbs = new List<BreadcrumbItemViewModel> {
 		new(SharedLocalizer["Message_Title"].Value, Url.Action("Index", "Message")),
 		new(Model.DisplayTitle)
@@ -31,28 +40,35 @@
 <partial name="_Breadcrumb" model="breadcrumbs" />
 
 <h2><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h2>
-<p>
-	<img src="~/icons/users.svg" class="icon" />@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count):
+@if (Model.Conversation.IsGroup) {
+<details class="chat-disclosure">
+	<summary><img src="~/icons/users.svg" class="icon" alt="" />@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count)</summary>
+	<p>
 	@foreach (var m in Model.Conversation.Members.Select((member, index) => new { member, index })) {
 				@if (m.index > 0) { <text>, </text> }
 				@if (m.member.User == null) { @SharedLocalizer["Common_UnknownUser"].Value }
 				else if (m.member.User.IsWithdrawn) { @(m.member.User.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") }
 				else { <text>@if (!m.member.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @m.member.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@m.member.User.UserName">@m.member.User.UserName</a> }</text> }
 			}
-</p>
+	</p>
+</details>
+}
 
-<div class="attribute-wrap">
+<details class="chat-disclosure" open="@Model.FilterDate.HasValue">
+	<summary>@SharedLocalizer["Message_SearchByDate"]@if (Model.FilterDate.HasValue) { <text>：@dateValue</text> }</summary>
+	<div class="attribute-wrap">
 	<form asp-action="Details" method="get">
 		<input type="hidden" name="id" value="@Model.Conversation.Id" />
-		<label>@SharedLocalizer["Message_DateLabel"]</label>
+		<label for="chatFilterDate">@SharedLocalizer["Message_DateLabel"]</label>
 		<div class="input-group">
-			<input type="date" name="date" value="@dateValue" />
+			<input type="date" id="chatFilterDate" name="date" value="@dateValue" />
 			<button type="submit">@SharedLocalizer["Common_Filter"]</button>
 			<a asp-action="Details" asp-route-id="@Model.Conversation.Id" class="button-like">@SharedLocalizer["Common_Clear"]</a>
 		</div>
 		<span class="description">@string.Format(SharedLocalizer["Message_ChatDateFilterHintFormat"].Value, Model.PageSize)</span>
 	</form>
-</div>
+	</div>
+</details>
 <div id="chatMessageContainer">
 	@if (!Model.Messages.Any()) {
 		<p>@SharedLocalizer["Message_NoMessagesForDate"]</p>
@@ -60,24 +76,32 @@
 	else {
 		@foreach (var msg in Model.Messages) {
 			var isMe = msg.SenderId == Model.CurrentUserId;
+			var replyParent = msg.ParentMessageId.HasValue ? messagesById.GetValueOrDefault(msg.ParentMessageId.Value) : null;
+			var replyLabel = string.Format(SharedLocalizer["Message_ReplyToFormat"].Value, SenderName(msg));
 			var depth = 0;
 			var parentId = msg.ParentMessageId;
 			while (parentId.HasValue && depth < 3) {
-				var parent = Model.Messages.FirstOrDefault(x => x.Id == parentId.Value);
+				var parent = messagesById.GetValueOrDefault(parentId.Value);
 				if (parent == null) { break; }
 				depth++;
 				parentId = parent.ParentMessageId;
 			}
 			var indentClass = depth > 0 ? $"chat-indent-{depth}" : null;
-			<div class="chat-message-item @indentClass">
+			<div id="message-@msg.Id" class="chat-message-item @indentClass @(msg.ParentMessageId.HasValue ? "chat-reply" : "")">
 				@if (!isMe) {
 					<div><img src="~/icons/user.svg" class="icon" />@if (msg.Sender == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (msg.Sender.IsWithdrawn) { @(msg.Sender.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") } else { <text>@if (!msg.Sender.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @msg.Sender.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@msg.Sender.UserName">@msg.Sender.UserName</a> }</text> }</div>
 				}
 				<div class="chat-message-box">
+					@if (replyParent != null) {
+						<a href="#message-@replyParent.Id" class="chat-reply-preview">
+							<span>@string.Format(SharedLocalizer["Message_ReplyToFormat"].Value, SenderName(replyParent))</span>
+							<span class="chat-preview-text">@Preview(replyParent)</span>
+						</a>
+					}
 					@if (msg.IsDeleted) {
 						<div><em>@SharedLocalizer["Message_Deleted"]</em></div>
 					}
-					@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Subject)) {
+					@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Subject) && (replyParent == null || msg.Subject != "Re: " + replyParent.Subject && msg.Subject != replyParent.Subject)) {
 						<div><strong>@msg.Subject</strong></div>
 					}
 					@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Body)) {
@@ -87,31 +111,47 @@
 						<div>
 							@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder)) {
 								<a href="/Image/File/@mi.ImageId" target="_blank">
-									<img src="/Image/File/@mi.ImageId" class="chat-message-image" alt="" />
+									<img src="/Image/File/@mi.ImageId" class="chat-message-image" alt="@SharedLocalizer["Message_AttachmentAlt"]" loading="lazy" />
 								</a>
 							}
 						</div>
 					}
-					<div class="inline-actions">
-						<span>@msg.CreatedAt.ToLocalTime()</span>
-						@if (isMe && !msg.IsDeleted) {
-							<a asp-action="Edit" asp-route-id="@msg.Id" class="button-like btn-sm">@SharedLocalizer["Common_Edit"]</a>
-							<form asp-action="Delete" asp-route-id="@msg.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
-								<button type="submit" class="btn-sm">@SharedLocalizer["Common_Delete"]</button>
-							</form>
-						}
+					<div class="chat-message-actions">
+						<time class="local-time chat-message-time" datetime="@msg.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")" data-format="chat">@msg.CreatedAt.ToLocalTime()</time>
 						@if (User.Identity?.IsAuthenticated == true) {
-							<button type="button" class="btn-sm" data-reply-subject="@msg.Subject" data-reply-id="@msg.Id"><img src="~/icons/reply.svg" class="icon" />@SharedLocalizer["Message_ReplyBtn"]</button>
+							<button type="button" class="btn-sm" data-reply-label="@replyLabel" data-reply-preview="@Preview(msg)" data-reply-id="@msg.Id"><img src="~/icons/reply.svg" class="icon" alt="" />@SharedLocalizer["Message_ReplyBtn"]</button>
+						}
+						@if (!msg.IsDeleted) {
+							<details class="chat-more-actions">
+								<summary aria-label="@SharedLocalizer["Message_MoreActions"]" title="@SharedLocalizer["Message_MoreActions"]">…</summary>
+								<div class="chat-actions-panel">
+									@if (isMe) {
+										<div class="inline-actions">
+											<a asp-action="Edit" asp-route-id="@msg.Id" class="button-like btn-sm">@SharedLocalizer["Common_Edit"]</a>
+											<form asp-action="Delete" asp-route-id="@msg.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
+												<button type="submit" class="btn-sm">@SharedLocalizer["Common_Delete"]</button>
+											</form>
+										</div>
+									}
+									<div>@SharedLocalizer["Message_ReactionBtn"]</div>
+									<partial name="_ReactionButtons" model='("Message", msg.Id, msg.Reactions.AsEnumerable())' />
+								</div>
+							</details>
 						}
 					</div>
 				</div>
 				@if (!msg.IsDeleted) {
-				<div>
-					<button type="button" class="btn-sm" data-toggle-next>@SharedLocalizer["Message_ReactionBtn"]</button>
-					<div hidden>
-						<partial name="_ReactionButtons" model='("Message", msg.Id, msg.Reactions.AsEnumerable())' />
+					<div class="reaction-list chat-reaction-summary">
+						@foreach (var type in Enum.GetValues<ReactionType>()) {
+							var count = msg.Reactions.Count(r => r.Type == type);
+							var reacted = msg.Reactions.Any(r => r.Type == type && r.UserId == Model.CurrentUserId);
+							<button type="button" class="btn-sm @(reacted ? "reacted" : "")" hidden="@(count == 0)"
+									title="@type.GetDescription()" aria-label="@type.GetDisplayName()" aria-pressed="@reacted.ToString().ToLowerInvariant()"
+									data-reaction-target-type="Message" data-reaction-target-id="@msg.Id" data-reaction-type="@((int)type)">
+								<span aria-hidden="true">@type.GetEmoji()</span><span class="reaction-count">@count</span>
+							</button>
+						}
 					</div>
-				</div>
 				}
 			</div>
 		}
@@ -120,20 +160,32 @@
 
 <partial name="_Pagination" model="pager" />
 
-<div>
+<div class="chat-composer">
 	<form asp-action="SendMessage" method="post" enctype="multipart/form-data" autocomplete="off">
 		@Html.AntiForgeryToken()
 		<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
 		<input type="hidden" id="parentMessageId" name="parentMessageId" value="" autocomplete="off" />
-		<div class="attribute-wrap">
-			<input type="text" id="messageSubject" name="subject" placeholder="@SharedLocalizer["Message_SubjectLabel"]" />
+		<div id="chatReplyNotice" class="chat-reply-notice" hidden role="status">
+			<div><strong id="chatReplyLabel"></strong><span id="chatReplyPreview" class="chat-preview-text"></span></div>
+			<button type="button" class="btn-sm" data-cancel-message-reply aria-label="@SharedLocalizer["Message_CancelReply"]" title="@SharedLocalizer["Message_CancelReply"]">×</button>
 		</div>
+		<details class="chat-disclosure">
+			<summary>@SharedLocalizer["Message_OptionalSubject"]</summary>
+			<div class="attribute-wrap">
+				<label for="messageSubject">@SharedLocalizer["Message_SubjectLabel"]</label>
+				<input type="text" id="messageSubject" name="subject" />
+			</div>
+		</details>
 		<div class="attribute-wrap">
-			<textarea id="messageText" name="text" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
+			<textarea id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
 		</div>
-		<div class="attribute-wrap">
-			<input type="file" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
-		</div>
+		<details class="chat-disclosure">
+			<summary><img src="~/icons/image.svg" class="icon" alt="" />@SharedLocalizer["Message_ImageAttachLabel"]</summary>
+			<div class="attribute-wrap">
+				<label for="chatImageFiles">@SharedLocalizer["Message_ImageAttachLabel"]</label>
+				<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+			</div>
+		</details>
 		<div class="button-wrap">
 			<button type="submit" class="btn-block"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
 		</div>

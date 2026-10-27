@@ -360,7 +360,7 @@ namespace Meguri.Controllers {
         // POST: /Message/SendMessage
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendMessage(long conversationId, string subject, string text, List<IFormFile>? imageFiles, long? parentMessageId = null) {
+        public async Task<IActionResult> SendMessage(long conversationId, string? subject, string text, List<IFormFile>? imageFiles, long? parentMessageId = null) {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
@@ -369,7 +369,7 @@ namespace Meguri.Controllers {
 
             if (!isMember) return Forbid();
 
-            if (!string.IsNullOrWhiteSpace(subject) && !string.IsNullOrWhiteSpace(text)) {
+            if (!string.IsNullOrWhiteSpace(text)) {
                 if (parentMessageId.HasValue && !await _context.Messages.AnyAsync(m => m.Id == parentMessageId.Value && m.ConversationId == conversationId)) {
                     parentMessageId = null;
                 }
