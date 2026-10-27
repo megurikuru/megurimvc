@@ -1,11 +1,12 @@
 ﻿.pagination {
 	display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（均等3列）で配置 */
 	grid-template-columns: auto 1fr auto;
+	margin-top: 0.5rem;
+	padding: 0.5rem 0.5rem 0 0.5rem;
 	align-items: center;
 	gap: 0.5rem;
-	padding: 0 0.5rem;
 	text-align: center;
-	/*border: 1px dotted gray;*/ /* 開発用 */
+	border-top: 1px solid var(--color-border);
 
 	& > * {
 		align-self: center;

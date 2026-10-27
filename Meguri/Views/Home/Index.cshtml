@@ -64,7 +64,7 @@
 					<span>@post.CreatedAt.ToLocalTime().ToString("M月d日 H:mm")</span>
 				</a>
 				@* 投稿本文プレビュー（120文字を超える場合は「...」で切り詰める） *@
-				<p class="article-body">@(post.Body.Length > 120 ? post.Body.Substring(0, 120) + "..." : post.Body)</p>
+				<p>@(post.Body.Length > 120 ? post.Body.Substring(0, 120) + "..." : post.Body)</p>
 
 				@* 添付画像サムネイル一覧（DisplayOrder順にソートし、最大4枚まで表示） *@
 				@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(4)) {

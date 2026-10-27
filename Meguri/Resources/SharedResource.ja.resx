@@ -1147,7 +1147,7 @@
     <value>指定した日付付近から、1ページあたり最大{0}スレッドを表示します。同じスレッドのメッセージは同じページに表示されます。</value>
   </data>
   <data name="Message_NoConversationsHint" xml:space="preserve">
-    <value>新しいメッセージを作成して他のユーザーと交流してみましょう！</value>
+    <value>メッセージを作成して他のユーザーと交流してみましょう！</value>
   </data>
   <data name="Message_GroupBadge" xml:space="preserve">
     <value>グループ</value>
@@ -1183,7 +1183,7 @@
     <value>メッセージ</value>
   </data>
   <data name="Message_NewConversation" xml:space="preserve">
-    <value>新しいメッセージ</value>
+    <value>メッセージ作成</value>
   </data>
   <data name="Message_Direct" xml:space="preserve">
     <value>ダイレクトメッセージ</value>

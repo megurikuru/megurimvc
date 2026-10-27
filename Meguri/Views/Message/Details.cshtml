@@ -1,6 +1,10 @@
 ﻿@model Meguri.ViewModels.Message.ChatRoomViewModel
 @{
 	ViewData["Title"] = Model.DisplayTitle;
+	var breadcrumbs = new List<BreadcrumbItemViewModel> {
+		new(SharedLocalizer["Message_Title"].Value, Url.Action("Index", "Message")),
+		new(Model.DisplayTitle)
+	};
 	var dateValue = Model.FilterDate?.ToString("yyyy-MM-dd");
 	var routeValues = new Dictionary<string, string> {
 		["id"] = Model.Conversation.Id.ToString()
@@ -23,19 +27,19 @@
 	};
 }
 
-<div>
-	<a asp-action="Index"><img src="~/icons/arrow-left.svg" class="icon" /></a>
-	<h2><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h2>
-	<p>
-		<img src="~/icons/users.svg" class="icon" />@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count):
-		@foreach (var m in Model.Conversation.Members.Select((member, index) => new { member, index })) {
-					@if (m.index > 0) { <text>, </text> }
-					@if (m.member.User == null) { @SharedLocalizer["Common_UnknownUser"].Value }
-					else if (m.member.User.IsWithdrawn) { @(m.member.User.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") }
-					else { <text>@if (!m.member.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @m.member.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@m.member.User.UserName">@m.member.User.UserName</a> }</text> }
-				}
-	</p>
-</div>
+<!-- パンくずリスト -->
+<partial name="_Breadcrumb" model="breadcrumbs" />
+
+<h2><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h2>
+<p>
+	<img src="~/icons/users.svg" class="icon" />@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count):
+	@foreach (var m in Model.Conversation.Members.Select((member, index) => new { member, index })) {
+				@if (m.index > 0) { <text>, </text> }
+				@if (m.member.User == null) { @SharedLocalizer["Common_UnknownUser"].Value }
+				else if (m.member.User.IsWithdrawn) { @(m.member.User.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") }
+				else { <text>@if (!m.member.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @m.member.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@m.member.User.UserName">@m.member.User.UserName</a> }</text> }
+			}
+</p>
 
 <div class="attribute-wrap">
 	<form asp-action="Details" method="get">
@@ -49,9 +53,6 @@
 		<span class="description">@string.Format(SharedLocalizer["Message_ChatDateFilterHintFormat"].Value, Model.PageSize)</span>
 	</form>
 </div>
-
-<partial name="_Pagination" model="pager" />
-
 <div id="chatMessageContainer">
 	@if (!Model.Messages.Any()) {
 		<p>@SharedLocalizer["Message_NoMessagesForDate"]</p>

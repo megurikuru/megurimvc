@@ -19,8 +19,15 @@
 	}
 }
 
-.article-body {
-	padding: 0.5rem 0.5rem 0 0.5rem;
+article p {
+	padding: 0.25rem 0.5rem 0 0.5rem;
+}
+
+article small {
+	display: block;
+	margin: 0.25rem 0.5rem 0 0.5rem;
+	font-size: 0.9rem;
+	text-align: right;
 }
 
 .article-image-wrap {
@@ -33,4 +40,62 @@
 		max-width: 100%;
 		border-radius: 0.5rem;
 	}
+}
+
+article .post-images {
+	display: block flex; /* 自身：ブロック要素 / 子：Flexbox（横並び・上下中央揃え）で配置 */
+	padding: 0.5rem 0.5rem 0 0.5rem;
+	gap: 0.5rem;
+}
+
+article .post-meta {
+	display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（3均等列）で配置 */
+	grid-template-columns: repeat(3, 1fr);
+	padding: 0.5rem 0.5rem 0 0.5rem;
+	text-align: center;
+}
+
+#post-list {
+	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（縦並び column）で配置 */
+	flex-direction: column;
+	margin-top: 0.5rem;
+}
+
+/* 投稿サムネイル */
+.post-thumb-img {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+}
+
+/* リアクションボタン一覧 */
+.reaction-list {
+	display: block flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	padding: 0.25rem 0;
+
+	& button {
+		min-height: var(--control-height-sm);
+		padding: 0.25rem 0.6rem;
+		font-size: 0.875rem;
+
+		&.reacted {
+			background-color: var(--color-border);
+			color: white;
+			border-color: var(--color-border);
+		}
+	}
+}
+
+/* コメント添付画像・返信スレッド */
+.comment-attachment-img {
+	max-height: 120px;
+	object-fit: cover;
+}
+
+.comment-replies {
+	margin-left: 1.5rem;
+	padding-left: 0.75rem;
+	border-left: 2px solid var(--color-border-light);
 }
