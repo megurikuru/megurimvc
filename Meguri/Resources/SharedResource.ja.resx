@@ -1708,6 +1708,21 @@
   <data name="Error_DevModeP2" xml:space="preserve">
     <value />
   </data>
+  <data name="Message_SearchByDate" xml:space="preserve">
+    <value>日付で探す</value>
+  </data>
+  <data name="Message_MoreActions" xml:space="preserve">
+    <value>その他の操作</value>
+  </data>
+  <data name="Message_ReplyToFormat" xml:space="preserve">
+    <value>{0}さんへの返信</value>
+  </data>
+  <data name="Message_CancelReply" xml:space="preserve">
+    <value>返信を取り消す</value>
+  </data>
+  <data name="Message_OptionalSubject" xml:space="preserve">
+    <value>件名を追加（任意）</value>
+  </data>
   <data name="Js_MaxTagsAlertFormat" xml:space="preserve">
     <value>タグは最大{0}個まで設定できます。</value>
   </data>

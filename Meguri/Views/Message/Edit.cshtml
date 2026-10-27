@@ -12,8 +12,8 @@
 		<div asp-validation-summary="ModelOnly"></div>
 
 		<div class="attribute-wrap">
-			<label asp-for="Subject">@SharedLocalizer["Message_SubjectLabel"] <span>*</span></label>
-			<input asp-for="Subject" required />
+			<label asp-for="Subject">@SharedLocalizer["Message_OptionalSubject"]</label>
+			<input asp-for="Subject" />
 			<span asp-validation-for="Subject"></span>
 		</div>
 
