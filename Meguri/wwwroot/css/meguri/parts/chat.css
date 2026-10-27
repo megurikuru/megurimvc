@@ -1,0 +1,45 @@
+/* チャット・メッセージ部品 */
+
+/* チャットメッセージ一覧 */
+#chatMessageContainer {
+	& .chat-message-item {
+		text-align: left;
+		margin: 8px 0;
+
+		&.chat-indent-1 {
+			margin-left: 1.5rem;
+		}
+
+		&.chat-indent-2 {
+			margin-left: 3rem;
+		}
+
+		&.chat-indent-3 {
+			margin-left: 4.5rem;
+		}
+	}
+
+	& .chat-message-box {
+		display: block;
+		text-align: left;
+		padding: 6px 10px;
+		border: 1px solid var(--color-border-light);
+		border-radius: 8px;
+	}
+
+	& .chat-message-body {
+		white-space: pre-wrap;
+	}
+
+	& .chat-message-image {
+		max-width: 100%;
+		max-height: 150px;
+		object-fit: cover;
+	}
+}
+
+/* メッセージ新規作成の宛先リスト */
+.recipient-list {
+	max-height: 180px;
+	overflow-y: auto;
+}

@@ -1,10 +1,7 @@
 ﻿/* ナビゲーション */
-main + nav {
-	margin-top: 0.5rem;
-}
-
 .nav-grid {
 	font-size: 1rem;
+
 	ul {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（3均等列）で配置 */
 		grid-template-columns: repeat(3, 1fr);
@@ -64,5 +61,16 @@ main + nav {
 		font-size: 1.1rem;
 		text-align: center;
 		background-color: var(--color-bg-title);
+	}
+}
+
+body:not([data-controller="Home"]) {
+	.nav-grid {
+		margin-top: 0.5rem;
+	}
+
+	h1 + .nav-grid,
+	.fandom-meta + .nav-grid {
+		margin-top: 0;
 	}
 }

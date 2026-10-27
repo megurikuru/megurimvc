@@ -1,0 +1,93 @@
+/* フォーム・入力部品 */
+
+/* 入力欄＋ボタンの横並びグループ */
+.input-group {
+	display: block flex;
+	align-items: stretch;
+	gap: 0.5rem;
+
+	& > input:not([type="hidden"]),
+	& > select {
+		flex: 1;
+		min-width: 0;
+		margin: 0;
+	}
+
+	& > button,
+	& > .button-like {
+		flex-shrink: 0;
+		width: max-content;
+		margin: 0;
+	}
+}
+
+/* 補助ボタン等の横並びラッパー */
+.inline-actions {
+	display: block flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.25rem 0;
+
+	& form {
+		display: inline;
+	}
+}
+
+.attribute-wrap {
+	display: block grid; /* 自身：ブロック要素 / 子：縦並びで余白を統一 */
+	gap: 0.35rem;
+	padding: 0.5rem 0.5rem 0 0.5rem;
+
+	& label {
+		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+	}
+}
+
+/* フォーム部品 */
+.attribute-wrap input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.attribute-wrap select,
+.attribute-wrap textarea {
+	display: block;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0.5rem 0.75rem;
+	width: 100%;
+	min-height: var(--control-height);
+	font-size: 1rem;
+}
+
+.attribute-wrap > button:not(.btn-sm) {
+	min-height: var(--control-height);
+	width: 100%;
+	margin-top: 0.25rem;
+}
+
+.check-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	min-height: var(--control-height);
+	padding: 0.25rem 0;
+	cursor: pointer;
+}
+
+.check-row input[type="checkbox"],
+.check-row input[type="radio"] {
+	width: 1.35rem;
+	height: 1.35rem;
+	margin: 0;
+	flex-shrink: 0;
+}
+
+.check-row label {
+	margin: 0;
+	cursor: pointer;
+}
+
+.description {
+	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
+	margin-top: 0.5rem;
+	font-size: 0.8rem;
+	color: var(--color-text-muted);
+}

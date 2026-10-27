@@ -21,19 +21,17 @@
 	};
 }
 
-<div>
-	<div>
-		<h1><img src="~/icons/mail.svg" class="icon" /><span>@SharedLocalizer["Message_Title"]</span></h1>
-		<p>@SharedLocalizer["Message_SubTitle"]</p>
-	</div>
-	<div class="button-wrap">
-		<a asp-action="Create" class="button-like icon-wrap"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</a>
-	</div>
-</div>
+<h1>@SharedLocalizer["Message_Title"]</h1>
+<nav class="nav-grid">
+	<ul>
+		<li>
+			<a asp-action="Create" class="button-like icon-wrap">@SharedLocalizer["Message_NewConversation"]</a>
+		</li>
+	</ul>
+</nav>
 
 <div class="attribute-wrap">
 	<form asp-action="Index" method="get">
-		<label>@SharedLocalizer["Message_DateLabel"]</label>
 		<div class="input-group">
 			<input type="date" name="date" value="@dateValue" />
 			<button type="submit">@SharedLocalizer["Common_Filter"]</button>
@@ -44,30 +42,29 @@
 </div>
 
 @if (!Model.Conversations.Any()) {
-	<div>
-		<h4>@SharedLocalizer["Message_NoConversations"]</h4>
+	<article>
+		<h2>@SharedLocalizer["Message_NoConversations"]</h2>
 		<p>@SharedLocalizer["Message_NoConversationsHint"]</p>
 		<div class="button-wrap">
 			<a asp-action="Create" class="button-like icon-wrap"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</a>
 		</div>
-	</div>
+	</article>
 } else {
-	<div>
-		@foreach (var c in Model.Conversations) {
-			<div>
-				<h4>
-					<a asp-action="Details" asp-route-id="@c.Id">
-						<img src="~/icons/@(c.IsGroup ? "users.svg" : "user.svg")" class="icon" />@c.Title
-					</a>
+	@foreach (var c in Model.Conversations) {
+		<a asp-action="Details" asp-route-id="@c.Id">
+			<article>
+				<h2>
+					<img src="~/icons/@(c.IsGroup ? "users.svg" : "user.svg")" class="icon" />@c.Title
 					@if (c.IsGroup) {
 						<span>@SharedLocalizer["Message_GroupBadge"]</span>
 					}
-				</h4>
+				</h2>
+				<small>@c.LastMessageTime.ToString("yyyy年MM月dd日 HH:mm")</small>
 				<p>@(c.LastMessageText.Length > 100 ? c.LastMessageText.Substring(0, 100) + "..." : c.LastMessageText)</p>
-				<small>@c.LastMessageTime.ToString("yyyy/MM/dd HH:mm")</small>
-			</div>
-		}
-	</div>
+				
+			</article>
+		</a>
+	}
 }
 
 <partial name="_Pagination" model="pager" />

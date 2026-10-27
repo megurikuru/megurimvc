@@ -6,12 +6,12 @@
 }
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName" data-bs-theme="@themeCookie">
 @await Html.PartialAsync("_Head")
-<body>
+<body data-controller="@ViewContext.RouteData.Values["controller"]" data-action="@ViewContext.RouteData.Values["action"]">
 	@await Html.PartialAsync("_Header")
 	@if (isHomePage) {
 		@await Html.PartialAsync("_NavMain")
 	}
-	<main data-controller="@ViewContext.RouteData.Values["controller"]" data-action="@ViewContext.RouteData.Values["action"]">
+	<main>
 		@RenderBody()
 	</main>
 	@if (isHomePage) {
