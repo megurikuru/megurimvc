@@ -7,19 +7,20 @@
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
 	<div asp-validation-summary="ModelOnly"></div>
+	<p class="description">@SharedLocalizer["Post_ContentRequired"]</p>
 
 	<input asp-for="FandomId" type="hidden" />
 
 	<!-- タイトル -->
 	<div class="attribute-wrap">
-		<label asp-for="Name">@SharedLocalizer["Post_PostName"]</label>
+		<label asp-for="Name">@SharedLocalizer["Post_OptionalTitle"]</label>
 		<input asp-for="Name" placeholder="@SharedLocalizer["Post_TitlePlaceholder"]" />
 		<span asp-validation-for="Name"></span>
 	</div>
 
 	<!-- 本文 -->
 	<div class="attribute-wrap">
-		<label asp-for="Text">@SharedLocalizer["Post_PostText"]</label>
+		<label asp-for="Text">@SharedLocalizer["Post_OptionalBody"]</label>
 		<textarea asp-for="Text" rows="6" placeholder="@SharedLocalizer["Post_BodyPlaceholder"]"></textarea>
 		<span asp-validation-for="Text"></span>
 	</div>

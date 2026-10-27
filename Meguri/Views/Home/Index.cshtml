@@ -55,20 +55,23 @@
 		<h1>@SharedLocalizer["Home_LatestPostsHeading"]</h1>
 		@* 投稿リストをループして描画 *@
 		@foreach (var post in posts) {
+			var displayTitle = string.IsNullOrWhiteSpace(post.Subject) ? SharedLocalizer["Post_Untitled"].Value : post.Subject;
 			<article>
 				@* 投稿タイトル（詳細画面へのリンク） *@
-				<h2><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Subject</a></h2>
+				<h2><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@displayTitle</a></h2>
 				@* 界隈と投稿日時 *@
-				<a class="article-meta" asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId">
-					<span>@post.Fandom?.Name</span>
+				<div class="article-meta">
+					<a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId">@post.Fandom?.Name</a>
 					<span>@post.CreatedAt.ToLocalTime().ToString("M月d日 H:mm")</span>
-				</a>
+				</div>
 				@* 投稿本文プレビュー（120文字を超える場合は「...」で切り詰める） *@
-				<p>@(post.Body.Length > 120 ? post.Body.Substring(0, 120) + "..." : post.Body)</p>
+				@if (!string.IsNullOrWhiteSpace(post.Body)) {
+					<p><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@(post.Body.Length > 120 ? post.Body.Substring(0, 120) + "..." : post.Body)</a></p>
+				}
 
-				@* 添付画像サムネイル一覧（DisplayOrder順にソートし、最大4枚まで表示） *@
+				@* 添付画像サムネイル一覧（投稿詳細へのリンク。DisplayOrder順に最大4枚まで表示） *@
 				@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(4)) {
-					<a class="article-image-wrap" href="/Image/File/@pi.ImageId" target="_blank">
+					<a class="article-image-wrap" asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
 						<img src="/Image/File/@pi.ImageId" alt="@pi.Image.Name" />
 					</a>
 				}

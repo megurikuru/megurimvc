@@ -4,14 +4,12 @@ using Microsoft.AspNetCore.Http;
 
 namespace Meguri.ViewModels.Post {
     public class PostCreateViewModel {
-        [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_PostName")]
         [StringLength(200, ErrorMessage = "Validation_StringLengthMax")]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
-        [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_PostText")]
-        public string Text { get; set; } = string.Empty;
+        public string? Text { get; set; }
 
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_SelectFandom")]
@@ -27,7 +25,7 @@ namespace Meguri.ViewModels.Post {
         public bool IsPublic { get; set; } = false;
 
         [Display(Name = "Post_AttachImages")]
-        public List<IFormFile> ImageFiles { get; set; } = new List<IFormFile>();
+        public List<IFormFile>? ImageFiles { get; set; } = new List<IFormFile>();
 
         [Display(Name = "Post_Tags")]
         public List<string> Tags { get; set; } = new List<string>();
@@ -36,14 +34,12 @@ namespace Meguri.ViewModels.Post {
     public class PostEditViewModel {
         public long Id { get; set; }
 
-        [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_PostName")]
         [StringLength(200, ErrorMessage = "Validation_StringLengthMax")]
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
 
-        [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_PostText")]
-        public string Text { get; set; } = string.Empty;
+        public string? Text { get; set; }
 
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_SelectFandom")]
@@ -72,7 +68,7 @@ namespace Meguri.ViewModels.Post {
 
         // 新規追加する画像
         [Display(Name = "Post_AttachImages")]
-        public List<IFormFile> NewImageFiles { get; set; } = new List<IFormFile>();
+        public List<IFormFile>? NewImageFiles { get; set; } = new List<IFormFile>();
     }
 
     public class PostImageItemViewModel {
