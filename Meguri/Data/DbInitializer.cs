@@ -10,15 +10,11 @@ using Meguri.Models;
 
 namespace Meguri.Data {
 
-    /// <summary>
-    /// データベースの全データ削除と初期データ登録（シード）処理を提供するクラス
-    /// </summary>
+    // データベースの全データ削除と初期データ登録（シード）処理を提供するクラス
     public static class DbInitializer {
 
-        /// <summary>
-        /// ユーザー・認証情報を含む全管理テーブルのデータを削除し、連番をリセットします。
-        /// テーブル構造とマイグレーション履歴は保持します。
-        /// </summary>
+        // ユーザー・認証情報を含む全管理テーブルのデータを削除し、連番をリセットします。
+        // テーブル構造とマイグレーション履歴は保持します。
         public static async Task DeleteAllDataAsync(ApplicationDbContext context) {
             if (!context.Database.IsNpgsql()) {
                 throw new NotSupportedException("全データ削除はPostgreSQLのみ対応しています。");
@@ -38,9 +34,7 @@ namespace Meguri.Data {
             context.ChangeTracker.Clear();
         }
 
-        /// <summary>
-        /// 設定で有効な場合のみ、既存データを削除せずに初期データを登録します。
-        /// </summary>
+        // 設定で有効な場合のみ、既存データを削除せずに初期データを登録します。
         public static async Task InitializeAsync(ApplicationDbContext context, IConfiguration configuration, Meguri.Services.IR2StorageService? storage = null, string? contentRootPath = null) {
             if (!configuration.GetValue<bool>("DatabaseInitialization:Enabled")) {
                 return;
@@ -56,17 +50,13 @@ namespace Meguri.Data {
             }
         }
 
-        /// <summary>
-        /// Fandomモデルなどのマスター初期データを登録します。
-        /// </summary>
+        // Fandomモデルなどのマスター初期データを登録します。
         public static async Task InitializeAsync(ApplicationDbContext context) {
             await InitializeFandomsAsync(context);
             await InitializeTagsAsync(context);
         }
 
-        /// <summary>
-        /// 界隈の初期データを登録・更新します。
-        /// </summary>
+        // 界隈の初期データを登録・更新します。
         private static async Task InitializeFandomsAsync(ApplicationDbContext context) {
             const int rootFandomId = 1;
             // 初期登録するFandom一覧

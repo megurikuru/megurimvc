@@ -66,6 +66,6 @@
 	@if (TurnstileOptions.Value.Enabled) {
 		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 	}
-	<script src="~/js/passkey.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/passkey.js" asp-append-version="true"></script>
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 }
