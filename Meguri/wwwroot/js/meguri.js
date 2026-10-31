@@ -2,7 +2,15 @@
 (function () {
     'use strict';
 
-    // リアクション送信 (Fetch API)
+    /**
+     * リアクション送信処理 (Fetch API)
+     * 指定されたターゲットに対してリアクションの追加・削除（トグル）を非同期で行います。
+     * 
+     * @param {string} targetType - ターゲットの種類
+     * @param {number|string} targetId - ターゲットのID
+     * @param {number|string} reactionType - リアクションの種類
+     * @param {HTMLElement} btn - 操作されたボタン要素
+     */
     async function toggleReaction(targetType, targetId, reactionType, btn) {
         const matchingButtons = Array.from(document.querySelectorAll('[data-reaction-target-type]')).filter(function (button) {
             return button.dataset.reactionTargetType === targetType
@@ -46,7 +54,7 @@
                     if (countSpan) countSpan.textContent = res.count;
                     button.classList.toggle('reacted', Boolean(res.hasReacted));
                     button.setAttribute('aria-pressed', String(Boolean(res.hasReacted)));
-                    if (button.closest('.chat-reaction-summary')) button.hidden = Number(res.count) === 0;
+                    if (button.closest('.message-reaction-summary')) button.hidden = Number(res.count) === 0;
                 });
             }
         } catch (err) {
@@ -56,7 +64,13 @@
         }
     }
 
-    // 画像の並び替え (上へ / 下へ)
+    /**
+     * 画像の並び替え (上へ / 下へ)
+     * 指定された画像アイテムをプレビューリスト内で「上」または「下」に移動させます。
+     * 
+     * @param {HTMLElement} btn - 並び替えボタン要素
+     * @param {string} direction - 移動方向 ('up' または 'down')
+     */
     function moveImageOrder(btn, direction) {
         const item = btn.closest('.image-order-item');
         if (!item || !item.parentElement) return;
@@ -75,6 +89,12 @@
         updateImageOrderIndexes();
     }
 
+    /**
+     * 画像並び替えアイテムの削除
+     * 指定された画像並び替えアイテムをDOMから削除し、インデックスを再採番します。
+     * 
+     * @param {HTMLElement} btn - 削除ボタン要素
+     */
     function removeImageOrderItem(btn) {
         const item = btn.closest('.image-order-item');
         if (item) {
@@ -83,6 +103,10 @@
         }
     }
 
+    /**
+     * 画像の順序インデックスの更新
+     * コンテナ内の画像アイテムの表示番号および隠しフィールドの値を順番に沿って再計算・更新します。
+     */
     function updateImageOrderIndexes() {
         document.querySelectorAll('#imageOrderContainer .image-order-item').forEach(function (item, index) {
             const numEl = item.querySelector('.order-number');
@@ -98,6 +122,11 @@
         selectedTags: [],
         maxTags: 10,
 
+        /**
+         * タグ管理コンポーネントの初期化
+         * 
+         * @param {Array<string>} initialTags - 初期タグの配列
+         */
         init: function (initialTags) {
             if (initialTags && Array.isArray(initialTags)) {
                 this.selectedTags = [...initialTags];
@@ -106,6 +135,12 @@
             this.setupAutocomplete();
         },
 
+        /**
+         * タグの追加
+         * 指定されたテキストのタグを追加します（最大数チェック、重複チェックあり）。
+         * 
+         * @param {string} tagText - 追加するタグのテキスト
+         */
         addTag: function (tagText) {
             tagText = (tagText || '').trim();
             if (!tagText) return;
@@ -128,11 +163,21 @@
             }
         },
 
+        /**
+         * タグの削除
+         * 選択されたタグの中から指定されたタグを除外します。
+         * 
+         * @param {string} tagText - 削除するタグのテキスト
+         */
         removeTag: function (tagText) {
             this.selectedTags = this.selectedTags.filter(t => t !== tagText);
             this.render();
         },
 
+        /**
+         * タグの画面描画
+         * 選択されたタグのバッジ、非同期送信用の隠しフィールド、件数表示を更新します。
+         */
         render: function () {
             const container = document.getElementById('selectedTagsContainer');
             const hiddenInputsContainer = document.getElementById('hiddenTagsInputs');
@@ -168,6 +213,10 @@
             }
         },
 
+        /**
+         * タグ入力時のオートコンプリート機能のセットアップ
+         * 入力文字に応じて候補を非同期で取得し、サジェスト表示を行います。
+         */
         setupAutocomplete: function () {
             const input = document.getElementById('tagInput');
             const suggestions = document.getElementById('tagSuggestions');
@@ -229,12 +278,24 @@
         previewSelector: '#imagePreviewContainer',
         countSelector: '#imageCountDisplay',
 
+        /**
+         * 画像添付マネージャーのインスタンスを作成して初期化します。
+         * 
+         * @param {string|HTMLInputElement} inputSelector - ファイル入力要素またはセレクター
+         * @param {string} previewSelector - プレビュー表示コンテナのセレクター
+         * @param {string} countSelector - 画像数表示要素のセレクター
+         * @param {number} maxImages - 最大添付枚数
+         * @returns {Object} 生成されたインスタンス
+         */
         createInstance: function (inputSelector, previewSelector, countSelector, maxImages) {
             const instance = Object.create(ImageAttachmentManager);
             instance.init(inputSelector, previewSelector, countSelector, maxImages);
             return instance;
         },
 
+        /**
+         * インスタンスの内部プロパティとイベントリスナーの初期化を行います。
+         */
         init: function (inputSelector, previewSelector, countSelector, maxImages) {
             const input = typeof inputSelector === 'string'
                 ? document.querySelector(inputSelector)
@@ -313,6 +374,11 @@
             this.render();
         },
 
+        /**
+         * 既存の画像のうち、削除されていない有効な枚数を取得します。
+         * 
+         * @returns {number} 有効な既存画像の数
+         */
         getExistingActiveCount: function () {
             if (this.maxImages === 1) return 0;
             const totalExisting = document.querySelectorAll('input[name^="ExistingImages"][name$=".ImageId"]').length;
@@ -320,11 +386,19 @@
             return Math.max(0, totalExisting - removedExisting);
         },
 
+        /**
+         * 最大枚数制限を超過した際の警告アラートを表示します。
+         */
         alertMaxImages: function () {
             const fmt = (window.MeguriI18n && window.MeguriI18n.maxImagesAlertFormat) || '画像は最大{0}枚まで添付できます。';
             alert(fmt.replace('{0}', this.maxImages));
         },
 
+        /**
+         * 選択されたファイル配列から指定インデックスのファイルを削除します。
+         * 
+         * @param {number} index - 削除するファイルのインデックス
+         */
         removeFile: function (index) {
             if (index < 0 || index >= this.selectedFiles.length) return;
             this.selectedFiles.splice(index, 1);
@@ -332,6 +406,9 @@
             this.render();
         },
 
+        /**
+         * 選択されたファイル一覧をファイル入力要素（input[type="file"]）の files プロパティに同期します。
+         */
         syncInputFiles: function () {
             if (!this.inputEl || typeof DataTransfer === 'undefined') return;
             const dt = new DataTransfer();
@@ -342,6 +419,9 @@
             }
         },
 
+        /**
+         * 生成したオブジェクトURLを解放し、メモリリークを防ぎます。
+         */
         clearObjectUrls: function () {
             if (this.objectUrls && this.objectUrls.length > 0) {
                 this.objectUrls.forEach(url => URL.revokeObjectURL(url));
@@ -349,6 +429,9 @@
             this.objectUrls = [];
         },
 
+        /**
+         * 添付画像のプレビューとカウント表示を再描画します。
+         */
         render: function () {
             this.clearObjectUrls();
             const container = document.querySelector(this.previewSelector);
@@ -408,13 +491,27 @@
         }
     };
 
-    // コメント返信機能
+    /**
+     * HTML特殊文字のエスケープ処理
+     * 文字列内のHTML特殊文字を安全な実体参照に変換します。
+     * 
+     * @param {string} str - エスケープ対象の文字列
+     * @returns {string} エスケープ済みの文字列
+     */
     function escapeHtml(str) {
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
     }
 
+    /**
+     * コメントへの返信準備処理
+     * 返信対象のコメントIDや通知表示、入力欄へのフォーカス等を設定します。
+     * 
+     * @param {string|number} commentId - 返信先コメントのID
+     * @param {string|number} commentNumber - コメントの番号
+     * @param {string} userName - 返信先ユーザー名
+     */
     function replyToComment(commentId, commentNumber, userName) {
         const parentInput = document.getElementById('replyParentId');
         if (parentInput) {
@@ -444,6 +541,10 @@
         }
     }
 
+    /**
+     * コメント返信のキャンセル処理
+     * 返信対象IDをクリアし、返信通知エリアを非表示にします。
+     */
     function cancelReply() {
         const parentInput = document.getElementById('replyParentId');
         if (parentInput) {
@@ -456,7 +557,10 @@
         }
     }
 
-    // ページ内のコンポーネント初期化 (data-* 属性ベース)
+    /**
+     * ページ内のコンポーネント初期化処理
+     * data-* 属性などを基に、タグや画像プレビューなどのコンポーネントを初期化します。
+     */
     function initComponents() {
         const tagInput = document.getElementById('tagInput');
         if (tagInput) {
@@ -479,7 +583,10 @@
         });
     }
 
-    // 共通イベントハンドラーの登録 (Event Delegation)
+    /**
+     * 共通イベントハンドラーの登録 (イベントデリゲーション)
+     * フォーム送信時の確認ダイアログや、各種ボタン・要素のクリック/変更イベントを一括管理します。
+     */
     function setupCommonEventHandlers() {
         // 確認ダイアログ付きフォーム送信
         document.addEventListener('submit', function (e) {
@@ -627,17 +734,20 @@
         });
     }
 
-    // UTC の <time> 要素をブラウザのタイムゾーン/ロケールで表示
+    /**
+     * 日時要素（<time>）のローカライズ処理
+     * UTCで記述された日時を、ブラウザの言語設定やタイムゾーンに合わせてフォーマット・表示を変換します。
+     */
     function localizeTimes() {
         let previousChatDate = null;
         document.querySelectorAll('time.local-time').forEach(function (el) {
             const d = new Date(el.getAttribute('datetime'));
             if (isNaN(d)) return;
             if (el.dataset.format === 'chat') {
-                const item = el.closest('.chat-message-item');
+                const item = el.closest('.message-item');
                 if (item && previousChatDate !== d.toDateString()) {
                     const divider = document.createElement('div');
-                    divider.className = 'chat-date-divider';
+                    divider.className = 'message-date-divider';
                     divider.textContent = d.toLocaleDateString(navigator.language, { year: 'numeric', month: 'long', day: 'numeric' });
                     item.before(divider);
                     previousChatDate = d.toDateString();
@@ -655,6 +765,7 @@
         });
     }
 
+    // DOM読み込み完了時に初期化処理を実行
     document.addEventListener('DOMContentLoaded', function () {
         localizeTimes();
         initComponents();

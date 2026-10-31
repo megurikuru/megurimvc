@@ -1,0 +1,34 @@
+<!-- 新規メッセージと返信で共用する送信フォーム -->
+<div class="message-composer">
+	<form asp-action="SendMessage" method="post" enctype="multipart/form-data" autocomplete="off">
+		@Html.AntiForgeryToken()
+		<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
+		@* 返信ボタンで返信先IDと案内を設定し、取り消すとIDを空にして通常の投稿へ戻す。 *@
+		<input type="hidden" id="parentMessageId" name="parentMessageId" value="" autocomplete="off" />
+		<div id="chatReplyNotice" class="message-reply-notice" hidden role="status">
+			<div><strong id="chatReplyLabel"></strong><span id="chatReplyPreview" class="message-preview-text"></span></div>
+			<button type="button" class="btn-sm" data-cancel-message-reply aria-label="@SharedLocalizer["Message_CancelReply"]" title="@SharedLocalizer["Message_CancelReply"]">×</button>
+		</div>
+		@* 本文入力を中心にするため、任意の件名と画像添付は必要なときだけ展開する。 *@
+		<details class="message-disclosure">
+			<summary>@SharedLocalizer["Message_OptionalSubject"]</summary>
+			<div class="attribute-wrap">
+				<label for="messageSubject">@SharedLocalizer["Message_SubjectLabel"]</label>
+				<input type="text" id="messageSubject" name="subject" />
+			</div>
+		</details>
+		<div class="attribute-wrap">
+			<textarea id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
+		</div>
+		<details class="message-disclosure">
+			<summary><img src="~/icons/image.svg" class="icon" alt="" />@SharedLocalizer["Message_ImageAttachLabel"]</summary>
+			<div class="attribute-wrap">
+				<label for="chatImageFiles">@SharedLocalizer["Message_ImageAttachLabel"]</label>
+				<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+			</div>
+		</details>
+		<div class="button-wrap">
+			<button type="submit" class="btn-block"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
+		</div>
+	</form>
+</div>

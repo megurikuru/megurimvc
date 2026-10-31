@@ -202,7 +202,7 @@ namespace Meguri.Controllers {
             var hasPrevious = resolvedSkip > 0;
             var hasNext = resolvedSkip + pageRootIds.Count < totalCount;
 
-            var vm = new ChatRoomViewModel {
+            var vm = new MessageRoomViewModel {
                 Conversation = conversation,
                 CurrentUserId = currentUserId,
                 DisplayTitle = displayTitle,

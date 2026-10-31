@@ -1,18 +1,8 @@
-﻿@model Meguri.ViewModels.Message.ChatRoomViewModel
+﻿@model Meguri.ViewModels.Message.MessageRoomViewModel
 @using Meguri.Extensions
 @{
 	ViewData["Title"] = Model.DisplayTitle;
-	// 表示中のメッセージから返信先や祖先をIDで参照する。
-	var messagesById = Model.Messages.ToDictionary(m => m.Id);
-	// 返信先の表示名にも、不明ユーザー・退会済みユーザーの表記を適用する。
-	string SenderName(Message message) => message.Sender == null
-		? SharedLocalizer["Common_UnknownUser"].Value
-		: message.Sender.UserName + (message.Sender.IsWithdrawn ? "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")" : "");
-	// 引用は本文・件名・添付の順に選び、削除済みの内容は表示しない。
-	string Preview(Message message) => message.IsDeleted ? SharedLocalizer["Message_Deleted"].Value
-		: !string.IsNullOrWhiteSpace(message.Body) ? new string(message.Body.Take(80).ToArray())
-		: !string.IsNullOrWhiteSpace(message.Subject) ? new string(message.Subject.Take(80).ToArray())
-		: SharedLocalizer["Message_ImageAttachLabel"].Value;
+
 	var breadcrumbs = new List<BreadcrumbItemViewModel> {
 		new(SharedLocalizer["Message_Title"].Value, Url.Action("Index", "Message")),
 		new(Model.DisplayTitle)
@@ -41,154 +31,19 @@
 	};
 }
 
-<!-- パンくずリスト -->
+@* パンくずリスト *@
 <partial name="_Breadcrumb" model="breadcrumbs" />
 
-<!-- 会話名と、グループの場合のみ展開できる参加者一覧 -->
-<h2><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h2>
-@if (Model.Conversation.IsGroup) {
-<details class="chat-disclosure">
-	<summary><img src="~/icons/users.svg" class="icon" alt="" />@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count)</summary>
-	<p>
-	@foreach (var m in Model.Conversation.Members.Select((member, index) => new { member, index })) {
-				@if (m.index > 0) { <text>, </text> }
-				@if (m.member.User == null) { @SharedLocalizer["Common_UnknownUser"].Value }
-				else if (m.member.User.IsWithdrawn) { @(m.member.User.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") }
-				else { <text>@if (!m.member.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @m.member.User.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@m.member.User.UserName">@m.member.User.UserName</a> }</text> }
-			}
-	</p>
-</details>
-}
+<h1><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h1>
 
-@* コントローラーで親子順に並べたメッセージを、その順序のまま表示する。 *@
-<div id="chatMessageContainer">
-	@if (!Model.Messages.Any()) {
-		<p>@SharedLocalizer["Message_NoMessagesForDate"]</p>
-	}
-	else {
-		@foreach (var msg in Model.Messages) {
-			var isMe = msg.SenderId == Model.CurrentUserId;
-			var replyParent = msg.ParentMessageId.HasValue ? messagesById.GetValueOrDefault(msg.ParentMessageId.Value) : null;
-			var replyLabel = string.Format(SharedLocalizer["Message_ReplyToFormat"].Value, SenderName(msg));
-			// 祖先を最大3段までたどって字下げクラスを選ぶ。スマホではCSSで浅い1段にそろえる。
-			var depth = 0;
-			var parentId = msg.ParentMessageId;
-			while (parentId.HasValue && depth < 3) {
-				var parent = messagesById.GetValueOrDefault(parentId.Value);
-				if (parent == null) { break; }
-				depth++;
-				parentId = parent.ParentMessageId;
-			}
-			var indentClass = depth > 0 ? $"chat-indent-{depth}" : null;
-			<div id="message-@msg.Id" class="chat-message-item @indentClass @(msg.ParentMessageId.HasValue ? "chat-reply" : "")">
-				@if (!isMe) {
-					<div><img src="~/icons/user.svg" class="icon" />@if (msg.Sender == null) { @SharedLocalizer["Common_UnknownUser"].Value } else if (msg.Sender.IsWithdrawn) { @(msg.Sender.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")") } else { <text>@if (!msg.Sender.IsProfilePublic && User.Identity?.IsAuthenticated != true) { @msg.Sender.UserName } else { <a asp-controller="Profile" asp-action="Details" asp-route-id="@msg.Sender.UserName">@msg.Sender.UserName</a> }</text> }</div>
-				}
-				<div class="chat-message-box">
-					@* 返信先が同じページにある場合は、引用から元のメッセージへ移動できる。 *@
-					@if (replyParent != null) {
-						<a href="#message-@replyParent.Id" class="chat-reply-preview">
-							<span>@string.Format(SharedLocalizer["Message_ReplyToFormat"].Value, SenderName(replyParent))</span>
-							<span class="chat-preview-text">@Preview(replyParent)</span>
-						</a>
-					}
-					@if (msg.IsDeleted) {
-						<div><em>@SharedLocalizer["Message_Deleted"]</em></div>
-					}
-					@* 返信元と同じ件名や「Re:」付きの重複件名は、返信先の引用に役割を寄せて省略する。 *@
-					@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Subject) && (replyParent == null || msg.Subject != "Re: " + replyParent.Subject && msg.Subject != replyParent.Subject)) {
-						<div><strong>@msg.Subject</strong></div>
-					}
-					@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Body)) {
-						<div class="chat-message-body">@msg.Body</div>
-					}
-					@if (!msg.IsDeleted && msg.MessageImages.Any()) {
-						<div>
-							@foreach (var mi in msg.MessageImages.OrderBy(x => x.DisplayOrder)) {
-								<a href="/Image/File/@mi.ImageId" target="_blank">
-									<img src="/Image/File/@mi.ImageId" class="chat-message-image" alt="@SharedLocalizer["Message_AttachmentAlt"]" loading="lazy" />
-								</a>
-							}
-						</div>
-					}
-					<div class="chat-message-actions">
-						@* UTC日時をJavaScriptで端末の時刻に変換し、日付の区切りも追加する。 *@
-						<time class="local-time chat-message-time" datetime="@msg.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")" data-format="chat">@msg.CreatedAt.ToLocalTime()</time>
-						@if (User.Identity?.IsAuthenticated == true) {
-							<button type="button" class="btn-sm" data-reply-label="@replyLabel" data-reply-preview="@Preview(msg)" data-reply-id="@msg.Id"><img src="~/icons/reply.svg" class="icon" alt="" />@SharedLocalizer["Message_ReplyBtn"]</button>
-						}
-						@if (!msg.IsDeleted) {
-							@* 編集・削除は自分の投稿のみ表示し、リアクション追加とともにメニューへまとめる。 *@
-							<details class="chat-more-actions">
-								<summary aria-label="@SharedLocalizer["Message_MoreActions"]" title="@SharedLocalizer["Message_MoreActions"]">…</summary>
-								<div class="chat-actions-panel">
-									@if (isMe) {
-										<div class="inline-actions">
-											<a asp-action="Edit" asp-route-id="@msg.Id" class="button-like btn-sm">@SharedLocalizer["Common_Edit"]</a>
-											<form asp-action="Delete" asp-route-id="@msg.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
-												<button type="submit" class="btn-sm">@SharedLocalizer["Common_Delete"]</button>
-											</form>
-										</div>
-									}
-									<div>@SharedLocalizer["Message_ReactionBtn"]</div>
-									<partial name="_ReactionButtons" model='("Message", msg.Id, msg.Reactions.AsEnumerable())' />
-								</div>
-							</details>
-						}
-					</div>
-				</div>
-				@if (!msg.IsDeleted) {
-					@* 件数がある種類だけを表示する。0件のボタンも残し、操作後にJavaScriptで件数と表示を同期する。 *@
-					<div class="reaction-list chat-reaction-summary">
-						@foreach (var type in Enum.GetValues<ReactionType>()) {
-							var count = msg.Reactions.Count(r => r.Type == type);
-							var reacted = msg.Reactions.Any(r => r.Type == type && r.UserId == Model.CurrentUserId);
-							<button type="button" class="btn-sm @(reacted ? "reacted" : "")" hidden="@(count == 0)"
-									title="@type.GetDescription()" aria-label="@type.GetDisplayName()" aria-pressed="@reacted.ToString().ToLowerInvariant()"
-									data-reaction-target-type="Message" data-reaction-target-id="@msg.Id" data-reaction-type="@((int)type)">
-								<span aria-hidden="true">@type.GetEmoji()</span><span class="reaction-count">@count</span>
-							</button>
-						}
-					</div>
-				}
-			</div>
-		}
-	}
-</div>
+@* メンバー一覧 *@
+<partial name="_MemberList" model="Model"	/>
 
+@* メッセージフォーム *@
+<partial name="_MessageForm" model="Model" />
+
+@* メッセージ一覧 *@
+<partial name="_Messages" model="Model" />
+
+@* ページネーション *@
 <partial name="_Pagination" model="pager" />
-
-<!-- 新規メッセージと返信で共用する送信フォーム -->
-<div class="chat-composer">
-	<form asp-action="SendMessage" method="post" enctype="multipart/form-data" autocomplete="off">
-		@Html.AntiForgeryToken()
-		<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
-		@* 返信ボタンで返信先IDと案内を設定し、取り消すとIDを空にして通常の投稿へ戻す。 *@
-		<input type="hidden" id="parentMessageId" name="parentMessageId" value="" autocomplete="off" />
-		<div id="chatReplyNotice" class="chat-reply-notice" hidden role="status">
-			<div><strong id="chatReplyLabel"></strong><span id="chatReplyPreview" class="chat-preview-text"></span></div>
-			<button type="button" class="btn-sm" data-cancel-message-reply aria-label="@SharedLocalizer["Message_CancelReply"]" title="@SharedLocalizer["Message_CancelReply"]">×</button>
-		</div>
-		@* 本文入力を中心にするため、任意の件名と画像添付は必要なときだけ展開する。 *@
-		<details class="chat-disclosure">
-			<summary>@SharedLocalizer["Message_OptionalSubject"]</summary>
-			<div class="attribute-wrap">
-				<label for="messageSubject">@SharedLocalizer["Message_SubjectLabel"]</label>
-				<input type="text" id="messageSubject" name="subject" />
-			</div>
-		</details>
-		<div class="attribute-wrap">
-			<textarea id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
-		</div>
-		<details class="chat-disclosure">
-			<summary><img src="~/icons/image.svg" class="icon" alt="" />@SharedLocalizer["Message_ImageAttachLabel"]</summary>
-			<div class="attribute-wrap">
-				<label for="chatImageFiles">@SharedLocalizer["Message_ImageAttachLabel"]</label>
-				<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
-			</div>
-		</details>
-		<div class="button-wrap">
-			<button type="submit" class="btn-block"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
-		</div>
-	</form>
-</div>
