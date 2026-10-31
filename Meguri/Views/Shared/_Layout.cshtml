@@ -30,7 +30,7 @@
 			cancelLabel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Common_Cancel"].Value))
 		};
 	</script>
-	<script src="~/js/meguri.js" asp-append-version="true"></script>
+	<script type="module" src="~/js/meguri.js" asp-append-version="true"></script>
 	@RenderSection("Scripts", required: false)
 </body>
 </html>
