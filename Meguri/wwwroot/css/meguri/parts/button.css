@@ -1,7 +1,7 @@
 ﻿.button-wrap {
 	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び・中央寄せ）で配置 */
 	flex-wrap: wrap;
-	padding: 0.5rem 0;
+	padding: 0.5rem 0.5rem 0 0.5rem;
 	justify-content: center;
 	align-items: center;
 	gap: 0.75rem;

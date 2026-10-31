@@ -1,0 +1,30 @@
+@* グループメッセージの場合には、メンバー一覧を開閉できるようにする。 *@
+@if (Model.Conversation.IsGroup) {
+	<details class="message-disclosure">
+		<summary><img src="~/icons/users.svg" class="icon" alt="" />@string.Format(SharedLocalizer["Message_MembersCountFormat"].Value, Model.Conversation.Members.Count)</summary>
+		<p>
+			@{
+				var index = 0;
+			}
+			@foreach (var member in Model.Conversation.Members) {
+				@if (index > 0) {
+					<text>, </text>
+				}
+				@if (member.User == null) {
+					@SharedLocalizer["Common_UnknownUser"].Value
+				} else if (member.User.IsWithdrawn) {
+					@(member.User.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")")
+				} else {
+					<text>
+						@if (!member.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+							@member.User.UserName
+						} else {
+							<a asp-controller="Profile" asp-action="Details" asp-route-id="@member.User.UserName">@member.User.UserName</a>
+						}
+					</text>
+				}
+				index++;
+			}
+		</p>
+	</details>
+}

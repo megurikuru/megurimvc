@@ -60,7 +60,7 @@ namespace Meguri.ViewModels.Message {
         public string Body { get; set; } = string.Empty;
     }
 
-    public class ChatRoomViewModel {
+    public class MessageRoomViewModel {
         public Conversation Conversation { get; set; } = null!;
         public string CurrentUserId { get; set; } = string.Empty;
         public string DisplayTitle { get; set; } = string.Empty;
