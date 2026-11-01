@@ -1,8 +1,10 @@
 ﻿@model IEnumerable<Meguri.Models.TagConcept>
+@using System.Security.Claims
 @{
 	// ページタイトルと検索クエリの初期設定
 	ViewData["Title"] = SharedLocalizer["Tag_Title"];
 	var searchQuery = ViewBag.SearchQuery as string;
+	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
 <h1>@SharedLocalizer["Tag_Title"]</h1>
@@ -35,10 +37,12 @@
 						@tagText
 						<span>@count</span>
 					</a>
-					@* 曖昧さ回避ページへのリンク *@
-					<a asp-action="Disambiguation" asp-route-id="@concept.Id" title="@SharedLocalizer["Tag_DisambiguationBtn"]">
-						@SharedLocalizer["Tag_DisambiguationBtn"]
-					</a>
+					@* 曖昧さ回避ページへのリンク（作成者のみ表示） *@
+					@if (currentUserId != null && concept.UserId == currentUserId) {
+						<a asp-action="Disambiguation" asp-route-id="@concept.Id" title="@SharedLocalizer["Tag_DisambiguationBtn"]">
+							@SharedLocalizer["Tag_DisambiguationBtn"]
+						</a>
+					}
 				</div>
 			}
 		</div>

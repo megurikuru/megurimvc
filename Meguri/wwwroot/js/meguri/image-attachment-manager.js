@@ -2,15 +2,19 @@
  * 添付画像管理＆プレビューコンポーネント (最大16枚)
  */
 export class ImageAttachmentManager {
+    static DEFAULT_MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+
     constructor() {
         this.selectedFiles = [];
         this.objectUrls = [];
         this.maxImages = 16;
+        this.maxFileSize = ImageAttachmentManager.DEFAULT_MAX_FILE_SIZE;
         this.inputEl = null;
         this.previewSelector = '#imagePreviewContainer';
         this.countSelector = '#imageCountDisplay';
         this._changeHandler = null;
         this._existingChangeHandler = null;
+        this._submitHandler = null;
     }
 
     /**
@@ -20,18 +24,19 @@ export class ImageAttachmentManager {
      * @param {string} previewSelector - プレビュー表示コンテナのセレクター
      * @param {string} countSelector - 画像数表示要素のセレクター
      * @param {number} maxImages - 最大添付枚数
+     * @param {number} [maxFileSize] - 1ファイルあたりの最大バイト数
      * @returns {ImageAttachmentManager} 生成されたインスタンス
      */
-    static createInstance(inputSelector, previewSelector, countSelector, maxImages) {
+    static createInstance(inputSelector, previewSelector, countSelector, maxImages, maxFileSize) {
         const instance = new ImageAttachmentManager();
-        instance.init(inputSelector, previewSelector, countSelector, maxImages);
+        instance.init(inputSelector, previewSelector, countSelector, maxImages, maxFileSize);
         return instance;
     }
 
     /**
      * インスタンスの内部プロパティとイベントリスナーの初期化を行います。
      */
-    init(inputSelector, previewSelector, countSelector, maxImages) {
+    init(inputSelector, previewSelector, countSelector, maxImages, maxFileSize) {
         const input = typeof inputSelector === 'string'
             ? document.querySelector(inputSelector)
             : inputSelector;
@@ -41,6 +46,7 @@ export class ImageAttachmentManager {
         this.previewSelector = previewSelector || '#imagePreviewContainer';
         this.countSelector = countSelector !== undefined ? countSelector : '#imageCountDisplay';
         this.maxImages = maxImages || 16;
+        this.maxFileSize = maxFileSize || Number(input.dataset.maxFileSize) || ImageAttachmentManager.DEFAULT_MAX_FILE_SIZE;
         this.selectedFiles = [];
         this.objectUrls = this.objectUrls || [];
         this.clearObjectUrls();
@@ -60,6 +66,7 @@ export class ImageAttachmentManager {
             const incoming = Array.from(self.inputEl.files || []);
             if (incoming.length === 0) {
                 self.syncInputFiles();
+                self.validateFiles();
                 self.render();
                 return;
             }
@@ -67,6 +74,7 @@ export class ImageAttachmentManager {
             if (self.maxImages === 1) {
                 self.selectedFiles = [incoming[0]];
                 self.syncInputFiles();
+                self.validateFiles();
                 self.render();
                 return;
             }
@@ -91,11 +99,37 @@ export class ImageAttachmentManager {
             }
 
             self.syncInputFiles();
+            self.validateFiles();
             self.render();
         }
 
         this._changeHandler = handleInputChange;
         this.inputEl.addEventListener('change', this._changeHandler);
+
+        const form = this.inputEl.form || this.inputEl.closest('form');
+        if (form) {
+            if (this._submitHandler) {
+                form.removeEventListener('submit', this._submitHandler, true);
+            }
+
+            function handleFormSubmit(e) {
+                if (!self.validateFiles()) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    const details = self.inputEl.closest('details');
+                    if (details) {
+                        details.open = true;
+                    }
+                    const valMsgEl = self.getValidationMessageElement();
+                    if (valMsgEl && typeof valMsgEl.scrollIntoView === 'function') {
+                        valMsgEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            }
+
+            this._submitHandler = handleFormSubmit;
+            form.addEventListener('submit', this._submitHandler, true);
+        }
 
         if (this.maxImages > 1) {
             if (this._existingChangeHandler) {
@@ -118,6 +152,89 @@ export class ImageAttachmentManager {
         }
 
         this.render();
+    }
+
+    /**
+     * バリデーションエラーメッセージを表示する要素を取得（存在しない場合は生成）します。
+     * 
+     * @returns {HTMLElement|null} バリデーションメッセージ表示要素
+     */
+    getValidationMessageElement() {
+        if (!this.inputEl) return null;
+        const form = this.inputEl.form || this.inputEl.closest('form') || document;
+        const inputName = this.inputEl.name;
+        if (inputName) {
+            const candidates = form.querySelectorAll('[data-valmsg-for]');
+            for (const el of candidates) {
+                if (el.getAttribute('data-valmsg-for') === inputName ||
+                    el.getAttribute('data-valmsg-for')?.toLowerCase() === inputName.toLowerCase()) {
+                    return el;
+                }
+            }
+        }
+
+        let fallback = this.inputEl.parentElement?.querySelector('.image-size-validation-message');
+        if (!fallback && this.inputEl.parentElement) {
+            fallback = document.createElement('span');
+            fallback.className = 'field-validation-valid image-size-validation-message';
+            if (inputName) {
+                fallback.setAttribute('data-valmsg-for', inputName);
+            }
+            fallback.setAttribute('data-valmsg-replace', 'true');
+            this.inputEl.insertAdjacentElement('afterend', fallback);
+        }
+        return fallback || null;
+    }
+
+    /**
+     * サイズ超過ファイルに対するローカライズ済みエラーメッセージを生成します。
+     * 
+     * @param {File} file - 対象ファイル
+     * @returns {string} エラーメッセージ
+     */
+    formatMaxSizeError(file) {
+        const fmt = (window.MeguriI18n && window.MeguriI18n.maxImageSizeErrorFormat)
+            || '画像サイズが上限の5MBを超えています (現在: {0:F2}MB)。';
+        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
+        const detail = fmt.replace(/\{0(?::[^}]*)?\}/g, sizeMb);
+        return `${file.name}: ${detail}`;
+    }
+
+    /**
+     * 選択されている画像ファイルのサイズを検証し、画面のエラー表示を更新します。
+     * 
+     * @returns {boolean} すべてのファイルが制限内の場合は true、超過ファイルがある場合は false
+     */
+    validateFiles() {
+        const filesToCheck = this.selectedFiles.length > 0
+            ? this.selectedFiles
+            : Array.from(this.inputEl?.files || []);
+
+        const errors = [];
+        for (const file of filesToCheck) {
+            if (file && file.size > this.maxFileSize) {
+                errors.push(this.formatMaxSizeError(file));
+            }
+        }
+
+        const valMsgEl = this.getValidationMessageElement();
+        if (valMsgEl) {
+            if (errors.length > 0) {
+                valMsgEl.textContent = errors.join(' ');
+                valMsgEl.classList.remove('field-validation-valid');
+                valMsgEl.classList.add('field-validation-error');
+                valMsgEl.setAttribute('role', 'alert');
+                this.inputEl?.classList.add('input-validation-error');
+            } else {
+                valMsgEl.textContent = '';
+                valMsgEl.classList.remove('field-validation-error');
+                valMsgEl.classList.add('field-validation-valid');
+                valMsgEl.removeAttribute('role');
+                this.inputEl?.classList.remove('input-validation-error');
+            }
+        }
+
+        return errors.length === 0;
     }
 
     /**
@@ -149,6 +266,7 @@ export class ImageAttachmentManager {
         if (index < 0 || index >= this.selectedFiles.length) return;
         this.selectedFiles.splice(index, 1);
         this.syncInputFiles();
+        this.validateFiles();
         this.render();
     }
 

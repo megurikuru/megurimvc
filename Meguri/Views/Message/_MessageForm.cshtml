@@ -1,5 +1,10 @@
 <!-- 新規メッセージと返信で共用する送信フォーム -->
 <div class="message-composer">
+	@if (TempData["Error"] is string messageError && !string.IsNullOrEmpty(messageError)) {
+		<div class="validation-summary-errors" role="alert">
+			<ul><li>@messageError</li></ul>
+		</div>
+	}
 	<form asp-action="SendMessage" method="post" enctype="multipart/form-data" autocomplete="off">
 		@Html.AntiForgeryToken()
 		<input type="hidden" name="conversationId" value="@Model.Conversation.Id" />
@@ -25,6 +30,7 @@
 			<div class="attribute-wrap">
 				<label for="chatImageFiles">@SharedLocalizer["Message_ImageAttachLabel"]</label>
 				<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#chatImagePreviewContainer" data-image-count="#chatImageCountDisplay" data-max-images="16" />
+				<span class="field-validation-valid" data-valmsg-for="imageFiles" data-valmsg-replace="true"></span>
 				<div id="chatImagePreviewContainer" class="image-preview-list"></div>
 			</div>
 		</details>

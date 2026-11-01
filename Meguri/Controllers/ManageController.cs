@@ -234,6 +234,12 @@ namespace Meguri.Controllers {
                     ModelState.AddModelError(nameof(model.ExternalUrls), string.Format(_localizer["Manage_Error_InvalidUrl"].Value, u));
                 }
             }
+            if (model.AvatarFile != null && model.AvatarFile.Length > ImageProcessingService.MaxInputSizeBytes) {
+                ModelState.AddModelError(nameof(model.AvatarFile), $"{model.AvatarFile.FileName}: {string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, model.AvatarFile.Length / 1024.0 / 1024.0)}");
+            }
+            if (model.HeaderFile != null && model.HeaderFile.Length > ImageProcessingService.MaxInputSizeBytes) {
+                ModelState.AddModelError(nameof(model.HeaderFile), $"{model.HeaderFile.FileName}: {string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, model.HeaderFile.Length / 1024.0 / 1024.0)}");
+            }
             if (!ModelState.IsValid) {
                 model.ExternalUrls ??= new List<string?>();
                 while (model.ExternalUrls.Count < 5) model.ExternalUrls.Add(null);

@@ -242,6 +242,18 @@ namespace Meguri.Controllers {
                 ModelState.AddModelError("SelectedUserIds", _localizer["Message_Error_SelectRecipientRequired"]);
             }
 
+            var validCreateFiles = model.ImageFiles?.Where(f => f != null && f.Length > 0).ToList();
+            if (validCreateFiles != null) {
+                if (validCreateFiles.Count > 16) {
+                    ModelState.AddModelError("ImageFiles", string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, 16));
+                }
+                foreach (var file in validCreateFiles) {
+                    if (file.Length > ImageProcessingService.MaxInputSizeBytes) {
+                        ModelState.AddModelError("ImageFiles", $"{file.FileName}: {string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, file.Length / 1024.0 / 1024.0)}");
+                    }
+                }
+            }
+
             if (!ModelState.IsValid) {
                 await LoadAvailableUsersAsync(model, currentUserId);
                 return View(model);
@@ -368,6 +380,19 @@ namespace Meguri.Controllers {
                 .AnyAsync(cm => cm.ConversationId == conversationId && cm.UserId == currentUserId);
 
             if (!isMember) return Forbid();
+
+            var validMessageFiles = imageFiles?.Where(f => f != null && f.Length > 0).ToList();
+            if (validMessageFiles != null) {
+                if (validMessageFiles.Count > 16) {
+                    TempData["Error"] = string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, 16);
+                    return RedirectToAction(nameof(Details), new { id = conversationId });
+                }
+                var oversizedFile = validMessageFiles.FirstOrDefault(f => f.Length > ImageProcessingService.MaxInputSizeBytes);
+                if (oversizedFile != null) {
+                    TempData["Error"] = $"{oversizedFile.FileName}: {string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, oversizedFile.Length / 1024.0 / 1024.0)}";
+                    return RedirectToAction(nameof(Details), new { id = conversationId });
+                }
+            }
 
             if (!string.IsNullOrWhiteSpace(text)) {
                 if (parentMessageId.HasValue && !await _context.Messages.AnyAsync(m => m.Id == parentMessageId.Value && m.ConversationId == conversationId)) {
