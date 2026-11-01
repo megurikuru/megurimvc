@@ -21,6 +21,12 @@
 		<div id="commentForm">
 				<h6 ><img src="~/icons/message-circle.svg" class="icon" />@SharedLocalizer["Comment_WriteTitle"]</h6>
 
+				@if (TempData["CommentError"] is string commentError && !string.IsNullOrEmpty(commentError)) {
+						<div class="validation-summary-errors" role="alert">
+								<ul><li>@commentError</li></ul>
+						</div>
+				}
+
 				<!-- 返信先インジケーター -->
 				<div id="replyNotice" class="inline-actions"></div>
 
@@ -41,7 +47,9 @@
 						</div>
 
 						<div class="attribute-wrap">
-								<input type="file" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+								<input type="file" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#commentImagePreviewContainer" data-max-images="1" />
+								<span class="field-validation-valid" data-valmsg-for="commentImage" data-valmsg-replace="true"></span>
+								<div id="commentImagePreviewContainer" class="image-preview-list"></div>
 						</div>
 
 						<div class="button-wrap">

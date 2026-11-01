@@ -16,7 +16,7 @@ namespace Meguri.Services {
         private readonly IStringLocalizer<SharedResource> _localizer;
 
         // 最大受け取りサイズ: 5MB
-        private const long MaxInputSizeBytes = 5 * 1024 * 1024;
+        public const long MaxInputSizeBytes = 5 * 1024 * 1024;
         // 目標最大出力サイズ: 250KB (256,000 bytes)
         private const long TargetMaxOutputSizeBytes = 250 * 1024;
         // 最大許可解像度（ポスターやイラスト等の超高解像度データも受け入れられるよう拡張）

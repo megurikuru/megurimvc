@@ -1,10 +1,19 @@
 ﻿@model Meguri.ViewModels.Tag.DisambiguationViewModel
 @{
 	ViewData["Title"] = string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText);
+
+	var breadcrumbs = new List<BreadcrumbItemViewModel> {
+		new(SharedLocalizer["Tag_Title"].Value, Url.Action("Index", "Tag")),
+		new($"#{Model.PrimaryTagText}", Url.Action("Details", "Tag", new { conceptId = Model.TagConceptId })),
+		new(SharedLocalizer["Tag_DisambiguationBtn"].Value)
+	};
 }
 
+@* パンくずリスト *@
+<partial name="_Breadcrumb" model="breadcrumbs" />
+
 <div class="space-between-wrap">
-	<h4><img src="~/icons/scale.svg" class="icon" />@string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h4>
+	<h4>@string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h4>
 	<a asp-action="Details" asp-route-conceptId="@Model.TagConceptId" class="button-like btn-sm">@SharedLocalizer["Common_Back"]</a>
 </div>
 
@@ -18,7 +27,7 @@
 
 <!-- 同義語 (Synonyms) -->
 <div class="attribute-wrap">
-	<h5><img src="~/icons/refresh-cw.svg" class="icon" />@SharedLocalizer["Tag_SynonymTerms"]</h5>
+	<h5>@SharedLocalizer["Tag_SynonymTerms"]</h5>
 	<p class="description">@SharedLocalizer["Tag_SynonymHelp"]</p>
 
 	<div class="inline-actions">
@@ -40,7 +49,7 @@
 
 <!-- 上位語 (Broader) -->
 <div class="attribute-wrap">
-	<h5><img src="~/icons/arrow-up.svg" class="icon" />@SharedLocalizer["Tag_BroaderTerms"]</h5>
+	<h5>@SharedLocalizer["Tag_BroaderTerms"]</h5>
 	<p class="description">@SharedLocalizer["Tag_BroaderHelp"]</p>
 
 	@if (!Model.BroaderConcepts.Any()) {
@@ -73,7 +82,7 @@
 
 <!-- 下位語 (Narrower) -->
 <div class="attribute-wrap">
-	<h5><img src="~/icons/arrow-down.svg" class="icon" />@SharedLocalizer["Tag_NarrowerTerms"]</h5>
+	<h5>@SharedLocalizer["Tag_NarrowerTerms"]</h5>
 	<p class="description">@SharedLocalizer["Tag_NarrowerHelp"]</p>
 
 	@if (!Model.NarrowerConcepts.Any()) {
@@ -106,7 +115,7 @@
 
 <!-- 関連語 (Related) -->
 <div class="attribute-wrap">
-	<h5><img src="~/icons/link.svg" class="icon" />@SharedLocalizer["Tag_RelatedTerms"]</h5>
+	<h5>@SharedLocalizer["Tag_RelatedTerms"]</h5>
 	<p class="description">@SharedLocalizer["Tag_RelatedHelp"]</p>
 
 	@if (!Model.RelatedConcepts.Any()) {

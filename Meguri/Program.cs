@@ -66,6 +66,16 @@ builder.Services.AddScoped<IR2StorageService, R2StorageService>();
 // 画像検証・変換・圧縮サービス
 builder.Services.AddScoped<IImageProcessingService, ImageProcessingService>();
 
+// 画像複数枚添付（最大16枚）およびJavaScript無効時のサイズ超過エラー返却のため、
+// KestrelとMultipartフォームの読み取り上限を拡張（個別ファイルの5MB上限はサーバー側で検証）
+const long maxMultipartRequestSizeBytes = 200L * 1024 * 1024; // 200MB
+builder.WebHost.ConfigureKestrel(options => {
+    options.Limits.MaxRequestBodySize = maxMultipartRequestSizeBytes;
+});
+builder.Services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options => {
+    options.MultipartBodyLengthLimit = maxMultipartRequestSizeBytes;
+});
+
 // Cloudflare Turnstile 設定とサービス
 var turnstileConf = builder.Configuration.GetSection("Turnstile");
 builder.Services.Configure<TurnstileConf>(turnstileConf);

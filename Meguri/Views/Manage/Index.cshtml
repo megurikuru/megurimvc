@@ -45,6 +45,7 @@
 			<label class="check-row"><input type="checkbox" asp-for="RemoveAvatar" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
 		}
 		<input type="file" asp-for="AvatarFile" accept="image/*" data-image-preview="#avatarPreviewContainer" data-max-images="1" />
+		<span asp-validation-for="AvatarFile"></span>
 		<div id="avatarPreviewContainer" class="image-preview-list"></div>
 	</div>
 	<div>
@@ -54,6 +55,7 @@
 			<label class="check-row"><input type="checkbox" asp-for="RemoveHeader" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
 		}
 		<input type="file" asp-for="HeaderFile" accept="image/*" data-image-preview="#headerPreviewContainer" data-max-images="1" />
+		<span asp-validation-for="HeaderFile"></span>
 		<div id="headerPreviewContainer" class="image-preview-list image-preview-wide"></div>
 	</div>
 	<div>

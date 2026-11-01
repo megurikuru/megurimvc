@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
 using Meguri.Services;
@@ -16,15 +17,18 @@ namespace Meguri.Controllers {
         private readonly ApplicationDbContext _context;
         private readonly IR2StorageService _r2StorageService;
         private readonly IImageProcessingService _imageProcessingService;
+        private readonly IStringLocalizer<SharedResource> _localizer;
         private const int MaxReplyDepth = 2;
 
         public CommentController(
             ApplicationDbContext context,
             IR2StorageService r2StorageService,
-            IImageProcessingService imageProcessingService) {
+            IImageProcessingService imageProcessingService,
+            IStringLocalizer<SharedResource> localizer) {
             _context = context;
             _r2StorageService = r2StorageService;
             _imageProcessingService = imageProcessingService;
+            _localizer = localizer;
         }
 
         // POST: /Comment/Create
@@ -38,6 +42,16 @@ namespace Meguri.Controllers {
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId)) return Challenge();
+
+            if (commentImage != null && commentImage.Length > ImageProcessingService.MaxInputSizeBytes) {
+                TempData["CommentError"] = $"{commentImage.FileName}: {string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, commentImage.Length / 1024.0 / 1024.0)}";
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)) {
+                    return Redirect(returnUrl);
+                }
+                if (docId.HasValue) return RedirectToAction("Details", "Post", new { id = docId.Value });
+                if (imageId.HasValue) return RedirectToAction("Details", "Image", new { id = imageId.Value });
+                return RedirectToAction("Index", "Home");
+            }
 
             if (parentId.HasValue) {
                 int parentDepth = 0;
@@ -112,8 +126,14 @@ namespace Meguri.Controllers {
                         ImageId = img.Id,
                         DisplayOrder = 0
                     });
-                } catch {
-                    // 画像処理失敗時はコメントのみ保存、またはエラー
+                } catch (Exception ex) {
+                    TempData["CommentError"] = $"{commentImage.FileName}: {ex.Message}";
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl)) {
+                        return Redirect(returnUrl);
+                    }
+                    if (docId.HasValue) return RedirectToAction("Details", "Post", new { id = docId.Value });
+                    if (imageId.HasValue) return RedirectToAction("Details", "Image", new { id = imageId.Value });
+                    return RedirectToAction("Index", "Home");
                 }
             }
 

@@ -166,13 +166,36 @@ namespace Meguri.Controllers {
             if (string.IsNullOrWhiteSpace(model.Name) && string.IsNullOrWhiteSpace(model.Text) && (validCreateFiles?.Count ?? 0) == 0) {
                 ModelState.AddModelError(string.Empty, _localizer["Post_ContentRequired"]);
             }
-            if (validCreateFiles != null && validCreateFiles.Count > MaxImagesPerPost) {
-                ModelState.AddModelError("ImageFiles", string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, MaxImagesPerPost));
+            if (validCreateFiles != null) {
+                if (validCreateFiles.Count > MaxImagesPerPost) {
+                    ModelState.AddModelError("ImageFiles", string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, MaxImagesPerPost));
+                }
+                foreach (var file in validCreateFiles) {
+                    if (file.Length > ImageProcessingService.MaxInputSizeBytes) {
+                        ModelState.AddModelError("ImageFiles", $"{file.FileName}: {string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, file.Length / 1024.0 / 1024.0)}");
+                    }
+                }
             }
 
             if (!ModelState.IsValid) {
                 ViewBag.Fandoms = await GetJoinedFandomsAsync(userId);
                 return View(model);
+            }
+
+            var processedCreateFiles = new List<(Microsoft.AspNetCore.Http.IFormFile File, ProcessedImageResult Processed)>();
+            if (validCreateFiles != null && validCreateFiles.Count > 0) {
+                foreach (var file in validCreateFiles) {
+                    try {
+                        var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
+                        processedCreateFiles.Add((file, processed));
+                    } catch (Exception ex) {
+                        ModelState.AddModelError("ImageFiles", $"{file.FileName}: {ex.Message}");
+                    }
+                }
+                if (!ModelState.IsValid) {
+                    ViewBag.Fandoms = await GetJoinedFandomsAsync(userId);
+                    return View(model);
+                }
             }
 
             var post = new Post {
@@ -188,43 +211,40 @@ namespace Meguri.Controllers {
             };
 
             // 画像の保存と添付
-            if (model.ImageFiles != null && model.ImageFiles.Count > 0) {
+            if (processedCreateFiles.Count > 0) {
                 int order = 0;
-                foreach (var file in model.ImageFiles) {
-                    if (file.Length > 0) {
-                        try {
-                            var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
-                            var storageKey = $"{userId}/{Guid.NewGuid():N}.webp";
+                foreach (var (file, processed) in processedCreateFiles) {
+                    try {
+                        var storageKey = $"{userId}/{Guid.NewGuid():N}.webp";
 
-                            using var uploadStream = new MemoryStream(processed.Data);
-                            await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
+                        using var uploadStream = new MemoryStream(processed.Data);
+                        await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
 
-                            var image = new Image {
-                                UserId = userId,
-                                Name = Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
-                                StorageKey = storageKey,
-                                ContentType = processed.ContentType,
-                                FileSize = processed.FileSize,
-                                Width = processed.Width,
-                                Height = processed.Height,
-                                Alt = Path.GetFileNameWithoutExtension(file.FileName)
-                            };
-                            image.UserImages.Add(new UserImage {
-                                UserId = userId,
-                                Image = image
-                            });
-                            _context.Images.Add(image);
-                            await _context.SaveChangesAsync();
+                        var image = new Image {
+                            UserId = userId,
+                            Name = Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
+                            StorageKey = storageKey,
+                            ContentType = processed.ContentType,
+                            FileSize = processed.FileSize,
+                            Width = processed.Width,
+                            Height = processed.Height,
+                            Alt = Path.GetFileNameWithoutExtension(file.FileName)
+                        };
+                        image.UserImages.Add(new UserImage {
+                            UserId = userId,
+                            Image = image
+                        });
+                        _context.Images.Add(image);
+                        await _context.SaveChangesAsync();
 
-                            post.PostImages.Add(new PostImage {
-                                ImageId = image.Id,
-                                DisplayOrder = order++
-                            });
-                        } catch (Exception ex) {
-                            ModelState.AddModelError("ImageFiles", $"{file.FileName}: {ex.Message}");
-                            ViewBag.Fandoms = await GetJoinedFandomsAsync(userId);
-                            return View(model);
-                        }
+                        post.PostImages.Add(new PostImage {
+                            ImageId = image.Id,
+                            DisplayOrder = order++
+                        });
+                    } catch (Exception ex) {
+                        ModelState.AddModelError("ImageFiles", $"{file.FileName}: {ex.Message}");
+                        ViewBag.Fandoms = await GetJoinedFandomsAsync(userId);
+                        return View(model);
                     }
                 }
             }
@@ -317,9 +337,32 @@ namespace Meguri.Controllers {
             if (remainingExistingCount + (validNewFiles?.Count ?? 0) > MaxImagesPerPost) {
                 ModelState.AddModelError("NewImageFiles", string.Format(_localizer["Js_MaxImagesAlertFormat"].Value, MaxImagesPerPost));
             }
+            if (validNewFiles != null) {
+                foreach (var file in validNewFiles) {
+                    if (file.Length > ImageProcessingService.MaxInputSizeBytes) {
+                        ModelState.AddModelError("NewImageFiles", $"{file.FileName}: {string.Format(_localizer["Image_Error_MaxSizeExceeded"].Value, file.Length / 1024.0 / 1024.0)}");
+                    }
+                }
+            }
             if (!ModelState.IsValid) {
                 ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
                 return View(model);
+            }
+
+            var processedNewFiles = new List<(Microsoft.AspNetCore.Http.IFormFile File, ProcessedImageResult Processed)>();
+            if (validNewFiles != null && validNewFiles.Count > 0) {
+                foreach (var file in validNewFiles) {
+                    try {
+                        var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
+                        processedNewFiles.Add((file, processed));
+                    } catch (Exception ex) {
+                        ModelState.AddModelError("NewImageFiles", $"{file.FileName}: {ex.Message}");
+                    }
+                }
+                if (!ModelState.IsValid) {
+                    ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+                    return View(model);
+                }
             }
 
             post.Subject = model.Name ?? string.Empty;
@@ -346,43 +389,40 @@ namespace Meguri.Controllers {
             }
 
             // 新規画像の追加
-            if (model.NewImageFiles != null && model.NewImageFiles.Count > 0) {
+            if (processedNewFiles.Count > 0) {
                 int nextOrder = post.PostImages.Any() ? post.PostImages.Max(pi => pi.DisplayOrder) + 1 : 0;
-                foreach (var file in model.NewImageFiles) {
-                    if (file.Length > 0) {
-                        try {
-                            var processed = await _imageProcessingService.ProcessAndOptimizeImageAsync(file);
-                            var storageKey = $"{userId}/{Guid.NewGuid():N}.webp";
+                foreach (var (file, processed) in processedNewFiles) {
+                    try {
+                        var storageKey = $"{userId}/{Guid.NewGuid():N}.webp";
 
-                            using var uploadStream = new MemoryStream(processed.Data);
-                            await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
+                        using var uploadStream = new MemoryStream(processed.Data);
+                        await _r2StorageService.UploadFileAsync(uploadStream, storageKey, processed.ContentType);
 
-                            var image = new Image {
-                                UserId = userId,
-                                Name = Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
-                                StorageKey = storageKey,
-                                ContentType = processed.ContentType,
-                                FileSize = processed.FileSize,
-                                Width = processed.Width,
-                                Height = processed.Height,
-                                Alt = Path.GetFileNameWithoutExtension(file.FileName)
-                            };
-                            image.UserImages.Add(new UserImage {
-                                UserId = userId,
-                                Image = image
-                            });
-                            _context.Images.Add(image);
-                            await _context.SaveChangesAsync();
+                        var image = new Image {
+                            UserId = userId,
+                            Name = Path.GetFileNameWithoutExtension(file.FileName) + ".webp",
+                            StorageKey = storageKey,
+                            ContentType = processed.ContentType,
+                            FileSize = processed.FileSize,
+                            Width = processed.Width,
+                            Height = processed.Height,
+                            Alt = Path.GetFileNameWithoutExtension(file.FileName)
+                        };
+                        image.UserImages.Add(new UserImage {
+                            UserId = userId,
+                            Image = image
+                        });
+                        _context.Images.Add(image);
+                        await _context.SaveChangesAsync();
 
-                            post.PostImages.Add(new PostImage {
-                                ImageId = image.Id,
-                                DisplayOrder = nextOrder++
-                            });
-                        } catch (Exception ex) {
-                            ModelState.AddModelError("NewImageFiles", $"{file.FileName}: {ex.Message}");
-                            ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
-                            return View(model);
-                        }
+                        post.PostImages.Add(new PostImage {
+                            ImageId = image.Id,
+                            DisplayOrder = nextOrder++
+                        });
+                    } catch (Exception ex) {
+                        ModelState.AddModelError("NewImageFiles", $"{file.FileName}: {ex.Message}");
+                        ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+                        return View(model);
                     }
                 }
             }

@@ -19,62 +19,16 @@
 <!-- パンくず -->
 <partial name="_Breadcrumb" model="breadcrumbs" />
 <!-- ヘッダー情報 -->
-<div>
-	@if (isAuthor) {
-		<partial name="_Attribute" model="Model" />
-		<nav class="nav-grid">
-			<ul>
-				<li>
-					<a asp-action="Edit" asp-route-id="@Model.Id" class="button-like">
-						@SharedLocalizer["Common_Edit"]
-					</a>
-				</li>
-				<li>
-					<form asp-action="Delete" asp-route-id="@Model.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
-						@Html.AntiForgeryToken()
-						<button type="submit">
-							@SharedLocalizer["Common_Delete"]
-						</button>
-					</form>
-				</li>
-			</ul>
-		</nav>
-	}
-
-	<h2>@displayTitle</h2>
-
-	<div>
-		@if (Model.User == null) {
-			@SharedLocalizer["Common_UnknownUser"].Value
-		} else if (Model.User.IsWithdrawn) {
-
-			@SharedLocalizer["Common_WithdrawnUser"].Value
-		} else {
-
-			<text>
-				@if (!Model.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
-					@Model.User.UserName
-				} else {
-
-					<a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.User.UserName">@Model.User.UserName</a>
-				}
-			</text>
-		}
-		@Model.CreatedAt.ToLocalTime()
-		<div>
-			<span>@string.Format(SharedLocalizer["Post_ViewsCount"].Value, Model.ViewCount)</span>
-		</div>
-	</div>
-
+<article>
+	<h1>@displayTitle</h1>
 	<!-- 本文 -->
-	<div>
+	<p>
 		@Model.Body
-	</div>
-
+	</p>
 	<!-- 添付画像（順序付き） -->
 	@if (Model.PostImages.Any()) {
 		<div>
-			<h2>@SharedLocalizer["Post_AttachImages"] (@Model.PostImages.Count)</h2>
+			<p>@SharedLocalizer["Post_AttachImages"] (@Model.PostImages.Count)</p>
 			<div>
 				@foreach (var pi in Model.PostImages.OrderBy(x => x.DisplayOrder)) {
 					<div>
@@ -89,7 +43,26 @@
 			</div>
 		</div>
 	}
-
+	@* メタ情報 *@
+	<div class="post-meta">
+		@if (Model.User == null) {
+			@SharedLocalizer["Common_UnknownUser"].Value
+		} else if (Model.User.IsWithdrawn) {
+			@SharedLocalizer["Common_WithdrawnUser"].Value
+		} else {
+			<text>
+				@if (!Model.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+					@Model.User.UserName
+				} else {
+					<a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.User.UserName">@Model.User.UserName</a>
+				}
+			</text>
+		}
+		@Model.CreatedAt.ToLocalTime()
+		<div>
+			<span>@string.Format(SharedLocalizer["Post_ViewsCount"].Value, Model.ViewCount)</span>
+		</div>
+	</div>
 	<!-- タグ一覧 & あいまいさ回避 -->
 	@if (Model.PostTags.Any()) {
 		<div>
@@ -113,7 +86,28 @@
 			@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
 		</div>
 	</div>
-</div>
+
+	@if (isAuthor) {
+		<partial name="_Attribute" model="Model" />
+		<nav class="nav-grid">
+			<ul>
+				<li>
+					<a asp-action="Edit" asp-route-id="@Model.Id" class="button-like">
+						@SharedLocalizer["Common_Edit"]
+					</a>
+				</li>
+				<li>
+					<form asp-action="Delete" asp-route-id="@Model.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
+						@Html.AntiForgeryToken()
+						<button type="submit">
+							@SharedLocalizer["Common_Delete"]
+						</button>
+					</form>
+				</li>
+			</ul>
+		</nav>
+	}
+</article>
 
 
 <!-- スレッド式コメント一覧 & 投稿フォーム -->
