@@ -9,11 +9,24 @@
 	}
 
 	/* フォーム直下の直接の子要素（div, label, button, 各種コンテナ）にグリッドのギャップを適用 */
-	& > div,
-	& > button,
-	& > .account-links {
+	& > div:not([hidden]),
+	& > button:not([hidden]),
+	& > .account-links:not([hidden]) {
 		display: block grid;
 		gap: 0.25rem;
+	}
+
+	& > #passwordSection:not([hidden]) {
+		gap: 1rem;
+
+		& > div:not([hidden]) {
+			display: block grid;
+			gap: 0.25rem;
+		}
+	}
+
+	& [hidden] {
+		display: none;
 	}
 
 	/* エラーがない時は非表示にして余白を消す */

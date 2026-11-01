@@ -17,15 +17,20 @@ export default class PasskeyManager {
      */
     async #fetchOptions(url, form) {
         const token = form.querySelector('input[name="__RequestVerificationToken"]');
+        const formData = new FormData(form);
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'RequestVerificationToken': token ? token.value : '' },
+            body: formData,
             credentials: 'same-origin'
         });
         if (!response.ok) {
-            throw new Error('options request failed');
+            const errorJson = await response.json().catch(() => null);
+            const err = new Error(errorJson?.message || 'options request failed');
+            err.customMessage = errorJson?.message;
+            throw err;
         }
-        return JSON.parse(await response.text());
+        return await response.json();
     }
 
     /**
@@ -38,12 +43,20 @@ export default class PasskeyManager {
         const message = form.querySelector('[data-passkey-message]');
 
         if (!PasskeyManager.isSupported()) {
-            button.hidden = true;
+            if (button.dataset.passkeyToggle !== 'true') {
+                button.hidden = true;
+            }
             return;
         }
 
         button.addEventListener('click', async (e) => {
+            if (button.dataset.passkeyDisabled === 'true') {
+                return;
+            }
             e.preventDefault();
+            if (form.reportValidity && !form.reportValidity()) {
+                return;
+            }
             button.disabled = true;
             if (message) { message.textContent = ''; }
             try {
@@ -59,12 +72,15 @@ export default class PasskeyManager {
                     });
                 }
                 credentialInput.value = JSON.stringify(credential);
+                if (button.dataset.submitUrl) {
+                    form.action = button.dataset.submitUrl;
+                }
                 form.submit();
             } catch (err) {
                 button.disabled = false;
                 console.error('Passkey error:', err);
                 if (message && err && err.name !== 'NotAllowedError') {
-                    message.textContent = button.dataset.errorText || '';
+                    message.textContent = err.customMessage || button.dataset.errorText || '';
                 }
             }
         });
@@ -80,5 +96,6 @@ export default class PasskeyManager {
     }
 }
 
+window.PasskeyManager = PasskeyManager;
 // モジュールとして読み込まれた際に自動で初期化を実行する場合
 new PasskeyManager();

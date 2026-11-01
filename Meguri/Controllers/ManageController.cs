@@ -80,7 +80,10 @@ namespace Meguri.Controllers {
                     Id = Base64Url.EncodeToString(p.CredentialId),
                     Name = p.Name,
                     CreatedAt = p.CreatedAt
-                }).ToList()
+                }).ToList(),
+                HasPassword = await _userManager.HasPasswordAsync(user),
+                Is2faEnabled = user.TwoFactorEnabled,
+                HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null
             };
             return View(model);
         }
@@ -132,8 +135,51 @@ namespace Meguri.Controllers {
             if (user == null) {
                 return await SignOutAndRedirectToLoginAsync();
             }
+            var passkeys = await _userManager.GetPasskeysAsync(user);
+            var hasPassword = await _userManager.HasPasswordAsync(user);
+            var logins = await _userManager.GetLoginsAsync(user);
+            if (!hasPassword && passkeys.Count <= 1 && logins.Count == 0) {
+                StatusMessage = _localizer["Manage_Passkeys_CannotRemoveLastAuthMethod"].Value;
+                return RedirectToAction(nameof(Passkeys));
+            }
             var result = await _userManager.RemovePasskeyAsync(user, Base64Url.DecodeFromChars(id));
             StatusMessage = result.Succeeded ? _localizer["Manage_Passkeys_Removed"].Value : _localizer["Manage_Passkeys_Failed"].Value;
+            return RedirectToAction(nameof(Passkeys));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemovePasswordAndTwoFactor() {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) {
+                return await SignOutAndRedirectToLoginAsync();
+            }
+
+            var passkeys = await _userManager.GetPasskeysAsync(user);
+            if (passkeys.Count == 0) {
+                StatusMessage = _localizer["Manage_Passkeys_Failed"].Value;
+                return RedirectToAction(nameof(Passkeys));
+            }
+
+            if (await _userManager.HasPasswordAsync(user)) {
+                var removePasswordResult = await _userManager.RemovePasswordAsync(user);
+                if (!removePasswordResult.Succeeded) {
+                    AddErrors(removePasswordResult);
+                    return RedirectToAction(nameof(Passkeys));
+                }
+            }
+
+            if (user.TwoFactorEnabled) {
+                var disable2faResult = await _userManager.SetTwoFactorEnabledAsync(user, false);
+                if (!disable2faResult.Succeeded) {
+                    _logger.LogWarning("Failed to disable 2FA for user {UserId}", user.Id);
+                }
+            }
+            await _userManager.ResetAuthenticatorKeyAsync(user);
+
+            await _signInManager.RefreshSignInAsync(user);
+            _logger.LogInformation("User with ID {UserId} removed password and 2FA.", user.Id);
+            StatusMessage = _localizer["Manage_Passkeys_PasswordAnd2faRemoved"].Value;
             return RedirectToAction(nameof(Passkeys));
         }
 
@@ -303,20 +349,27 @@ namespace Meguri.Controllers {
                 return RedirectToAction(nameof(SetPassword));
             }
 
-            var model = new ChangePasswordViewModel { StatusMessage = StatusMessage };
+            var passkeys = await _userManager.GetPasskeysAsync(user);
+            var model = new ChangePasswordViewModel {
+                StatusMessage = StatusMessage,
+                CanRemovePasswordAnd2fa = passkeys.Count > 0
+            };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model) {
-            if (!ModelState.IsValid) {
-                return View(model);
-            }
-
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
                 return await SignOutAndRedirectToLoginAsync();
+            }
+
+            var passkeys = await _userManager.GetPasskeysAsync(user);
+            model.CanRemovePasswordAnd2fa = passkeys.Count > 0;
+
+            if (!ModelState.IsValid) {
+                return View(model);
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
