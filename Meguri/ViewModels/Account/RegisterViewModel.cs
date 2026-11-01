@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Localization;
 
 namespace Meguri.ViewModels.Account {
-    public class RegisterViewModel : IValidatableObject {
+    public class RegisterBaseViewModel : IValidatableObject {
         [Required(ErrorMessage = "Validation_Required")]
         [StringLength(256, ErrorMessage = "Validation_StringLengthMax")]
         [Display(Name = "Account_Field_UserName")]
@@ -16,17 +16,6 @@ namespace Meguri.ViewModels.Account {
         [EmailAddress(ErrorMessage = "Validation_InvalidEmail")]
         [Display(Name = "Account_Field_Email")]
         public string Email { get; set; }
-
-        [Required(ErrorMessage = "Validation_Required")]
-        [StringLength(100, ErrorMessage = "Validation_StringLength", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Account_Field_Password")]
-        public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Account_Field_ConfirmPassword")]
-        [Compare("Password", ErrorMessage = "Validation_Compare")]
-        public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Account_Field_DateOfBirth_Year")]
@@ -40,9 +29,9 @@ namespace Meguri.ViewModels.Account {
         [Display(Name = "Account_Field_DateOfBirth_Day")]
         public int? BirthDay { get; set; }
 
-        public DateOnly DateOfBirth { get; private set; }
+        public DateOnly DateOfBirth { get; protected set; }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
+        public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
             if (BirthYear.HasValue && BirthMonth.HasValue && BirthDay.HasValue) {
                 var localizer = validationContext.GetService(typeof(IStringLocalizer<SharedResource>)) as IStringLocalizer<SharedResource>;
                 string invalidDateMessage = localizer?["Validation_InvalidDate"] ?? "Validation_InvalidDate";
@@ -59,5 +48,22 @@ namespace Meguri.ViewModels.Account {
                 }
             }
         }
+    }
+
+    public class RegisterViewModel : RegisterBaseViewModel {
+        [Required(ErrorMessage = "Validation_Required")]
+        [StringLength(100, ErrorMessage = "Validation_StringLength", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Account_Field_Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Account_Field_ConfirmPassword")]
+        [Compare("Password", ErrorMessage = "Validation_Compare")]
+        public string ConfirmPassword { get; set; }
+    }
+
+    public class PasskeyRegisterViewModel : RegisterBaseViewModel {
+        public string? CredentialJson { get; set; }
     }
 }

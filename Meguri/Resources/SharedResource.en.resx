@@ -1783,4 +1783,40 @@
   <data name="Js_Validate_Min" xml:space="preserve">
     <value>Please enter a value greater than or equal to {0}.</value>
   </data>
+  <data name="Account_Register_MethodPasskey" xml:space="preserve">
+    <value>Register with Passkey (Recommended, no password)</value>
+  </data>
+  <data name="Account_Register_MethodPassword" xml:space="preserve">
+    <value>Register with Password</value>
+  </data>
+  <data name="Account_Register_PasskeyButton" xml:space="preserve">
+    <value>Register with Passkey</value>
+  </data>
+  <data name="Account_Register_PasskeyFailed" xml:space="preserve">
+    <value>Passkey registration failed.</value>
+  </data>
+  <data name="Manage_Passkeys_RemovePasswordAnd2fa_Title" xml:space="preserve">
+    <value>Remove Password and Two-Factor Authentication</value>
+  </data>
+  <data name="Manage_Passkeys_RemovePasswordAnd2fa_Description" xml:space="preserve">
+    <value>Because you have a registered passkey, you can remove your password and two-factor authentication to log in using passkeys only.</value>
+  </data>
+  <data name="Manage_Passkeys_RemovePasswordAnd2fa_Button" xml:space="preserve">
+    <value>Remove Password and Two-Factor Authentication</value>
+  </data>
+  <data name="Manage_Passkeys_RemovePasswordAnd2fa_Confirm" xml:space="preserve">
+    <value>Are you sure you want to remove your password and two-factor authentication? You will only be able to log in with passkeys.</value>
+  </data>
+  <data name="Manage_Passkeys_PasswordAnd2faRemoved" xml:space="preserve">
+    <value>Password and two-factor authentication have been removed.</value>
+  </data>
+  <data name="Manage_Passkeys_CannotRemoveLastAuthMethod" xml:space="preserve">
+    <value>You cannot remove your last passkey because there are no other login methods.</value>
+  </data>
+  <data name="Account_Login_MethodPasskey" xml:space="preserve">
+    <value>Log in with a passkey (Recommended, no password)</value>
+  </data>
+  <data name="Account_Login_MethodPassword" xml:space="preserve">
+    <value>Log in with a password</value>
+  </data>
 </root>

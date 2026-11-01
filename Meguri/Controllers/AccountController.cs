@@ -105,38 +105,52 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PasskeyRequestOptions() {
-            var optionsJson = await _signInManager.MakePasskeyRequestOptionsAsync(user: null);
+        public async Task<IActionResult> PasskeyRequestOptions(string? userName = null) {
+            ApplicationUser? user = null;
+            if (!string.IsNullOrWhiteSpace(userName)) {
+                user = await _userManager.FindByNameAsync(userName.Trim());
+            }
+            var optionsJson = await _signInManager.MakePasskeyRequestOptionsAsync(user);
             return Content(optionsJson, "application/json");
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PasskeyLogin(string credentialJson, bool rememberMe = false, string returnUrl = null) {
+        public async Task<IActionResult> PasskeyLogin(string credentialJson, string? userName = null, [FromForm(Name = "cf-turnstile-response")] string? turnstileToken = null, bool rememberMe = false, string returnUrl = null) {
             ViewData["ReturnUrl"] = returnUrl;
-            if (string.IsNullOrEmpty(credentialJson)) {
-                ModelState.AddModelError(string.Empty, _localizer["Account_Login_PasskeyFailed"]);
-                return View(nameof(Login), new LoginViewModel());
+            if (!await _turnstileService.VerifyAsync(turnstileToken, "login", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Error_TurnstileFailed"]);
+                return View(nameof(Login), new LoginViewModel { UserName = userName, RememberMe = rememberMe });
             }
 
-            var assertion = await _signInManager.PerformPasskeyAssertionAsync(credentialJson);
-            var user = assertion.Succeeded ? assertion.User : null;
+            if (string.IsNullOrEmpty(credentialJson)) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Login_PasskeyFailed"]);
+                return View(nameof(Login), new LoginViewModel { UserName = userName, RememberMe = rememberMe });
+            }
+
+            PasskeyAssertionResult<ApplicationUser>? assertion = null;
+            try {
+                assertion = await _signInManager.PerformPasskeyAssertionAsync(credentialJson);
+            } catch (Exception ex) {
+                _logger.LogWarning(ex, "Passkey assertion threw an exception.");
+            }
+            var user = assertion?.Succeeded == true ? assertion.User : null;
             if (user == null || user.IsWithdrawn) {
                 ModelState.AddModelError(string.Empty, _localizer["Account_Login_PasskeyFailed"]);
-                return View(nameof(Login), new LoginViewModel());
+                return View(nameof(Login), new LoginViewModel { UserName = userName, RememberMe = rememberMe });
             }
 
             if (!await _signInManager.CanSignInAsync(user)) {
                 ModelState.AddModelError(string.Empty, _localizer["Account_Error_EmailNotConfirmed"]);
-                return View(nameof(Login), new LoginViewModel());
+                return View(nameof(Login), new LoginViewModel { UserName = userName, RememberMe = rememberMe });
             }
             if (await _userManager.IsLockedOutAsync(user)) {
                 return RedirectToAction(nameof(Lockout));
             }
 
             // サインカウント等を更新してからサインイン（Passkeyは多要素認証済みのため2FAは求めない）
-            await _userManager.AddOrUpdatePasskeyAsync(user, assertion.Passkey);
+            await _userManager.AddOrUpdatePasskeyAsync(user, assertion!.Passkey);
             await _signInManager.SignInAsync(user, rememberMe);
             _logger.LogInformation("User logged in with a passkey.");
             return RedirectToLocal(returnUrl);
@@ -281,6 +295,110 @@ namespace Meguri.Controllers {
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PasskeyRegisterOptions(PasskeyRegisterViewModel model) {
+            if (!ModelState.IsValid) {
+                var firstError = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .FirstOrDefault();
+                return BadRequest(new { message = firstError ?? _localizer["Account_Register_PasskeyFailed"].Value });
+            }
+
+            var withdrawnUser = await _userManager.FindByNameAsync(model.UserName);
+            if (withdrawnUser != null && withdrawnUser.IsWithdrawn) {
+                return BadRequest(new { message = _localizer["Account_Error_UnavailableUserName"].Value });
+            }
+
+            var existingByName = await _userManager.FindByNameAsync(model.UserName);
+            if (existingByName != null) {
+                return BadRequest(new { message = string.Format(_localizer["Identity_DuplicateUserName"].Value, model.UserName) });
+            }
+
+            var existingByEmail = await _userManager.FindByEmailAsync(model.Email);
+            if (existingByEmail != null) {
+                return BadRequest(new { message = string.Format(_localizer["Identity_DuplicateEmail"].Value, model.Email) });
+            }
+
+            var userEntity = new PasskeyUserEntity {
+                Id = Guid.NewGuid().ToString(),
+                Name = model.UserName,
+                DisplayName = model.UserName
+            };
+            var optionsJson = await _signInManager.MakePasskeyCreationOptionsAsync(userEntity);
+            return Content(optionsJson, "application/json");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PasskeyRegister(PasskeyRegisterViewModel model, [FromForm(Name = "cf-turnstile-response")] string? turnstileToken = null, string returnUrl = null) {
+            ViewData["ReturnUrl"] = returnUrl;
+            if (!await _turnstileService.VerifyAsync(turnstileToken, "signup", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Error_TurnstileFailed"]);
+                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+            }
+
+            if (string.IsNullOrEmpty(model.CredentialJson)) {
+                ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
+                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+            }
+
+            if (ModelState.IsValid) {
+                var withdrawnUser = await _userManager.FindByNameAsync(model.UserName);
+                if (withdrawnUser != null && withdrawnUser.IsWithdrawn) {
+                    ModelState.AddModelError(nameof(model.UserName), _localizer["Account_Error_UnavailableUserName"]);
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+                }
+
+                PasskeyAttestationResult attestation;
+                try {
+                    attestation = await _signInManager.PerformPasskeyAttestationAsync(model.CredentialJson);
+                } catch (Exception ex) {
+                    _logger.LogWarning(ex, "Passkey attestation threw an exception.");
+                    ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+                }
+
+                if (!attestation.Succeeded) {
+                    _logger.LogWarning("Passkey registration failed: {Error}", attestation.Failure?.Message);
+                    ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+                }
+
+                var user = new ApplicationUser {
+                    Id = attestation.UserEntity.Id,
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    DateOfBirth = model.DateOfBirth
+                };
+                var result = await _userManager.CreateAsync(user);
+                if (result.Succeeded) {
+                    _logger.LogInformation("User created a new account with passkey.");
+
+                    attestation.Passkey.Name = _localizer["Manage_Passkeys_DefaultName"].Value;
+                    var addPasskeyResult = await _userManager.AddOrUpdatePasskeyAsync(user, attestation.Passkey);
+                    if (!addPasskeyResult.Succeeded) {
+                        _logger.LogWarning("Failed to associate passkey with user: {Errors}", string.Join(", ", addPasskeyResult.Errors.Select(e => e.Description)));
+                    }
+
+                    _context.FandomUsers.Add(new FandomUser { FandomId = 1, UserId = user.Id });
+                    await _context.SaveChangesAsync();
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackUrl = Url.EmailConfirmationLink(user.Id, code, Request.Scheme);
+                    await _emailSender.SendConfirmationLinkAsync(user, model.Email, callbackUrl);
+
+                    return RedirectToAction(nameof(RegisterConfirmation));
+                }
+                AddErrors(result);
+            }
+
+            return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
         }
 
         [HttpGet]

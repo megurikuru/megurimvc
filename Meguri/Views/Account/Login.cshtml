@@ -17,8 +17,20 @@
 
 <h2>@ViewData["Title"]</h2>
 <section>
-	<form class="account" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+	<form class="account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
 		<div asp-validation-summary="All"></div>
+		<input type="hidden" name="credentialJson" />
+
+		<div class="auth-method-selector" id="authMethodSelector">
+			<label class="option-row">
+				<input type="radio" name="authMethod" id="authMethodPasskey" value="passkey" checked />
+				<span>@SharedLocalizer["Account_Login_MethodPasskey"]</span>
+			</label>
+			<label class="option-row">
+				<input type="radio" name="authMethod" id="authMethodPassword" value="password" />
+				<span>@SharedLocalizer["Account_Login_MethodPassword"]</span>
+			</label>
+		</div>
 
 		<div>
 			<label asp-for="UserName"></label>
@@ -26,10 +38,12 @@
 			<span asp-validation-for="UserName"></span>
 		</div>
 
-		<div>
-			<label asp-for="Password"></label>
-			<input asp-for="Password" />
-			<span asp-validation-for="Password"></span>
+		<div id="passwordSection" hidden>
+			<div>
+				<label asp-for="Password"></label>
+				<input asp-for="Password" disabled />
+				<span asp-validation-for="Password"></span>
+			</div>
 		</div>
 
 		<label asp-for="RememberMe" class="check-row">
@@ -41,7 +55,11 @@
 			<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="login"></div>
 		}
 
-		<button type="submit">@SharedLocalizer["Account_Login_Button"]</button>
+		<div id="passkeySection">
+			<button type="button" data-passkey="login" data-options-url="@Url.Action("PasskeyRequestOptions", "Account")" data-submit-url="@Url.Action("PasskeyLogin", "Account", new { returnUrl = ViewData["ReturnUrl"] })" data-error-text="@SharedLocalizer["Account_Login_PasskeyFailed"]">@SharedLocalizer["Account_Login_PasskeyButton"]</button>
+			<span data-passkey-message></span>
+		</div>
+		<button type="submit" id="passwordSubmitButton" hidden disabled>@SharedLocalizer["Account_Login_Button"]</button>
 
 		<div class="account-links">
 			<p>
@@ -52,14 +70,6 @@
 			</p>
 		</div>
 	</form>
-
-	<form class="account" asp-action="PasskeyLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-		<input type="hidden" name="credentialJson" />
-		<div>
-			<button type="button" data-passkey="login" data-options-url="@Url.Action("PasskeyRequestOptions", "Account")" data-error-text="@SharedLocalizer["Account_Login_PasskeyFailed"]">@SharedLocalizer["Account_Login_PasskeyButton"]</button>
-			<span data-passkey-message></span>
-		</div>
-	</form>
 </section>
 
 @section Scripts {
@@ -67,5 +77,68 @@
 		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 	}
 	<script type="module" src="~/js/passkey.js" asp-append-version="true"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', () => {
+			const passkeyRadio = document.getElementById('authMethodPasskey');
+			const passwordRadio = document.getElementById('authMethodPassword');
+			const passwordSection = document.getElementById('passwordSection');
+			const passkeySection = document.getElementById('passkeySection');
+			const passwordSubmitButton = document.getElementById('passwordSubmitButton');
+			const selector = document.getElementById('authMethodSelector');
+			const passwordInputs = passwordSection ? passwordSection.querySelectorAll('input') : [];
+			const form = selector?.closest('form');
+			const passkeyButton = passkeySection?.querySelector('button[data-passkey]');
+
+			const isPasskeySupported = window.PublicKeyCredential &&
+				typeof PublicKeyCredential.parseCreationOptionsFromJSON === 'function' &&
+				typeof PublicKeyCredential.parseRequestOptionsFromJSON === 'function';
+
+			function setMode(isPasskey) {
+				if (isPasskey) {
+					if (passwordSection) passwordSection.hidden = true;
+					passwordInputs.forEach(i => i.disabled = true);
+					if (passkeySection) passkeySection.hidden = false;
+					if (passwordSubmitButton) {
+						passwordSubmitButton.hidden = true;
+						passwordSubmitButton.disabled = true;
+					}
+				} else {
+					if (passwordSection) passwordSection.hidden = false;
+					passwordInputs.forEach(i => i.disabled = false);
+					if (passkeySection) passkeySection.hidden = true;
+					if (passwordSubmitButton) {
+						passwordSubmitButton.hidden = false;
+						passwordSubmitButton.disabled = false;
+					}
+				}
+			}
+
+			form?.addEventListener('submit', (e) => {
+				if (passkeyRadio?.checked) {
+					e.preventDefault();
+					passkeyButton?.click();
+				}
+			});
+
+			if (!isPasskeySupported) {
+				if (selector) selector.hidden = true;
+				if (passwordRadio) passwordRadio.checked = true;
+				setMode(false);
+			} else {
+				passkeyRadio?.addEventListener('change', () => setMode(true));
+				passwordRadio?.addEventListener('change', () => setMode(false));
+				@if (ViewData.ModelState.ContainsKey(nameof(Model.Password))) {
+					<text>
+					if (passwordRadio) passwordRadio.checked = true;
+					setMode(false);
+					</text>
+				} else {
+					<text>
+					setMode(true);
+					</text>
+				}
+			}
+		});
+	</script>
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 }
