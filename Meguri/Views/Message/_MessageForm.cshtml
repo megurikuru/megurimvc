@@ -21,10 +21,11 @@
 			<textarea id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
 		</div>
 		<details class="message-disclosure">
-			<summary><img src="~/icons/image.svg" class="icon" alt="" />@SharedLocalizer["Message_ImageAttachLabel"]</summary>
+			<summary><img src="~/icons/image.svg" class="icon" alt="" />@SharedLocalizer["Message_ImageAttachLabel"] <span id="chatImageCountDisplay">0/16</span></summary>
 			<div class="attribute-wrap">
 				<label for="chatImageFiles">@SharedLocalizer["Message_ImageAttachLabel"]</label>
-				<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" />
+				<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#chatImagePreviewContainer" data-image-count="#chatImageCountDisplay" data-max-images="16" />
+				<div id="chatImagePreviewContainer" class="image-preview-list"></div>
 			</div>
 		</details>
 		<div class="button-wrap">
