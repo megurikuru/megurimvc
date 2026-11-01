@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Mvc.ViewFeatures.IFileVersionProvider FileVersionProvider
+<!DOCTYPE html>
 @{
 	var themeCookie = Context.Request.Cookies["meguri_theme"] ?? "auto";
 	var isHomePage = string.Equals(ViewContext.RouteData.Values["controller"] as string, "Home", StringComparison.OrdinalIgnoreCase)
