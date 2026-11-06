@@ -10,7 +10,7 @@ namespace Meguri.ViewModels.Tag {
         public bool CanEdit { get; set; }
 
         // 同義語・表記揺れ（同一概念内の別名タグ）
-        public List<string> Synonyms { get; set; } = new List<string>();
+        public List<SynonymDto> Synonyms { get; set; } = new List<SynonymDto>();
 
         // 上位語 (Broader)
         public List<RelatedConceptDto> BroaderConcepts { get; set; } = new List<RelatedConceptDto>();
@@ -26,6 +26,11 @@ namespace Meguri.ViewModels.Tag {
         public string? NewBroaderText { get; set; }
         public string? NewNarrowerText { get; set; }
         public string? NewRelatedText { get; set; }
+    }
+
+    public class SynonymDto {
+        public long TagId { get; set; }
+        public string Text { get; set; } = string.Empty;
     }
 
     public class RelatedConceptDto {

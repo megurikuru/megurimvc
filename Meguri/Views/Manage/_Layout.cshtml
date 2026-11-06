@@ -2,9 +2,11 @@
 	Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<h1>@SharedLocalizer["Manage_AccountManagement_Title"]</h1>
+<div>
+	<h1>@SharedLocalizer["Manage_AccountManagement_Title"]</h1>
 
-@await Html.PartialAsync("_ManageNav")
+	@await Html.PartialAsync("_ManageNav")
+</div>
 @RenderBody()
 
 @section Scripts {

@@ -53,7 +53,6 @@
 }
 
 .nav-sub {
-	margin-top: 0.5rem;
 	border-top: 1px solid var(--color-border);
 
 	& > .title {
@@ -61,16 +60,5 @@
 		font-size: 1.1rem;
 		text-align: center;
 		background-color: var(--color-bg-title);
-	}
-}
-
-body:not([data-controller="Home"]) {
-	.nav-grid {
-		margin-top: 0.5rem;
-	}
-
-	h1 + .nav-grid,
-	.fandom-meta + .nav-grid {
-		margin-top: 0;
 	}
 }

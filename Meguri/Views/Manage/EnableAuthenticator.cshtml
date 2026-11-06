@@ -14,10 +14,12 @@
 			</p>
 		</li>
 		<li>
-			<p>@SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part1"] <kbd>@Model.SharedKey</kbd> @SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part2"]</p>
-			@* <div >@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div> *@
-			<div id="qrCode"></div>
-			<div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+			<div>
+				<p>@SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part1"] <kbd>@Model.SharedKey</kbd> @SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part2"]</p>
+				@* <div >@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div> *@
+				<div id="qrCode"></div>
+				<div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+			</div>
 		</li>
 		<li>
 			<p>

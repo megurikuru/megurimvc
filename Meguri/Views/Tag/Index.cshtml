@@ -1,76 +1,68 @@
 ﻿@model IEnumerable<Meguri.Models.TagConcept>
-@using System.Security.Claims
 @{
 	// ページタイトルと検索クエリの初期設定
 	ViewData["Title"] = SharedLocalizer["Tag_Title"];
 	var searchQuery = ViewBag.SearchQuery as string;
-	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
 
-<h1>@SharedLocalizer["Tag_Title"]</h1>
-
-@* タグ検索フォームエリア	*@
-@{
-	var searchForm = new SearchFormViewModel {
-		Controller = "Tag",
-		Action = "Index",
-		ParameterName = "q",
-		Value = searchQuery,
-		PlaceholderKey = "Tag_SearchPlaceholder"
-	};
-}
-<partial name="_SearchForm" model="searchForm" />
-
-@* タグ一覧表示エリア *@
 <div>
-	<div class="tag-wrap">
-		<div>
-			@* タグ概念（TagConcept）一覧のループ表示 *@
-			@foreach (var concept in Model) {
-				// 代表タグ名の取得（存在しない場合はConcept IDでフォールバック）
-				var tagText = concept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{concept.Id}";
-				// 紐づく投稿数と画像数の合計カウント
-				var count = concept.PostTags.Count + concept.ImageTags.Count;
-				<div class="tag-item">
-					@* タグ詳細ページへのリンク（タグ名・使用件数） *@
-					<a asp-action="Details" asp-route-conceptId="@concept.Id">
-						@tagText
-						<span>@count</span>
-					</a>
-					@* 曖昧さ回避ページへのリンク（作成者のみ表示） *@
-					@if (currentUserId != null && concept.UserId == currentUserId) {
-						<a asp-action="Disambiguation" asp-route-id="@concept.Id" title="@SharedLocalizer["Tag_DisambiguationBtn"]">
-							@SharedLocalizer["Tag_DisambiguationBtn"]
-						</a>
-					}
-				</div>
-			}
-		</div>
-		@* タグが1件も見つからなかった場合のメッセージ *@
-		@if (!Model.Any()) {
-			<p>@SharedLocalizer["Tag_NoTagsFound"]</p>
-		}
-	</div>
+	<h1>@SharedLocalizer["Tag_Title"]</h1>
 
-	@* ページネーションエリア *@
+	@* タグ検索フォームエリア	*@
 	@{
-		// ViewBagからページネーション用パラメータを展開
-		var routeValues = new Dictionary<string, string>();
-		if (!string.IsNullOrWhiteSpace(searchQuery)) {
-			routeValues["q"] = searchQuery;
-		}
-		var pager = new PaginationViewModel {
+		var searchForm = new SearchFormViewModel {
 			Controller = "Tag",
 			Action = "Index",
-			HasPrevious = ViewBag.HasPrevious as bool? ?? false,
-			HasNext = ViewBag.HasNext as bool? ?? false,
-			TotalCount = ViewBag.TotalCount as int? ?? 0,
-			Skip = ViewBag.Skip as int? ?? 0,
-			PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
-			NextSkip = ViewBag.NextSkip as int? ?? 0,
-			CurrentCount = Model.Count(),
-			RouteValues = routeValues
+			ParameterName = "q",
+			Value = searchQuery,
+			PlaceholderKey = "Tag_SearchPlaceholder"
 		};
 	}
-	<partial name="_Pagination" model="pager" />
+	<partial name="_SearchForm" model="searchForm" />
 </div>
+
+@* タグ一覧表示エリア *@
+<div class="tag-wrap">
+	<div class="tag-list">
+		@* タグ概念（TagConcept）一覧のループ表示 *@
+		@foreach (var concept in Model) {
+			// 代表タグ名の取得（存在しない場合はConcept IDでフォールバック）
+			var tagText = concept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{concept.Id}";
+			// 紐づく投稿数と画像数の合計カウント
+			var count = concept.PostTags.Count + concept.ImageTags.Count;
+			<a asp-action="Details" asp-route-conceptId="@concept.Id">
+				@* タグ詳細ページへのリンク（タグ名・使用件数） *@
+				<div class="tag-item">				
+					@tagText
+					<span>@count</span>
+				</div>
+			</a>
+		}
+	</div>
+	@* タグが1件も見つからなかった場合のメッセージ *@
+	@if (!Model.Any()) {
+		<p>@SharedLocalizer["Tag_NoTagsFound"]</p>
+	}
+</div>
+
+@* ページネーションエリア *@
+@{
+	// ViewBagからページネーション用パラメータを展開
+	var routeValues = new Dictionary<string, string>();
+	if (!string.IsNullOrWhiteSpace(searchQuery)) {
+		routeValues["q"] = searchQuery;
+	}
+	var pager = new PaginationViewModel {
+		Controller = "Tag",
+		Action = "Index",
+		HasPrevious = ViewBag.HasPrevious as bool? ?? false,
+		HasNext = ViewBag.HasNext as bool? ?? false,
+		TotalCount = ViewBag.TotalCount as int? ?? 0,
+		Skip = ViewBag.Skip as int? ?? 0,
+		PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
+		NextSkip = ViewBag.NextSkip as int? ?? 0,
+		CurrentCount = Model.Count(),
+		RouteValues = routeValues
+	};
+}
+<partial name="_Pagination" model="pager" />

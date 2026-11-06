@@ -1,63 +1,94 @@
 ﻿@model Meguri.ViewModels.Tag.DisambiguationViewModel
 @{
+	// ページタイトルの設定（代表タグ名を含める）
 	ViewData["Title"] = string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText);
 
+	// パンくずリストの構築（タグ一覧 > タグ詳細 > 曖昧さ回避）
 	var breadcrumbs = new List<BreadcrumbItemViewModel> {
 		new(SharedLocalizer["Tag_Title"].Value, Url.Action("Index", "Tag")),
-		new($"#{Model.PrimaryTagText}", Url.Action("Details", "Tag", new { conceptId = Model.TagConceptId })),
+		new($"{Model.PrimaryTagText}", Url.Action("Details", "Tag", new { conceptId = Model.TagConceptId })),
 		new(SharedLocalizer["Tag_DisambiguationBtn"].Value)
 	};
 }
 
-@* パンくずリスト *@
-<partial name="_Breadcrumb" model="breadcrumbs" />
+@* ヘッダーエリア（パンくずリスト・見出し・戻るボタン） *@
+<div>
+	@* パンくずリスト *@
+	<partial name="_Breadcrumb" model="breadcrumbs" />
+	@* 曖昧さ回避ページの見出し *@
+	<h1>@string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h1>
 
-<div class="space-between-wrap">
-	<h4>@string.Format(SharedLocalizer["Tag_DisambiguationTitle"].Value, Model.PrimaryTagText)</h4>
-	<a asp-action="Details" asp-route-conceptId="@Model.TagConceptId" class="button-like btn-sm">@SharedLocalizer["Common_Back"]</a>
+	@* ナビゲーション（タグ詳細ページへ戻る） *@
+	<nav class="nav-grid">
+		<ul>
+			<li>
+				<a asp-action="Details" asp-route-conceptId="@Model.TagConceptId" class="button-like">
+					@SharedLocalizer["Common_Back"]
+				</a>
+			</li>
+		</ul>
+	</nav>
 </div>
 
+@* 編集権限がない場合（作成者以外）の注意メッセージ *@
 @if (!Model.CanEdit) {
 	<p>@SharedLocalizer["Tag_OnlyOwnerCanEdit"]</p>
 }
 
-<p>
-	@string.Format(SharedLocalizer["Tag_DisambiguationIntroFormat"].Value, Model.PrimaryTagText)
-</p>
+@* 曖昧さ回避・シソーラス設定の説明文 *@
+<article>
+	<p>
+		@string.Format(SharedLocalizer["Tag_DisambiguationIntroFormat"].Value, Model.PrimaryTagText)
+	</p>
+</article>
 
-<!-- 同義語 (Synonyms) -->
-<div class="attribute-wrap">
-	<h5>@SharedLocalizer["Tag_SynonymTerms"]</h5>
+@* 同義語・別名・表記揺れ (Synonyms) セクション *@
+<article>
+	<h2>@SharedLocalizer["Tag_SynonymTerms"]</h2>
 	<p class="description">@SharedLocalizer["Tag_SynonymHelp"]</p>
-
-	<div class="inline-actions">
-		<span>#@Model.PrimaryTagText @SharedLocalizer["Tag_StandardBadge"]</span>
+	<div>
+		@* 登録済みの同義語一覧と削除フォーム *@
 		@foreach (var syn in Model.Synonyms) {
-			<span>#@syn</span>
+			<div class="inline-actions">
+				<p>@syn.Text</p>
+				@if (Model.CanEdit) {
+					<form asp-action="RemoveSynonym" method="post">
+						@Html.AntiForgeryToken()
+						<input type="hidden" name="tagId" value="@syn.TagId" />
+						<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
+						<button type="submit" class="btn-sm"><img src="~/icons/x.svg" class="icon" /></button>
+					</form>
+				}
+			</div>
+		}
+
+		@* 同義語の追加フォーム（編集権限がある場合のみ表示） *@
+		@if (Model.CanEdit) {
+			<div>
+				<form asp-action="AddSynonym" method="post" class="input-group">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
+					<input type="text" name="synonymText" placeholder="@SharedLocalizer["Tag_SynonymPlaceholder"]" required />
+					<button type="submit">@SharedLocalizer["Common_Add"]</button>
+				</form>
+			</div>
 		}
 	</div>
+</article>
 
-	@if (Model.CanEdit) {
-		<form asp-action="AddSynonym" method="post" class="input-group">
-			@Html.AntiForgeryToken()
-			<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-			<input type="text" name="synonymText" placeholder="@SharedLocalizer["Tag_SynonymPlaceholder"]" required />
-			<button type="submit">@SharedLocalizer["Common_Add"]</button>
-		</form>
-	}
-</div>
-
-<!-- 上位語 (Broader) -->
-<div class="attribute-wrap">
-	<h5>@SharedLocalizer["Tag_BroaderTerms"]</h5>
+@* 上位語 (Broader) セクション *@
+<article>
+	<h2>@SharedLocalizer["Tag_BroaderTerms"]</h2>
 	<p class="description">@SharedLocalizer["Tag_BroaderHelp"]</p>
 
+	@* 上位語が未設定の場合のメッセージ *@
 	@if (!Model.BroaderConcepts.Any()) {
 		<span>@SharedLocalizer["Common_NotSet"]</span>
 	}
+	@* 登録済みの上位語一覧と削除フォーム *@
 	@foreach (var b in Model.BroaderConcepts) {
 		<div class="inline-actions">
-			<a asp-action="Details" asp-route-conceptId="@b.ConceptId">#@b.Text</a>
+			<a asp-action="Details" asp-route-conceptId="@b.ConceptId">@b.Text</a>
 			@if (Model.CanEdit) {
 				<form asp-action="RemoveRelationship" method="post">
 					@Html.AntiForgeryToken()
@@ -69,6 +100,7 @@
 		</div>
 	}
 
+	@* 上位語の追加フォーム（編集権限がある場合のみ表示） *@
 	@if (Model.CanEdit) {
 		<form asp-action="AddRelationship" method="post" class="input-group">
 			@Html.AntiForgeryToken()
@@ -78,19 +110,21 @@
 			<button type="submit">@SharedLocalizer["Common_Add"]</button>
 		</form>
 	}
-</div>
+</article>
 
-<!-- 下位語 (Narrower) -->
-<div class="attribute-wrap">
-	<h5>@SharedLocalizer["Tag_NarrowerTerms"]</h5>
+@* 下位語 (Narrower) セクション *@
+<article>
+	<h2>@SharedLocalizer["Tag_NarrowerTerms"]</h2>
 	<p class="description">@SharedLocalizer["Tag_NarrowerHelp"]</p>
 
+	@* 下位語が未設定の場合のメッセージ *@
 	@if (!Model.NarrowerConcepts.Any()) {
 		<span>@SharedLocalizer["Common_NotSet"]</span>
 	}
+	@* 登録済みの下位語一覧と削除フォーム *@
 	@foreach (var n in Model.NarrowerConcepts) {
 		<div class="inline-actions">
-			<a asp-action="Details" asp-route-conceptId="@n.ConceptId">#@n.Text</a>
+			<a asp-action="Details" asp-route-conceptId="@n.ConceptId">@n.Text</a>
 			@if (Model.CanEdit) {
 				<form asp-action="RemoveRelationship" method="post">
 					@Html.AntiForgeryToken()
@@ -102,6 +136,7 @@
 		</div>
 	}
 
+	@* 下位語の追加フォーム（編集権限がある場合のみ表示） *@
 	@if (Model.CanEdit) {
 		<form asp-action="AddRelationship" method="post" class="input-group">
 			@Html.AntiForgeryToken()
@@ -111,19 +146,21 @@
 			<button type="submit">@SharedLocalizer["Common_Add"]</button>
 		</form>
 	}
-</div>
+</article>
 
-<!-- 関連語 (Related) -->
-<div class="attribute-wrap">
-	<h5>@SharedLocalizer["Tag_RelatedTerms"]</h5>
-	<p class="description">@SharedLocalizer["Tag_RelatedHelp"]</p>
+@* 関連語 (Related) セクション *@
+<article>
+	<h2>@SharedLocalizer["Tag_RelatedTerms"]</h2>
+	<div class="description">@SharedLocalizer["Tag_RelatedHelp"]</div>
 
+	@* 関連語が未設定の場合のメッセージ *@
 	@if (!Model.RelatedConcepts.Any()) {
-		<span>@SharedLocalizer["Common_NotSet"]</span>
+		<p>@SharedLocalizer["Common_NotSet"]</p>
 	}
+	@* 登録済みの関連語一覧と削除フォーム *@
 	@foreach (var r in Model.RelatedConcepts) {
 		<div class="inline-actions">
-			<a asp-action="Details" asp-route-conceptId="@r.ConceptId">#@r.Text</a>
+			<a asp-action="Details" asp-route-conceptId="@r.ConceptId">@r.Text</a>
 			@if (Model.CanEdit) {
 				<form asp-action="RemoveRelationship" method="post">
 					@Html.AntiForgeryToken()
@@ -135,6 +172,7 @@
 		</div>
 	}
 
+	@* 関連語の追加フォーム（編集権限がある場合のみ表示） *@
 	@if (Model.CanEdit) {
 		<form asp-action="AddRelationship" method="post" class="input-group">
 			@Html.AntiForgeryToken()
@@ -144,4 +182,4 @@
 			<button type="submit">@SharedLocalizer["Common_Add"]</button>
 		</form>
 	}
-</div>
+</article>

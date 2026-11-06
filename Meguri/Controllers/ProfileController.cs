@@ -30,6 +30,9 @@ namespace Meguri.Controllers {
             if (!isOwner) {
                 query = query.Where(p => p.IsPublic);
             }
+            if (User.Identity?.IsAuthenticated != true) {
+                query = query.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
+            }
 
             var totalCount = await query.CountAsync();
             var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;

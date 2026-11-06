@@ -31,13 +31,15 @@
 	};
 }
 
-@* パンくずリスト *@
-<partial name="_Breadcrumb" model="breadcrumbs" />
+<div>
+	@* パンくずリスト *@
+	<partial name="_Breadcrumb" model="breadcrumbs" />
 
-<h1><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h1>
+	<h1><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h1>
 
-@* メンバー一覧 *@
-<partial name="_MemberList" model="Model"	/>
+	@* メンバー一覧 *@
+	<partial name="_MemberList" model="Model"	/>
+</div>
 
 @* メッセージフォーム *@
 <partial name="_MessageForm" model="Model" />

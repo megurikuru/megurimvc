@@ -793,7 +793,7 @@
     <value>タイトルや本文で検索...</value>
   </data>
   <data name="Post_ShowingTagFormat" xml:space="preserve">
-    <value>タグ: #{0} の投稿を表示中</value>
+    <value>タグ: 「{0}」 の投稿を表示中</value>
   </data>
   <data name="Post_PinnedBadge" xml:space="preserve">
     <value>固定</value>
@@ -808,7 +808,7 @@
     <value>{0} リアクション</value>
   </data>
   <data name="Image_ShowingTagFormat" xml:space="preserve">
-    <value>#{0} の画像を表示中</value>
+    <value>「{0}」 の画像を表示中</value>
   </data>
   <data name="Image_PublicBadge" xml:space="preserve">
     <value>公開</value>
@@ -1114,7 +1114,7 @@
     <value>0 件</value>
   </data>
   <data name="Tag_DisambiguationIntroFormat" xml:space="preserve">
-    <value>タグ「#{0}」の意味やカテゴリを明確にするため、上位語（より包括的な概念）、下位語（より具体的な概念）、同義語（別名・表記揺れ）、関連語（関係する概念）を設定できます。</value>
+    <value>タグ「{0}」の意味やカテゴリを明確にするため、上位語（より包括的な概念）、下位語（より具体的な概念）、同義語（別名・表記揺れ）、関連語（関係する概念）を設定できます。</value>
   </data>
   <data name="Tag_StandardBadge" xml:space="preserve">
     <value>(標準)</value>

@@ -21,14 +21,16 @@
 	};
 }
 
-<h1>@SharedLocalizer["Message_Title"]</h1>
-<nav class="nav-grid">
-	<ul>
-		<li>
-			<a asp-action="Create" class="button-like icon-wrap">@SharedLocalizer["Message_NewConversation"]</a>
-		</li>
-	</ul>
-</nav>
+<div>
+	<h1>@SharedLocalizer["Message_Title"]</h1>
+	<nav class="nav-grid">
+		<ul>
+			<li>
+				<a asp-action="Create" class="button-like icon-wrap">@SharedLocalizer["Message_NewConversation"]</a>
+			</li>
+		</ul>
+	</nav>
+</div>
 
 <div class="attribute-wrap">
 	<form asp-action="Index" method="get">
@@ -53,15 +55,17 @@
 	@foreach (var c in Model.Conversations) {
 		<a asp-action="Details" asp-route-id="@c.Id">
 			<article>
-				<h2>
-					<img src="~/icons/@(c.IsGroup ? "users.svg" : "user.svg")" class="icon" />@c.Title
-					@if (c.IsGroup) {
-						<span>@SharedLocalizer["Message_GroupBadge"]</span>
-					}
-				</h2>
-				<small>@LocalTimeExtensions.ToLocalTime(c.LastMessageTime)</small>
+				<div class="article-header">
+					<h2>
+						<img src="~/icons/@(c.IsGroup ? "users.svg" : "user.svg")" class="icon" />@c.Title
+						@if (c.IsGroup) {
+							<span>@SharedLocalizer["Message_GroupBadge"]</span>
+						}
+					</h2>
+					<small>@LocalTimeExtensions.ToLocalTime(c.LastMessageTime)</small>
+				</div>
 				<p>@(c.LastMessageText.Length > 100 ? c.LastMessageText.Substring(0, 100) + "..." : c.LastMessageText)</p>
-				
+
 			</article>
 		</a>
 	}

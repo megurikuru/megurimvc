@@ -27,10 +27,15 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 0.5rem;
-	padding: 0.25rem 0;
 
-	& form {
+	form {
+		padding: 0.5rem;
 		display: inline;
+	}
+
+	p {
+		padding: 0.5rem;
+		border: 1px solid var(--color-border);
 	}
 }
 
@@ -38,6 +43,11 @@
 	display: block grid; /* 自身：ブロック要素 / 子：縦並びで余白を統一 */
 	gap: 0.35rem;
 	padding: 0.5rem 0.5rem 0 0.5rem;
+
+	& > form {
+		display: block grid;
+		gap: 0.5rem;
+	}
 
 	& label {
 		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
@@ -60,7 +70,6 @@
 .attribute-wrap > button:not(.btn-sm) {
 	min-height: var(--control-height);
 	width: 100%;
-	margin-top: 0.25rem;
 }
 
 .check-row {
@@ -86,8 +95,8 @@
 }
 
 .description {
-	display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
-	margin-top: 0.5rem;
-	font-size: 0.8rem;
+	display: block grid; /* 自身：ブロック要素（横幅全域・改行） / 子：縦並びで余白を統一 */
+	gap: 0.5rem;
+	font-size: 0.9rem;
 	color: var(--color-text-muted);
 }

@@ -18,16 +18,9 @@
 	}
 	<!-- 投稿  -->
 	@foreach (var post in Model.Posts) {
-		var thumb = post.PostImages.OrderBy(x => x.DisplayOrder).FirstOrDefault();
-		<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="finder-item-wrap">
-			<!-- 画像がある場合-->
-			@if (thumb != null) {
-				<img src="~/icons/image.svg" class="icon" />
-				<span>@post.Subject</span>
-				<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image.Name" class="thumb" />			<!-- 画像がない場合-->			} else {
-				<img src="~/icons/file-text.svg" class="icon" />
-				<span>@post.Subject</span>
-			}
-		</a>
+		<partial name="_PostItem" model="new PostItemViewModel { 
+				Post = post, 
+				IsFinderMode = true 
+		}" />
 	}
 </div>

@@ -2,6 +2,9 @@
 @using System.Security.Claims
 
 @{
+	if (User.Identity?.IsAuthenticated != true && (!Model.IsPublic || Model.IsSexual || Model.IsViolence)) {
+		return;
+	}
 	var displayTitle = string.IsNullOrWhiteSpace(Model.Subject) ? SharedLocalizer["Post_Untitled"].Value : Model.Subject;
 	ViewData["Title"] = displayTitle;
 	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

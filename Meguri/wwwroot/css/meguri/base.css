@@ -54,40 +54,20 @@ a {
 .felt-bg {
 }
 
-h1 {
+
+h1, h2, h3, h4, h5, h6 {
 	font-size: 1.1rem;
-	text-align: center;
 	padding: 0.5rem;
+}
+
+h1, h2 {
+	text-align: center;
 	border-top: 1px solid var(--color-border);
 	background-color: var(--color-bg-title);
 }
 
-h2, h3, h4, h5, h6 {
-	font-size: 1.1rem;
-	margin-top: 0.5rem;
-	padding: 0.5rem 0.5rem 0 0.5rem;
-	border-top: 1px solid var(--color-border);
-}
-
-#post-list > article:first-of-type > h2 {
-	margin-top: 0;
-}
-
-body[data-controller="Profile" i][data-action="Details" i] {
-	h1 {
-		margin-top: 0.5rem;
-	}
-}
-
-body[data-controller="Message" i][data-action="Details" i] {
-	h1 {
-		margin-top: 0;
-	}
-}
-
 img {
 	max-width: 100%;
-	margin-top: 0.5rem;
 	height: auto;
 
 	&.icon {
@@ -146,11 +126,11 @@ textarea {
 }
 
 ol {
+	display: block grid;
 	list-style: decimal;
-	margin-left: 1.5rem;
-	/*border: 1px dotted red;*/ /* 開発用 */
 
-	& li {
-		margin-top: 1rem;
+	& > li > div {
+		display: block grid;
+		gap: 0.5rem;
 	}
 }
