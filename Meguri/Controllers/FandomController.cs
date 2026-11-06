@@ -35,10 +35,16 @@ namespace Meguri.Controllers {
             if (fandom == null) return NotFound();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAuthenticated = User.Identity?.IsAuthenticated == true;
             var isJoined = userId != null && await _context.FandomUsers.AnyAsync(fu => fu.FandomId == fandom.Id && fu.UserId == userId);
 
-            var postsQuery = _context.Posts
-                .Where(p => p.FandomId == fandom.Id)
+            var basePostsQuery = _context.Posts
+                .Where(p => p.FandomId == fandom.Id);
+            if (!isAuthenticated) {
+                basePostsQuery = basePostsQuery.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
+            }
+
+            var postsQuery = basePostsQuery
                 .Include(p => p.User)
                 .Include(p => p.PostImages).ThenInclude(pi => pi.Image)
                 .Include(p => p.PostTags).ThenInclude(pt => pt.TagConcept).ThenInclude(tc => tc.Tags)
@@ -70,8 +76,12 @@ namespace Meguri.Controllers {
             }
 
             int descendantPostsCount;
+            var countablePosts = _context.Posts.AsQueryable();
+            if (!isAuthenticated) {
+                countablePosts = countablePosts.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
+            }
             if (fandom.Id == 1) {
-                descendantPostsCount = await _context.Posts.CountAsync();
+                descendantPostsCount = await countablePosts.CountAsync();
             } else {
                 var fandomParents = await _context.Fandoms
                     .AsNoTracking()
@@ -86,7 +96,7 @@ namespace Meguri.Controllers {
                         if (targetIds.Add(child.Id)) queue.Enqueue(child.Id);
                     }
                 }
-                descendantPostsCount = await _context.Posts.CountAsync(p => targetIds.Contains(p.FandomId));
+                descendantPostsCount = await countablePosts.CountAsync(p => targetIds.Contains(p.FandomId));
             }
 
             ViewBag.FandomPostsDescendantCount = descendantPostsCount;

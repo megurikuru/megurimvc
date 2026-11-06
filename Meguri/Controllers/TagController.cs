@@ -109,29 +109,66 @@ namespace Meguri.Controllers {
             if (concept == null) return NotFound();
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAuthenticated = User.Identity?.IsAuthenticated == true;
             ViewBag.CanEdit = concept.UserId == currentUserId || User.IsInRole("Admin");
 
             // PostTags の件数取得とデータ取得 (SQL)
-            var postTagsTotalCount = await _context.Database
-                .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"PostTags\" WHERE \"TagConceptId\" = {conceptId}")
-                .SingleAsync();
+            int postTagsTotalCount;
+            if (isAuthenticated) {
+                postTagsTotalCount = await _context.Database
+                    .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"PostTags\" WHERE \"TagConceptId\" = {conceptId}")
+                    .SingleAsync();
+            } else {
+                postTagsTotalCount = await _context.Database
+                    .SqlQuery<int>($@"
+                        SELECT COUNT(*) AS ""Value""
+                        FROM ""PostTags"" pt
+                        INNER JOIN ""Posts"" p ON pt.""PostId"" = p.""Id""
+                        WHERE pt.""TagConceptId"" = {conceptId}
+                          AND p.""IsPublic"" = TRUE
+                          AND p.""IsSexual"" = FALSE
+                          AND p.""IsViolence"" = FALSE")
+                    .SingleAsync();
+            }
 
             var resolvedPostSkip = postSkip.HasValue && postSkip.Value > 0 ? postSkip.Value : 0;
             if (resolvedPostSkip >= postTagsTotalCount) {
                 resolvedPostSkip = Math.Max(0, postTagsTotalCount - pageSize);
             }
 
-            var postTags = await _context.PostTags
-                .FromSqlInterpolated($@"
-                    SELECT pt.*
-                    FROM ""PostTags"" pt
-                    INNER JOIN ""Posts"" p ON pt.""PostId"" = p.""Id""
-                    WHERE pt.""TagConceptId"" = {conceptId}
-                    ORDER BY p.""CreatedAt"" DESC
-                    LIMIT {pageSize} OFFSET {resolvedPostSkip}")
-                .Include(pt => pt.Post).ThenInclude(p => p.User)
-                .Include(pt => pt.Post).ThenInclude(p => p.PostImages)
-                .ToListAsync();
+            List<PostTag> postTags;
+            if (isAuthenticated) {
+                postTags = await _context.PostTags
+                    .FromSqlInterpolated($@"
+                        SELECT pt.*
+                        FROM ""PostTags"" pt
+                        INNER JOIN ""Posts"" p ON pt.""PostId"" = p.""Id""
+                        WHERE pt.""TagConceptId"" = {conceptId}
+                        ORDER BY p.""CreatedAt"" DESC
+                        LIMIT {pageSize} OFFSET {resolvedPostSkip}")
+                    .Include(pt => pt.Post).ThenInclude(p => p.User)
+                    .Include(pt => pt.Post).ThenInclude(p => p.Fandom)
+                    .Include(pt => pt.Post).ThenInclude(p => p.PostImages).ThenInclude(pi => pi.Image)
+                    .Include(pt => pt.Post).ThenInclude(p => p.Reactions)
+                    .ToListAsync();
+            } else {
+                postTags = await _context.PostTags
+                    .FromSqlInterpolated($@"
+                        SELECT pt.*
+                        FROM ""PostTags"" pt
+                        INNER JOIN ""Posts"" p ON pt.""PostId"" = p.""Id""
+                        WHERE pt.""TagConceptId"" = {conceptId}
+                          AND p.""IsPublic"" = TRUE
+                          AND p.""IsSexual"" = FALSE
+                          AND p.""IsViolence"" = FALSE
+                        ORDER BY p.""CreatedAt"" DESC
+                        LIMIT {pageSize} OFFSET {resolvedPostSkip}")
+                    .Include(pt => pt.Post).ThenInclude(p => p.User)
+                    .Include(pt => pt.Post).ThenInclude(p => p.Fandom)
+                    .Include(pt => pt.Post).ThenInclude(p => p.PostImages).ThenInclude(pi => pi.Image)
+                    .Include(pt => pt.Post).ThenInclude(p => p.Reactions)
+                    .ToListAsync();
+            }
 
             // ImageTags の件数取得とデータ取得 (SQL)
             var imageTagsTotalCount = await _context.Database
@@ -205,7 +242,12 @@ namespace Meguri.Controllers {
                 PrimaryTagText = primaryTag,
                 Category = concept.Category,
                 CanEdit = canEdit,
-                Synonyms = concept.Tags.Where(t => t.TagText != primaryTag).Select(t => t.TagText).ToList(),
+                Synonyms = concept.Tags
+                    .Where(t => t.TagText != primaryTag)
+                    .Select(t => new SynonymDto {
+                        TagId = t.Id,
+                        Text = t.TagText
+                    }).ToList(),
 
                 BroaderConcepts = concept.SubjectRelationships
                     .Where(r => r.Predicate == "broader")
@@ -271,6 +313,35 @@ namespace Meguri.Controllers {
                     await _context.Database.ExecuteSqlInterpolatedAsync($@"
                         INSERT INTO ""Tags"" (""TagConceptId"", ""TagText"", ""NormalizedText"", ""LanguageCode"", ""IsCanonical"")
                         VALUES ({tagConceptId}, {text}, {normalized}, 'ja', false)");
+                }
+            }
+
+            return RedirectToAction(nameof(Disambiguation), new { id = tagConceptId });
+        }
+
+        // POST: /Tag/RemoveSynonym
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoveSynonym(long tagId, long tagConceptId) {
+            var tag = await _context.Tags
+                .FromSqlInterpolated($"SELECT * FROM \"Tags\" WHERE \"Id\" = {tagId} AND \"TagConceptId\" = {tagConceptId}")
+                .FirstOrDefaultAsync();
+
+            if (tag != null && !tag.IsCanonical) {
+                var concept = await _context.TagConcepts
+                    .FromSqlInterpolated($"SELECT * FROM \"TagConcepts\" WHERE \"Id\" = {tagConceptId}")
+                    .FirstOrDefaultAsync();
+
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (concept != null && (concept.UserId == currentUserId || User.IsInRole("Admin"))) {
+                    var totalTagCount = await _context.Database
+                        .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"Tags\" WHERE \"TagConceptId\" = {tagConceptId}")
+                        .SingleAsync();
+
+                    if (totalTagCount > 1) {
+                        await _context.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM \"Tags\" WHERE \"Id\" = {tagId}");
+                    }
                 }
             }
 

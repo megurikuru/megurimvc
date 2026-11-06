@@ -793,7 +793,7 @@
     <value>Search by title or text...</value>
   </data>
   <data name="Post_ShowingTagFormat" xml:space="preserve">
-    <value>Tag: #{0} - Showing posts</value>
+    <value>Tag: "{0}" - Showing posts</value>
   </data>
   <data name="Post_PinnedBadge" xml:space="preserve">
     <value>Pinned</value>
@@ -808,7 +808,7 @@
     <value>{0} reactions</value>
   </data>
   <data name="Image_ShowingTagFormat" xml:space="preserve">
-    <value>Showing images for #{0}</value>
+    <value>Showing images for "{0}"</value>
   </data>
   <data name="Image_PublicBadge" xml:space="preserve">
     <value>Public</value>
@@ -1114,7 +1114,7 @@
     <value>0</value>
   </data>
   <data name="Tag_DisambiguationIntroFormat" xml:space="preserve">
-    <value>To clarify the meaning or category of tag "#{0}", you can set broader terms (more general concepts), narrower terms (more specific concepts), synonyms (alternate names/spellings), and related terms (related concepts).</value>
+    <value>To clarify the meaning or category of tag "{0}", you can set broader terms (more general concepts), narrower terms (more specific concepts), synonyms (alternate names/spellings), and related terms (related concepts).</value>
   </data>
   <data name="Tag_StandardBadge" xml:space="preserve">
     <value>(Standard)</value>

@@ -48,6 +48,10 @@ namespace Meguri.Controllers {
                 .Include(p => p.Reactions)
                 .AsQueryable();
 
+            if (User.Identity?.IsAuthenticated != true) {
+                query = query.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
+            }
+
             if (fandomId.HasValue) {
                 query = query.Where(p => p.FandomId == fandomId.Value);
                 ViewBag.CurrentFandom = await _context.Fandoms.FindAsync(fandomId.Value);
@@ -107,6 +111,9 @@ namespace Meguri.Controllers {
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (post == null) return NotFound();
+            if (User.Identity?.IsAuthenticated != true && (!post.IsPublic || post.IsSexual || post.IsViolence)) {
+                return NotFound();
+            }
 
             // 多階層パンくず用：投稿先の界隈の祖先を最上位から順に取得する。
             var ancestors = new List<Fandom>();

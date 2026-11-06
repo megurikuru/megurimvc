@@ -92,12 +92,12 @@ namespace Meguri.Controllers {
             // SQL から Posts のクエリを作成
             var postQuery = _context.Posts.FromSqlRaw(sql, parameters.ToArray());
 
-            // 未ログイン時は外部公開の投稿のみ、ログイン時は外部公開の投稿または参加している界隈の投稿のみ
+            // 未ログイン時は外部公開かつ性的・暴力表現なしの投稿のみ、ログイン時は外部公開の投稿または参加している界隈の投稿のみ
             if (isAuthenticated) {
                 var currentUserId = _userManager.GetUserId(User);
                 postQuery = postQuery.Where(p => p.IsPublic || _context.FandomUsers.Any(fu => fu.UserId == currentUserId && fu.FandomId == p.FandomId));
             } else {
-                postQuery = postQuery.Where(p => p.IsPublic);
+                postQuery = postQuery.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
             }
 
             // 2. 総件数取得とページネーションの調整
@@ -123,6 +123,9 @@ namespace Meguri.Controllers {
                     Id = p.Id,
                     Subject = p.Subject,
                     Body = p.Body,
+                    IsPublic = p.IsPublic,
+                    IsSexual = p.IsSexual,
+                    IsViolence = p.IsViolence,
                     CreatedAt = p.CreatedAt,
                     User = p.User,
                     FandomId = p.FandomId,

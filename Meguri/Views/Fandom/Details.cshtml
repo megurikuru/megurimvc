@@ -28,45 +28,47 @@
 	};
 }
 
-<!-- パンくずリスト -->
-<partial name="_Breadcrumb" model="breadcrumbs" />
-<!-- 界隈メタ情報 -->
-<div class="fandom-meta">
-	<div>
-		<img src="~/icons/users.svg" class="icon" /><span>@string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)</span>
+<div>
+	<!-- パンくずリスト -->
+	<partial name="_Breadcrumb" model="breadcrumbs" />
+	<!-- 界隈メタ情報 -->
+	<div class="fandom-meta">
+		<div>
+			<img src="~/icons/users.svg" class="icon" /><span>@string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)</span>
+		</div>
+		<div>
+			<span>@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, ViewBag.FandomPostsDescendantCount as int? ?? 0)</span>
+		</div>
 	</div>
-	<div>
-		<span>@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, ViewBag.FandomPostsDescendantCount as int? ?? 0)</span>
-	</div>
-</div>
 
-<!-- 界隈メニュー -->
-@if (Model.Id != 1) {
-	<nav class="nav-grid">
-		<ul>
-			<li>
-				@if (isJoined) {
-					<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
-						@Html.AntiForgeryToken()
-						<button type="submit">@SharedLocalizer["Fandom_Leave"]</button>
-					</form>
-				} else {
-					<form asp-action="Join" asp-route-id="@Model.Id" method="post">
-						@Html.AntiForgeryToken()
-						<button type="submit">@SharedLocalizer["Fandom_Join"]</button>
-					</form>
-				}
-			</li>
-			@if (isJoined) {
+	<!-- 界隈メニュー -->
+	@if (Model.Id != 1) {
+		<nav class="nav-grid">
+			<ul>
 				<li>
-					<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
-						@SharedLocalizer["Post_CreateNew"]
-					</a>
+					@if (isJoined) {
+						<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
+							@Html.AntiForgeryToken()
+							<button type="submit">@SharedLocalizer["Fandom_Leave"]</button>
+						</form>
+					} else {
+						<form asp-action="Join" asp-route-id="@Model.Id" method="post">
+							@Html.AntiForgeryToken()
+							<button type="submit">@SharedLocalizer["Fandom_Join"]</button>
+						</form>
+					}
 				</li>
-			}
-		</ul>
-	</nav>
-}
+				@if (isJoined) {
+					<li>
+						<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
+							@SharedLocalizer["Post_CreateNew"]
+						</a>
+					</li>
+				}
+			</ul>
+		</nav>
+	}
+</div>
 
 <partial name="_Finder" model="new FinderViewModel { ParentFandomId = Model.ParentFandomId, ChildFandoms = Model.ChildFandoms, Posts = fandomPosts }" />
 

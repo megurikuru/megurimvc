@@ -6,7 +6,6 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	text-align: right;
 }
 
 /* トップページ ユーザー検索結果のアバター */
@@ -18,6 +17,10 @@
 }
 
 /* プロフィール詳細 */
+.profile-info {
+	display: block grid;
+}
+
 .profile-banner {
 	display: flex;
 	align-items: center;
@@ -40,7 +43,8 @@
 }
 
 .profile-bio {
-	padding: 0.5rem 0.5rem 0 0.5rem;
+	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	border-top: 1px solid var(--color-border);
 	white-space: pre-wrap;
 }
 
@@ -50,14 +54,13 @@
 	}
 }
 
-body[data-controller="Profile" i][data-action="Details" i] {
+/*body[data-controller="Profile" i][data-action="Details" i] {
 	span.user-name {
-		margin-top: 0.5rem;
 		text-align: center;
 	}
 
 	article p {
 		padding: 0 0.5rem 0 0.5rem;
 	}
-}
+}*/
 

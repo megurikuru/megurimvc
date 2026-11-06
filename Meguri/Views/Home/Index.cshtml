@@ -30,8 +30,8 @@
 }
 
 @if (foundUsers != null && foundUsers.Any()) {
+	<h1>@SharedLocalizer["Home_UsersHeading"]</h1>
 	<div id="user-list">
-		<h1>@SharedLocalizer["Home_UsersHeading"]</h1>
 		<ul>
 			@foreach (var u in foundUsers) {
 				<li>
@@ -51,30 +51,15 @@
 
 @* 新着投稿一覧 *@
 @if (posts.Any()) {
+	<h1>@SharedLocalizer["Home_LatestPostsHeading"]</h1>
 	<div id="post-list">
-		<h1>@SharedLocalizer["Home_LatestPostsHeading"]</h1>
 		@* 投稿リストをループして描画 *@
 		@foreach (var post in posts) {
-			var displayTitle = string.IsNullOrWhiteSpace(post.Subject) ? SharedLocalizer["Post_Untitled"].Value : post.Subject;
-			<article>
-				<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
-					@* 投稿タイトル（詳細画面へのリンク） *@
-					<h1>@displayTitle</h1>
-					@* 投稿本文プレビュー（120文字を超える場合は「...」で切り詰める） *@
-					@if (!string.IsNullOrWhiteSpace(post.Body)) {
-						<p>@(post.Body.Length > 120 ? post.Body.Substring(0, 120) + "..." : post.Body)</p>
-					}
-					@* 添付画像サムネイル一覧（投稿詳細へのリンク。DisplayOrder順に最大4枚まで表示） *@
-					@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(4)) {					
-						<img src="/Image/File/@pi.ImageId" alt="@pi.Image.Name" />
-					}
-					@* 界隈と投稿日時 *@
-					<div class="article-meta">
-						@post.Fandom?.Name
-						<span>@post.CreatedAt.ToLocalTime().ToString("M月d日 H:mm")</span>
-					</div>
-				</a>
-			</article>
+			<partial name="_PostItem" model="new PostItemViewModel { 
+				Post = post, 
+				ShowAuthor = false, 
+				ShowStats = false 
+			}" />
 		}
 	</div>
 }

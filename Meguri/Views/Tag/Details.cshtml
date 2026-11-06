@@ -1,8 +1,11 @@
 ﻿@model Meguri.Models.TagConcept
 @{
+	// 正規（代表）タグ名の取得（未設定時は先頭タグ名、それもなければIDでフォールバック）
 	var primaryTag = Model.Tags.FirstOrDefault(t => t.IsCanonical)?.TagText
 			?? Model.Tags.FirstOrDefault()?.TagText ?? $"Tag#{Model.Id}";
-	ViewData["Title"] = $"#{primaryTag}";
+	// ページタイトルの設定
+	ViewData["Title"] = $"{primaryTag}";
+	// 編集権限および関連投稿・関連画像データの取得（ViewBagからの展開）
 	bool canEdit = ViewBag.CanEdit is true;
 	var postTags = ViewBag.PostTags as List<Meguri.Models.PostTag> ?? new List<Meguri.Models.PostTag>();
 	var imageTags = ViewBag.ImageTags as List<Meguri.Models.ImageTag> ?? new List<Meguri.Models.ImageTag>();
@@ -10,134 +13,118 @@
 	var imageTagsTotalCount = ViewBag.ImageTagsTotalCount as int? ?? 0;
 }
 
-@* ================================================== *@
-@* 1. タグ基本情報 & シソーラスエリア                  *@
-@* ================================================== *@
+@* タグ基本情報 & シソーラスエリア *@
 <div>
-	<div>
-		<h1><img src="~/icons/tag.svg" class="icon" />#@primaryTag</h1>
+	@* 代表タグ名見出し *@
+	<h1>@primaryTag</h1>
 
-		<div class="button-wrap">
-			<a asp-action="Disambiguation" asp-route-id="@Model.Id" class="button-like icon-wrap">
-				<img src="~/icons/scale.svg" class="icon" />@SharedLocalizer["Tag_DisambiguationBtn"]
-			</a>
-			<a asp-controller="Post" asp-action="Index" asp-route-tag="@primaryTag" class="button-like icon-wrap">
-				<img src="~/icons/file-text.svg" class="icon" />@SharedLocalizer["Post_ListTitle"]
-			</a>
-		</div>
-	</div>
+	@* ナビゲーション（曖昧さ回避ページへのリンク：編集権限がある場合のみ表示） *@
+	@if (canEdit) {
+		<nav class="nav-grid">
+			<ul>
+				<li>
+					<a asp-action="Disambiguation" asp-route-id="@Model.Id" class="button-like">
+						@SharedLocalizer["Tag_DisambiguationBtn"]
+					</a>
+				</li>
+			</ul>
+		</nav>
+	}
 
-	<!-- シソーラス情報（上位語・下位語・関連語・同義語） -->
+	@* シソーラス情報（上位語・下位語・関連語・同義語） *@
 	<div>
-		<!-- 同義語 -->
+		@* 同義語（代表タグ以外の別名タグ一覧） *@
 		@if (Model.Tags.Count > 1) {
-			<div>
-				<h6><img src="~/icons/refresh-cw.svg" class="icon" />@SharedLocalizer["Tag_SynonymTerms"]</h6>
-				<div>
+			<article>
+				<h2>@SharedLocalizer["Tag_SynonymTerms"]</h2>
+				<p>
 					@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag)) {
 						<span class="icon-wrap">#@t.TagText</span>
 					}
-				</div>
-			</div>
+				</p>
+			</article>
 		}
 
-		<!-- 上位語 -->
+		@* 上位語（このタグがSubjectでPredicate=="broader"のObjectConcept） *@
 		@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader")) {
-			<div>
-				<h6><img src="~/icons/arrow-up.svg" class="icon" />@SharedLocalizer["Tag_BroaderTerms"]</h6>
-				<div>
+			<article>
+				<h2><img src="~/icons/arrow-up.svg" class="icon" />@SharedLocalizer["Tag_BroaderTerms"]</h2>
+				<p>
 					@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader")) {
+						// 上位概念の代表タグ名を取得（未設定時はConcept IDでフォールバック）
 						var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
 						<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
 							#@text
 						</a>
 					}
-				</div>
-			</div>
+				</p>
+			</article>
 		}
 
-		<!-- 下位語 -->
+		@* 下位語（このタグがObjectでPredicate=="broader"のSubjectConcept） *@
 		@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader")) {
-			<div>
-				<h6><img src="~/icons/arrow-down.svg" class="icon" />@SharedLocalizer["Tag_NarrowerTerms"]</h6>
-				<div>
+			<article>
+				<h2><img src="~/icons/arrow-down.svg" class="icon" />@SharedLocalizer["Tag_NarrowerTerms"]</h2>
+				<p>
 					@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader")) {
+						// 下位概念の代表タグ名を取得（未設定時はConcept IDでフォールバック）
 						var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
 						<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
 							#@text
 						</a>
 					}
-				</div>
-			</div>
+				</p>
+			</article>
 		}
 
-		<!-- 関連語 -->
+		@* 関連語（双方向のPredicate=="related"の関連概念） *@
 		@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related")) {
-			<div>
-				<h6><img src="~/icons/link.svg" class="icon" />@SharedLocalizer["Tag_RelatedTerms"]</h6>
-				<div>
-					@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related")) {
-						var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
-						<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
-							#@text
-						</a>
-					}
-					@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related")) {
-						var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
-						<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
-							#@text
-						</a>
-					}
-				</div>
-			</div>
+			<article>
+				<h2><img src="~/icons/link.svg" class="icon" />@SharedLocalizer["Tag_RelatedTerms"]</h2>
+				@* このタグがSubject側の関連概念 *@
+				@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related")) {
+					var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
+					<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
+						#@text
+					</a>
+				}
+				@* このタグがObject側の関連概念 *@
+				@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related")) {
+					var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
+					<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
+						#@text
+					</a>
+				}
+			</article>
 		}
 	</div>
 </div>
 
-@* ================================================== *@
-@* 2. 関連投稿一覧エリア                              *@
-@* ================================================== *@
+@* 関連投稿一覧エリア *@
 <div id="post-list">
-	<h2><img src="~/icons/file-text.svg" class="icon" />@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, postTagsTotalCount)</h2>
+	@* 関連投稿の総件数付き見出し *@
+	<h1>@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, postTagsTotalCount)</h1>
 	@if (!postTags.Any()) {
+		@* 関連投稿が存在しない場合のメッセージ *@
 		<p>@SharedLocalizer["Post_NoPostsFound"]</p>
 	} else {
+		@* 関連投稿リストの描画（タイトル・投稿者・日付のみ表示し、本文・画像は非表示） *@
 		@foreach (var pt in postTags) {
-			<div>
-				<div class="space-between-wrap">
-					<h3>
-						<a asp-controller="Post" asp-action="Details" asp-route-id="@pt.PostId">
-							@pt.Post.Subject
-						</a>
-					</h3>
-					@pt.Post.CreatedAt.ToLocalTime(true)
-				</div>
-				<div>
-					<span class="icon-wrap">
-						@if (pt.Post.User == null) {
-							@SharedLocalizer["Common_UnknownUser"].Value
-						} else if (pt.Post.User.IsWithdrawn) {
-
-							@SharedLocalizer["Common_WithdrawnUser"].Value
-						} else {
-
-							<text>@if (!pt.Post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
-								@pt.Post.User.UserName
-							} else {
-
-								<a asp-controller="Profile" asp-action="Details" asp-route-id="@pt.Post.User.UserName">@pt.Post.User.UserName</a>
-							}
-						</text>
-					}
-				</span>
-			</div>
-		</div>
+			<partial name="_PostItem" model="new PostItemViewModel {
+				Post = pt.Post, 
+				BodyMaxLength = 50, 
+				MaxImages = 1, 
+				ShowFandom = false, 
+				ShowStats = false, 
+				DateOnly = true 
+			}" />
+		}
 	}
-}
 </div>
 
 @* 投稿用ページネーション *@
 @{
+	// ViewBagから投稿一覧ページネーション用のパラメータを取得
 	var ptHasPrevious = ViewBag.PostTagsHasPrevious as bool? ?? false;
 	var ptHasNext = ViewBag.PostTagsHasNext as bool? ?? false;
 	var ptSkip = ViewBag.PostTagsSkip as int? ?? 0;
@@ -146,12 +133,15 @@
 }
 @if (postTagsTotalCount > 0) {
 	<nav class="pagination">
+		@* 前のページ（存在する場合はリンク、ない場合は無効化ボタン） *@
 		@if (ptHasPrevious) {
 			<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</a>
 		} else {
 			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</button>
 		}
+		@* 現在の表示範囲と総件数 *@
 		<span>@(ptSkip + 1) - @(ptSkip + postTags.Count) / @postTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
+		@* 次のページ（存在する場合はリンク、ない場合は無効化ボタン） *@
 		@if (ptHasNext) {
 			<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</a>
 		} else {
