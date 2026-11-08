@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
+using Meguri.ViewModels.Fandom;
+using Meguri.ViewModels.Shared;
 
 namespace Meguri.Controllers {
     public class FandomController : Controller {
@@ -99,18 +101,29 @@ namespace Meguri.Controllers {
                 descendantPostsCount = await countablePosts.CountAsync(p => targetIds.Contains(p.FandomId));
             }
 
-            ViewBag.FandomPostsDescendantCount = descendantPostsCount;
-            ViewBag.Ancestors = ancestors;
-            ViewBag.IsJoined = isJoined;
-            ViewBag.FandomPosts = posts;
-            ViewBag.FandomPostsPageSize = pageSize;
-            ViewBag.FandomPostsTotalCount = totalCount;
-            ViewBag.FandomPostsSkip = resolvedSkip;
-            ViewBag.FandomPostsHasPrevious = resolvedSkip > 0;
-            ViewBag.FandomPostsHasNext = resolvedSkip + posts.Count < totalCount;
-            ViewBag.FandomPostsPreviousSkip = Math.Max(0, resolvedSkip - pageSize);
-            ViewBag.FandomPostsNextSkip = resolvedSkip + pageSize;
-            return View(fandom);
+            var viewModel = new FandomDetailsViewModel {
+                Fandom = fandom,
+                IsJoined = isJoined,
+                FandomPosts = posts,
+                Ancestors = ancestors,
+                FandomPostsDescendantCount = descendantPostsCount,
+                Pagination = new PaginationViewModel {
+                    Controller = "Fandom",
+                    Action = "Details",
+                    PageSize = pageSize,
+                    TotalCount = totalCount,
+                    Skip = resolvedSkip,
+                    HasPrevious = resolvedSkip > 0,
+                    HasNext = resolvedSkip + posts.Count < totalCount,
+                    PreviousSkip = Math.Max(0, resolvedSkip - pageSize),
+                    NextSkip = resolvedSkip + pageSize,
+                    CurrentCount = posts.Count,
+                    RouteValues = new Dictionary<string, string> {
+                        ["id"] = fandom.Id.ToString()
+                    }
+                }
+            };
+            return View(viewModel);
         }
 
         // GET: /Fandom/Join/5
@@ -196,25 +209,32 @@ namespace Meguri.Controllers {
         // GET: /Fandom/Create
         [Authorize]
         public async Task<IActionResult> Create(int? parentId) {
-            ViewBag.ParentFandoms = await _context.Fandoms.ToListAsync();
-            return View(new Fandom { ParentFandomId = parentId });
+            var viewModel = new FandomCreateViewModel {
+                ParentFandomId = parentId,
+                ParentFandoms = await _context.Fandoms.ToListAsync()
+            };
+            return View(viewModel);
         }
 
         // POST: /Fandom/Create
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,ParentFandomId")] Fandom fandom) {
-            if (string.IsNullOrWhiteSpace(fandom.Name)) {
+        public async Task<IActionResult> Create([Bind("Name,ParentFandomId")] FandomCreateViewModel model) {
+            if (string.IsNullOrWhiteSpace(model.Name)) {
                 ModelState.AddModelError("Name", _localizer["Fandom_Error_NameRequired"]);
             }
 
-            if (fandom.ParentFandomId.HasValue &&
-                !await _context.Fandoms.AnyAsync(f => f.Id == fandom.ParentFandomId.Value)) {
+            if (model.ParentFandomId.HasValue &&
+                !await _context.Fandoms.AnyAsync(f => f.Id == model.ParentFandomId.Value)) {
                 ModelState.AddModelError("ParentFandomId", _localizer["Fandom_Error_ParentNotFound"]);
             }
 
             if (ModelState.IsValid) {
+                var fandom = new Fandom {
+                    Name = model.Name,
+                    ParentFandomId = model.ParentFandomId
+                };
                 _context.Fandoms.Add(fandom);
                 await _context.SaveChangesAsync();
 
@@ -228,8 +248,8 @@ namespace Meguri.Controllers {
                 return RedirectToAction(nameof(Details), new { id = fandom.Id });
             }
 
-            ViewBag.ParentFandoms = await _context.Fandoms.ToListAsync();
-            return View(fandom);
+            model.ParentFandoms = await _context.Fandoms.ToListAsync();
+            return View(model);
         }
 
         // 再帰的に全子孫界隈IDを取得するヘルパー

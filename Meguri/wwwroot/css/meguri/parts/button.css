@@ -39,7 +39,6 @@ button, .button-like {
 
 	&:hover:not(:disabled) {
 		background-color: var(--color-primary-hover);
-		color: white;
 	}
 
 	&:disabled {

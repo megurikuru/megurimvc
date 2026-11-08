@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -6,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Meguri.Data;
 using Meguri.Models;
+using Meguri.ViewModels.Profile;
+using Meguri.ViewModels.Shared;
 
 namespace Meguri.Controllers {
     public class ProfileController : Controller {
@@ -51,20 +54,29 @@ namespace Meguri.Controllers {
                 .Take(pageSize)
                 .ToListAsync();
 
-            ViewBag.Profile = user;
-            ViewBag.IsOwner = isOwner;
-            ViewBag.ExternalUrls = user.ExternalUrls
-                .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .Take(5)
-                .ToList();
-            ViewBag.PageSize = pageSize;
-            ViewBag.TotalCount = totalCount;
-            ViewBag.Skip = resolvedSkip;
-            ViewBag.HasPrevious = resolvedSkip > 0;
-            ViewBag.HasNext = resolvedSkip + posts.Count < totalCount;
-            ViewBag.PreviousSkip = Math.Max(0, resolvedSkip - pageSize);
-            ViewBag.NextSkip = resolvedSkip + pageSize;
-            return View(posts);
+            var viewModel = new ProfileDetailsViewModel {
+                Profile = user,
+                IsOwner = isOwner,
+                ExternalUrls = user.ExternalUrls
+                    .Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .Take(5)
+                    .ToList(),
+                Posts = posts,
+                Pagination = new PaginationViewModel {
+                    Controller = "Profile",
+                    Action = "Details",
+                    PageSize = pageSize,
+                    TotalCount = totalCount,
+                    Skip = resolvedSkip,
+                    HasPrevious = resolvedSkip > 0,
+                    HasNext = resolvedSkip + posts.Count < totalCount,
+                    PreviousSkip = Math.Max(0, resolvedSkip - pageSize),
+                    NextSkip = resolvedSkip + pageSize,
+                    CurrentCount = posts.Count,
+                    RouteValues = new Dictionary<string, string> { ["id"] = user.UserName ?? "" }
+                }
+            };
+            return View(viewModel);
         }
     }
 }

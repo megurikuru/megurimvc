@@ -137,14 +137,6 @@
 	text-overflow: ellipsis;
 }
 
-.message-reaction-summary {
-	padding-left: 0.25rem;
-
-	&:not(:has(button:not([hidden]))) {
-		display: none;
-	}
-}
-
 .message-date-divider {
 	padding: 0.5rem 0.5rem 0 0.5rem;
 	border-top: 1px solid var(--color-border);

@@ -1,131 +1,23 @@
-﻿@model Meguri.Models.Post
-@using System.Security.Claims
+﻿@model Meguri.ViewModels.Post.PostDetailsViewModel
 
 @{
-	if (User.Identity?.IsAuthenticated != true && (!Model.IsPublic || Model.IsSexual || Model.IsViolence)) {
+	if (User.Identity?.IsAuthenticated != true && (!Model.Post.IsPublic || Model.Post.IsSexual || Model.Post.IsViolence)) {
 		return;
 	}
-	var displayTitle = string.IsNullOrWhiteSpace(Model.Subject) ? SharedLocalizer["Post_Untitled"].Value : Model.Subject;
-	ViewData["Title"] = displayTitle;
-	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-	var isAuthor = Model.UserId == currentUserId || User.IsInRole("Admin");
+	ViewData["Title"] = Model.DisplayTitle;
 	var breadcrumbs = new List<BreadcrumbItemViewModel>();
-	if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors) {
-		foreach (var ancestor in ancestors) {
-			breadcrumbs.Add(new(ancestor.Name, Url.Action("Details", "Fandom", new { id = ancestor.Id })));
-		}
+	foreach (var ancestor in Model.Ancestors) {
+		breadcrumbs.Add(new(ancestor.Name, Url.Action("Details", "Fandom", new { id = ancestor.Id })));
 	}
-	breadcrumbs.Add(new(Model.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value, Url.Action("Details", "Fandom", new { id = Model.FandomId })));
-	breadcrumbs.Add(new(displayTitle));
+	breadcrumbs.Add(new(Model.Post.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value, Url.Action("Details", "Fandom", new { id = Model.Post.FandomId })));
+	breadcrumbs.Add(new(Model.DisplayTitle));
 }
 
 <!-- パンくず -->
 <partial name="_Breadcrumb" model="breadcrumbs" />
-<!-- ヘッダー情報 -->
-<article>
-	<h1>@displayTitle</h1>
-	<!-- 本文 -->
-	<p>
-		@Model.Body
-	</p>
-	<!-- 添付画像（順序付き） -->
-	@if (Model.PostImages.Any()) {
-		<div>
-			<p>@SharedLocalizer["Post_AttachImages"] (@Model.PostImages.Count)</p>
-			<div>
-				@foreach (var pi in Model.PostImages.OrderBy(x => x.DisplayOrder)) {
-					<div>
-						<a href="/Image/File/@pi.ImageId" target="_blank">
-							<img src="/Image/File/@pi.ImageId" alt="@pi.Image.Name" />
-						</a>
-						<span>
-							#@(pi.DisplayOrder + 1)
-						</span>
-					</div>
-				}
-			</div>
-		</div>
-	}
-	@* メタ情報 *@
-	<div class="post-meta">
-		@if (Model.User == null) {
-			@SharedLocalizer["Common_UnknownUser"].Value
-		} else if (Model.User.IsWithdrawn) {
-			@SharedLocalizer["Common_WithdrawnUser"].Value
-		} else {
-			<text>
-				@if (!Model.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
-					@Model.User.UserName
-				} else {
-					<a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.User.UserName">@Model.User.UserName</a>
-				}
-			</text>
-		}
-		@Model.CreatedAt.ToLocalTime()
-		<div>
-			<span>@string.Format(SharedLocalizer["Post_ViewsCount"].Value, Model.ViewCount)</span>
-		</div>
-	</div>
-	<!-- タグ一覧 & あいまいさ回避 -->
-	@if (Model.PostTags.Any()) {
-		<div>
-			<span>@SharedLocalizer["Post_Tags"]</span>
-			@foreach (var pt in Model.PostTags) {
-				var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText ?? SharedLocalizer["Tag_Title"].Value;
-				<div>
-					<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="icon-wrap">
-						<img src="~/icons/tag.svg" class="icon" />@tagText
-					</a>
-					<a asp-controller="Tag" asp-action="Disambiguation" asp-route-id="@pt.TagConceptId">@SharedLocalizer["Tag_DisambiguationBtn"]</a>
-				</div>
-			}
-		</div>
-	}
 
-	<!-- リアクションボタン -->
-	<div>
-		<button type="button" class="btn-sm" data-toggle-panel="reaction-buttons-panel" aria-expanded="false" aria-controls="reaction-buttons-panel">@SharedLocalizer["Reaction_React"]</button>
-		<div id="reaction-buttons-panel" hidden>
-			@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Id, Model.Reactions.AsEnumerable()))
-		</div>
-	</div>
-
-	@if (isAuthor) {
-		<partial name="_Attribute" model="Model" />
-		<nav class="nav-grid">
-			<ul>
-				<li>
-					<a asp-action="Edit" asp-route-id="@Model.Id" class="button-like">
-						@SharedLocalizer["Common_Edit"]
-					</a>
-				</li>
-				<li>
-					<form asp-action="Delete" asp-route-id="@Model.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
-						@Html.AntiForgeryToken()
-						<button type="submit">
-							@SharedLocalizer["Common_Delete"]
-						</button>
-					</form>
-				</li>
-			</ul>
-		</nav>
-	}
-</article>
-
+<!-- 本文 -->
+<partial name="_Body" model="Model" />
 
 <!-- スレッド式コメント一覧 & 投稿フォーム -->
-<div>
-	<div>
-		<h2>@SharedLocalizer["Comment_Header"] (@Model.CommentCount)</h2>
-		@if (Model.IsLocked) {
-			<span><img src="~/icons/lock.svg" class="icon" />@SharedLocalizer["Post_Locked"]</span>
-		}
-	</div>
-	<div>
-		@if (Model.IsLocked) {
-			<div>@SharedLocalizer["Post_ThreadLockedMessage"]</div>
-		}
-
-		@await Html.PartialAsync("_CommentThread", (Model.Comments.Where(c => c.ParentId == null).OrderBy(c => c.CreatedAt).ToList(), "Post", Model.Id))
-	</div>
-</div>
+<partial name="_Comment" model="Model" />

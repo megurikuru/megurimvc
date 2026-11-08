@@ -1,0 +1,35 @@
+﻿@model Meguri.ViewModels.Tag.DisambiguationViewModel
+@* 下位語 (Narrower) セクション *@
+<article>
+	<h2>@SharedLocalizer["Tag_NarrowerTerms"]</h2>
+	<p class="description">@SharedLocalizer["Tag_NarrowerHelp"]</p>
+	<div>
+		@* 登録済みの下位語一覧と削除フォーム *@
+		@foreach (var n in Model.NarrowerConcepts) {
+			<div class="inline-actions">
+				<a asp-action="Details" asp-route-conceptId="@n.ConceptId">@n.Text</a>
+				@if (Model.CanEdit) {
+					<form asp-action="RemoveRelationship" method="post">
+						@Html.AntiForgeryToken()
+						<input type="hidden" name="relationshipId" value="@n.RelationshipId" />
+						<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
+						<button type="submit" class="btn-sm"><img src="~/icons/x.svg" class="icon" /></button>
+					</form>
+				}
+			</div>
+		}
+
+		@* 下位語の追加フォーム（編集権限がある場合のみ表示） *@
+		@if (Model.CanEdit) {
+			<div>
+				<form asp-action="AddRelationship" method="post" class="input-group">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
+					<input type="hidden" name="predicate" value="narrower" />
+					<input type="text" name="targetTagText" placeholder="@SharedLocalizer["Tag_NarrowerPlaceholder"]" required />
+					<button type="submit">@SharedLocalizer["Common_Add"]</button>
+				</form>
+			</div>
+		}
+	</div>
+</article>

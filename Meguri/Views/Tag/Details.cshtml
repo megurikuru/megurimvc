@@ -1,29 +1,28 @@
-﻿@model Meguri.Models.TagConcept
+﻿@model Meguri.ViewModels.Tag.TagDetailsViewModel
 @{
-	// 正規（代表）タグ名の取得（未設定時は先頭タグ名、それもなければIDでフォールバック）
-	var primaryTag = Model.Tags.FirstOrDefault(t => t.IsCanonical)?.TagText
-			?? Model.Tags.FirstOrDefault()?.TagText ?? $"Tag#{Model.Id}";
 	// ページタイトルの設定
-	ViewData["Title"] = $"{primaryTag}";
-	// 編集権限および関連投稿・関連画像データの取得（ViewBagからの展開）
-	bool canEdit = ViewBag.CanEdit is true;
-	var postTags = ViewBag.PostTags as List<Meguri.Models.PostTag> ?? new List<Meguri.Models.PostTag>();
-	var imageTags = ViewBag.ImageTags as List<Meguri.Models.ImageTag> ?? new List<Meguri.Models.ImageTag>();
-	var postTagsTotalCount = ViewBag.PostTagsTotalCount as int? ?? 0;
-	var imageTagsTotalCount = ViewBag.ImageTagsTotalCount as int? ?? 0;
+	ViewData["Title"] = $"{Model.PrimaryTag}";
+
+	// パンくずリストの構築（タグ一覧 > タグ詳細）
+	var breadcrumbs = new List<BreadcrumbItemViewModel> {
+		new(SharedLocalizer["Tag_Title"].Value, Url.Action("Index", "Tag")),
+		new($"{Model.PrimaryTag}")
+	};
 }
 
 @* タグ基本情報 & シソーラスエリア *@
 <div>
+	@* パンくずリスト *@
+	<partial name="_Breadcrumb" model="breadcrumbs" />
 	@* 代表タグ名見出し *@
-	<h1>@primaryTag</h1>
+	<h1>@Model.PrimaryTag</h1>
 
 	@* ナビゲーション（曖昧さ回避ページへのリンク：編集権限がある場合のみ表示） *@
-	@if (canEdit) {
+	@if (Model.CanEdit) {
 		<nav class="nav-grid">
 			<ul>
 				<li>
-					<a asp-action="Disambiguation" asp-route-id="@Model.Id" class="button-like">
+					<a asp-action="Disambiguation" asp-route-id="@Model.Concept.Id" class="button-like">
 						@SharedLocalizer["Tag_DisambiguationBtn"]
 					</a>
 				</li>
@@ -34,11 +33,11 @@
 	@* シソーラス情報（上位語・下位語・関連語・同義語） *@
 	<div>
 		@* 同義語（代表タグ以外の別名タグ一覧） *@
-		@if (Model.Tags.Count > 1) {
+		@if (Model.Concept.Tags.Count > 1) {
 			<article>
 				<h2>@SharedLocalizer["Tag_SynonymTerms"]</h2>
 				<p>
-					@foreach (var t in Model.Tags.Where(t => t.TagText != primaryTag)) {
+					@foreach (var t in Model.Concept.Tags.Where(t => t.TagText != Model.PrimaryTag)) {
 						<span class="icon-wrap">#@t.TagText</span>
 					}
 				</p>
@@ -46,11 +45,11 @@
 		}
 
 		@* 上位語（このタグがSubjectでPredicate=="broader"のObjectConcept） *@
-		@if (Model.SubjectRelationships.Any(r => r.Predicate == "broader")) {
+		@if (Model.Concept.SubjectRelationships.Any(r => r.Predicate == "broader")) {
 			<article>
 				<h2><img src="~/icons/arrow-up.svg" class="icon" />@SharedLocalizer["Tag_BroaderTerms"]</h2>
 				<p>
-					@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "broader")) {
+					@foreach (var r in Model.Concept.SubjectRelationships.Where(r => r.Predicate == "broader")) {
 						// 上位概念の代表タグ名を取得（未設定時はConcept IDでフォールバック）
 						var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
 						<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
@@ -62,11 +61,11 @@
 		}
 
 		@* 下位語（このタグがObjectでPredicate=="broader"のSubjectConcept） *@
-		@if (Model.ObjectRelationships.Any(r => r.Predicate == "broader")) {
+		@if (Model.Concept.ObjectRelationships.Any(r => r.Predicate == "broader")) {
 			<article>
 				<h2><img src="~/icons/arrow-down.svg" class="icon" />@SharedLocalizer["Tag_NarrowerTerms"]</h2>
 				<p>
-					@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "broader")) {
+					@foreach (var r in Model.Concept.ObjectRelationships.Where(r => r.Predicate == "broader")) {
 						// 下位概念の代表タグ名を取得（未設定時はConcept IDでフォールバック）
 						var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
 						<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
@@ -78,18 +77,18 @@
 		}
 
 		@* 関連語（双方向のPredicate=="related"の関連概念） *@
-		@if (Model.SubjectRelationships.Any(r => r.Predicate == "related") || Model.ObjectRelationships.Any(r => r.Predicate == "related")) {
+		@if (Model.Concept.SubjectRelationships.Any(r => r.Predicate == "related") || Model.Concept.ObjectRelationships.Any(r => r.Predicate == "related")) {
 			<article>
 				<h2><img src="~/icons/link.svg" class="icon" />@SharedLocalizer["Tag_RelatedTerms"]</h2>
 				@* このタグがSubject側の関連概念 *@
-				@foreach (var r in Model.SubjectRelationships.Where(r => r.Predicate == "related")) {
+				@foreach (var r in Model.Concept.SubjectRelationships.Where(r => r.Predicate == "related")) {
 					var text = r.ObjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.ObjectConceptId}";
 					<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.ObjectConceptId">
 						#@text
 					</a>
 				}
 				@* このタグがObject側の関連概念 *@
-				@foreach (var r in Model.ObjectRelationships.Where(r => r.Predicate == "related")) {
+				@foreach (var r in Model.Concept.ObjectRelationships.Where(r => r.Predicate == "related")) {
 					var text = r.SubjectConcept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{r.SubjectConceptId}";
 					<a class="icon-wrap" asp-action="Details" asp-route-conceptId="@r.SubjectConceptId">
 						#@text
@@ -103,13 +102,13 @@
 @* 関連投稿一覧エリア *@
 <div id="post-list">
 	@* 関連投稿の総件数付き見出し *@
-	<h1>@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, postTagsTotalCount)</h1>
-	@if (!postTags.Any()) {
+	<h1>@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, Model.PostTagsTotalCount)</h1>
+	@if (!Model.PostTags.Any()) {
 		@* 関連投稿が存在しない場合のメッセージ *@
 		<p>@SharedLocalizer["Post_NoPostsFound"]</p>
 	} else {
 		@* 関連投稿リストの描画（タイトル・投稿者・日付のみ表示し、本文・画像は非表示） *@
-		@foreach (var pt in postTags) {
+		@foreach (var pt in Model.PostTags) {
 			<partial name="_PostItem" model="new PostItemViewModel {
 				Post = pt.Post, 
 				BodyMaxLength = 50, 
@@ -123,29 +122,21 @@
 </div>
 
 @* 投稿用ページネーション *@
-@{
-	// ViewBagから投稿一覧ページネーション用のパラメータを取得
-	var ptHasPrevious = ViewBag.PostTagsHasPrevious as bool? ?? false;
-	var ptHasNext = ViewBag.PostTagsHasNext as bool? ?? false;
-	var ptSkip = ViewBag.PostTagsSkip as int? ?? 0;
-	var ptPreviousSkip = ViewBag.PostTagsPreviousSkip as int? ?? 0;
-	var ptNextSkip = ViewBag.PostTagsNextSkip as int? ?? 0;
-}
-@if (postTagsTotalCount > 0) {
+@if (Model.PostTagsTotalCount > 0) {
 	<nav class="pagination">
 		@* 前のページ（存在する場合はリンク、ない場合は無効化ボタン） *@
-		@if (ptHasPrevious) {
-			<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</a>
+		@if (Model.PostTagsHasPrevious) {
+			<a asp-action="Details" asp-route-conceptId="@Model.Concept.Id" asp-route-postSkip="@Model.PostTagsPreviousSkip">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, Model.PostTagsPageSize)</a>
 		} else {
-			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</button>
+			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, Model.PostTagsPageSize)</button>
 		}
 		@* 現在の表示範囲と総件数 *@
-		<span>@(ptSkip + 1) - @(ptSkip + postTags.Count) / @postTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
+		<span>@(Model.PostTagsSkip + 1) - @(Model.PostTagsSkip + Model.PostTags.Count) / @Model.PostTagsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 		@* 次のページ（存在する場合はリンク、ない場合は無効化ボタン） *@
-		@if (ptHasNext) {
-			<a asp-action="Details" asp-route-conceptId="@Model.Id" asp-route-postSkip="@ptNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</a>
+		@if (Model.PostTagsHasNext) {
+			<a asp-action="Details" asp-route-conceptId="@Model.Concept.Id" asp-route-postSkip="@Model.PostTagsNextSkip">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, Model.PostTagsPageSize)</a>
 		} else {
-			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</button>
+			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, Model.PostTagsPageSize)</button>
 		}
 	</nav>
 }

@@ -6,9 +6,6 @@ namespace Meguri.ViewModels.Shared {
         /// <summary>対象の投稿データ</summary>
         public required Meguri.Models.Post Post { get; init; }
 
-        /// <summary>Finder形式（フォルダ・ファイル一覧形式）で表示するか</summary>
-        public bool IsFinderMode { get; init; }
-
         /// <summary>本文プレビューの最大文字数（0以下の場合は本文非表示）</summary>
         public int BodyMaxLength { get; init; } = 120;
 

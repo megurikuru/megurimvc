@@ -11,6 +11,7 @@ using Microsoft.Extensions.Localization;
 using Meguri.Data;
 using Meguri.Models;
 using Meguri.ViewModels.Post;
+using Meguri.ViewModels.Shared;
 using Meguri.Services;
 
 namespace Meguri.Controllers {
@@ -52,20 +53,19 @@ namespace Meguri.Controllers {
                 query = query.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
             }
 
+            Fandom? currentFandom = null;
             if (fandomId.HasValue) {
                 query = query.Where(p => p.FandomId == fandomId.Value);
-                ViewBag.CurrentFandom = await _context.Fandoms.FindAsync(fandomId.Value);
+                currentFandom = await _context.Fandoms.FindAsync(fandomId.Value);
             }
 
             if (!string.IsNullOrEmpty(tag)) {
                 var normalized = tag.Trim().ToLowerInvariant();
                 query = query.Where(p => p.PostTags.Any(pt => pt.TagConcept.Tags.Any(t => t.NormalizedText == normalized)));
-                ViewBag.CurrentTag = tag;
             }
 
             if (!string.IsNullOrEmpty(search)) {
                 query = query.Where(p => p.Subject.Contains(search) || p.Body.Contains(search));
-                ViewBag.CurrentSearch = search;
             }
 
             var totalCount = await query.CountAsync();
@@ -81,17 +81,43 @@ namespace Meguri.Controllers {
                 .Take(pageSize)
                 .ToListAsync();
 
-            ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
+            var fandoms = await _context.Fandoms.ToListAsync();
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewBag.CanPostToCurrentFandom = !fandomId.HasValue || (fandomId.Value != 1 && currentUserId != null && await IsJoinedAsync(fandomId.Value, currentUserId));
-            ViewBag.PageSize = pageSize;
-            ViewBag.TotalCount = totalCount;
-            ViewBag.Skip = resolvedSkip;
-            ViewBag.HasPrevious = resolvedSkip > 0;
-            ViewBag.HasNext = resolvedSkip + posts.Count < totalCount;
-            ViewBag.PreviousSkip = Math.Max(0, resolvedSkip - pageSize);
-            ViewBag.NextSkip = resolvedSkip + pageSize;
-            return View(posts);
+            var canPostToCurrentFandom = !fandomId.HasValue || (fandomId.Value != 1 && currentUserId != null && await IsJoinedAsync(fandomId.Value, currentUserId));
+
+            var routeValues = new Dictionary<string, string>();
+            if (currentFandom != null) {
+                routeValues["fandomId"] = currentFandom.Id.ToString();
+            }
+            if (!string.IsNullOrEmpty(tag)) {
+                routeValues["tag"] = tag;
+            }
+            if (!string.IsNullOrEmpty(search)) {
+                routeValues["search"] = search;
+            }
+
+            var viewModel = new PostIndexViewModel {
+                Posts = posts,
+                Fandoms = fandoms,
+                CurrentFandom = currentFandom,
+                CurrentTag = tag,
+                CurrentSearch = search,
+                CanPostToCurrentFandom = canPostToCurrentFandom,
+                Pagination = new PaginationViewModel {
+                    Controller = "Post",
+                    Action = "Index",
+                    PageSize = pageSize,
+                    TotalCount = totalCount,
+                    Skip = resolvedSkip,
+                    HasPrevious = resolvedSkip > 0,
+                    HasNext = resolvedSkip + posts.Count < totalCount,
+                    PreviousSkip = Math.Max(0, resolvedSkip - pageSize),
+                    NextSkip = resolvedSkip + pageSize,
+                    CurrentCount = posts.Count,
+                    RouteValues = routeValues
+                }
+            };
+            return View(viewModel);
         }
 
         // GET: /Post/Details/5
@@ -106,7 +132,9 @@ namespace Meguri.Controllers {
                 .Include(p => p.PostTags).ThenInclude(pt => pt.TagConcept).ThenInclude(tc => tc.User)
                 .Include(p => p.Reactions).ThenInclude(r => r.User)
                 .Include(p => p.Comments).ThenInclude(c => c.User)
+                .Include(p => p.Comments).ThenInclude(c => c.CommentImages)
                 .Include(p => p.Comments).ThenInclude(c => c.Replies).ThenInclude(r => r.User)
+                .Include(p => p.Comments).ThenInclude(c => c.Replies).ThenInclude(r => r.CommentImages)
                 .Include(p => p.Comments).ThenInclude(c => c.Reactions)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
@@ -127,13 +155,20 @@ namespace Meguri.Controllers {
                 ancestors.Insert(0, ancestor);
                 parentId = ancestor.ParentFandomId;
             }
-            ViewBag.Ancestors = ancestors;
 
             // 閲覧カウントアップ
             post.ViewCount++;
             await _context.SaveChangesAsync();
 
-            return View(post);
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var viewModel = new PostDetailsViewModel {
+                Post = post,
+                DisplayTitle = string.IsNullOrWhiteSpace(post.Subject) ? _localizer["Post_Untitled"].Value : post.Subject,
+                IsAuthor = post.UserId == currentUserId || User.IsInRole("Admin"),
+                Ancestors = ancestors
+            };
+
+            return View(viewModel);
         }
 
         // GET: /Post/Create

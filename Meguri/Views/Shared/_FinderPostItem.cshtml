@@ -1,0 +1,24 @@
+@model Meguri.Models.Post
+@{
+	// 投稿データと表示用タイトル（未入力時は「無題」にフォールバック）
+	if (User.Identity?.IsAuthenticated != true && (!Model.IsPublic || Model.IsSexual || Model.IsViolence)) {
+		return;
+	}
+	var displayTitle = string.IsNullOrWhiteSpace(Model.Subject)
+		? SharedLocalizer["Post_Untitled"].Value
+		: Model.Subject;
+	var thumb = Model.PostImages?.OrderBy(x => x.DisplayOrder).FirstOrDefault();
+}
+
+<a asp-controller="Post" asp-action="Details" asp-route-id="@Model.Id" class="finder-item-wrap">
+	@* 添付画像がある場合は画像アイコン＋1枚目のサムネイルを表示 *@
+	@if (thumb != null) {
+		<img src="~/icons/image.svg" class="icon" />
+		<span>@displayTitle</span>
+		<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image?.Name" class="thumb" />
+	} else {
+		@* 添付画像がない場合はテキストアイコンのみ表示 *@
+		<img src="~/icons/file-text.svg" class="icon" />
+		<span>@displayTitle</span>
+	}
+</a>

@@ -1,0 +1,88 @@
+﻿@model Meguri.ViewModels.Post.PostDetailsViewModel
+<article>
+	@* 編集ボタン *@
+	@if (Model.IsAuthor) {
+		<nav class="nav-grid">
+			<ul>
+				<li>
+					<a asp-action="Edit" asp-route-id="@Model.Post.Id" class="button-like">
+						@SharedLocalizer["Common_Edit"]
+					</a>
+				</li>
+				<li>
+					<form asp-action="Delete" asp-route-id="@Model.Post.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
+						@Html.AntiForgeryToken()
+						<button type="submit">
+							@SharedLocalizer["Common_Delete"]
+						</button>
+					</form>
+				</li>
+			</ul>
+		</nav>
+	}
+	<h1>@Model.DisplayTitle</h1>
+	<!-- 本文 -->
+	<p>
+		@Model.Post.Body
+	</p>
+	<!-- 添付画像（順序付き） -->
+	@if (Model.Post.PostImages.Any()) {
+		<div class="post-images">
+			@foreach (var pi in Model.Post.PostImages.OrderBy(x => x.DisplayOrder)) {
+				<a href="/Image/File/@pi.ImageId" target="_blank">
+					<img src="/Image/File/@pi.ImageId" class="post-thumb-img" alt="@pi.Image?.Name" />
+				</a>
+			}
+		</div>
+	}
+	@* メタ情報（ユーザー名、投稿日、閲覧数） *@
+	<div class="post-meta">
+		@if (Model.Post.User == null) {
+			@SharedLocalizer["Common_UnknownUser"].Value
+		} else if (Model.Post.User.IsWithdrawn) {
+			@SharedLocalizer["Common_WithdrawnUser"].Value
+		} else {
+			<div>
+				@if (!Model.Post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+					@Model.Post.User.UserName
+				} else {
+					<a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.Post.User.UserName">@Model.Post.User.UserName</a>
+				}
+			</div>
+		}
+		@Model.Post.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd")
+		<div>
+			<span>@string.Format(SharedLocalizer["Post_ViewsCount"].Value, Model.Post.ViewCount)</span>
+		</div>
+	</div>
+
+	@* 属性（インターネット公開、性的コンテンツ（R-18）、暴力表現・グロテスク等） *@
+	<partial name="_Attribute" model="Model.Post" />
+
+	@* タグ一覧 & あいまいさ回避 *@
+	@if (Model.Post.PostTags.Any()) {
+		<div class="tag-wrap">
+			<div class="tag-list">
+				@foreach (var pt in Model.Post.PostTags) {
+					var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText ?? SharedLocalizer["Tag_Title"].Value;
+					<div class="tag-item">
+						<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="icon-wrap">
+							<img src="~/icons/tag.svg" class="icon" />@tagText
+						</a>
+						<a asp-controller="Tag" asp-action="Disambiguation" asp-route-id="@pt.TagConceptId">@SharedLocalizer["Tag_DisambiguationBtn"]</a>
+					</div>
+				}
+			</div>
+		</div>
+	}
+
+	<!-- リアクションボタン -->
+	<div class="reaction-buttons">
+		<button type="button" class="btn-sm" data-toggle-panel="reaction-buttons-panel" aria-expanded="false" aria-controls="reaction-buttons-panel">@SharedLocalizer["Reaction_React"]</button>
+		<div id="reaction-buttons-panel" hidden>
+			@await Html.PartialAsync("_ReactionButtons", ("Post", Model.Post.Id, Model.Post.Reactions.AsEnumerable()))
+		</div>
+	</div>
+
+</article>
+

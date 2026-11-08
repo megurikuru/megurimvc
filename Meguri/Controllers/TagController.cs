@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Meguri.Data;
 using Meguri.Models;
 using Meguri.ViewModels.Tag;
+using Meguri.ViewModels.Shared;
 using Meguri.Services;
 
 namespace Meguri.Controllers {
@@ -82,16 +83,30 @@ namespace Meguri.Controllers {
                     .ToListAsync();
             }
 
-            ViewBag.SearchQuery = q;
-            ViewBag.PageSize = pageSize;
-            ViewBag.TotalCount = totalCount;
-            ViewBag.Skip = resolvedSkip;
-            ViewBag.HasPrevious = resolvedSkip > 0;
-            ViewBag.HasNext = resolvedSkip + concepts.Count < totalCount;
-            ViewBag.PreviousSkip = Math.Max(0, resolvedSkip - pageSize);
-            ViewBag.NextSkip = resolvedSkip + pageSize;
+            var routeValues = new Dictionary<string, string>();
+            if (!string.IsNullOrWhiteSpace(q)) {
+                routeValues["q"] = q;
+            }
 
-            return View(concepts);
+            var viewModel = new TagIndexViewModel {
+                Concepts = concepts,
+                SearchQuery = q,
+                Pagination = new PaginationViewModel {
+                    Controller = "Tag",
+                    Action = "Index",
+                    PageSize = pageSize,
+                    TotalCount = totalCount,
+                    Skip = resolvedSkip,
+                    HasPrevious = resolvedSkip > 0,
+                    HasNext = resolvedSkip + concepts.Count < totalCount,
+                    PreviousSkip = Math.Max(0, resolvedSkip - pageSize),
+                    NextSkip = resolvedSkip + pageSize,
+                    CurrentCount = concepts.Count,
+                    RouteValues = routeValues
+                }
+            };
+
+            return View(viewModel);
         }
 
         // GET: /Tag/Details/5
@@ -110,7 +125,7 @@ namespace Meguri.Controllers {
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var isAuthenticated = User.Identity?.IsAuthenticated == true;
-            ViewBag.CanEdit = concept.UserId == currentUserId || User.IsInRole("Admin");
+            var canEdit = concept.UserId == currentUserId || User.IsInRole("Admin");
 
             // PostTags の件数取得とデータ取得 (SQL)
             int postTagsTotalCount;
@@ -191,25 +206,32 @@ namespace Meguri.Controllers {
                 .Include(it => it.Image)
                 .ToListAsync();
 
-            ViewBag.PostTags = postTags;
-            ViewBag.PostTagsPageSize = pageSize;
-            ViewBag.PostTagsTotalCount = postTagsTotalCount;
-            ViewBag.PostTagsSkip = resolvedPostSkip;
-            ViewBag.PostTagsHasPrevious = resolvedPostSkip > 0;
-            ViewBag.PostTagsHasNext = resolvedPostSkip + postTags.Count < postTagsTotalCount;
-            ViewBag.PostTagsPreviousSkip = Math.Max(0, resolvedPostSkip - pageSize);
-            ViewBag.PostTagsNextSkip = resolvedPostSkip + pageSize;
+            var primaryTag = concept.Tags.FirstOrDefault(t => t.IsCanonical)?.TagText
+                ?? concept.Tags.FirstOrDefault()?.TagText ?? $"Tag#{concept.Id}";
 
-            ViewBag.ImageTags = imageTags;
-            ViewBag.ImageTagsPageSize = pageSize;
-            ViewBag.ImageTagsTotalCount = imageTagsTotalCount;
-            ViewBag.ImageTagsSkip = resolvedImageSkip;
-            ViewBag.ImageTagsHasPrevious = resolvedImageSkip > 0;
-            ViewBag.ImageTagsHasNext = resolvedImageSkip + imageTags.Count < imageTagsTotalCount;
-            ViewBag.ImageTagsPreviousSkip = Math.Max(0, resolvedImageSkip - pageSize);
-            ViewBag.ImageTagsNextSkip = resolvedImageSkip + pageSize;
+            var viewModel = new TagDetailsViewModel {
+                Concept = concept,
+                PrimaryTag = primaryTag,
+                CanEdit = canEdit,
+                PostTags = postTags,
+                PostTagsPageSize = pageSize,
+                PostTagsTotalCount = postTagsTotalCount,
+                PostTagsSkip = resolvedPostSkip,
+                PostTagsHasPrevious = resolvedPostSkip > 0,
+                PostTagsHasNext = resolvedPostSkip + postTags.Count < postTagsTotalCount,
+                PostTagsPreviousSkip = Math.Max(0, resolvedPostSkip - pageSize),
+                PostTagsNextSkip = resolvedPostSkip + pageSize,
+                ImageTags = imageTags,
+                ImageTagsPageSize = pageSize,
+                ImageTagsTotalCount = imageTagsTotalCount,
+                ImageTagsSkip = resolvedImageSkip,
+                ImageTagsHasPrevious = resolvedImageSkip > 0,
+                ImageTagsHasNext = resolvedImageSkip + imageTags.Count < imageTagsTotalCount,
+                ImageTagsPreviousSkip = Math.Max(0, resolvedImageSkip - pageSize),
+                ImageTagsNextSkip = resolvedImageSkip + pageSize
+            };
 
-            return View(concept);
+            return View(viewModel);
         }
 
         // GET: /Tag/Search?q=... (AJAX オートコンプリート)

@@ -18,9 +18,6 @@
 	}
 	<!-- 投稿  -->
 	@foreach (var post in Model.Posts) {
-		<partial name="_PostItem" model="new PostItemViewModel { 
-				Post = post, 
-				IsFinderMode = true 
-		}" />
+		<partial name="_FinderPostItem" model="post" />
 	}
 </div>

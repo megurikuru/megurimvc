@@ -1,0 +1,19 @@
+﻿@model Meguri.ViewModels.Post.PostDetailsViewModel
+<!-- スレッド式コメント一覧 & 投稿フォーム -->
+<div>
+	<div>
+		<h2>
+			@SharedLocalizer["Comment_Header"] (@Model.Post.CommentCount)
+			@if (Model.Post.IsLocked) {
+				<span><img src="~/icons/lock.svg" class="icon" alt="" />@SharedLocalizer["Post_Locked"]</span>
+			}
+		</h2>
+	</div>
+	<div>
+		@if (Model.Post.IsLocked) {
+			<div>@SharedLocalizer["Post_ThreadLockedMessage"]</div>
+		}
+
+		@await Html.PartialAsync("_CommentThread", (Model.Post.Comments.ToList(), "Post", Model.Post.Id, Model.Post.IsLocked))
+	</div>
+</div>

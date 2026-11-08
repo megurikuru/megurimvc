@@ -1,31 +1,15 @@
-﻿@model Meguri.Models.Fandom
+﻿@model Meguri.ViewModels.Fandom.FandomDetailsViewModel
 @{
-	ViewData["Title"] = Model.Name;
-	bool isJoined = ViewBag.IsJoined is true;
-	var fandomPosts = ViewBag.FandomPosts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
+	ViewData["Title"] = Model.Fandom.Name;
 	var breadcrumbs = new List<BreadcrumbItemViewModel>();
-	if (ViewBag.Ancestors is List<Meguri.Models.Fandom> ancestors && ancestors.Count > 0) {
-		foreach (var ancestor in ancestors) {
+	if (Model.Ancestors.Count > 0) {
+		foreach (var ancestor in Model.Ancestors) {
 			breadcrumbs.Add(new(ancestor.Name, Url.Action("Details", "Fandom", new { id = ancestor.Id })));
 		}
-	} else if (Model.ParentFandom != null) {
-		breadcrumbs.Add(new(Model.ParentFandom.Name, Url.Action("Details", "Fandom", new { id = Model.ParentFandom.Id })));
+	} else if (Model.Fandom.ParentFandom != null) {
+		breadcrumbs.Add(new(Model.Fandom.ParentFandom.Name, Url.Action("Details", "Fandom", new { id = Model.Fandom.ParentFandom.Id })));
 	}
-	breadcrumbs.Add(new(Model.Name));
-	var pager = new PaginationViewModel {
-		Controller = "Fandom",
-		Action = "Details",
-		HasPrevious = ViewBag.FandomPostsHasPrevious as bool? ?? false,
-		HasNext = ViewBag.FandomPostsHasNext as bool? ?? false,
-		TotalCount = ViewBag.FandomPostsTotalCount as int? ?? 0,
-		Skip = ViewBag.FandomPostsSkip as int? ?? 0,
-		PreviousSkip = ViewBag.FandomPostsPreviousSkip as int? ?? 0,
-		NextSkip = ViewBag.FandomPostsNextSkip as int? ?? 0,
-		CurrentCount = fandomPosts.Count,
-		RouteValues = new Dictionary<string, string> {
-			["id"] = Model.Id.ToString()
-		}
-	};
+	breadcrumbs.Add(new(Model.Fandom.Name));
 }
 
 <div>
@@ -34,33 +18,33 @@
 	<!-- 界隈メタ情報 -->
 	<div class="fandom-meta">
 		<div>
-			<img src="~/icons/users.svg" class="icon" /><span>@string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.FandomUsers.Count)</span>
+			<img src="~/icons/users.svg" class="icon" /><span>@string.Format(SharedLocalizer["Fandom_MembersCount"].Value, Model.Fandom.FandomUsers.Count)</span>
 		</div>
 		<div>
-			<span>@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, ViewBag.FandomPostsDescendantCount as int? ?? 0)</span>
+			<span>@string.Format(SharedLocalizer["Fandom_PostsCount"].Value, Model.FandomPostsDescendantCount)</span>
 		</div>
 	</div>
 
 	<!-- 界隈メニュー -->
-	@if (Model.Id != 1) {
+	@if (Model.Fandom.Id != 1) {
 		<nav class="nav-grid">
 			<ul>
 				<li>
-					@if (isJoined) {
-						<form asp-action="Leave" asp-route-id="@Model.Id" method="post">
+					@if (Model.IsJoined) {
+						<form asp-action="Leave" asp-route-id="@Model.Fandom.Id" method="post">
 							@Html.AntiForgeryToken()
 							<button type="submit">@SharedLocalizer["Fandom_Leave"]</button>
 						</form>
 					} else {
-						<form asp-action="Join" asp-route-id="@Model.Id" method="post">
+						<form asp-action="Join" asp-route-id="@Model.Fandom.Id" method="post">
 							@Html.AntiForgeryToken()
 							<button type="submit">@SharedLocalizer["Fandom_Join"]</button>
 						</form>
 					}
 				</li>
-				@if (isJoined) {
+				@if (Model.IsJoined) {
 					<li>
-						<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Id" class="button-like">
+						<a asp-controller="Post" asp-action="Create" asp-route-fandomId="@Model.Fandom.Id" class="button-like">
 							@SharedLocalizer["Post_CreateNew"]
 						</a>
 					</li>
@@ -70,9 +54,9 @@
 	}
 </div>
 
-<partial name="_Finder" model="new FinderViewModel { ParentFandomId = Model.ParentFandomId, ChildFandoms = Model.ChildFandoms, Posts = fandomPosts }" />
+<partial name="_Finder" model="new FinderViewModel { ParentFandomId = Model.Fandom.ParentFandomId, ChildFandoms = Model.Fandom.ChildFandoms, Posts = Model.FandomPosts }" />
 
 <!-- ページネーション -->
 <div>
-	<partial name="_Pagination" model="pager" />
+	<partial name="_Pagination" model="Model.Pagination" />
 </div>

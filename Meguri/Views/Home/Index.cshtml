@@ -1,18 +1,13 @@
-﻿@using Meguri.Extensions
+﻿@model Meguri.ViewModels.Home.HomeIndexViewModel
+@using Meguri.Extensions
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
 	// レイアウト制御用フラグ（トップページ判定）
 	ViewData["IsHomePage"] = true;
 
-	// コントローラー（ViewBag）からのデータ取得と型キャスト（nullの場合は空リスト・既定値を設定）
-	var posts = ViewBag.Posts as List<Meguri.Models.Post> ?? new List<Meguri.Models.Post>();
-	var search = ViewBag.Search as string;
-
-	var foundUsers = ViewBag.Users as List<Meguri.Models.ApplicationUser>;
-
 	// 投稿・ユーザーともに存在しない場合の判定フラグ
-	var nothingFound = !posts.Any() && (foundUsers == null || !foundUsers.Any());
+	var nothingFound = !Model.Posts.Any() && !Model.Users.Any();
 }
 
 @{
@@ -20,7 +15,7 @@
 		Controller = "Home",
 		Action = "Index",
 		ParameterName = "search",
-		Value = search,
+		Value = Model.Search,
 		NothingFound = nothingFound
 	};
 }
@@ -29,11 +24,11 @@
 	<partial name="_SearchForm" model="searchForm" />
 }
 
-@if (foundUsers != null && foundUsers.Any()) {
+@if (Model.Users.Any()) {
 	<h1>@SharedLocalizer["Home_UsersHeading"]</h1>
 	<div id="user-list">
 		<ul>
-			@foreach (var u in foundUsers) {
+			@foreach (var u in Model.Users) {
 				<li>
 					@if (u.ActiveAvatarImageId.HasValue) {
 						<img src="/Image/File/@u.ActiveAvatarImageId" alt="" />
@@ -50,11 +45,11 @@
 }
 
 @* 新着投稿一覧 *@
-@if (posts.Any()) {
+@if (Model.Posts.Any()) {
 	<h1>@SharedLocalizer["Home_LatestPostsHeading"]</h1>
 	<div id="post-list">
 		@* 投稿リストをループして描画 *@
-		@foreach (var post in posts) {
+		@foreach (var post in Model.Posts) {
 			<partial name="_PostItem" model="new PostItemViewModel { 
 				Post = post, 
 				ShowAuthor = false, 
@@ -65,32 +60,23 @@
 }
 
 @* ページネーション *@
-@{
-	// 投稿用ページネーション情報の取得
-	var postsHasPrevious = ViewBag.PostsHasPrevious as bool? ?? false;
-	var postsHasNext = ViewBag.PostsHasNext as bool? ?? false;
-	var postsTotalCount = ViewBag.PostsTotalCount as int? ?? 0;
-	var postsSkip = ViewBag.PostsSkip as int? ?? 0;
-	var postsPreviousSkip = ViewBag.PostsPreviousSkip as int? ?? 0;
-	var postsNextSkip = ViewBag.PostsNextSkip as int? ?? 0;
-}
-@if (postsTotalCount > 0) {
+@if (Model.PostsTotalCount > 0) {
 	<nav class="pagination">
 		@* 前のページ（存在する場合はリンク、ない場合は無効化ボタン） *@
-		@if (postsHasPrevious) {
-			<a asp-action="Index" asp-route-skip="@postsPreviousSkip" asp-route-search="@search">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</a>
+		@if (Model.PostsHasPrevious) {
+			<a asp-action="Index" asp-route-skip="@Model.PostsPreviousSkip" asp-route-search="@Model.Search">@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, Model.PostsPageSize)</a>
 		} else {
-			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, 10)</button>
+			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_PreviousCountFormat"].Value, Model.PostsPageSize)</button>
 		}
 
 		@* 現在の表示範囲と総件数 (例: 1 - 40 / 120件) *@
-		<span>@(postsSkip + 1) - @(postsSkip + posts.Count) / @postsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
+		<span>@(Model.PostsSkip + 1) - @(Model.PostsSkip + Model.Posts.Count) / @Model.PostsTotalCount @SharedLocalizer["Common_ItemsSuffix"]</span>
 
 		@* 次のページ（存在する場合はリンク、ない場合は無効化ボタン） *@
-		@if (postsHasNext) {
-			<a asp-action="Index" asp-route-skip="@postsNextSkip" asp-route-search="@search">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</a>
+		@if (Model.PostsHasNext) {
+			<a asp-action="Index" asp-route-skip="@Model.PostsNextSkip" asp-route-search="@Model.Search">@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, Model.PostsPageSize)</a>
 		} else {
-			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, 10)</button>
+			<button type="button" disabled>@string.Format(SharedLocalizer["Pagination_NextCountFormat"].Value, Model.PostsPageSize)</button>
 		}
 	</nav>
 }
