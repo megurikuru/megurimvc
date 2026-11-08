@@ -82,11 +82,13 @@
 
 		<!-- 各種フラグ -->
 		<div class="attribute-wrap">
-			<label class="check-row"><input asp-for="IsPublic" type="checkbox" role="switch" /> @SharedLocalizer["Post_Public"]</label>
-			<label class="check-row"><input asp-for="IsPinned" type="checkbox" role="switch" /> @SharedLocalizer["Post_Pinned"]</label>
-			<label class="check-row"><input asp-for="IsLocked" type="checkbox" role="switch" /> @SharedLocalizer["Post_Locked"]</label>
-			<label class="check-row"><input asp-for="IsSexual" type="checkbox" role="switch" /> @SharedLocalizer["Post_NSFW_Sexual"]</label>
-			<label class="check-row"><input asp-for="IsViolence" type="checkbox" role="switch" /> @SharedLocalizer["Post_NSFW_Violence"]</label>
+			<div class="checkbox-wrap">
+				<label class="check-row"><input asp-for="IsPublic" type="checkbox" role="switch" /> @SharedLocalizer["Post_Public"]</label>
+				<label class="check-row"><input asp-for="IsPinned" type="checkbox" role="switch" /> @SharedLocalizer["Post_Pinned"]</label>
+				<label class="check-row"><input asp-for="IsLocked" type="checkbox" role="switch" /> @SharedLocalizer["Post_Locked"]</label>
+				<label class="check-row"><input asp-for="IsSexual" type="checkbox" role="switch" /> @SharedLocalizer["Post_NSFW_Sexual"]</label>
+				<label class="check-row"><input asp-for="IsViolence" type="checkbox" role="switch" /> @SharedLocalizer["Post_NSFW_Violence"]</label>
+			</div>
 		</div>
 
 		<div class="button-wrap">
