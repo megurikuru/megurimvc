@@ -68,7 +68,6 @@ export async function toggleReaction(targetType, targetId, reactionType, btn) {
                 if (countSpan) countSpan.textContent = res.count;
                 button.classList.toggle('reacted', Boolean(res.hasReacted));
                 button.setAttribute('aria-pressed', String(Boolean(res.hasReacted)));
-                if (button.closest('.message-reaction-summary')) button.hidden = Number(res.count) === 0;
             }
 
             matchingButtons.forEach(updateReactionButtonState);

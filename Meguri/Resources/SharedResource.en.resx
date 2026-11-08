@@ -994,7 +994,7 @@
     <value>Comments: {0}</value>
   </data>
   <data name="Post_ViewsCount" xml:space="preserve">
-    <value>Views: {0}</value>
+    <value>{0} Views</value>
   </data>
   <data name="Post_ThreadTitle" xml:space="preserve">
     <value>Discussion Thread</value>

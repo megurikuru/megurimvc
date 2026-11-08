@@ -1,8 +1,27 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using Meguri.Models;
+using Meguri.ViewModels.Shared;
 
 namespace Meguri.ViewModels.Post {
+    public class PostIndexViewModel {
+        public List<Meguri.Models.Post> Posts { get; set; } = new List<Meguri.Models.Post>();
+        public List<Meguri.Models.Fandom> Fandoms { get; set; } = new List<Meguri.Models.Fandom>();
+        public Meguri.Models.Fandom? CurrentFandom { get; set; }
+        public string? CurrentTag { get; set; }
+        public string? CurrentSearch { get; set; }
+        public bool CanPostToCurrentFandom { get; set; }
+        public PaginationViewModel Pagination { get; set; } = new PaginationViewModel();
+    }
+
+    public class PostDetailsViewModel {
+        public Meguri.Models.Post Post { get; set; } = null!;
+        public string DisplayTitle { get; set; } = string.Empty;
+        public bool IsAuthor { get; set; }
+        public List<Meguri.Models.Fandom> Ancestors { get; set; } = new List<Meguri.Models.Fandom>();
+    }
+
     public class PostCreateViewModel {
         [Display(Name = "Post_PostName")]
         [StringLength(200, ErrorMessage = "Validation_StringLengthMax")]

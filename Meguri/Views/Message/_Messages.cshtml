@@ -112,20 +112,6 @@
 						}
 					</div>
 				</div>
-				@if (!msg.IsDeleted) {
-					@* 件数がある種類だけを表示する。0件のボタンも残し、操作後にJavaScriptで件数と表示を同期する。 *@
-					<div class="reaction-list message-reaction-summary">
-						@foreach (var type in Enum.GetValues<ReactionType>()) {
-							var count = msg.Reactions.Count(r => r.Type == type);
-							var reacted = msg.Reactions.Any(r => r.Type == type && r.UserId == Model.CurrentUserId);
-							<button type="button" class="btn-sm @(reacted ? "reacted" : "")" hidden="@(count == 0)"
-											title="@type.GetDescription()" aria-label="@type.GetDisplayName()" aria-pressed="@reacted.ToString().ToLowerInvariant()"
-											data-reaction-target-type="Message" data-reaction-target-id="@msg.Id" data-reaction-type="@((int)type)">
-								<span aria-hidden="true">@type.GetEmoji()</span><span class="reaction-count">@count</span>
-							</button>
-						}
-					</div>
-				}
 			</div>
 		}
 	}

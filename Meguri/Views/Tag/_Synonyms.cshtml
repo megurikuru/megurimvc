@@ -1,0 +1,34 @@
+﻿@model Meguri.ViewModels.Tag.DisambiguationViewModel
+@* 同義語・別名・表記揺れ (Synonyms) セクション *@
+<article>
+	<h2>@SharedLocalizer["Tag_SynonymTerms"]</h2>
+	<p class="description">@SharedLocalizer["Tag_SynonymHelp"]</p>
+	<div>
+		@* 登録済みの同義語一覧と削除フォーム *@
+		@foreach (var syn in Model.Synonyms) {
+			<div class="inline-actions">
+				<p>@syn.Text</p>
+				@if (Model.CanEdit) {
+					<form asp-action="RemoveSynonym" method="post">
+						@Html.AntiForgeryToken()
+						<input type="hidden" name="tagId" value="@syn.TagId" />
+						<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
+						<button type="submit" class="btn-sm"><img src="~/icons/x.svg" class="icon" /></button>
+					</form>
+				}
+			</div>
+		}
+
+		@* 同義語の追加フォーム（編集権限がある場合のみ表示） *@
+		@if (Model.CanEdit) {
+			<div>
+				<form asp-action="AddSynonym" method="post" class="input-group">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
+					<input type="text" name="synonymText" placeholder="@SharedLocalizer["Tag_SynonymPlaceholder"]" required />
+					<button type="submit">@SharedLocalizer["Common_Add"]</button>
+				</form>
+			</div>
+		}
+	</div>
+</article>

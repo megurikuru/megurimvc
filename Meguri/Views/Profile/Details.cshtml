@@ -1,44 +1,29 @@
-﻿@model IEnumerable<Meguri.Models.Post>
+﻿@model Meguri.ViewModels.Profile.ProfileDetailsViewModel
 @{
-	var profile = (Meguri.Models.ApplicationUser)ViewBag.Profile;
-	var isOwner = ViewBag.IsOwner as bool? ?? false;
-	var urls = ViewBag.ExternalUrls as List<string> ?? new List<string>();
-	ViewData["Title"] = profile.UserName;
-	var pager = new PaginationViewModel {
-		Controller = "Profile",
-		Action = "Details",
-		HasPrevious = ViewBag.HasPrevious as bool? ?? false,
-		HasNext = ViewBag.HasNext as bool? ?? false,
-		TotalCount = ViewBag.TotalCount as int? ?? 0,
-		Skip = ViewBag.Skip as int? ?? 0,
-		PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
-		NextSkip = ViewBag.NextSkip as int? ?? 0,
-		CurrentCount = Model.Count(),
-		RouteValues = new Dictionary<string, string> { ["id"] = profile.UserName ?? "" }
-	};
+	ViewData["Title"] = Model.Profile.UserName;
 }
 
 <div class="profile-info">
-	@if (profile.ActiveAvatarImageId.HasValue || profile.HeaderImageId.HasValue) {
+	@if (Model.Profile.ActiveAvatarImageId.HasValue || Model.Profile.HeaderImageId.HasValue) {
 		<div class="profile-banner">
-			@if (profile.HeaderImageId.HasValue) {
-				<img src="/Image/File/@profile.HeaderImageId" alt="" class="profile-header" />
+			@if (Model.Profile.HeaderImageId.HasValue) {
+				<img src="/Image/File/@Model.Profile.HeaderImageId" alt="" class="profile-header" />
 			}
 		</div>
 	}
-	<h1 class="user-name">@profile.UserName
-	@if (isOwner) {
-		@if (!profile.IsProfilePublic) {
+	<h1 class="user-name">@Model.Profile.UserName
+	@if (Model.IsOwner) {
+		@if (!Model.Profile.IsProfilePublic) {
 			<small>@SharedLocalizer["Profile_PrivateBadge"]</small>
 		}
 	}
 	</h1>
-	@if (!string.IsNullOrEmpty(profile.Bio)) {
-		<p class="profile-bio">@profile.Bio</p>
+	@if (!string.IsNullOrEmpty(Model.Profile.Bio)) {
+		<p class="profile-bio">@Model.Profile.Bio</p>
 	}
-	@if (urls.Any()) {
+	@if (Model.ExternalUrls.Any()) {
 		<ul class="profile-external-urls">
-			@foreach (var u in urls) {
+			@foreach (var u in Model.ExternalUrls) {
 				<li><a href="@u" target="_blank" rel="noopener noreferrer nofollow">@u</a></li>
 			}
 		</ul>
@@ -47,10 +32,10 @@
 
 <div id="post-list">
 	<h1>@SharedLocalizer["Profile_PostListHeading"]</h1>
-	@if (!Model.Any()) {
+	@if (!Model.Posts.Any()) {
 		<p>@SharedLocalizer["Common_NoItems"]</p>
 	} else {
-		@foreach (var post in Model) {
+		@foreach (var post in Model.Posts) {
 			<partial name="_PostItem" model="new PostItemViewModel { 
 				Post = post, 
 				BodyMaxLength = 150, 
@@ -64,4 +49,4 @@
 	}
 </div>
 
-<partial name="_Pagination" model="pager" />
+<partial name="_Pagination" model="Model.Pagination" />

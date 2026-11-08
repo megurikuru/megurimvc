@@ -1,62 +1,183 @@
-﻿@model (List<Meguri.Models.Comment> Comments, string TargetType, long TargetId)
+﻿@model (List<Meguri.Models.Comment> Comments, string TargetType, long TargetId, bool IsLocked)
 @using System.Security.Claims
+@using Meguri.Extensions
 
 @{
-		var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+	var commentsById = Model.Comments.ToDictionary(c => c.Id);
+
+	// 親コメントの下に返信が続くようスレッド順に整列する
+	var childrenMap = Model.Comments
+		.Where(c => c.ParentId.HasValue && commentsById.ContainsKey(c.ParentId.Value))
+		.GroupBy(c => c.ParentId!.Value)
+		.ToDictionary(g => g.Key, g => g.OrderBy(c => c.CreatedAt).ToList());
+
+	var orderedComments = new List<Meguri.Models.Comment>(Model.Comments.Count);
+	void AddWithReplies(Meguri.Models.Comment c) {
+		orderedComments.Add(c);
+		if (childrenMap.TryGetValue(c.Id, out var replies)) {
+			foreach (var r in replies) {
+				AddWithReplies(r);
+			}
+		}
+	}
+	foreach (var root in Model.Comments.Where(c => !c.ParentId.HasValue || !commentsById.ContainsKey(c.ParentId.Value)).OrderBy(c => c.CreatedAt)) {
+		AddWithReplies(root);
+	}
+
+	string SenderName(Meguri.Models.Comment comment) => comment.User == null
+		? SharedLocalizer["Common_UnknownUser"].Value
+		: comment.User.UserName + (comment.User.IsWithdrawn ? "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")" : "");
+
+	string Preview(Meguri.Models.Comment comment) => comment.IsDeleted ? SharedLocalizer["Comment_DeletedText"].Value
+		: !string.IsNullOrWhiteSpace(comment.Text) ? new string(comment.Text.Take(80).ToArray())
+		: SharedLocalizer["Message_ImageAttachLabel"].Value;
 }
 
 <div>
-		@if (!Model.Comments.Any()) {
-				<p >@SharedLocalizer["Comment_NoCommentsYet"]</p>
-		}
-		else {
-				<div>
-						@foreach (var comment in Model.Comments) {
-								@await Html.PartialAsync("_CommentItem", (comment, Model.TargetType, Model.TargetId, 0))
-						}
-				</div>
-		}
-
+	@if (!Model.IsLocked && User.Identity?.IsAuthenticated == true) {
 		<!-- コメント投稿フォーム -->
-		<div id="commentForm">
-				<h6 ><img src="~/icons/message-circle.svg" class="icon" />@SharedLocalizer["Comment_WriteTitle"]</h6>
+		<div id="commentForm" class="message-composer">
+			@if (TempData["CommentError"] is string commentError && !string.IsNullOrEmpty(commentError)) {
+				<div class="validation-summary-errors" role="alert">
+					<ul><li>@commentError</li></ul>
+				</div>
+			}
 
-				@if (TempData["CommentError"] is string commentError && !string.IsNullOrEmpty(commentError)) {
-						<div class="validation-summary-errors" role="alert">
-								<ul><li>@commentError</li></ul>
-						</div>
+			<form asp-controller="Comment" asp-action="Create" method="post" enctype="multipart/form-data" autocomplete="off">
+				@Html.AntiForgeryToken()
+				<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+				<input type="hidden" id="replyParentId" name="parentId" value="" autocomplete="off" />
+
+				@if (Model.TargetType == "Post") {
+					<input type="hidden" name="docId" value="@Model.TargetId" />
+				} else if (Model.TargetType == "Image") {
+					<input type="hidden" name="imageId" value="@Model.TargetId" />
 				}
 
-				<!-- 返信先インジケーター -->
-				<div id="replyNotice" class="inline-actions"></div>
+				<div id="replyNotice" class="message-reply-notice" hidden role="status">
+					<div><strong id="commentReplyLabel"></strong><span id="commentReplyPreview" class="message-preview-text"></span></div>
+					<button type="button" class="btn-sm" data-cancel-reply aria-label="@SharedLocalizer["Message_CancelReply"]" title="@SharedLocalizer["Message_CancelReply"]">×</button>
+				</div>
 
-				<form asp-controller="Comment" asp-action="Create" method="post" enctype="multipart/form-data">
-						@Html.AntiForgeryToken()
-						<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
-						<input type="hidden" id="replyParentId" name="parentId" value="" />
+				<div class="attribute-wrap">
+					<textarea name="text" id="commentTextInput" rows="3" placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" aria-label="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
+				</div>
 
-						@if (Model.TargetType == "Post") {
-								<input type="hidden" name="docId" value="@Model.TargetId" />
-						}
-						else if (Model.TargetType == "Image") {
-								<input type="hidden" name="imageId" value="@Model.TargetId" />
-						}
+				<details class="message-disclosure">
+					<summary><img src="~/icons/image.svg" class="icon" alt="" />@SharedLocalizer["Message_ImageAttachLabel"] <span id="commentImageCountDisplay">0/1</span></summary>
+					<div class="attribute-wrap">
+						<label for="commentImageInput">@SharedLocalizer["Message_ImageAttachLabel"]</label>
+						<input type="file" id="commentImageInput" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#commentImagePreviewContainer" data-image-count="#commentImageCountDisplay" data-max-images="1" />
+						<span class="field-validation-valid" data-valmsg-for="commentImage" data-valmsg-replace="true"></span>
+						<div id="commentImagePreviewContainer" class="image-preview-list"></div>
+					</div>
+				</details>
 
-						<div class="attribute-wrap">
-								<textarea name="text" id="commentTextInput" rows="3" placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
-						</div>
-
-						<div class="attribute-wrap">
-								<input type="file" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#commentImagePreviewContainer" data-max-images="1" />
-								<span class="field-validation-valid" data-valmsg-for="commentImage" data-valmsg-replace="true"></span>
-								<div id="commentImagePreviewContainer" class="image-preview-list"></div>
-						</div>
-
-						<div class="button-wrap">
-								<button type="submit" class="btn-block">
-										@SharedLocalizer["Comment_Submit"]
-								</button>
-						</div>
-				</form>
+				<div class="button-wrap">
+					<button type="submit" class="btn-block">
+						<img src="~/icons/send.svg" class="icon" alt="" />@SharedLocalizer["Comment_Submit"]
+					</button>
+				</div>
+			</form>
 		</div>
+	}
+
+	<div id="messageContainer">
+		@if (!orderedComments.Any()) {
+			<p>@SharedLocalizer["Comment_NoCommentsYet"]</p>
+		} else {
+			@foreach (var comment in orderedComments) {
+				var isMine = comment.UserId == currentUserId;
+				var isAuthor = isMine || User.IsInRole("Admin");
+				var replyParent = comment.ParentId.HasValue ? commentsById.GetValueOrDefault(comment.ParentId.Value) : null;
+				var replyLabel = $">>{comment.Number} " + string.Format(SharedLocalizer["Message_ReplyToFormat"].Value, SenderName(comment));
+
+				var depth = 0;
+				var parentId = comment.ParentId;
+				while (parentId.HasValue && depth < 3) {
+					var parent = commentsById.GetValueOrDefault(parentId.Value);
+					if (parent == null) { break; }
+					depth++;
+					parentId = parent.ParentId;
+				}
+				var indentClass = depth > 0 ? $"message-indent-{depth}" : null;
+
+				<div id="comment-@comment.Id" class="message-item @indentClass @(comment.ParentId.HasValue ? "message-reply" : "")">
+					@if (!isMine) {
+						<div class="message-sender">
+							<img src="~/icons/user.svg" class="icon" alt="" />
+							<span>>>@comment.Number</span>
+							@if (comment.User == null) {
+								@SharedLocalizer["Common_UnknownUser"].Value
+							} else if (comment.User.IsWithdrawn) {
+								@(comment.User.UserName + "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")")
+							} else if (!comment.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+								@comment.User.UserName
+							} else {
+								<a asp-controller="Profile" asp-action="Details" asp-route-id="@comment.User.UserName">@comment.User.UserName</a>
+							}
+						</div>
+					}
+					<div class="message-box @(isMine ? "is-mine" : "")">
+						@if (replyParent != null) {
+							<a href="#comment-@replyParent.Id" class="message-reply-preview">
+								<span>>>@replyParent.Number @string.Format(SharedLocalizer["Message_ReplyToFormat"].Value, SenderName(replyParent))</span>
+								<span class="message-preview-text">@Preview(replyParent)</span>
+							</a>
+						}
+						@if (comment.IsDeleted) {
+							<div><em>@SharedLocalizer["Comment_DeletedText"]</em></div>
+						} else {
+							@if (!string.IsNullOrEmpty(comment.Text)) {
+								<div class="chat-message-body">@comment.Text</div>
+							}
+							@if (comment.CommentImages.Any()) {
+								<div>
+									@foreach (var ci in comment.CommentImages.OrderBy(x => x.DisplayOrder)) {
+										<a href="/Image/File/@ci.ImageId" target="_blank">
+											<img src="/Image/File/@ci.ImageId" class="message-image" alt="@SharedLocalizer["Message_AttachmentAlt"]" loading="lazy" />
+										</a>
+									}
+								</div>
+							}
+						}
+						<div class="message-actions">
+							<time class="local-time message-time" datetime="@comment.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")" data-format="chat">@comment.CreatedAt.ToLocalTime()</time>
+							@if (!Model.IsLocked && User.Identity?.IsAuthenticated == true && !comment.IsDeleted) {
+								if (depth >= 3) {
+									<span>@SharedLocalizer["Comment_ReplyLimit"]</span>
+								} else {
+									<button type="button" class="btn-sm"
+											data-reply-comment-id="@comment.Id"
+											data-reply-label="@replyLabel"
+											data-reply-preview="@Preview(comment)">
+										<img src="~/icons/reply.svg" class="icon" alt="" />@SharedLocalizer["Message_ReplyBtn"]
+									</button>
+								}
+							}
+							@if (!comment.IsDeleted) {
+								<details class="chat-more-actions">
+									<summary aria-label="@SharedLocalizer["Message_MoreActions"]" title="@SharedLocalizer["Message_MoreActions"]">…</summary>
+									<div class="chat-actions-panel">
+										@if (isAuthor) {
+											<div class="inline-actions">
+												<form asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" method="post" data-confirm="@SharedLocalizer["Common_ConfirmDelete"]">
+													@Html.AntiForgeryToken()
+													<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+													<button type="submit" class="btn-sm">@SharedLocalizer["Common_Delete"]</button>
+												</form>
+											</div>
+										}
+										<div>@SharedLocalizer["Message_ReactionBtn"]</div>
+										<partial name="_ReactionButtons" model='("Comment", comment.Id, comment.Reactions.AsEnumerable())' />
+									</div>
+								</details>
+							}
+						</div>
+					</div>
+				</div>
+			}
+		}
+	</div>
 </div>

@@ -1,0 +1,35 @@
+﻿@model Meguri.ViewModels.Tag.DisambiguationViewModel
+@* 関連語 (Related) セクション *@
+<article>
+	<h2>@SharedLocalizer["Tag_RelatedTerms"]</h2>
+	<p class="description">@SharedLocalizer["Tag_RelatedHelp"]</p>
+	<div>
+		@* 登録済みの関連語一覧と削除フォーム *@
+		@foreach (var r in Model.RelatedConcepts) {
+			<div class="inline-actions">
+				<a asp-action="Details" asp-route-conceptId="@r.ConceptId">@r.Text</a>
+				@if (Model.CanEdit) {
+					<form asp-action="RemoveRelationship" method="post">
+						@Html.AntiForgeryToken()
+						<input type="hidden" name="relationshipId" value="@r.RelationshipId" />
+						<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
+						<button type="submit" class="btn-sm"><img src="~/icons/x.svg" class="icon" /></button>
+					</form>
+				}
+			</div>
+		}
+
+		@* 関連語の追加フォーム（編集権限がある場合のみ表示） *@
+		@if (Model.CanEdit) {
+			<div>
+				<form asp-action="AddRelationship" method="post" class="input-group">
+					@Html.AntiForgeryToken()
+					<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
+					<input type="hidden" name="predicate" value="related" />
+					<input type="text" name="targetTagText" placeholder="@SharedLocalizer["Tag_RelatedPlaceholder"]" required />
+					<button type="submit">@SharedLocalizer["Common_Add"]</button>
+				</form>
+			</div>
+		}
+	</div>
+</article>

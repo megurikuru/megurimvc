@@ -994,7 +994,7 @@
     <value>コメント: {0}件</value>
   </data>
   <data name="Post_ViewsCount" xml:space="preserve">
-    <value>閲覧数: {0}</value>
+    <value>{0} 閲覧</value>
   </data>
   <data name="Post_ThreadTitle" xml:space="preserve">
     <value>スレッド</value>

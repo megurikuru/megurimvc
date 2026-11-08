@@ -37,6 +37,10 @@ article {
 		text-align: right;
 	}
 
+	.post-image {
+		padding: 0.5rem 0.5rem 0 0.5rem;
+	}
+
 	.post-images {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（2枚以上は2均等列、1枚は全幅）で配置 */
 		grid-template-columns: repeat(2, 1fr);
@@ -51,8 +55,8 @@ article {
 	.post-meta {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（3均等列）で配置 */
 		grid-template-columns: repeat(3, 1fr);
+		padding: 0.5rem;
 		border-top: 1px solid var(--color-border);
-		padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 		text-align: center;
 	}
 	/* 投稿サムネイル */
@@ -62,12 +66,21 @@ article {
 		height: auto;
 		object-fit: cover;
 	}
+
+	.tag-wrap {
+		margin-top: 0.5rem;
+	}
+	/* リアクションボタンラッパー */
+	.reaction-buttons {
+		padding: 0.5rem;
+		border-top: 1px solid var(--color-border);
+	}
 	/* リアクションボタン一覧 */
 	.reaction-list {
 		display: block flex;
 		flex-wrap: wrap;
-		gap: 0.35rem;
-		padding: 0.25rem 0;
+		gap: 0.5rem;
+		padding-top: 0.5rem;
 
 		& button {
 			min-height: var(--control-height-sm);
@@ -76,7 +89,6 @@ article {
 
 			&.reacted {
 				background-color: var(--color-border);
-				color: white;
 				border-color: var(--color-border);
 			}
 		}

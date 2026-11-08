@@ -7,7 +7,6 @@
 
 	 【主なプロパティと初期値】
 	 - Post (必須)              : 表示対象の Post エンティティ
-	 - IsFinderMode (false)     : Finder形式（アイコン＋タイトル＋1枚目サムネイル）で表示するか
 	 - BodyMaxLength (120)      : 本文プレビューの最大文字数（0以下で非表示）
 	 - MaxImages (4)            : 添付画像の最大表示枚数（0以下で非表示）
 	 - LinkImagesToFile (false) : 画像クリック時に画像ファイルを別タブで開くか（false時は投稿詳細へ遷移）
@@ -21,18 +20,14 @@
 	 - ShowStats (true)         : コメント数・閲覧数・リアクション数を表示するか
 
 	 【各画面での呼び出し例】
-	 1. Finderモード（Shared/_Finder.cshtml）
-			<partial name="_PostItem" model="new PostItemViewModel { Post = post, IsFinderMode = true }" />
-
-	 2. 通常カードモード
-			- トップページ（Home/Index.cshtml）
-				<partial name="_PostItem" model="new PostItemViewModel { Post = post, ShowAuthor = false, ShowStats = false }" />
-			- 投稿一覧（Post/Index.cshtml）
-				<partial name="_PostItem" model="new PostItemViewModel { Post = post, BodyMaxLength = 150, MaxImages = 16, LinkImagesToFile = true, ShowBadges = true, ShowTags = true }" />
-			- プロフィール詳細（Profile/Details.cshtml）
-				<partial name="_PostItem" model="new PostItemViewModel { Post = post, BodyMaxLength = 150, MaxImages = 16, LinkImagesToFile = true, ShowFandom = false, ShowAuthor = false, ShowCreatedAt = false }" />
-			- タグ詳細（Tag/Details.cshtml）
-				<partial name="_PostItem" model="new PostItemViewModel { Post = pt.Post, BodyMaxLength = 0, MaxImages = 0, ShowFandom = false, ShowStats = false, DateOnly = true }" />
+	 - トップページ（Home/Index.cshtml）
+		 <partial name="_PostItem" model="new PostItemViewModel { Post = post, ShowAuthor = false, ShowStats = false }" />
+	 - 投稿一覧（Post/Index.cshtml）
+		 <partial name="_PostItem" model="new PostItemViewModel { Post = post, BodyMaxLength = 150, MaxImages = 16, LinkImagesToFile = true, ShowBadges = true, ShowTags = true }" />
+	 - プロフィール詳細（Profile/Details.cshtml）
+		 <partial name="_PostItem" model="new PostItemViewModel { Post = post, BodyMaxLength = 150, MaxImages = 16, LinkImagesToFile = true, ShowFandom = false, ShowAuthor = false, ShowCreatedAt = false }" />
+	 - タグ詳細（Tag/Details.cshtml）
+		 <partial name="_PostItem" model="new PostItemViewModel { Post = pt.Post, BodyMaxLength = 50, MaxImages = 1, ShowFandom = false, ShowStats = false, DateOnly = true }" />
 	 ====================================================================== *@
 @{
 	// 投稿データと表示用タイトル（未入力時は「無題」にフォールバック）
@@ -45,120 +40,98 @@
 		: post.Subject;
 }
 
-@* ====================================================================== *@
-@* 1. Finderモード（Shared/_Finder.cshtml：界隈詳細のフォルダ・ファイル一覧） *@
-@* ====================================================================== *@
-@if (Model.IsFinderMode) {
-	var thumb = post.PostImages?.OrderBy(x => x.DisplayOrder).FirstOrDefault();
-	<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="finder-item-wrap">
-		@* 添付画像がある場合は画像アイコン＋1枚目のサムネイルを表示 *@
-		@if (thumb != null) {
-			<img src="~/icons/image.svg" class="icon" />
-			<span>@displayTitle</span>
-			<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image?.Name" class="thumb" />
-		} else {
-			@* 添付画像がない場合はテキストアイコンのみ表示 *@
-			<img src="~/icons/file-text.svg" class="icon" />
-			<span>@displayTitle</span>
-		}
-	</a>
-@* ====================================================================== *@
-@* 2. 通常カードモード（Home/Index, Tag/Details, Profile/Details, Post/Index） *@
-@* ====================================================================== *@
-} else {
-	<article class="post-item">
-		@* 投稿タイトル（詳細画面への個別リンク） *@
-		<h1>
-			<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@displayTitle</a>
-		</h1>
+<article class="post-item">
+	@* 投稿タイトル（詳細画面への個別リンク） *@
+	<h1>
+		<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@displayTitle</a>
+	</h1>
 
-		@* 本文プレビュー（Home/Index, Profile/Details, Post/Index で表示 / Tag/Details では非表示） *@
-		@if (Model.BodyMaxLength > 0 && !string.IsNullOrWhiteSpace(post.Body)) {
-			<p>@(post.Body.Length > Model.BodyMaxLength ? post.Body.Substring(0, Model.BodyMaxLength) + "..." : post.Body)</p>
-		}
+	@* 本文プレビュー（Home/Index, Profile/Details, Post/Index, Tag/Details で表示） *@
+	@if (Model.BodyMaxLength > 0 && !string.IsNullOrWhiteSpace(post.Body)) {
+		<p>@(post.Body.Length > Model.BodyMaxLength ? post.Body.Substring(0, Model.BodyMaxLength) + "..." : post.Body)</p>
+	}
 
-		@* 添付画像一覧（Home/Index, Profile/Details, Post/Index で表示 / LinkImagesToFile=true なら画像ファイルを別タブで開く） *@
-		@if (Model.MaxImages > 0 && post.PostImages != null && post.PostImages.Any()) {
-			<div class="post-images">
-				@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(Model.MaxImages)) {
-					@if (Model.LinkImagesToFile) {
-						<a href="/Image/File/@pi.ImageId" target="_blank">
-							<img src="/Image/File/@pi.ImageId" class="post-thumb-img" alt="@pi.Image?.Name" />
-						</a>
-					} else {
-						<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
-							<img src="/Image/File/@pi.ImageId" class="post-thumb-img" alt="@pi.Image?.Name" />
-						</a>
-					}
+	@* 添付画像一覧（LinkImagesToFile=true なら画像ファイルを別タブで開く） *@
+	@if (Model.MaxImages > 0 && post.PostImages != null && post.PostImages.Any()) {
+		<div class="post-images">
+			@foreach (var pi in post.PostImages.OrderBy(x => x.DisplayOrder).Take(Model.MaxImages)) {
+				@if (Model.LinkImagesToFile) {
+					<a href="/Image/File/@pi.ImageId" target="_blank">
+						<img src="/Image/File/@pi.ImageId" class="post-thumb-img" alt="@pi.Image?.Name" />
+					</a>
+				} else {
+					<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+						<img src="/Image/File/@pi.ImageId" class="post-thumb-img" alt="@pi.Image?.Name" />
+					</a>
 				}
-			</div>
-		}
+			}
+		</div>
+	}
 
-		@* タグ一覧（Post/Index で表示） *@
-		@if (Model.ShowTags && post.PostTags != null && post.PostTags.Any()) {
-			<div class="post-tags">
-				@foreach (var pt in post.PostTags) {
-					var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
-					if (!string.IsNullOrEmpty(tagText)) {
-						<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId">#@tagText</a>
-					}
+	@* タグ一覧（Post/Index で表示） *@
+	@if (Model.ShowTags && post.PostTags != null && post.PostTags.Any()) {
+		<div class="post-tags">
+			@foreach (var pt in post.PostTags) {
+				var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText;
+				if (!string.IsNullOrEmpty(tagText)) {
+					<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId">#@tagText</a>
 				}
-			</div>
-		}
+			}
+		</div>
+	}
 
-		@* メタ情報エリア（Tag/Details, Post/Index で表示 / Profile/Details では非表示） *@
-		@if (Model.ShowFandom || Model.ShowBadges || Model.ShowAuthor || Model.ShowCreatedAt) {
-			<div class="article-meta">
-				@* 界隈名（Post/Index で表示） *@
-				@if (Model.ShowFandom) {
-					@if (Model.LinkFandom) {
-						<a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId">
-							@(post.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value)
-						</a>
-					} else {
+	@* メタ情報エリア（Tag/Details, Post/Index で表示 / Profile/Details では非表示） *@
+	@if (Model.ShowFandom || Model.ShowBadges || Model.ShowAuthor || Model.ShowCreatedAt) {
+		<div class="article-meta">
+			@* 界隈名（Post/Index で表示） *@
+			@if (Model.ShowFandom) {
+				@if (Model.LinkFandom) {
+					<a asp-controller="Fandom" asp-action="Details" asp-route-id="@post.FandomId">
 						@(post.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value)
-					}
+					</a>
+				} else {
+					@(post.Fandom?.Name ?? SharedLocalizer["Fandom_DefaultLabel"].Value)
 				}
-				@* 固定・R-18・R-18Gバッジ（Post/Index で表示） *@
-				@if (Model.ShowBadges) {
-					@if (post.IsPinned) {
-						<span><img src="~/icons/pin.svg" class="icon" />@SharedLocalizer["Post_PinnedBadge"]</span>
-					}
-					@if (post.IsSexual) {
-						<span>R-18</span>
-					}
-					@if (post.IsViolence) {
-						<span>R-18G</span>
-					}
+			}
+			@* 固定・R-18・R-18Gバッジ（Post/Index で表示） *@
+			@if (Model.ShowBadges) {
+				@if (post.IsPinned) {
+					<span><img src="~/icons/pin.svg" class="icon" />@SharedLocalizer["Post_PinnedBadge"]</span>
 				}
-				@* 投稿者名（Tag/Details, Post/Index で表示：退会済み・非公開プロフィールを考慮） *@
-				@if (Model.ShowAuthor) {
-					<span>
-						@if (post.User == null) {
-							@SharedLocalizer["Common_UnknownUser"].Value
-						} else if (post.User.IsWithdrawn) {
-							@SharedLocalizer["Common_WithdrawnUser"].Value
-						} else if (!post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
-							@post.User.UserName
-						} else {
-							<a asp-controller="Profile" asp-action="Details" asp-route-id="@post.User.UserName">@post.User.UserName</a>
-						}
-					</span>
+				@if (post.IsSexual) {
+					<span>R-18</span>
 				}
-				@* 投稿日時（Tag/Details では日付のみ DateOnly=true、Post/Index では日時表示） *@
-				@if (Model.ShowCreatedAt) {
-					@post.CreatedAt.ToLocalTime(Model.DateOnly)
+				@if (post.IsViolence) {
+					<span>R-18G</span>
 				}
-			</div>
-		}
+			}
+			@* 投稿者名（Tag/Details, Post/Index で表示：退会済み・非公開プロフィールを考慮） *@
+			@if (Model.ShowAuthor) {
+				<span>
+					@if (post.User == null) {
+						@SharedLocalizer["Common_UnknownUser"].Value
+					} else if (post.User.IsWithdrawn) {
+						@SharedLocalizer["Common_WithdrawnUser"].Value
+					} else if (!post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+						@post.User.UserName
+					} else {
+						<a asp-controller="Profile" asp-action="Details" asp-route-id="@post.User.UserName">@post.User.UserName</a>
+					}
+				</span>
+			}
+			@* 投稿日時（Tag/Details では日付のみ DateOnly=true、Post/Index では日時表示） *@
+			@if (Model.ShowCreatedAt) {
+				@post.CreatedAt.ToLocalTime(Model.DateOnly)
+			}
+		</div>
+	}
 
-		@* 統計情報：コメント数・閲覧数・リアクション数（Profile/Details, Post/Index で表示） *@
-		@if (Model.ShowStats) {
-			<div class="post-meta">
-				<span>@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)</span>
-				<span>@string.Format(SharedLocalizer["Post_ViewCountSuffix"].Value, post.ViewCount)</span>
-				<span>@string.Format(SharedLocalizer["Post_ReactionCountSuffix"].Value, post.Reactions?.Count ?? 0)</span>
-			</div>
-		}
-	</article>
-}
+	@* 統計情報：コメント数・閲覧数・リアクション数（Profile/Details, Post/Index で表示） *@
+	@if (Model.ShowStats) {
+		<div class="post-meta">
+			<span>@string.Format(SharedLocalizer["Post_CommentCountSuffix"].Value, post.CommentCount)</span>
+			<span>@string.Format(SharedLocalizer["Post_ViewCountSuffix"].Value, post.ViewCount)</span>
+			<span>@string.Format(SharedLocalizer["Post_ReactionCountSuffix"].Value, post.Reactions?.Count ?? 0)</span>
+		</div>
+	}
+</article>

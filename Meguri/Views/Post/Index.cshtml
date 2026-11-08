@@ -1,32 +1,6 @@
-﻿@model IEnumerable<Meguri.Models.Post>
+﻿@model Meguri.ViewModels.Post.PostIndexViewModel
 @{
 	ViewData["Title"] = SharedLocalizer["Post_Title"];
-	var currentFandom = ViewBag.CurrentFandom as Meguri.Models.Fandom;
-	var currentTag = ViewBag.CurrentTag as string;
-	var currentSearch = ViewBag.CurrentSearch as string;
-	var fandoms = ViewBag.Fandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
-	var postRouteValues = new Dictionary<string, string>();
-	if (currentFandom != null) {
-		postRouteValues["fandomId"] = currentFandom.Id.ToString();
-	}
-	if (!string.IsNullOrEmpty(currentTag)) {
-		postRouteValues["tag"] = currentTag;
-	}
-	if (!string.IsNullOrEmpty(currentSearch)) {
-		postRouteValues["search"] = currentSearch;
-	}
-	var pager = new PaginationViewModel {
-		Controller = "Post",
-		Action = "Index",
-		HasPrevious = ViewBag.HasPrevious as bool? ?? false,
-		HasNext = ViewBag.HasNext as bool? ?? false,
-		TotalCount = ViewBag.TotalCount as int? ?? 0,
-		Skip = ViewBag.Skip as int? ?? 0,
-		PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
-		NextSkip = ViewBag.NextSkip as int? ?? 0,
-		CurrentCount = Model.Count(),
-		RouteValues = postRouteValues
-	};
 }
 
 <div>
@@ -34,9 +8,9 @@
 		<h2><img src="~/icons/file-text.svg" class="icon" />@SharedLocalizer["Post_Title"]</h2>
 		<p>@SharedLocalizer["Post_SubTitle"]</p>
 	</div>
-	@if (ViewBag.CanPostToCurrentFandom is true) {
+	@if (Model.CanPostToCurrentFandom) {
 		<div class="button-wrap">
-			<a asp-action="Create" asp-route-fandomId="@currentFandom?.Id" class="button-like icon-wrap">
+			<a asp-action="Create" asp-route-fandomId="@Model.CurrentFandom?.Id" class="button-like icon-wrap">
 				<img src="~/icons/square-pen.svg" class="icon" />@SharedLocalizer["Post_CreateNew"]
 			</a>
 		</div>
@@ -50,30 +24,30 @@
 			<div>
 				<select name="fandomId" data-auto-submit>
 					<option value="">@SharedLocalizer["Fandom_AllOption"]</option>
-					@foreach (var f in fandoms) {
-						<!option value="@f.Id" @(currentFandom?.Id == f.Id ? "selected" : "")>@f.Name</!option>
+					@foreach (var f in Model.Fandoms) {
+						<!option value="@f.Id" @(Model.CurrentFandom?.Id == f.Id ? "selected" : "")>@f.Name</!option>
 					}
 				</select>
 			</div>
 			<div class="input-group">
-				<input type="text" name="search" value="@currentSearch" placeholder="@SharedLocalizer["Post_SearchPlaceholder"]" />
+				<input type="text" name="search" value="@Model.CurrentSearch" placeholder="@SharedLocalizer["Post_SearchPlaceholder"]" />
 				<button type="submit">@SharedLocalizer["Common_Search"]</button>
 			</div>
 		</form>
 	</div>
 </div>
 
-@if (!string.IsNullOrEmpty(currentTag)) {
+@if (!string.IsNullOrEmpty(Model.CurrentTag)) {
 	<div class="inline-actions">
-		<span>@Html.Raw(string.Format(SharedLocalizer["Post_ShowingTagFormat"].Value, $"<strong>#{currentTag}</strong>"))</span>
+		<span>@Html.Raw(string.Format(SharedLocalizer["Post_ShowingTagFormat"].Value, $"<strong>#{Model.CurrentTag}</strong>"))</span>
 		<a asp-action="Index" class="button-like btn-sm">@SharedLocalizer["Common_All"]</a>
 	</div>
 }
 
-@if (!Model.Any()) {
+@if (!Model.Posts.Any()) {
 	<div>
 		<h4>@SharedLocalizer["Common_NoItems"]</h4>
-		@if (ViewBag.CanPostToCurrentFandom is true) {
+		@if (Model.CanPostToCurrentFandom) {
 			<div class="button-wrap">
 				<a asp-action="Create" class="button-like">@SharedLocalizer["Post_CreateNew"]</a>
 			</div>
@@ -81,7 +55,7 @@
 	</div>
 } else {
 	<div id="post-list">
-		@foreach (var post in Model) {
+		@foreach (var post in Model.Posts) {
 			<partial name="_PostItem" model="new PostItemViewModel {
 				Post = post,
 				BodyMaxLength = 150,
@@ -94,4 +68,4 @@
 	</div>
 }
 
-<partial name="_Pagination" model="pager" />
+<partial name="_Pagination" model="Model.Pagination" />

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Data.SqlClient;
 using Meguri.Data;
 using Meguri.Models;
+using Meguri.ViewModels.Home;
 using Meguri.ViewModels.Shared;
 
 namespace Meguri.Controllers {
@@ -53,7 +54,6 @@ namespace Meguri.Controllers {
 
             // パラメータの正規化
             var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
-            ViewBag.Search = search;
 
             // ユーザーの認証状態と年齢制限のチェック
             var isAuthenticated = User.Identity?.IsAuthenticated == true;
@@ -136,35 +136,40 @@ namespace Meguri.Controllers {
                 })
                 .ToListAsync();
 
-            // View へ渡すデータの設定
-            ViewBag.Posts = posts;
-            ViewBag.TopFandoms = await _context.Fandoms
+            var topFandoms = await _context.Fandoms
                 .Include(f => f.ChildFandoms.OrderBy(c => c.Id))
                 .Where(f => f.ParentFandomId == null)
                 .OrderBy(f => f.Id)
                 .ToListAsync();
-            ViewBag.Fandoms = await _context.Fandoms.ToListAsync();
-
-            // ページネーション情報
-            ViewBag.PostsPageSize = pageSize;
-            ViewBag.PostsTotalCount = totalCount;
-            ViewBag.PostsSkip = resolvedSkip;
-            ViewBag.PostsHasPrevious = resolvedSkip > 0;
-            ViewBag.PostsHasNext = resolvedSkip + posts.Count < totalCount;
-            ViewBag.PostsPreviousSkip = Math.Max(0, resolvedSkip - pageSize);
-            ViewBag.PostsNextSkip = resolvedSkip + pageSize;
+            var fandoms = await _context.Fandoms.ToListAsync();
 
             // ユーザー名検索（部分一致）。マイページの閲覧条件に合わせ、未ログイン時は公開マイページのみ
+            var users = new List<ApplicationUser>();
             if (!string.IsNullOrWhiteSpace(search)) {
                 var keyword = search.Trim();
-                ViewBag.Users = await _context.Users
+                users = await _context.Users
                     .Where(u => (isAuthenticated || u.IsProfilePublic) && !u.IsWithdrawn && u.UserName != null && EF.Functions.ILike(u.UserName, "%" + keyword + "%"))
                     .OrderBy(u => u.UserName)
                     .Take(20)
                     .ToListAsync();
             }
 
-            return View();
+            var viewModel = new HomeIndexViewModel {
+                Search = search,
+                Posts = posts,
+                Users = users,
+                TopFandoms = topFandoms,
+                Fandoms = fandoms,
+                PostsPageSize = pageSize,
+                PostsTotalCount = totalCount,
+                PostsSkip = resolvedSkip,
+                PostsHasPrevious = resolvedSkip > 0,
+                PostsHasNext = resolvedSkip + posts.Count < totalCount,
+                PostsPreviousSkip = Math.Max(0, resolvedSkip - pageSize),
+                PostsNextSkip = resolvedSkip + pageSize
+            };
+
+            return View(viewModel);
         }
 
         // 言語・カルチャ切り替え処理（クッキーに選択された言語情報を保存）

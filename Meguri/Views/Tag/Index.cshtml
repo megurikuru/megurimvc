@@ -1,8 +1,7 @@
-﻿@model IEnumerable<Meguri.Models.TagConcept>
+﻿@model Meguri.ViewModels.Tag.TagIndexViewModel
 @{
-	// ページタイトルと検索クエリの初期設定
+	// ページタイトルの設定
 	ViewData["Title"] = SharedLocalizer["Tag_Title"];
-	var searchQuery = ViewBag.SearchQuery as string;
 }
 
 <div>
@@ -14,7 +13,7 @@
 			Controller = "Tag",
 			Action = "Index",
 			ParameterName = "q",
-			Value = searchQuery,
+			Value = Model.SearchQuery,
 			PlaceholderKey = "Tag_SearchPlaceholder"
 		};
 	}
@@ -25,7 +24,7 @@
 <div class="tag-wrap">
 	<div class="tag-list">
 		@* タグ概念（TagConcept）一覧のループ表示 *@
-		@foreach (var concept in Model) {
+		@foreach (var concept in Model.Concepts) {
 			// 代表タグ名の取得（存在しない場合はConcept IDでフォールバック）
 			var tagText = concept.Tags.FirstOrDefault()?.TagText ?? $"Concept#{concept.Id}";
 			// 紐づく投稿数と画像数の合計カウント
@@ -40,29 +39,10 @@
 		}
 	</div>
 	@* タグが1件も見つからなかった場合のメッセージ *@
-	@if (!Model.Any()) {
+	@if (!Model.Concepts.Any()) {
 		<p>@SharedLocalizer["Tag_NoTagsFound"]</p>
 	}
 </div>
 
 @* ページネーションエリア *@
-@{
-	// ViewBagからページネーション用パラメータを展開
-	var routeValues = new Dictionary<string, string>();
-	if (!string.IsNullOrWhiteSpace(searchQuery)) {
-		routeValues["q"] = searchQuery;
-	}
-	var pager = new PaginationViewModel {
-		Controller = "Tag",
-		Action = "Index",
-		HasPrevious = ViewBag.HasPrevious as bool? ?? false,
-		HasNext = ViewBag.HasNext as bool? ?? false,
-		TotalCount = ViewBag.TotalCount as int? ?? 0,
-		Skip = ViewBag.Skip as int? ?? 0,
-		PreviousSkip = ViewBag.PreviousSkip as int? ?? 0,
-		NextSkip = ViewBag.NextSkip as int? ?? 0,
-		CurrentCount = Model.Count(),
-		RouteValues = routeValues
-	};
-}
-<partial name="_Pagination" model="pager" />
+<partial name="_Pagination" model="Model.Pagination" />
