@@ -630,11 +630,8 @@
   <data name="Manage_EnableAuthenticator_AppInstruction" xml:space="preserve">
     <value>スマートフォンにGoogle Authenticator または Microsoft Authenticator などの二段階認証アプリをインストールしてください。</value>
   </data>
-  <data name="Manage_EnableAuthenticator_ScanPrompt_Part1" xml:space="preserve">
-    <value>QR コードを読み取るか、このキー</value>
-  </data>
-  <data name="Manage_EnableAuthenticator_ScanPrompt_Part2" xml:space="preserve">
-    <value>を二段階認証アプリに入力してください。スペースや大文字小文字は区別されません。</value>
+  <data name="Manage_EnableAuthenticator_ScanPrompt" xml:space="preserve">
+    <value>QR コードを読み取ってください。または、下記のキーを二段階認証アプリに入力してください。スペースや大文字小文字は区別されません。</value>
   </data>
   <data name="Manage_EnableAuthenticator_QRHint" xml:space="preserve">
     <value>QR コード生成を有効にするには、</value>
@@ -1364,7 +1361,7 @@
     <value>登録済みのパスキーはありません。</value>
   </data>
   <data name="Manage_Passkeys_Name" xml:space="preserve">
-    <value>名前</value>
+    <value>パスキーの名前</value>
   </data>
   <data name="Manage_Passkeys_Add" xml:space="preserve">
     <value>パスキーを追加</value>

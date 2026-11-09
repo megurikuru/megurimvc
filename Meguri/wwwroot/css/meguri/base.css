@@ -127,10 +127,16 @@ textarea {
 
 ol {
 	display: block grid;
+	margin-left: 2rem;
 	list-style: decimal;
+	gap: 0.5rem;
 
 	& > li > div {
 		display: block grid;
 		gap: 0.5rem;
 	}
+}
+
+body[data-controller="Manage" i][data-action="Passkeys" i] p {
+	padding: 0.5rem 0.5rem 0 0.5rem;
 }

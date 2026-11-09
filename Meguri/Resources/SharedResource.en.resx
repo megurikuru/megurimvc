@@ -630,11 +630,8 @@
   <data name="Manage_EnableAuthenticator_AppInstruction" xml:space="preserve">
     <value>Install a two-factor authentication app, such as Google Authenticator or Microsoft Authenticator, on your smartphone.</value>
   </data>
-  <data name="Manage_EnableAuthenticator_ScanPrompt_Part1" xml:space="preserve">
-    <value>Scan the QR code or enter this key</value>
-  </data>
-  <data name="Manage_EnableAuthenticator_ScanPrompt_Part2" xml:space="preserve">
-    <value>into your authenticator app. Spaces and casing do not matter.</value>
+  <data name="Manage_EnableAuthenticator_ScanPrompt" xml:space="preserve">
+    <value>Please scan the QR code, or enter the key below into your two-factor authentication app. Spaces and letter casing are ignored.</value>
   </data>
   <data name="Manage_EnableAuthenticator_QRHint" xml:space="preserve">
     <value>To enable QR code generation, please read our</value>
