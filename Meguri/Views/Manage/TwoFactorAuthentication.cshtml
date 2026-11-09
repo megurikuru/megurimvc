@@ -1,45 +1,42 @@
 ﻿@model TwoFactorAuthenticationViewModel
 @{
-    ViewData["Title"] = SharedLocalizer["Manage_TwoFactorAuthentication_Title"];
-    ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
+	ViewData["Title"] = SharedLocalizer["Manage_TwoFactorAuthentication_Title"];
+	ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
 <h2>@ViewData["Title"]</h2>
 <div class="account">
-@if (Model.Is2faEnabled) {
-    if (Model.RecoveryCodesLeft == 0) {
-        <div>
-            <strong>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes"]</strong>
-            <p>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes_Message"]</p>
-        </div>
-    }
-    else if (Model.RecoveryCodesLeft == 1) {
-        <div>
-            <strong>@SharedLocalizer["Manage_TwoFactorAuthentication_OneCodeLeft"]</strong>
-            <p>@SharedLocalizer["Manage_TwoFactorAuthentication_OneCodeLeft_Message"]</p>
-        </div>
-    }
-    else if (Model.RecoveryCodesLeft <= 3) {
-        <div>
-            <strong>@string.Format(SharedLocalizer["Manage_TwoFactorAuthentication_CodesLeft"].Value, Model.RecoveryCodesLeft)</strong>
-            <p>@SharedLocalizer["Manage_TwoFactorAuthentication_CodesLeft_Message"]</p>
-        </div>
-    }
+	@if (Model.Is2faEnabled) {
+		if (Model.RecoveryCodesLeft == 0) {
+			<div>
+				<strong>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes"]</strong>
+				<p>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes_Message"]</p>
+			</div>
+		} else if (Model.RecoveryCodesLeft == 1) {
+			<div>
+				<strong>@SharedLocalizer["Manage_TwoFactorAuthentication_OneCodeLeft"]</strong>
+				<p>@SharedLocalizer["Manage_TwoFactorAuthentication_OneCodeLeft_Message"]</p>
+			</div>
+		} else if (Model.RecoveryCodesLeft <= 3) {
+			<div>
+				<strong>@string.Format(SharedLocalizer["Manage_TwoFactorAuthentication_CodesLeft"].Value, Model.RecoveryCodesLeft)</strong>
+				<p>@SharedLocalizer["Manage_TwoFactorAuthentication_CodesLeft_Message"]</p>
+			</div>
+		}
 
-    <a asp-action="Disable2faWarning" >@SharedLocalizer["Manage_TwoFactorAuthentication_Disable2FA"]</a>
-    <a asp-action="GenerateRecoveryCodesWarning" >@SharedLocalizer["Manage_TwoFactorAuthentication_ResetRecoveryCodes"]</a>
-}
+		<a asp-action="Disable2faWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_Disable2FA"]</a>
+		<a asp-action="GenerateRecoveryCodesWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetRecoveryCodes"]</a>
+	}
 
-<h5>@SharedLocalizer["Manage_TwoFactorAuthentication_AuthenticatorApp"]</h5>
-@if (!Model.HasAuthenticator) {
-    <a asp-action="EnableAuthenticator" >@SharedLocalizer["Manage_TwoFactorAuthentication_AddAuthenticator"]</a>
-}
-else {
-    <a asp-action="EnableAuthenticator" >@SharedLocalizer["Manage_TwoFactorAuthentication_ConfigureAuthenticator"]</a>
-    <a asp-action="ResetAuthenticatorWarning" >@SharedLocalizer["Manage_TwoFactorAuthentication_ResetAuthenticatorKey"]</a>
-}
+	<label>@SharedLocalizer["Manage_TwoFactorAuthentication_AuthenticatorApp"]</label>
+	@if (!Model.HasAuthenticator) {
+		<a asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_AddAuthenticator"]</a>
+	} else {
+		<a asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_ConfigureAuthenticator"]</a>
+		<a asp-action="ResetAuthenticatorWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetAuthenticatorKey"]</a>
+	}
 </div>
 
 @section Scripts {
-    @await Html.PartialAsync("_ValidationScriptsPartial")
+	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

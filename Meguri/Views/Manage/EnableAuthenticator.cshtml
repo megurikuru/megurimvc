@@ -15,7 +15,11 @@
 		</li>
 		<li>
 			<div>
-				<p>@SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part1"] <kbd>@Model.SharedKey</kbd> @SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt_Part2"]</p>
+				<p>
+					@SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt"] 
+					<br />
+					<br /><kbd>@Model.SharedKey</kbd>
+				</p>
 				@* <div >@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div> *@
 				<div id="qrCode"></div>
 				<div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
@@ -42,22 +46,22 @@
 	<script src="~/lib/qrcodejs/qrcode.min.js"></script>
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
-				const qrCodeElement = document.getElementById("qrCode");
-				const qrCodeDataElement = document.getElementById("qrCodeData");
+			const qrCodeElement = document.getElementById("qrCode");
+			const qrCodeDataElement = document.getElementById("qrCodeData");
 
-				if (qrCodeElement && qrCodeDataElement) {
-						const url = qrCodeDataElement.dataset.url;
-						if (url) {
-								new QRCode(qrCodeElement, {
-										text: url,
-										width: 220,
-										height: 220,
-										colorDark: "#000000",
-										colorLight: "#ffffff",
-										correctLevel: QRCode.CorrectLevel.H
-								});
-						}
+			if (qrCodeElement && qrCodeDataElement) {
+				const url = qrCodeDataElement.dataset.url;
+				if (url) {
+					new QRCode(qrCodeElement, {
+						text: url,
+						width: 220,
+						height: 220,
+						colorDark: "#000000",
+						colorLight: "#ffffff",
+						correctLevel: QRCode.CorrectLevel.H
+					});
 				}
+			}
 		});
 	</script>
 	@await Html.PartialAsync("_ValidationScriptsPartial")

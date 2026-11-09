@@ -62,10 +62,9 @@
 							<span>@SharedLocalizer["Message_GroupBadge"]</span>
 						}
 					</h2>
-					<small>@LocalTimeExtensions.ToLocalTime(c.LastMessageTime)</small>
 				</div>
 				<p>@(c.LastMessageText.Length > 100 ? c.LastMessageText.Substring(0, 100) + "..." : c.LastMessageText)</p>
-
+				<small>@LocalTimeExtensions.ToLocalTime(c.LastMessageTime)</small>
 			</article>
 		</a>
 	}

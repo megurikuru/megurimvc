@@ -1,7 +1,8 @@
-﻿@using Meguri.Extensions
+﻿@model Meguri.ViewModels.Home.HomeIndexViewModel
+@using Meguri.Extensions
 @{
 	ViewData["IsHomePage"] = true;
-	var topFandoms = ViewBag.TopFandoms as List<Meguri.Models.Fandom> ?? new List<Meguri.Models.Fandom>();
+	var topFandoms = Model?.TopFandoms ?? new List<Meguri.Models.Fandom>();
 	var rootFandom = topFandoms.FirstOrDefault(f => f.Id == 1);
 }
 

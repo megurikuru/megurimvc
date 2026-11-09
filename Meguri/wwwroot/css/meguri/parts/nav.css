@@ -1,7 +1,7 @@
 ﻿/* ナビゲーション */
 .nav-grid {
 
-	body[data-controller="Post" i] & {
+	body[data-controller="Post" i][data-action="edit" i] & {
 		margin-top: 0.5rem;
 	}
 
