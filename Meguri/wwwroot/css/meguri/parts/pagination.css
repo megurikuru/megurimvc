@@ -15,9 +15,9 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		min-height: var(--control-height-sm);
-		padding: 0.35rem 0.75rem;
-		font-size: 0.875rem;
+		min-height: var(--control-height);
+		padding: 0.5rem 1rem;
+		font-size: 1rem;
 		text-decoration: none;
 		border: 2px solid var(--color-border);
 		border-radius: var(--radius-sm);

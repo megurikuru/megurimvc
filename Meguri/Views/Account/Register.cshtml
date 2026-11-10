@@ -9,7 +9,7 @@
 <h1>@ViewData["Title"]</h1>
 
 <form class="account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-	<h2>@SharedLocalizer["Account_Register_CreateNewAccount"]</h2>
+	<p>@SharedLocalizer["Account_Register_CreateNewAccount"]</p>
 	<div asp-validation-summary="All"></div>
 	<input type="hidden" name="credentialJson" />
 

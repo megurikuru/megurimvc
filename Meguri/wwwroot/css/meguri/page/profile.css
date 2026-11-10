@@ -1,0 +1,10 @@
+/* Profileコントローラー固有スタイル */
+/*body[data-controller="Profile" i][data-action="Details" i] {
+	span.user-name {
+		text-align: center;
+	}
+
+	article p {
+		padding: 0 0.5rem 0 0.5rem;
+	}
+}*/

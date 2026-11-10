@@ -4,14 +4,6 @@
 	border-top: 1px solid var(--color-border);
 	background-color: var(--color-bg-title);
 
-	body[data-controller="Post" i][data-action="Details" i] & {
-		padding-bottom: 0.5rem;
-	}
-
-	body[data-controller="Message" i][data-action="Details" i] & {
-		padding-bottom: 0.5rem;
-	}
-
 	/* リスト全体のレイアウト */
 	ol {
 		display: flex;

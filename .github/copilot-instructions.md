@@ -6,3 +6,4 @@
 ## CSS Guidelines
 - CSSでカラーコードを指定する際は直接記述せず、Meguri/wwwroot/css/meguri/base.css の :root にCSS変数として定義して使用する。
 - CSSで上下の余白（margin-top / margin-bottom）を指定する際は、直接マージンを指定するのではなく、必要であればラッパー要素を追加して Flexbox または Grid の gap を使用する。
+- CSSの設計ではパーツ毎のファイル分割（wwwroot/css/meguri/parts/）を優先しつつ、ページ・コントローラー（[data-controller]）・アクション（[data-action]）固有のCSS指定はコントローラー単位で wwwroot/css/meguri/controller/ 配下の個別ファイルに分割して配置する。

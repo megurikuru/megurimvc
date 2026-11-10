@@ -8,14 +8,6 @@
 	text-overflow: ellipsis;
 }
 
-/* トップページ ユーザー検索結果のアバター */
-#user-list img {
-	width: 40px;
-	height: 40px;
-	object-fit: cover;
-	border-radius: 50%;
-}
-
 /* プロフィール詳細 */
 .profile-info {
 	display: block grid;
@@ -53,14 +45,4 @@
 		padding: 0.5rem 0.5rem 0 0.5rem;
 	}
 }
-
-/*body[data-controller="Profile" i][data-action="Details" i] {
-	span.user-name {
-		text-align: center;
-	}
-
-	article p {
-		padding: 0 0.5rem 0 0.5rem;
-	}
-}*/
 
