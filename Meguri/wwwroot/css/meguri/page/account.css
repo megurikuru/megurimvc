@@ -1,0 +1,8 @@
+/* Accountページ固有スタイル */
+body[data-controller="Account" i] {
+	
+	h1 {
+		border-bottom: 1px solid var(--color-border);
+	}
+
+}

@@ -5,6 +5,12 @@
     <UserSecretsId>aspnet-meguri-C05BB45D-59C8-4B64-B0B8-85F18DC87411</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="wwwroot\css\meguri\pages\**" />
+    <Content Remove="wwwroot\css\meguri\pages\**" />
+    <EmbeddedResource Remove="wwwroot\css\meguri\pages\**" />
+    <None Remove="wwwroot\css\meguri\pages\**" />
+  </ItemGroup>
+  <ItemGroup>
     <!--<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />-->
     <!--<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0" />-->
     <PackageReference Include="AWSSDK.S3" Version="4.0.104.4" />

@@ -16,10 +16,6 @@
 	& > form > button {
 		width: 100%;
 	}
-
-	body[data-controller="Post" i][data-action="details" i] & {
-		margin-top: 0;
-	}
 }
 
 button, .button-like {

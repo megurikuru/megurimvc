@@ -1,12 +1,4 @@
-﻿/* Tag/Index */
-.tag-page {
-	display: block grid;
-	gap: 0.5rem;
-	padding: 0.5rem;
-	max-width: 600px;
-	margin: 0 auto;
-}
-
+﻿/* タグ一覧・タグバッジ部品 */
 .tag-wrap {
 	display: block grid;
 	gap: 0.5rem;
@@ -17,15 +9,6 @@
 .tag-list {
 	display: block grid;
 	gap: 0.5rem;
-}
-
-.tag-page h2 {
-	font-size: 1.25rem;
-}
-
-.tag-page p {
-	color: var(--color-text-muted);
-	margin: 0;
 }
 
 .tag-item {

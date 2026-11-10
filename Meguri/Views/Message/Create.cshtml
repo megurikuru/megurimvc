@@ -3,7 +3,7 @@
 	ViewData["Title"] = SharedLocalizer["Message_NewConversation"];
 }
 
-<h2><img src="~/icons/message-circle.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</h2>
+<h2>@SharedLocalizer["Message_NewConversation"]</h2>
 
 <div>
 	<form asp-action="Create" method="post" enctype="multipart/form-data">
@@ -57,7 +57,7 @@
 		</div>
 
 		<div class="attribute-wrap">
-			<label asp-for="ImageFiles"><img src="~/icons/image.svg" class="icon" />@SharedLocalizer["Message_ImageAttachLabel"] <span id="imageCountDisplay">0/16</span></label>
+			<label asp-for="ImageFiles">@SharedLocalizer["Message_ImageAttachLabel"] <span id="imageCountDisplay">0/16</span></label>
 			<input asp-for="ImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#imagePreviewContainer" data-image-count="#imageCountDisplay" data-max-images="16" />
 			<span asp-validation-for="ImageFiles"></span>
 			<div id="imagePreviewContainer" class="image-preview-list"></div>
@@ -67,7 +67,7 @@
 
 		<div class="button-wrap">
 			<a asp-action="Index" class="button-like">@SharedLocalizer["Common_Cancel"]</a>
-			<button type="submit"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
+			<button type="submit">@SharedLocalizer["Message_SendBtn"]</button>
 		</div>
 	</form>
 </div>

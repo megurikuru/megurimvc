@@ -17,11 +17,12 @@ textarea {
 
 	--color-nav-main: #E9E4F0; /* 紫 */
 	--color-nav-main-hover: #D8CFE8; /* 紫 */
-	--color-border: #B9AFBE; /* 紫 */
+	--color-border: #9A99A7;
 
 	--color-bg-base: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
-	--color-bg-title: #EEEEEE; /* 灰色 */
+	--color-bg-control: #FFFFFF; /* 入力コントロール背景 */
 
+	--color-bg-title: #CDCFD7;
 
 	--color-text: #1f2937; /* わずかに青みがかったダークグレー */
 	--color-text-reverse: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
@@ -135,8 +136,4 @@ ol {
 		display: block grid;
 		gap: 0.5rem;
 	}
-}
-
-body[data-controller="Manage" i][data-action="Passkeys" i] p {
-	padding: 0.5rem 0.5rem 0 0.5rem;
 }

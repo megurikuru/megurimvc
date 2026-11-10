@@ -1,0 +1,23 @@
+/* Manageページ固有スタイル */
+body[data-controller="Manage" i] {
+
+	
+
+	#qrCode {
+		display: block;
+		width: fit-content;
+		margin: 1rem auto;
+		position: relative;
+		left: -1rem;
+		padding: 1.5rem;
+		border: 1px solid var(--color-border);
+	}
+
+	.manage-header-img {
+		max-width: 100%;
+		max-height: 150px;
+		object-fit: cover;
+	}
+}
+
+

@@ -16,10 +16,13 @@
 	</div>
 	<div>
 		<label asp-for="Email">@SharedLocalizer["Manage_Profile_Email"]</label>
-		<input asp-for="Email" />
-		@if (Model.IsEmailConfirmed) {
-			<img src="~/icons/check.svg" class="icon" aria-hidden="true" />
-		} else {
+		<div class="input-group">
+			<input asp-for="Email" />
+			@if (Model.IsEmailConfirmed) {
+				<img src="~/icons/check.svg" class="icon" aria-hidden="true" />
+			}
+		</div>
+		@if (!Model.IsEmailConfirmed) {
 			<button asp-action="SendVerificationEmail" class="btn-sm">@SharedLocalizer["Manage_Profile_SendVerificationEmail"]</button>
 		}
 		<span asp-validation-for="Email"></span>

@@ -7,23 +7,21 @@
 <h2>@ViewData["Title"]</h2>
 @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
 
-<div class="account">
-	<h3>@SharedLocalizer["Manage_Passkeys_Registered"]</h3>
-	@if (Model.Passkeys.Count == 0) {
-		<p>@SharedLocalizer["Manage_Passkeys_None"]</p>
-	} else {
-		foreach (var passkey in Model.Passkeys) {
-			<form asp-action="RemovePasskey" method="post" class="account">
-				<div class="inline-actions">
-					<strong>@passkey.Name</strong>
-					<span>@passkey.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</span>
-					<input type="hidden" name="id" value="@passkey.Id" />
-					<button type="submit" class="btn-sm">@SharedLocalizer["Manage_Passkeys_Remove"]</button>
-				</div>
-			</form>
-		}
+<p>@SharedLocalizer["Manage_Passkeys_Registered"]</p>
+@if (Model.Passkeys.Count == 0) {
+	<p>@SharedLocalizer["Manage_Passkeys_None"]</p>
+} else {
+	foreach (var passkey in Model.Passkeys) {
+		<form asp-action="RemovePasskey" method="post" class="account">
+			<div class="inline-actions">
+				<strong>@passkey.Name</strong>
+				<span>@passkey.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</span>
+				<input type="hidden" name="id" value="@passkey.Id" />
+				<button type="submit" class="btn-sm">@SharedLocalizer["Manage_Passkeys_Remove"]</button>
+			</div>
+		</form>
 	}
-</div>
+}
 
 <form asp-action="AddPasskey" method="post" class="account">
 	<input type="hidden" name="credentialJson" />

@@ -1,0 +1,10 @@
+/* Postコントローラー固有スタイル */
+body[data-controller="Post" i] {
+	.breadcrumb {
+		padding-bottom: 0.5rem;
+	}
+
+	#nav-main {
+		margin-top: 0.5rem;
+	}
+}
