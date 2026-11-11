@@ -1,7 +1,9 @@
 /* Manageページ固有スタイル */
 body[data-controller="Manage" i] {
 
-	
+	h2 {
+		border-bottom: 1px solid var(--color-border);
+	}
 
 	#qrCode {
 		display: block;

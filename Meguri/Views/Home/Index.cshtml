@@ -52,7 +52,6 @@
 		@foreach (var post in Model.Posts) {
 			<partial name="_PostItem" model="new PostItemViewModel { 
 				Post = post, 
-				ShowAuthor = false, 
 				ShowStats = false 
 			}" />
 		}

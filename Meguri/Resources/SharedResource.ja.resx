@@ -1816,4 +1816,28 @@
   <data name="Account_Login_MethodPassword" xml:space="preserve">
     <value>パスワードでログイン</value>
   </data>
+  <data name="Message_RecipientSearchPlaceholder" xml:space="preserve">
+    <value>ユーザー名を入力して検索...</value>
+  </data>
+  <data name="Message_SearchResultsLabel" xml:space="preserve">
+    <value>検索結果</value>
+  </data>
+  <data name="Message_SelectedRecipientsLabel" xml:space="preserve">
+    <value>選択済みのユーザー</value>
+  </data>
+  <data name="Message_NoUsersFound" xml:space="preserve">
+    <value>該当するユーザーが見つかりませんでした。</value>
+  </data>
+  <data name="Message_SelectUserBtn" xml:space="preserve">
+    <value>選択</value>
+  </data>
+  <data name="Message_SelectedBadge" xml:space="preserve">
+    <value>選択済み</value>
+  </data>
+  <data name="Message_NoSelectedRecipients" xml:space="preserve">
+    <value>まだ宛先が選択されていません。</value>
+  </data>
+  <data name="Message_Error_DirectSingleRecipient" xml:space="preserve">
+    <value>ダイレクトメッセージの宛先は1名のみ選択できます。</value>
+  </data>
 </root>

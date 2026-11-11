@@ -4,10 +4,23 @@
 #messageContainer {
 	display: block grid;
 	gap: 0.5rem;
+	padding: 0.5rem 0;
+
+	& .message-thread {
+		display: block grid;
+		gap: 0.5rem;
+		padding-bottom: 0.5rem;
+		border-bottom: 1px solid var(--color-border-light);
+
+		&:last-child {
+			padding-bottom: 0;
+			border-bottom: none;
+		}
+	}
 
 	& .message-item {
 		display: block grid;
-		gap: 0.5rem;
+		gap: 0.35rem;
 		text-align: left;
 		margin: 0 0.5rem;
 		min-width: 0;
@@ -15,33 +28,72 @@
 		scroll-margin-top: 1rem;
 
 		&.message-reply {
-			margin-left: 0.65rem;
 			padding-left: 0.5rem;
-			border-left: 2px solid var(--color-border);
+			border-left: 3px solid var(--color-border);
 		}
 
-		.message-sender {
-			margin-left: 0.5rem;
+		&.message-indent-1 {
+			margin-left: 1rem;
+		}
+
+		&.message-indent-2 {
+			margin-left: 1.75rem;
+		}
+
+		&.message-indent-3 {
+			margin-left: 2.5rem;
 		}
 	}
 
 	& .message-box {
 		display: block grid;
-		gap: 0.5rem;
+		gap: 0.35rem;
 		text-align: left;
-		padding: 0.5rem;
+		padding: 0.5rem 0.65rem;
 		border: 1px solid var(--color-border-light);
-		border-radius: 8px;
+		border-radius: var(--radius-md);
 		background-color: var(--color-bg-message-is-other);
+	}
+
+	& .message-header {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.25rem 0.5rem;
+		font-size: 0.85rem;
+
+		& .message-sender {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.25rem;
+			font-weight: 600;
+
+			& .icon {
+				margin-right: 0;
+			}
+		}
+
+		& .message-time {
+			margin-left: auto;
+			font-size: 0.75rem;
+			color: var(--color-text-muted);
+		}
 	}
 
 	& .chat-message-body {
 		white-space: pre-wrap;
-		line-height: 1.7;
+		line-height: 1.6;
 	}
 
 	& .is-mine {
 		background-color: var(--color-bg-message-is-mine);
+	}
+
+	& .message-images {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
 	}
 
 	& .message-image {
@@ -52,15 +104,24 @@
 }
 
 .message-disclosure {
-	padding: 0.5rem 0.5rem 0 0.5rem;
-	/*border-top: 1px solid var(--color-border);*/
+	padding: 0.5rem;
 	min-width: 0;
 	overflow-wrap: anywhere;
 
+	&[open] {
+		display: block grid;
+		gap: 0.5rem;
+	}
+
 	& > summary {
 		cursor: pointer;
-		padding: 0 0.5rem;
 		box-sizing: border-box;
+	}
+
+	& > input[type="file"] {
+		padding: 0.5rem;
+		border: 1px dashed var(--color-border);
+		border-radius: var(--radius-sm);
 	}
 
 	& .input-group {
@@ -72,17 +133,55 @@
 	}
 }
 
+h1 + .message-disclosure:first-of-type {
+	border-top: 1px solid var(--color-border);
+}
+
+/* 参加者一覧 */
+.member-list {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+
+	& > li {
+		display: flex;
+	}
+
+	& a,
+	& span {
+		display: inline-flex;
+		align-items: center;
+		min-height: var(--control-height-sm);
+		padding: 0.25rem 0.65rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+		box-sizing: border-box;
+	}
+
+	& a {
+		color: var(--color-link);
+		background-color: var(--color-bg-control);
+		transition: color 0.2s ease, background-color 0.2s ease;
+
+		&:hover {
+			color: var(--color-link-hover);
+			background-color: var(--color-nav-main);
+		}
+	}
+
+	& span {
+		color: var(--color-text-muted);
+		background-color: var(--color-bg-title);
+	}
+}
+
 .message-actions {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
+	justify-content: flex-end;
 	gap: 0.25rem 0.5rem;
-
-	& .message-time {
-		margin-right: auto;
-		font-size: 0.75rem;
-		color: var(--color-text-muted);
-	}
 }
 
 .chat-more-actions {
@@ -92,8 +191,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		min-width: 44px;
-		min-height: 44px;
+		min-width: var(--control-height-sm);
+		min-height: var(--control-height-sm);
+		padding: 0 0.4rem;
 		cursor: pointer;
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
@@ -111,38 +211,44 @@
 	}
 
 	&[open] > summary {
-		width: 44px;
+		width: var(--control-height-sm);
 		margin-left: auto;
 	}
 }
 
 .chat-actions-panel {
+	display: block grid;
+	gap: 0.35rem;
 	padding-top: 0.5rem;
 	border-top: 1px solid var(--color-border-light);
 }
 
 .message-reply-preview {
-	display: block;
-	padding: 0.4rem 0.65rem;
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	min-width: 0;
+	padding: 0.25rem 0.5rem;
 	border-left: 2px solid var(--color-border);
+	border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+	background-color: var(--color-bg-base);
 	color: var(--color-text-muted);
 	font-size: 0.8rem;
 	text-decoration: none;
+
+	& .message-reply-target {
+		flex-shrink: 0;
+		font-weight: 600;
+	}
 }
 
 .message-preview-text {
+	flex: 1;
+	min-width: 0;
 	display: block;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-}
-
-.message-date-divider {
-	margin-top: 0.5rem;
-	padding: 0.5rem 0.5rem 0 0.5rem;
-	border-top: 1px solid var(--color-border);
-	text-align: center;
-	color: var(--color-text-muted);
 }
 
 .message-composer {
@@ -151,6 +257,24 @@
 	& > form {
 		display: block grid;
 		gap: 0.5rem;
+	}
+
+	& .attribute-wrap {
+		margin-top: 0;
+	}
+
+	& .message-disclosure {
+		padding: 0.5rem 0.5rem 0 0.5rem;
+		border-top: 1px solid var(--color-border);
+	}
+
+	& > form > .message-disclosure:first-of-type,
+	& > form > .attribute-wrap:first-child {
+		border-top: none;
+	}
+
+	& .button-wrap {
+		padding-top: 0;
 	}
 }
 
@@ -172,8 +296,10 @@
 #messageContainer button.btn-sm,
 #messageContainer .button-like.btn-sm,
 .message-reply-notice button.btn-sm {
-	min-height: 44px;
-	min-width: 44px;
+	min-height: var(--control-height-sm);
+	min-width: var(--control-height-sm);
+	padding: 0.15rem 0.5rem;
+	font-size: 0.8rem;
 }
 
 #messageContainer [hidden],
@@ -201,8 +327,41 @@
 	}
 }
 
-/* メッセージ新規作成の宛先リスト */
-.recipient-list {
-	max-height: 180px;
+/* メッセージ新規作成の宛先検索・選択リスト */
+.recipient-search-results {
+	display: block grid;
+	gap: 0.5rem;
+	max-height: 220px;
 	overflow-y: auto;
+	padding: 0.5rem;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+	background-color: var(--color-bg-control);
+}
+
+.selected-recipients-section {
+	display: block grid;
+	gap: 0.5rem;
+}
+
+.selected-recipients-list {
+	display: block grid;
+	gap: 0.5rem;
+}
+
+.recipient-user-item {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+	background-color: var(--color-bg-control);
+	box-sizing: border-box;
+}
+
+.recipient-empty-message {
+	color: var(--color-text-muted);
+	font-size: 0.875rem;
 }

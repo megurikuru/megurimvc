@@ -1,18 +1,10 @@
 /* Messageコントローラー固有スタイル */
 body[data-controller="Message" i] {
 
-	&[data-action="Details" i] {
-		.breadcrumb {
-			padding-bottom: 0.5rem;
-		}
+	#nav-main {
+		margin-top: 0.5rem;
 	}
 
-	&[data-action="Index" i] {
-		.attribute-wrap {
-			margin-top: 0;
-		}
-	}
-	
 	form .attribute-wrap:first-of-type {
 		margin-top: 0;
 	}
@@ -20,5 +12,19 @@ body[data-controller="Message" i] {
 	.description {
 		border-top: none;
 		padding: 0 0.5rem 0.5rem 0.5rem;
+	}
+
+	/*一覧画面*/
+	&[data-action="Index" i] {
+		.attribute-wrap {
+			margin-top: 0;
+		}
+	}
+
+	/*詳細画面*/
+	&[data-action="Details" i] {
+		.breadcrumb {
+			padding-bottom: 0.5rem;
+		}
 	}
 }

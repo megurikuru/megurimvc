@@ -6,6 +6,10 @@ body[data-controller="Home" i] {
 		margin-top: 0;
 	}
 
+	.nav-sub {
+		border-top: none;
+	}
+	
 	/* トップページ ユーザー検索結果のアバター */
 	#user-list img {
 		width: 40px;
@@ -13,6 +17,5 @@ body[data-controller="Home" i] {
 		object-fit: cover;
 		border-radius: 50%;
 	}
-
 }
 

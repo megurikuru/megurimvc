@@ -221,13 +221,37 @@ namespace Meguri.Controllers {
         }
 
 
+        // GET: /Message/SearchUsers
+        [HttpGet]
+        public async Task<IActionResult> SearchUsers(string? q) {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(currentUserId)) return Challenge();
+
+            if (string.IsNullOrWhiteSpace(q)) {
+                return Json(Array.Empty<RecipientUserItemViewModel>());
+            }
+
+            var keyword = q.Trim();
+            var users = await _userManager.Users
+                .Where(u => u.Id != currentUserId && !u.IsWithdrawn && u.UserName != null && EF.Functions.ILike(u.UserName, "%" + keyword + "%"))
+                .OrderBy(u => u.UserName)
+                .Take(20)
+                .Select(u => new RecipientUserItemViewModel {
+                    Id = u.Id,
+                    UserName = u.UserName!
+                })
+                .ToListAsync();
+
+            return Json(users);
+        }
+
         // GET: /Message/Create
         public async Task<IActionResult> Create() {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
             var model = new CreateConversationViewModel();
-            await LoadAvailableUsersAsync(model, currentUserId);
+            await LoadSelectedUsersAsync(model, currentUserId);
             return View(model);
         }
 
@@ -238,8 +262,27 @@ namespace Meguri.Controllers {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
-            if (model.SelectedUserIds == null || model.SelectedUserIds.Count == 0) {
+            var requestedIds = model.SelectedUserIds?
+                .Where(id => !string.IsNullOrWhiteSpace(id) && id != currentUserId)
+                .Distinct()
+                .ToList() ?? new List<string>();
+
+            List<string> validUserIds = new List<string>();
+            if (requestedIds.Count > 0) {
+                var existingIds = await _userManager.Users
+                    .Where(u => requestedIds.Contains(u.Id) && u.Id != currentUserId && !u.IsWithdrawn)
+                    .Select(u => u.Id)
+                    .ToListAsync();
+                var existingSet = existingIds.ToHashSet();
+                validUserIds = requestedIds.Where(id => existingSet.Contains(id)).ToList();
+            }
+
+            model.SelectedUserIds = validUserIds;
+
+            if (validUserIds.Count == 0) {
                 ModelState.AddModelError("SelectedUserIds", _localizer["Message_Error_SelectRecipientRequired"]);
+            } else if (!model.IsGroup && validUserIds.Count > 1) {
+                ModelState.AddModelError("SelectedUserIds", _localizer["Message_Error_DirectSingleRecipient"]);
             }
 
             var validCreateFiles = model.ImageFiles?.Where(f => f != null && f.Length > 0).ToList();
@@ -255,7 +298,7 @@ namespace Meguri.Controllers {
             }
 
             if (!ModelState.IsValid) {
-                await LoadAvailableUsersAsync(model, currentUserId);
+                await LoadSelectedUsersAsync(model, currentUserId);
                 return View(model);
             }
 
@@ -408,11 +451,30 @@ namespace Meguri.Controllers {
             return RedirectToAction(nameof(Details), new { id = conversationId });
         }
 
-        private async Task LoadAvailableUsersAsync(CreateConversationViewModel model, string currentUserId) {
-            model.AvailableUsers = await _userManager.Users
-                .Where(u => u.Id != currentUserId)
-                .Take(50)
+        private async Task LoadSelectedUsersAsync(CreateConversationViewModel model, string currentUserId) {
+            var selectedIds = model.SelectedUserIds?
+                .Where(id => !string.IsNullOrWhiteSpace(id) && id != currentUserId)
+                .Distinct()
+                .ToList() ?? new List<string>();
+
+            if (selectedIds.Count == 0) {
+                model.SelectedUsers = new List<RecipientUserItemViewModel>();
+                return;
+            }
+
+            var users = await _userManager.Users
+                .Where(u => selectedIds.Contains(u.Id) && u.Id != currentUserId && !u.IsWithdrawn && u.UserName != null)
+                .Select(u => new RecipientUserItemViewModel {
+                    Id = u.Id,
+                    UserName = u.UserName!
+                })
                 .ToListAsync();
+
+            var userMap = users.ToDictionary(u => u.Id);
+            model.SelectedUsers = selectedIds
+                .Where(id => userMap.ContainsKey(id))
+                .Select(id => userMap[id])
+                .ToList();
         }
 
         private static List<Message> OrderRepliesUnderParents(List<Message> messages) {
@@ -420,7 +482,7 @@ namespace Meguri.Controllers {
             var children = messages
                 .Where(m => m.ParentMessageId.HasValue && ids.Contains(m.ParentMessageId.Value))
                 .GroupBy(m => m.ParentMessageId!.Value)
-                .ToDictionary(g => g.Key, g => g.OrderByDescending(m => m.CreatedAt).ToList());
+                .ToDictionary(g => g.Key, g => g.OrderBy(m => m.CreatedAt).ToList());
             var result = new List<Message>(messages.Count);
             DateTime LatestInThread(Message m) {
                 var latest = m.CreatedAt;

@@ -17,12 +17,12 @@ textarea {
 
 	--color-nav-main: #E9E4F0; /* 紫 */
 	--color-nav-main-hover: #D8CFE8; /* 紫 */
-	--color-border: #9A99A7;
+	--color-border: #BBB9CA;	/* 枠線 */
 
 	--color-bg-base: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
 	--color-bg-control: #FFFFFF; /* 入力コントロール背景 */
 
-	--color-bg-title: #CDCFD7;
+	--color-bg-title: #DBDBDB; /* タイトルの背景 */
 
 	--color-text: #1f2937; /* わずかに青みがかったダークグレー */
 	--color-text-reverse: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
@@ -72,14 +72,11 @@ img {
 	height: auto;
 
 	&.icon {
-		width: 1.25rem;
-		height: 1.25rem;
-		vertical-align: middle;
+		margin-right: 0.5rem;
+		width: 1.2rem;
+		height: 1.2rem;
+		vertical-align: -3px;
 	}
-}
-
-h1 .icon {
-	filter: invert(100%);
 }
 
 label {
@@ -115,6 +112,7 @@ input[type="file"] {
 
 input[type="checkbox"],
 input[type="radio"] {
+	margin-right: 0.5rem;
 	width: 1.35rem;
 	height: 1.35rem;
 	vertical-align: middle;

@@ -27,6 +27,11 @@ namespace Meguri.ViewModels.Message {
         public List<string> MemberNames { get; set; } = new List<string>();
     }
 
+    public class RecipientUserItemViewModel {
+        public string Id { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+    }
+
     public class CreateConversationViewModel {
         public bool IsGroup { get; set; } = false;
 
@@ -36,6 +41,8 @@ namespace Meguri.ViewModels.Message {
         [Required(ErrorMessage = "Message_Error_SelectRecipientRequired")]
         [Display(Name = "Message_SelectRecipient")]
         public List<string> SelectedUserIds { get; set; } = new List<string>();
+
+        public List<RecipientUserItemViewModel> SelectedUsers { get; set; } = new List<RecipientUserItemViewModel>();
 
         [Display(Name = "Message_SubjectLabel")]
         public string? Subject { get; set; }

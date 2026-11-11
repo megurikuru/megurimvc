@@ -17,25 +17,19 @@
 		@* 本文入力を中心にするため、任意の件名と画像添付は必要なときだけ展開する。 *@
 		<details class="message-disclosure">
 			<summary>@SharedLocalizer["Message_OptionalSubject"]</summary>
-			<div class="attribute-wrap">
-				<label for="messageSubject">@SharedLocalizer["Message_SubjectLabel"]</label>
-				<input type="text" id="messageSubject" name="subject" />
-			</div>
+			<input type="text" id="messageSubject" name="subject" aria-label="@SharedLocalizer["Message_SubjectLabel"]" />
 		</details>
 		<div class="attribute-wrap">
 			<textarea id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
 		</div>
 		<details class="message-disclosure">
-			<summary><img src="~/icons/image.svg" class="icon" alt="" />@SharedLocalizer["Message_ImageAttachLabel"] <span id="chatImageCountDisplay">0/16</span></summary>
-			<div class="attribute-wrap">
-				<label for="chatImageFiles">@SharedLocalizer["Message_ImageAttachLabel"]</label>
-				<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#chatImagePreviewContainer" data-image-count="#chatImageCountDisplay" data-max-images="16" />
-				<span class="field-validation-valid" data-valmsg-for="imageFiles" data-valmsg-replace="true"></span>
-				<div id="chatImagePreviewContainer" class="image-preview-list"></div>
-			</div>
+			<summary>@SharedLocalizer["Message_ImageAttachLabel"] <span id="chatImageCountDisplay">0/16</span></summary>
+			<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" aria-label="@SharedLocalizer["Message_ImageAttachLabel"]" data-image-preview="#chatImagePreviewContainer" data-image-count="#chatImageCountDisplay" data-max-images="16" />
+			<span class="field-validation-valid" data-valmsg-for="imageFiles" data-valmsg-replace="true"></span>
+			<div id="chatImagePreviewContainer" class="image-preview-list"></div>
 		</details>
 		<div class="button-wrap">
-			<button type="submit" class="btn-block"><img src="~/icons/send.svg" class="icon" />@SharedLocalizer["Message_SendBtn"]</button>
+			<button type="submit" class="btn-block">@SharedLocalizer["Message_SendBtn"]</button>
 		</div>
 	</form>
 </div>
