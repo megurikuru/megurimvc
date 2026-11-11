@@ -1816,4 +1816,28 @@
   <data name="Account_Login_MethodPassword" xml:space="preserve">
     <value>Log in with a password</value>
   </data>
+  <data name="Message_RecipientSearchPlaceholder" xml:space="preserve">
+    <value>Search by username...</value>
+  </data>
+  <data name="Message_SearchResultsLabel" xml:space="preserve">
+    <value>Search Results</value>
+  </data>
+  <data name="Message_SelectedRecipientsLabel" xml:space="preserve">
+    <value>Selected Users</value>
+  </data>
+  <data name="Message_NoUsersFound" xml:space="preserve">
+    <value>No matching users found.</value>
+  </data>
+  <data name="Message_SelectUserBtn" xml:space="preserve">
+    <value>Select</value>
+  </data>
+  <data name="Message_SelectedBadge" xml:space="preserve">
+    <value>Selected</value>
+  </data>
+  <data name="Message_NoSelectedRecipients" xml:space="preserve">
+    <value>No recipients selected yet.</value>
+  </data>
+  <data name="Message_Error_DirectSingleRecipient" xml:space="preserve">
+    <value>Only one recipient can be selected for a direct message.</value>
+  </data>
 </root>

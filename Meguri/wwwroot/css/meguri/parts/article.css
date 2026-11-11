@@ -1,5 +1,10 @@
 ﻿/* 投稿 */
 article {
+/*	margin: 0 0.5rem 0 0.5rem;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	overflow: hidden;*/
+
 	.article-header {
 		display: block grid;
 		gap: 0.25rem;

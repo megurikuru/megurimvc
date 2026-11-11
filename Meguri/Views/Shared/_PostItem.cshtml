@@ -21,7 +21,7 @@
 
 	 【各画面での呼び出し例】
 	 - トップページ（Home/Index.cshtml）
-		 <partial name="_PostItem" model="new PostItemViewModel { Post = post, ShowAuthor = false, ShowStats = false }" />
+		 <partial name="_PostItem" model="new PostItemViewModel { Post = post, ShowStats = false }" />
 	 - 投稿一覧（Post/Index.cshtml）
 		 <partial name="_PostItem" model="new PostItemViewModel { Post = post, BodyMaxLength = 150, MaxImages = 16, LinkImagesToFile = true, ShowBadges = true, ShowTags = true }" />
 	 - プロフィール詳細（Profile/Details.cshtml）
@@ -105,7 +105,7 @@
 					<span>R-18G</span>
 				}
 			}
-			@* 投稿者名（Tag/Details, Post/Index で表示：退会済み・非公開プロフィールを考慮） *@
+			@* 投稿者名（Home/Index, Tag/Details, Post/Index で表示：退会済み・非公開プロフィールを考慮） *@
 			@if (Model.ShowAuthor) {
 				<span>
 					@if (post.User == null) {

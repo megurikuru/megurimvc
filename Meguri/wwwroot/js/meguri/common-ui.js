@@ -3,30 +3,15 @@
  * UTCで記述された日時を、ブラウザの言語設定やタイムゾーンに合わせてフォーマット・表示を変換します。
  */
 export function localizeTimes() {
-    let previousChatDate = null;
-
     function formatLocalTime(el) {
         const d = new Date(el.getAttribute('datetime'));
         if (isNaN(d)) return;
-        if (el.dataset.format === 'chat') {
-            const item = el.closest('.message-item');
-            if (item && previousChatDate !== d.toDateString()) {
-                const divider = document.createElement('div');
-                divider.className = 'message-date-divider';
-                divider.textContent = d.toLocaleDateString(navigator.language, { year: 'numeric', month: 'long', day: 'numeric' });
-                item.before(divider);
-                previousChatDate = d.toDateString();
-            }
-            el.textContent = d.toLocaleTimeString(navigator.language, { hour: '2-digit', minute: '2-digit' });
-            el.title = d.toLocaleString(navigator.language);
-            el.setAttribute('aria-label', el.title);
-            return;
-        }
         const opts = el.dataset.format === 'date'
             ? { year: 'numeric', month: '2-digit', day: '2-digit' }
             : { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
         el.textContent = d.toLocaleString(navigator.language, opts);
-        el.title = d.toISOString();
+        el.title = d.toLocaleString(navigator.language);
+        el.setAttribute('aria-label', el.title);
     }
 
     document.querySelectorAll('time.local-time').forEach(formatLocalTime);

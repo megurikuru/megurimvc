@@ -67,7 +67,8 @@
 					var tagText = pt.TagConcept?.Tags?.FirstOrDefault()?.TagText ?? SharedLocalizer["Tag_Title"].Value;
 					<div class="tag-item">
 						<a asp-controller="Tag" asp-action="Details" asp-route-conceptId="@pt.TagConceptId" class="icon-wrap">
-							<img src="~/icons/tag.svg" class="icon" />@tagText
+							<img src="~/icons/tag.svg" class="icon" />
+							@tagText
 						</a>
 						<a asp-controller="Tag" asp-action="Disambiguation" asp-route-id="@pt.TagConceptId">@SharedLocalizer["Tag_DisambiguationBtn"]</a>
 					</div>

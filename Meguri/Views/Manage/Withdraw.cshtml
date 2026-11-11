@@ -6,9 +6,8 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<p>@SharedLocalizer["Manage_Withdraw_Description"]</p>
-
 <form method="post" class="account" data-confirm="@SharedLocalizer["Manage_Withdraw_Confirm"]">
+	<p>@SharedLocalizer["Manage_Withdraw_Description"]</p>
 	<div asp-validation-summary="All"></div>
 	@if (Model.HasPassword) {
 		<div>

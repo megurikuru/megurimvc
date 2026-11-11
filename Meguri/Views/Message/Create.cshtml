@@ -29,18 +29,27 @@
 		</div>
 
 		<div class="attribute-wrap">
-			<label>@SharedLocalizer["Message_SelectRecipient"] <span>*</span></label>
-			<div class="recipient-list">
-				@if (!Model.AvailableUsers.Any()) {
-					<p>@SharedLocalizer["Message_NoOtherUsers"]</p>
-				}
-				@foreach (var user in Model.AvailableUsers) {
-					<label class="check-row" for="user_@user.Id">
-						<input type="checkbox" name="SelectedUserIds" value="@user.Id" id="user_@user.Id" checked="@Model.SelectedUserIds.Contains(user.Id)" />
-						<img src="~/icons/user.svg" class="icon" />@user.UserName
-					</label>
-				}
+			<label for="recipientSearchInput">@SharedLocalizer["Message_SelectRecipient"] <span>*</span></label>
+			<div class="input-group">
+				<input type="text"
+						 id="recipientSearchInput"
+						 placeholder="@SharedLocalizer["Message_RecipientSearchPlaceholder"]"
+						 autocomplete="off"
+						 data-search-url="@Url.Action("SearchUsers", "Message")"
+						 data-initial-users="@(System.Text.Json.JsonSerializer.Serialize(Model.SelectedUsers, new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }))"
+						 data-select-label="@SharedLocalizer["Message_SelectUserBtn"]"
+						 data-selected-label="@SharedLocalizer["Message_SelectedBadge"]"
+						 data-remove-label="@SharedLocalizer["Common_Remove"]"
+						 data-no-results-label="@SharedLocalizer["Message_NoUsersFound"]"
+						 data-no-selected-label="@SharedLocalizer["Message_NoSelectedRecipients"]" />
+				<button type="button" data-search-recipient>@SharedLocalizer["Common_Search"]</button>
 			</div>
+			<div id="recipientSearchResults" class="recipient-search-results" hidden></div>
+			<div class="selected-recipients-section">
+				<label>@SharedLocalizer["Message_SelectedRecipientsLabel"] <span id="selectedRecipientCount">(0)</span></label>
+				<div id="selectedRecipientsContainer" class="selected-recipients-list"></div>
+			</div>
+			<div id="hiddenRecipientInputs"></div>
 			<span asp-validation-for="SelectedUserIds"></span>
 		</div>
 

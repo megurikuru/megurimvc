@@ -63,7 +63,9 @@
 	span.field-validation-valid,
 	#tagSuggestions:empty,
 	#selectedTagsContainer:empty,
-	#hiddenTagsInputs {
+	#hiddenTagsInputs,
+	#recipientSearchResults[hidden],
+	#hiddenRecipientInputs {
 		display: none;
 	}
 }

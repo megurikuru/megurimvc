@@ -3,7 +3,6 @@
 	display: block grid;
 	gap: 0.5rem;
 	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
-	/*border-top: 1px solid var(--color-border);*/
 
 	& > #passwordSection:not([hidden]) {
 		gap: 1rem;
@@ -18,11 +17,15 @@
 		padding-top: 0;
 	}
 	/* フォーム直下の直接の子要素（div, label, button, 各種コンテナ）にグリッドのギャップを適用 */
-	& > div:not([hidden]),
+	& > div:not([hidden]):not(.inline-actions),
 	& > button:not([hidden]),
 	& > .account-links:not([hidden]) {
 		display: block grid;
 		gap: 0.25rem;
+	}
+
+	& h3 {
+		padding: 0;
 	}
 
 	& [hidden] {
