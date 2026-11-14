@@ -37,10 +37,10 @@ input[type="file"],
 		border-radius: var(--radius-sm);
 		cursor: pointer;
 		transition: background-color 0.2s ease, color 0.2s ease;
+	}
 
-		&:hover {
-			background-color: var(--color-button-main-hover);
-		}
+	&::file-selector-button:hover {
+		background-color: var(--color-button-main-hover);
 	}
 }
 
