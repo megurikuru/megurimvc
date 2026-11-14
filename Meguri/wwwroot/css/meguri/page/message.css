@@ -1,10 +1,6 @@
 /* Messageコントローラー固有スタイル */
 body[data-controller="Message" i] {
 
-	#nav-main {
-		margin-top: 0.5rem;
-	}
-
 	form .attribute-wrap:first-of-type {
 		margin-top: 0;
 	}

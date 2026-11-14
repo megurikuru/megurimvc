@@ -1,3 +1,4 @@
+@model Meguri.ViewModels.Message.MessageRoomViewModel
 <!-- 新規メッセージと返信で共用する送信フォーム -->
 <div class="message-composer">
 	@if (TempData["Error"] is string messageError && !string.IsNullOrEmpty(messageError)) {
