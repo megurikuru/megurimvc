@@ -22,6 +22,7 @@ namespace Meguri.ViewModels.Message {
         public long Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public bool IsGroup { get; set; }
+        public long? AvatarImageId { get; set; }
         public string LastMessageText { get; set; } = string.Empty;
         public System.DateTime LastMessageTime { get; set; }
         public List<string> MemberNames { get; set; } = new List<string>();
@@ -30,6 +31,7 @@ namespace Meguri.ViewModels.Message {
     public class RecipientUserItemViewModel {
         public string Id { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
+        public long? AvatarImageId { get; set; }
     }
 
     public class CreateConversationViewModel {

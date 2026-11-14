@@ -1,0 +1,94 @@
+@model Meguri.ViewModels.Shared.FileUploadViewModel
+@{
+	var previewVariantClass = Model.PreviewVariant switch {
+		"avatar" => "image-preview-avatar",
+		"wide" => "image-preview-wide",
+		_ => null
+	};
+	var existingImageClass = Model.PreviewVariant switch {
+		"avatar" => "file-upload-current-avatar",
+		"wide" => "file-upload-current-header",
+		_ => "file-upload-current-img"
+	};
+	var previewListClass = string.IsNullOrEmpty(previewVariantClass)
+		? "image-preview-list"
+		: $"image-preview-list {previewVariantClass}";
+	var removeCheckboxId = Model.RemoveCheckboxId ?? Model.RemoveCheckboxName;
+	var removeLabelText = Model.RemoveLabelText ?? SharedLocalizer["Manage_Profile_RemoveImage"].Value;
+}
+
+@if (Model.UseDisclosure) {
+	<details class="message-disclosure file-upload">
+		<summary>
+			@if (!string.IsNullOrEmpty(Model.IconPath)) {
+				<img src="@Url.Content(Model.IconPath)" class="icon" alt="" />
+			}
+			@Model.LabelText
+			@if (Model.ShowCount) {
+				<span id="@Model.ResolvedCountDisplayId">0/@Model.MaxImages</span>
+			}
+		</summary>
+		@if (!string.IsNullOrEmpty(Model.ExistingImageUrl)) {
+			<img src="@Model.ExistingImageUrl" alt="" class="@existingImageClass" />
+			@if (!string.IsNullOrEmpty(Model.RemoveCheckboxName)) {
+				<label class="check-row" for="@removeCheckboxId">
+					<input type="checkbox" id="@removeCheckboxId" name="@Model.RemoveCheckboxName" value="true" checked="@Model.RemoveCheckboxChecked" />
+					<input type="hidden" name="@Model.RemoveCheckboxName" value="false" />
+					@removeLabelText
+				</label>
+			}
+		}
+		<input type="file"
+				 id="@Model.InputId"
+				 name="@Model.InputName"
+				 class="file-upload-input"
+				 multiple="@(Model.MaxImages > 1 ? "multiple" : null)"
+				 accept="@Model.Accept"
+				 aria-label="@Model.LabelText"
+				 data-image-preview="#@Model.ResolvedPreviewContainerId"
+				 data-image-count="@(Model.ShowCount ? $"#{Model.ResolvedCountDisplayId}" : null)"
+				 data-max-images="@Model.MaxImages" />
+		<span class="field-validation-valid" data-valmsg-for="@Model.InputName" data-valmsg-replace="true"></span>
+		<div id="@Model.ResolvedPreviewContainerId" class="@previewListClass"></div>
+		@foreach (var hint in Model.Hints) {
+			<div class="description">@hint</div>
+		}
+	</details>
+} else {
+	<div class="file-upload">
+		<label for="@Model.InputId">
+			@if (!string.IsNullOrEmpty(Model.IconPath)) {
+				<img src="@Url.Content(Model.IconPath)" class="icon" alt="" />
+			}
+			@Model.LabelText
+			@if (Model.ShowCount) {
+				<span id="@Model.ResolvedCountDisplayId">0/@Model.MaxImages</span>
+			}
+		</label>
+		@if (!string.IsNullOrEmpty(Model.ExistingImageUrl)) {
+			<img src="@Model.ExistingImageUrl" alt="" class="@existingImageClass" />
+			@if (!string.IsNullOrEmpty(Model.RemoveCheckboxName)) {
+				<label class="check-row" for="@removeCheckboxId">
+					<input type="checkbox" id="@removeCheckboxId" name="@Model.RemoveCheckboxName" value="true" checked="@Model.RemoveCheckboxChecked" />
+					<input type="hidden" name="@Model.RemoveCheckboxName" value="false" />
+					@removeLabelText
+				</label>
+			}
+		}
+		<input type="file"
+				 id="@Model.InputId"
+				 name="@Model.InputName"
+				 class="file-upload-input"
+				 multiple="@(Model.MaxImages > 1 ? "multiple" : null)"
+				 accept="@Model.Accept"
+				 aria-label="@Model.LabelText"
+				 data-image-preview="#@Model.ResolvedPreviewContainerId"
+				 data-image-count="@(Model.ShowCount ? $"#{Model.ResolvedCountDisplayId}" : null)"
+				 data-max-images="@Model.MaxImages" />
+		<span class="field-validation-valid" data-valmsg-for="@Model.InputName" data-valmsg-replace="true"></span>
+		<div id="@Model.ResolvedPreviewContainerId" class="@previewListClass"></div>
+		@foreach (var hint in Model.Hints) {
+			<div class="description">@hint</div>
+		}
+	</div>
+}

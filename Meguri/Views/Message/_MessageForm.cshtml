@@ -22,12 +22,19 @@
 		<div class="attribute-wrap">
 			<textarea id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
 		</div>
-		<details class="message-disclosure">
-			<summary>@SharedLocalizer["Message_ImageAttachLabel"] <span id="chatImageCountDisplay">0/16</span></summary>
-			<input type="file" id="chatImageFiles" name="imageFiles" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" aria-label="@SharedLocalizer["Message_ImageAttachLabel"]" data-image-preview="#chatImagePreviewContainer" data-image-count="#chatImageCountDisplay" data-max-images="16" />
-			<span class="field-validation-valid" data-valmsg-for="imageFiles" data-valmsg-replace="true"></span>
-			<div id="chatImagePreviewContainer" class="image-preview-list"></div>
-		</details>
+		@{
+			var chatImageUpload = new FileUploadViewModel {
+				InputId = "chatImageFiles",
+				InputName = "imageFiles",
+				LabelText = SharedLocalizer["Message_ImageAttachLabel"].Value,
+				MaxImages = 16,
+				ShowCount = true,
+				PreviewContainerId = "chatImagePreviewContainer",
+				CountDisplayId = "chatImageCountDisplay",
+				UseDisclosure = true
+			};
+		}
+		<partial name="_FileUpload" model="chatImageUpload" />
 		<div class="button-wrap">
 			<button type="submit" class="btn-block">@SharedLocalizer["Message_SendBtn"]</button>
 		</div>

@@ -36,7 +36,7 @@
 		display: none;
 	}
 
-	& input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+	& input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
 	& select,
 	& textarea {
 		width: 100%;
@@ -55,18 +55,19 @@
 		border-radius: var(--radius-sm);
 	}
 
-	& a:not(.inline-link) {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		min-height: var(--control-height);
-		padding: 0.5rem 0.75rem;
-		text-align: center;
-		text-decoration: none;
-		border: 1px solid var(--color-border);
-		border-radius: var(--radius-sm);
-		background-color: white;
-		box-sizing: border-box;
+	& a:not(.inline-link):not(.button-like) {
+		display: block;
+		width: fit-content;
+		margin-inline: auto;
+		padding: 0.5rem 0;
+		color: var(--color-link);
+		background: none;
+		border: none;
+	}
+
+	/* ホバー時のスタイル（色を少し濃くする、下線をつけるなど） */
+	& a:not(.inline-link):hover {
+		color: var(--color-link-hover);
 	}
 
 	& input[type="checkbox"], & input[type="radio"] {
@@ -101,7 +102,7 @@
 		}
 	}
 
-	& button:not([hidden]):not(.btn-sm) {
+	& button:not([hidden]):not(.btn-sm):not(.image-preview-remove) {
 		display: flex;
 		align-items: center;
 		justify-content: center;

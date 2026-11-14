@@ -11,7 +11,11 @@
 			}
 		</div>
 	}
-	<h1 class="user-name">@Model.Profile.UserName
+	<h1 class="user-name">
+		@if (Model.Profile.ActiveAvatarImageId.HasValue) {
+			<img src="/Image/File/@Model.Profile.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+		}
+		@Model.Profile.UserName
 	@if (Model.IsOwner) {
 		@if (!Model.Profile.IsProfilePublic) {
 			<small>@SharedLocalizer["Profile_PrivateBadge"]</small>

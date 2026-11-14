@@ -12,5 +12,9 @@ body[data-controller="Post" i] {
 		#nav-main {
 			margin-top: 0;
 		}
+
+		.attribute-wrap {
+			margin-top: 0;
+		}
 	}
 }

@@ -81,15 +81,20 @@ namespace Meguri.Controllers {
             foreach (var conv in conversations) {
                 var lastMsg = conv.Messages.OrderByDescending(m => m.CreatedAt).FirstOrDefault();
                 string title = conv.Title;
+                long? avatarImageId = null;
                 if (!conv.IsGroup || string.IsNullOrEmpty(title)) {
                     var otherMember = conv.Members.FirstOrDefault(m => m.UserId != currentUserId);
                     title = otherMember?.User == null ? _localizer["Message_Direct"].Value : otherMember.User.UserName + (otherMember.User.IsWithdrawn ? _localizer["Message_WithdrawnUserSuffix"].Value : "");
+                    if (!conv.IsGroup) {
+                        avatarImageId = otherMember?.User?.ActiveAvatarImageId;
+                    }
                 }
 
                 vmList.Add(new ConversationItemViewModel {
                     Id = conv.Id,
                     Title = title,
                     IsGroup = conv.IsGroup,
+                    AvatarImageId = avatarImageId,
                     LastMessageText = lastMsg == null ? _localizer["Message_NoMessagesInConv"].Value : (lastMsg.IsDeleted ? _localizer["Message_Deleted"].Value : lastMsg.Body),
                     LastMessageTime = lastMsg?.CreatedAt ?? conv.CreatedAt,
                     MemberNames = conv.Members.Select(m => m.User?.UserName ?? _localizer["Common_UnknownUser"].Value).ToList()
@@ -238,7 +243,8 @@ namespace Meguri.Controllers {
                 .Take(20)
                 .Select(u => new RecipientUserItemViewModel {
                     Id = u.Id,
-                    UserName = u.UserName!
+                    UserName = u.UserName!,
+                    AvatarImageId = u.ActiveAvatarImageId
                 })
                 .ToListAsync();
 
@@ -466,7 +472,8 @@ namespace Meguri.Controllers {
                 .Where(u => selectedIds.Contains(u.Id) && u.Id != currentUserId && !u.IsWithdrawn && u.UserName != null)
                 .Select(u => new RecipientUserItemViewModel {
                     Id = u.Id,
-                    UserName = u.UserName!
+                    UserName = u.UserName!,
+                    AvatarImageId = u.ActiveAvatarImageId
                 })
                 .ToListAsync();
 

@@ -27,7 +27,7 @@ class RecipientSelector {
                 if (Array.isArray(parsed)) {
                     this.selectedUsers = parsed
                         .filter(u => u && u.id && u.userName)
-                        .map(u => ({ id: String(u.id), userName: String(u.userName) }));
+                        .map(u => ({ id: String(u.id), userName: String(u.userName), avatarImageId: u.avatarImageId || null }));
                 }
             } catch (err) {
                 console.error('Failed to parse initial users:', err);
@@ -137,6 +137,7 @@ class RecipientSelector {
             if (!user || !user.id) return;
             const userId = String(user.id);
             const userName = String(user.userName || '');
+            const avatarImageId = user.avatarImageId || null;
             const isAlreadySelected = selectedIds.has(userId);
 
             const row = document.createElement('div');
@@ -145,8 +146,13 @@ class RecipientSelector {
             const info = document.createElement('span');
             info.className = 'icon-wrap';
             const icon = document.createElement('img');
-            icon.src = '/icons/user.svg';
-            icon.className = 'icon';
+            if (avatarImageId) {
+                icon.src = `/Image/File/${avatarImageId}`;
+                icon.className = 'user-avatar-sm';
+            } else {
+                icon.src = '/icons/user.svg';
+                icon.className = 'icon';
+            }
             icon.alt = '';
             info.appendChild(icon);
             info.appendChild(document.createTextNode(userName));
@@ -161,6 +167,9 @@ class RecipientSelector {
                 actionBtn.textContent = selectLabel;
                 actionBtn.dataset.selectRecipientId = userId;
                 actionBtn.dataset.selectRecipientName = userName;
+                if (avatarImageId) {
+                    actionBtn.dataset.selectRecipientAvatar = String(avatarImageId);
+                }
             }
 
             row.appendChild(info);
@@ -171,19 +180,20 @@ class RecipientSelector {
         resultsContainer.hidden = false;
     }
 
-    static addUser(id, userName) {
+    static addUser(id, userName, avatarImageId) {
         if (!id || !userName) return;
         const userId = String(id);
         const name = String(userName);
+        const avatarId = avatarImageId || null;
 
         if (this.selectedUsers.some(u => u.id === userId)) {
             return;
         }
 
         if (this.isGroupMode()) {
-            this.selectedUsers.push({ id: userId, userName: name });
+            this.selectedUsers.push({ id: userId, userName: name, avatarImageId: avatarId });
         } else {
-            this.selectedUsers = [{ id: userId, userName: name }];
+            this.selectedUsers = [{ id: userId, userName: name, avatarImageId: avatarId }];
         }
 
         this.renderSelected();
@@ -250,8 +260,13 @@ class RecipientSelector {
             const info = document.createElement('span');
             info.className = 'icon-wrap';
             const icon = document.createElement('img');
-            icon.src = '/icons/user.svg';
-            icon.className = 'icon';
+            if (user.avatarImageId) {
+                icon.src = `/Image/File/${user.avatarImageId}`;
+                icon.className = 'user-avatar-sm';
+            } else {
+                icon.src = '/icons/user.svg';
+                icon.className = 'icon';
+            }
             icon.alt = '';
             info.appendChild(icon);
             info.appendChild(document.createTextNode(user.userName));
@@ -306,7 +321,8 @@ function handleMessageUiClick(e) {
     if (selectRecipientBtn) {
         RecipientSelector.addUser(
             selectRecipientBtn.dataset.selectRecipientId,
-            selectRecipientBtn.dataset.selectRecipientName
+            selectRecipientBtn.dataset.selectRecipientName,
+            selectRecipientBtn.dataset.selectRecipientAvatar
         );
         return;
     }

@@ -58,12 +58,23 @@
 
 		<!-- 新規画像追加（複数可・最大16枚） -->
 		<div class="attribute-wrap">
-			<label asp-for="NewImageFiles"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Post_AddMoreImagesLabel"] <span id="imageCountDisplay">0/16</span></label>
-			<input asp-for="NewImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#imagePreviewContainer" data-image-count="#imageCountDisplay" data-max-images="16" />
-			<span asp-validation-for="NewImageFiles"></span>
-			<div id="imagePreviewContainer" class="image-preview-list"></div>
-			<div class="description">@SharedLocalizer["Post_ImageUploadHint1"]</div>
-			<div class="description">@SharedLocalizer["Post_ImageUploadHint2"]</div>
+			@{
+				var editPostImageUpload = new FileUploadViewModel {
+					InputId = "NewImageFiles",
+					InputName = "NewImageFiles",
+					LabelText = SharedLocalizer["Post_AddMoreImagesLabel"].Value,
+					IconPath = "~/icons/plus.svg",
+					MaxImages = 16,
+					ShowCount = true,
+					PreviewContainerId = "imagePreviewContainer",
+					CountDisplayId = "imageCountDisplay",
+					Hints = [
+						SharedLocalizer["Post_ImageUploadHint1"].Value,
+						SharedLocalizer["Post_ImageUploadHint2"].Value
+					]
+				};
+			}
+			<partial name="_FileUpload" model="editPostImageUpload" />
 		</div>
 
 		<!-- タグ編集コンポーネント (最大10個) -->
