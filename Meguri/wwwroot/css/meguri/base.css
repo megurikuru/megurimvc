@@ -49,6 +49,8 @@ textarea {
 	/*メッセージ関連*/
 	--color-bg-message-is-mine: #E9E4F0; /* 薄紫色 */
 	--color-bg-message-is-other: #EEEEEE; /* 薄灰色 */
+	/*画像ビューアー関連*/
+	--color-bg-overlay: rgba(0, 0, 0, 0.85); /* 半透明ダークオーバーレイ */
 }
 
 /* 基本要素 */

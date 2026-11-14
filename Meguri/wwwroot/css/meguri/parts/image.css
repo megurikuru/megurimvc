@@ -36,3 +36,97 @@
 	}
 }
 
+/* 画像ビューアー（オリジナルサイズ／画面サイズ上限モーダル） */
+.image-viewer-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+	box-sizing: border-box;
+	background-color: var(--color-bg-overlay);
+
+	&[hidden] {
+		display: none;
+	}
+
+	& .image-viewer-img {
+		display: block;
+		width: auto;
+		height: auto;
+		max-width: calc(100vw - 2rem);
+		max-height: calc(100vh - 2rem);
+		max-height: calc(100dvh - 2rem);
+		object-fit: contain;
+		user-select: none;
+	}
+
+	& .image-viewer-btn {
+		position: fixed;
+		z-index: 10000;
+		width: 2.75rem;
+		height: 2.75rem;
+		min-height: 2.75rem;
+		padding: 0;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		background-color: var(--color-button-main);
+		color: var(--color-text);
+		font-size: 1.5rem;
+		line-height: 1;
+		user-select: none;
+
+		&:hover:not(:disabled) {
+			background-color: var(--color-button-main-hover);
+		}
+
+		&:disabled {
+			opacity: 0.35;
+			cursor: not-allowed;
+		}
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	& .image-viewer-prev {
+		left: 0.75rem;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	& .image-viewer-next {
+		right: 0.75rem;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	& .image-viewer-close {
+		top: 0.75rem;
+		right: 0.75rem;
+	}
+
+	& .image-viewer-counter {
+		position: fixed;
+		bottom: 0.75rem;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 10000;
+		padding: 0.25rem 0.75rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-full);
+		background-color: var(--color-bg-control);
+		color: var(--color-text);
+		font-size: 0.875rem;
+		user-select: none;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+}
+
+
