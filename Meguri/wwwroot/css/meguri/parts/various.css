@@ -1,5 +1,14 @@
 ﻿/* 各種パーツ */
 
+.in-develop {
+	display: block;
+	width: fit-content;
+	margin: 0 auto;
+	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	font-size: 0.8rem;
+	color: #0069B7; /* 青色 */ 
+}
+
 .top-link {
 	display: block;
 	width: fit-content;
