@@ -1,3 +1,4 @@
+@model Meguri.ViewModels.Message.MessageRoomViewModel
 @* グループメッセージの場合には、メンバー一覧を開閉できるようにする。 *@
 @if (Model.Conversation.IsGroup) {
 	<details class="message-disclosure">
