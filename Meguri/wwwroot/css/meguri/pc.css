@@ -133,7 +133,7 @@
 	}
 
 	.finder-item-wrap .thumb {
-		max-height: 16rem;
+		height: 10rem;
 	}
 
 	/*	.profile-avatar {

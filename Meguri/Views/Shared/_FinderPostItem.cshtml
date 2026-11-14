@@ -7,15 +7,19 @@
 	var displayTitle = string.IsNullOrWhiteSpace(Model.Subject)
 		? SharedLocalizer["Post_Untitled"].Value
 		: Model.Subject;
-	var thumb = Model.PostImages?.OrderBy(x => x.DisplayOrder).FirstOrDefault();
+	var images = Model.PostImages?.OrderBy(x => x.DisplayOrder).ToList();
 }
 
 <a asp-controller="Post" asp-action="Details" asp-route-id="@Model.Id" class="finder-item-wrap">
-	@* 添付画像がある場合は画像アイコン＋1枚目のサムネイルを表示 *@
-	@if (thumb != null) {
+	@* 添付画像がある場合は画像アイコン＋サムネイル一覧を横スクロール表示 *@
+	@if (images != null && images.Any()) {
 		<img src="~/icons/image.svg" class="icon" />
 		<span>@displayTitle</span>
-		<img src="/Image/File/@thumb.ImageId" alt="@thumb.Image?.Name" class="thumb" />
+		<div class="finder-thumbs">
+			@foreach (var pi in images) {
+				<img src="/Image/File/@pi.ImageId" alt="@pi.Image?.Name" class="thumb" />
+			}
+		</div>
 	} else {
 		@* 添付画像がない場合はテキストアイコンのみ表示 *@
 		<img src="~/icons/file-text.svg" class="icon" />

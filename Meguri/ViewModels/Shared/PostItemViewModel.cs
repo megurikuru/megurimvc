@@ -12,8 +12,8 @@ namespace Meguri.ViewModels.Shared {
         /// <summary>表示する最大画像枚数（0以下の場合は画像非表示）</summary>
         public int MaxImages { get; init; } = 4;
 
-        /// <summary>画像クリック時に画像ファイルを別タブで開くか（falseの場合は投稿詳細へ遷移）</summary>
-        public bool LinkImagesToFile { get; init; }
+        /// <summary>画像クリック時に画像ファイルを別タブ（画像ビューアー）で開くか（falseの場合は投稿詳細へ遷移）</summary>
+        public bool LinkImagesToFile { get; init; } = true;
 
         /// <summary>界隈名を表示するか</summary>
         public bool ShowFandom { get; init; } = true;

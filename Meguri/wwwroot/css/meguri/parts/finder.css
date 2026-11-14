@@ -1,5 +1,6 @@
 ﻿/* Finder */
 .finder {
+	min-width: 0;
 }
 
 /* Finderでのフォルダや投稿の表示 */
@@ -8,6 +9,7 @@
 	grid-template-columns: auto 1fr;
 	align-items: center;
 	gap: 0.5rem;
+	min-width: 0;
 	min-height: var(--control-height);
 	padding: 0.5rem 0.75rem;
 	box-sizing: border-box;
@@ -23,12 +25,22 @@
 		width: 1.25rem;
 		height: 1.25rem;
 	}
+	/* サムネイル横スクロールコンテナ */
+	.finder-thumbs {
+		grid-column: 1 / -1; /* 全列をまたいで次の行に表示 */
+		display: block flex;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		min-width: 0;
+		gap: 0.5rem;
+	}
 	/* サムネイル */
 	.thumb {
-		grid-column: 1 / -1; /* 全列をまたいで次の行に表示 */
-		justify-self: center; /* 横中央寄せ */
-		max-width: 100%;
-		max-height: 12rem;
-		object-fit: contain;
+		flex: 0 0 auto;
+		display: block;
+		width: auto;
+		max-width: none;
+		height: 10rem;
+		object-fit: cover;
 	}
 }
