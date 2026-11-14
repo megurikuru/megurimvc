@@ -1649,10 +1649,10 @@
     <value>Latest Posts</value>
   </data>
   <data name="Manage_Profile_AvatarLabel" xml:space="preserve">
-    <value>Profile Image</value>
+    <value>Profile Image(400 x 400 px)</value>
   </data>
   <data name="Manage_Profile_HeaderLabel" xml:space="preserve">
-    <value>Header Image</value>
+    <value>Header Image(1500 x 500 px)</value>
   </data>
   <data name="Manage_Profile_RemoveImage" xml:space="preserve">
     <value>Remove image</value>

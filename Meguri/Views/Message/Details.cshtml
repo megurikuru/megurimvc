@@ -35,7 +35,19 @@
 	@* パンくずリスト *@
 	<partial name="_Breadcrumb" model="breadcrumbs" />
 
-	<h1><img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />@Model.DisplayTitle</h1>
+	@{
+		var otherMember = !Model.Conversation.IsGroup
+			? Model.Conversation.Members.FirstOrDefault(m => m.UserId != Model.CurrentUserId)
+			: null;
+	}
+	<h1>
+		@if (!Model.Conversation.IsGroup && otherMember?.User?.ActiveAvatarImageId != null) {
+			<img src="/Image/File/@otherMember.User.ActiveAvatarImageId" class="user-avatar-sm" alt="" />
+		} else {
+			<img src="~/icons/@(Model.Conversation.IsGroup ? "users.svg" : "user.svg")" class="icon" />
+		}
+		@Model.DisplayTitle
+	</h1>
 
 	@* メンバー一覧 *@
 	<partial name="_MemberList" model="Model"	/>

@@ -73,12 +73,19 @@
 					<textarea name="text" id="commentTextInput" rows="3" placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" aria-label="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
 				</div>
 
-				<details class="message-disclosure">
-					<summary>@SharedLocalizer["Message_ImageAttachLabel"] <span id="commentImageCountDisplay">0/1</span></summary>
-					<input type="file" id="commentImageInput" name="commentImage" accept=".jpg,.jpeg,.png,image/jpeg,image/png" aria-label="@SharedLocalizer["Message_ImageAttachLabel"]" data-image-preview="#commentImagePreviewContainer" data-image-count="#commentImageCountDisplay" data-max-images="1" />
-					<span class="field-validation-valid" data-valmsg-for="commentImage" data-valmsg-replace="true"></span>
-					<div id="commentImagePreviewContainer" class="image-preview-list"></div>
-				</details>
+				@{
+					var commentImageUpload = new FileUploadViewModel {
+						InputId = "commentImageInput",
+						InputName = "commentImage",
+						LabelText = SharedLocalizer["Message_ImageAttachLabel"].Value,
+						MaxImages = 1,
+						ShowCount = true,
+						PreviewContainerId = "commentImagePreviewContainer",
+						CountDisplayId = "commentImageCountDisplay",
+						UseDisclosure = true
+					};
+				}
+				<partial name="_FileUpload" model="commentImageUpload" />
 
 				<div class="button-wrap">
 					<button type="submit" class="btn-block">@SharedLocalizer["Comment_Submit"]</button>
@@ -114,8 +121,12 @@
 								<div class="message-header">
 									@if (!isMine) {
 										<div class="message-sender">
-											<img src="~/icons/user.svg" class="icon" alt="" />
 											<span>>>@comment.Number</span>
+											@if (comment.User?.ActiveAvatarImageId != null) {
+												<img src="/Image/File/@comment.User.ActiveAvatarImageId" class="user-avatar-sm" alt="" />
+											} else {
+												<img src="~/icons/user.svg" class="icon" alt="" />
+											}
 											@if (comment.User == null) {
 												@SharedLocalizer["Common_UnknownUser"].Value
 											} else if (comment.User.IsWithdrawn) {

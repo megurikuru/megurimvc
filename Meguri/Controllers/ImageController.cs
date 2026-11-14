@@ -71,10 +71,9 @@ namespace Meguri.Controllers {
                 if (inMessage) return (true, false);
             }
 
-            var profileVisible = await _context.Users.AnyAsync(u =>
-                (u.ActiveAvatarImageId == image.Id || u.HeaderImageId == image.Id) &&
-                (u.IsProfilePublic || isAuthenticated));
-            if (profileVisible) return (true, false);
+            var isProfileImage = await _context.Users.AnyAsync(u =>
+                u.ActiveAvatarImageId == image.Id || u.HeaderImageId == image.Id);
+            if (isProfileImage) return (true, true);
 
             return (false, false);
         }

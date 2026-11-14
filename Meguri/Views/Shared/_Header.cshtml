@@ -1,4 +1,11 @@
-﻿<header>
+﻿@inject UserManager<ApplicationUser> UserManager
+@{
+	ApplicationUser? currentUser = null;
+	if (User.Identity?.IsAuthenticated == true) {
+		currentUser = await UserManager.GetUserAsync(User);
+	}
+}
+<header>
 	<span class="user-icon"></span>
 	<span class="top-link">
 		<a asp-area="" asp-controller="Home" asp-action="Index">meguri</a>
@@ -6,7 +13,12 @@
 	<span class="user-name">
 			@if (User.Identity?.IsAuthenticated == true)
 			{
-				<a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.Identity.Name" title="@SharedLocalizer["Header_MyPageTitle"]">@User.Identity.Name</a>
+				<a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.Identity.Name" title="@SharedLocalizer["Header_MyPageTitle"]">
+					@if (currentUser?.ActiveAvatarImageId != null) {
+						<img src="/Image/File/@currentUser.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+					}
+					@User.Identity.Name
+				</a>
 			}
 		</span>
 </header>

@@ -30,13 +30,18 @@
 		<ul>
 			@foreach (var u in Model.Users) {
 				<li>
-					@if (u.ActiveAvatarImageId.HasValue) {
-						<img src="/Image/File/@u.ActiveAvatarImageId" alt="" />
-					}
 					@if (!u.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+						@if (u.ActiveAvatarImageId.HasValue) {
+							<img src="/Image/File/@u.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+						}
 						@u.UserName
 					} else {
-						<a asp-controller="Profile" asp-action="Details" asp-route-id="@u.UserName">@u.UserName</a>
+						<a asp-controller="Profile" asp-action="Details" asp-route-id="@u.UserName">
+							@if (u.ActiveAvatarImageId.HasValue) {
+								<img src="/Image/File/@u.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+							}
+							@u.UserName
+						</a>
 					}
 				</li>
 			}

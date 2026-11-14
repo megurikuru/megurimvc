@@ -113,9 +113,17 @@
 					} else if (post.User.IsWithdrawn) {
 						@SharedLocalizer["Common_WithdrawnUser"].Value
 					} else if (!post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+						@if (post.User.ActiveAvatarImageId.HasValue) {
+							<img src="/Image/File/@post.User.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+						}
 						@post.User.UserName
 					} else {
-						<a asp-controller="Profile" asp-action="Details" asp-route-id="@post.User.UserName">@post.User.UserName</a>
+						<a asp-controller="Profile" asp-action="Details" asp-route-id="@post.User.UserName">
+							@if (post.User.ActiveAvatarImageId.HasValue) {
+								<img src="/Image/File/@post.User.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+							}
+							@post.User.UserName
+						</a>
 					}
 				</span>
 			}

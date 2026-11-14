@@ -1,12 +1,15 @@
 ﻿@model TwoFactorAuthenticationViewModel
 @{
+	// ページタイトルとナビゲーションのアクティブ項目を設定
 	ViewData["Title"] = SharedLocalizer["Manage_TwoFactorAuthentication_Title"];
 	ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
 <h2>@ViewData["Title"]</h2>
 <div class="account">
+	@* 2要素認証（2FA）が有効な場合の状態表示と操作リンク *@
 	@if (Model.Is2faEnabled) {
+		// リカバリーコードの残数に応じた警告メッセージを表示
 		if (Model.RecoveryCodesLeft == 0) {
 			<div>
 				<strong>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes"]</strong>
@@ -24,19 +27,24 @@
 			</div>
 		}
 
-		<a asp-action="Disable2faWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_Disable2FA"]</a>
-		<a asp-action="GenerateRecoveryCodesWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetRecoveryCodes"]</a>
+		@* 2FAの無効化およびリカバリーコード再生成ページへのリンク *@
+		<a class="button-like" asp-action="Disable2faWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_Disable2FA"]</a>
+		<a class="button-like" asp-action="GenerateRecoveryCodesWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetRecoveryCodes"]</a>
 	}
 
+	@* 認証アプリ（Authenticator）の設定・リセット操作リンク *@
 	<label>@SharedLocalizer["Manage_TwoFactorAuthentication_AuthenticatorApp"]</label>
 	@if (!Model.HasAuthenticator) {
-		<a asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_AddAuthenticator"]</a>
+		@* 認証アプリ未登録の場合：追加リンクを表示 *@
+		<a class="button-like" asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_AddAuthenticator"]</a>
 	} else {
-		<a asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_ConfigureAuthenticator"]</a>
-		<a asp-action="ResetAuthenticatorWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetAuthenticatorKey"]</a>
+		@* 認証アプリ登録済みの場合：再設定およびキーのリセットリンクを表示 *@
+		<a class="button-like" asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_ConfigureAuthenticator"]</a>
+		<a class="button-like" asp-action="ResetAuthenticatorWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetAuthenticatorKey"]</a>
 	}
 </div>
 
 @section Scripts {
+	@* クライアントサイドバリデーションスクリプトの読み込み *@
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

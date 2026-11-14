@@ -310,7 +310,7 @@
     <value>登録</value>
   </data>
   <data name="Account_ForgotPassword_Title" xml:space="preserve">
-    <value>パスワードをお忘れですか？</value>
+    <value>パスワードを忘れた場合</value>
   </data>
   <data name="Account_ForgotPassword_EnterEmail" xml:space="preserve">
     <value>メールアドレスを入力してください。</value>
@@ -337,10 +337,10 @@
     <value>ログイン</value>
   </data>
   <data name="Account_Login_ForgotPassword" xml:space="preserve">
-    <value>パスワードをお忘れですか？</value>
+    <value>パスワードを忘れた場合</value>
   </data>
   <data name="Account_Login_RegisterNewUser" xml:space="preserve">
-    <value>新規ユーザーとして登録しますか？</value>
+    <value>新規ユーザーとして登録</value>
   </data>
   <data name="Account_Login_UseAnotherService" xml:space="preserve">
     <value>他のサービスでログイン</value>
@@ -1649,10 +1649,10 @@
     <value>新着投稿</value>
   </data>
   <data name="Manage_Profile_AvatarLabel" xml:space="preserve">
-    <value>プロフィール画像</value>
+    <value>プロフィール画像（400 x 400 px 推奨）</value>
   </data>
   <data name="Manage_Profile_HeaderLabel" xml:space="preserve">
-    <value>ヘッダー画像</value>
+    <value>ヘッダー画像（1500 x 500 px 推奨）</value>
   </data>
   <data name="Manage_Profile_RemoveImage" xml:space="preserve">
     <value>画像を削除</value>

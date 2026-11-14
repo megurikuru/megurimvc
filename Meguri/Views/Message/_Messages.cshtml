@@ -51,7 +51,11 @@
 							<div class="message-header">
 								@if (!isMine) {
 									<div class="message-sender">
-										<img src="~/icons/user.svg" class="icon" alt="" />
+										@if (msg.Sender?.ActiveAvatarImageId != null) {
+											<img src="/Image/File/@msg.Sender.ActiveAvatarImageId" class="user-avatar-sm" alt="" />
+										} else {
+											<img src="~/icons/user.svg" class="icon" alt="" />
+										}
 										@if (msg.Sender == null) {
 											@SharedLocalizer["Common_UnknownUser"].Value
 										} else if (msg.Sender.IsWithdrawn) {

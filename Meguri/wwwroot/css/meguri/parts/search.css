@@ -38,7 +38,7 @@
 		box-sizing: border-box;
 
 		&:hover {
-			background-color: var(--color-primary-hover);
+			background-color: var(--color-nav-main-hover);
 			color: white;
 		}
 	}

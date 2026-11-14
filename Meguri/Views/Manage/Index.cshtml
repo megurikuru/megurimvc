@@ -41,26 +41,38 @@
 		<textarea asp-for="Bio" rows="4" placeholder="@SharedLocalizer["Manage_Profile_BioPlaceholder"]"></textarea>
 		<span asp-validation-for="Bio"></span>
 	</div>
-	<div>
-		<label>@SharedLocalizer["Manage_Profile_AvatarLabel"]</label>
-		@if (Model.AvatarImageId.HasValue) {
-			<img src="/Image/File/@Model.AvatarImageId" alt="" class="post-thumb-img" />
-			<label class="check-row"><input type="checkbox" asp-for="RemoveAvatar" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
-		}
-		<input type="file" asp-for="AvatarFile" accept="image/*" data-image-preview="#avatarPreviewContainer" data-max-images="1" />
-		<span asp-validation-for="AvatarFile"></span>
-		<div id="avatarPreviewContainer" class="image-preview-list"></div>
-	</div>
-	<div>
-		<label>@SharedLocalizer["Manage_Profile_HeaderLabel"]</label>
-		@if (Model.HeaderImageId.HasValue) {
-			<img src="/Image/File/@Model.HeaderImageId" alt="" class="manage-header-img" />
-			<label class="check-row"><input type="checkbox" asp-for="RemoveHeader" /> @SharedLocalizer["Manage_Profile_RemoveImage"]</label>
-		}
-		<input type="file" asp-for="HeaderFile" accept="image/*" data-image-preview="#headerPreviewContainer" data-max-images="1" />
-		<span asp-validation-for="HeaderFile"></span>
-		<div id="headerPreviewContainer" class="image-preview-list image-preview-wide"></div>
-	</div>
+	@{
+		var avatarUpload = new FileUploadViewModel {
+			InputId = "AvatarFile",
+			InputName = "AvatarFile",
+			LabelText = SharedLocalizer["Manage_Profile_AvatarLabel"].Value,
+			Accept = "image/*",
+			MaxImages = 1,
+			PreviewContainerId = "avatarPreviewContainer",
+			PreviewVariant = "avatar",
+			ExistingImageUrl = Model.AvatarImageId.HasValue ? $"/Image/File/{Model.AvatarImageId}" : null,
+			RemoveCheckboxId = "RemoveAvatar",
+			RemoveCheckboxName = "RemoveAvatar",
+			RemoveCheckboxChecked = Model.RemoveAvatar,
+			RemoveLabelText = SharedLocalizer["Manage_Profile_RemoveImage"].Value
+		};
+		var headerUpload = new FileUploadViewModel {
+			InputId = "HeaderFile",
+			InputName = "HeaderFile",
+			LabelText = SharedLocalizer["Manage_Profile_HeaderLabel"].Value,
+			Accept = "image/*",
+			MaxImages = 1,
+			PreviewContainerId = "headerPreviewContainer",
+			PreviewVariant = "wide",
+			ExistingImageUrl = Model.HeaderImageId.HasValue ? $"/Image/File/{Model.HeaderImageId}" : null,
+			RemoveCheckboxId = "RemoveHeader",
+			RemoveCheckboxName = "RemoveHeader",
+			RemoveCheckboxChecked = Model.RemoveHeader,
+			RemoveLabelText = SharedLocalizer["Manage_Profile_RemoveImage"].Value
+		};
+	}
+	<partial name="_FileUpload" model="avatarUpload" />
+	<partial name="_FileUpload" model="headerUpload" />
 	<div>
 		<label>@SharedLocalizer["Manage_Profile_ExternalUrlsLabel"]</label>
 		@for (var i = 0; i < 5; i++) {

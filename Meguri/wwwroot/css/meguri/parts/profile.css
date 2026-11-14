@@ -1,11 +1,22 @@
 /* プロフィール・ユーザー表示部品 */
 
+.user-avatar-sm {
+	width: 1.5rem;
+	height: 1.5rem;
+	object-fit: cover;
+	border-radius: 50%;
+	vertical-align: middle;
+	margin-right: 0.25rem;
+	flex-shrink: 0;
+}
+
 .user-name {
 	display: block;
 	min-width: 0;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	text-align: right;
 }
 
 /* プロフィール詳細 */
@@ -27,11 +38,12 @@
 	flex-shrink: 0;
 }
 
-.profile-header {
-	flex: 1;
-	min-width: 0;
-	height: 100px;
+.profile-avatar {
+	width: 100%;
+	height: auto;
+	aspect-ratio: 3 / 1;
 	object-fit: cover;
+	flex-shrink: 0;
 }
 
 .profile-bio {

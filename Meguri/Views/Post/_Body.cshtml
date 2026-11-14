@@ -44,9 +44,17 @@
 		} else {
 			<div>
 				@if (!Model.Post.User.IsProfilePublic && User.Identity?.IsAuthenticated != true) {
+					@if (Model.Post.User.ActiveAvatarImageId.HasValue) {
+						<img src="/Image/File/@Model.Post.User.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+					}
 					@Model.Post.User.UserName
 				} else {
-					<a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.Post.User.UserName">@Model.Post.User.UserName</a>
+					<a asp-controller="Profile" asp-action="Details" asp-route-id="@Model.Post.User.UserName">
+						@if (Model.Post.User.ActiveAvatarImageId.HasValue) {
+							<img src="/Image/File/@Model.Post.User.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+						}
+						@Model.Post.User.UserName
+					</a>
 				}
 			</div>
 		}

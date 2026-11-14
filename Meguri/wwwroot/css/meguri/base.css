@@ -12,29 +12,33 @@ textarea {
 
 /* 変数 */
 :root {
-	/* --- カラー関連 --- */
+	/* --- カラー --- */
+	--color-bg-base: #F9F7F9;					/* ほんのり紫色を感じる明るい白 */
+	--color-bg-control: #FFFFFF;			/* 純白 */
+	--color-border: #BBB9CA;					/* 紫みがかったライトグレー */
+
+	/* ナビゲーション */
+	--color-nav-main: #E9E4F0;				/* 淡いラベンダーグレー（薄紫色） */
+	--color-nav-main-hover: #D8CFE8;	/* やや深みのある淡いラベンダー（薄紫色） */
 
 
-	--color-nav-main: #E9E4F0; /* 紫 */
-	--color-nav-main-hover: #D8CFE8; /* 紫 */
-	--color-border: #BBB9CA;	/* 枠線 */
+	/* ボタン */
+	--color-button-main: #FFFFFF;				/* 純白 */
+	--color-button-main-hover: #EBEBEB;	/* 薄いグレー */
 
-	--color-bg-base: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
-	--color-bg-control: #FFFFFF; /* 入力コントロール背景 */
+	--color-bg-title: #DBDBDB;				/* 明るいライトグレー */
 
-	--color-bg-title: #DBDBDB; /* タイトルの背景 */
+	--color-text: #1f2937;						/* わずかに青みがかったダークグレー */
 
-	--color-text: #1f2937; /* わずかに青みがかったダークグレー */
-	--color-text-reverse: #F9F7F9; /* ほんのり紫色を感じる明るい白 */
+	--color-text-muted: #6b7280;			/* 落ち着いたミディアムグレー */
+	--color-text-current: #333333;		/* チャコールグレー（濃いダークグレー） */
+	--color-separator: #888888;				/* ミディアムグレー */
 
-	--color-text-muted: #6b7280; /* 落ち着いたミディアムグレー */
-	--color-text-current: #333333; /* ダークグレー */
-	--color-separator: #888888; /* グレー */
+	--color-link: #0066cc;						/* 鮮やかな標準ブルー */
+	--color-link-hover: #004499;			/* 落ち着いたディープブルー（濃い青） */
 
-	--color-link: #0066cc; /* 青 */
-	--color-link-hover: #004499; /* 濃い青 */
+	--color-border-light: #ccc;				/* 明るいシルバーグレー */
 
-	--color-border-light: #ccc; /* 明るいグレー */
 	/* --- 角丸・シャドウ --- */
 	--radius-sm: 4px;
 	--radius-md: 8px;
@@ -99,15 +103,6 @@ textarea {
 	line-height: 1.5;
 	background-color: white;
 	border-radius: var(--radius-sm);
-}
-
-input[type="file"] {
-	display: block;
-	box-sizing: border-box;
-	width: 100%;
-	min-height: var(--control-height);
-	padding: 0.5rem;
-	font-size: 0.9rem;
 }
 
 input[type="checkbox"],

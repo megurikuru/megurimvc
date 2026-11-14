@@ -10,12 +10,11 @@ body[data-controller="Home" i] {
 		border-top: none;
 	}
 	
-	/* トップページ ユーザー検索結果のアバター */
-	#user-list img {
-		width: 40px;
-		height: 40px;
-		object-fit: cover;
-		border-radius: 50%;
+	/* トップページ ユーザー検索結果 */
+	#user-list ul {
+		display: block grid;
+		gap: 0.5rem;
+		padding: 0.5rem;
 	}
 }
 

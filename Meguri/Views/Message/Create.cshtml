@@ -66,12 +66,22 @@
 		</div>
 
 		<div class="attribute-wrap">
-			<label asp-for="ImageFiles">@SharedLocalizer["Message_ImageAttachLabel"] <span id="imageCountDisplay">0/16</span></label>
-			<input asp-for="ImageFiles" type="file" multiple accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-image-preview="#imagePreviewContainer" data-image-count="#imageCountDisplay" data-max-images="16" />
-			<span asp-validation-for="ImageFiles"></span>
-			<div id="imagePreviewContainer" class="image-preview-list"></div>
-			<div class="description">@SharedLocalizer["Post_ImageUploadHint1"]</div>
-			<div class="description">@SharedLocalizer["Post_ImageUploadHint2"]</div>
+			@{
+				var messageImageUpload = new FileUploadViewModel {
+					InputId = "ImageFiles",
+					InputName = "ImageFiles",
+					LabelText = SharedLocalizer["Message_ImageAttachLabel"].Value,
+					MaxImages = 16,
+					ShowCount = true,
+					PreviewContainerId = "imagePreviewContainer",
+					CountDisplayId = "imageCountDisplay",
+					Hints = [
+						SharedLocalizer["Post_ImageUploadHint1"].Value,
+						SharedLocalizer["Post_ImageUploadHint2"].Value
+					]
+				};
+			}
+			<partial name="_FileUpload" model="messageImageUpload" />
 		</div>
 
 		<div class="button-wrap">

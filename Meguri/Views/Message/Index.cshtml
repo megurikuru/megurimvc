@@ -57,7 +57,12 @@
 			<article>
 				<div class="article-header">
 					<h2>
-						<img src="~/icons/@(c.IsGroup ? "users.svg" : "user.svg")" class="icon" />@c.Title
+						@if (!c.IsGroup && c.AvatarImageId.HasValue) {
+							<img src="/Image/File/@c.AvatarImageId" class="user-avatar-sm" alt="" />
+						} else {
+							<img src="~/icons/@(c.IsGroup ? "users.svg" : "user.svg")" class="icon" />
+						}
+						@c.Title
 						@if (c.IsGroup) {
 							<span>@SharedLocalizer["Message_GroupBadge"]</span>
 						}

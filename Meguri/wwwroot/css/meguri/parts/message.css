@@ -69,7 +69,8 @@
 			gap: 0.25rem;
 			font-weight: 600;
 
-			& .icon {
+			& .icon,
+			& .user-avatar-sm {
 				margin-right: 0;
 			}
 		}
@@ -116,12 +117,6 @@
 	& > summary {
 		cursor: pointer;
 		box-sizing: border-box;
-	}
-
-	& > input[type="file"] {
-		padding: 0.5rem;
-		border: 1px dashed var(--color-border);
-		border-radius: var(--radius-sm);
 	}
 
 	& .input-group {
