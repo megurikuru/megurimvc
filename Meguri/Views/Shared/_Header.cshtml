@@ -6,19 +6,18 @@
 	}
 }
 <header>
-	<span class="user-icon"></span>
+	<span></span>
 	<span class="top-link">
 		<a asp-area="" asp-controller="Home" asp-action="Index">meguri</a>
-	</span>	
+	</span>
 	<span class="user-name">
-			@if (User.Identity?.IsAuthenticated == true)
-			{
-				<a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.Identity.Name" title="@SharedLocalizer["Header_MyPageTitle"]">
-					@if (currentUser?.ActiveAvatarImageId != null) {
-						<img src="/Image/File/@currentUser.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
-					}
-					@User.Identity.Name
-				</a>
-			}
-		</span>
+		@if (User.Identity?.IsAuthenticated == true) {
+			<a asp-area="" asp-controller="Profile" asp-action="Details" asp-route-id="@User.Identity.Name" title="@SharedLocalizer["Header_MyPageTitle"]">
+				@if (currentUser?.ActiveAvatarImageId != null) {
+					<img src="/Image/File/@currentUser.ActiveAvatarImageId" alt="" class="user-avatar-sm" />
+				}
+				@User.Identity.Name
+			</a>
+		}
+	</span>
 </header>

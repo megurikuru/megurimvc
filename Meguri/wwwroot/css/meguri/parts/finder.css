@@ -42,5 +42,9 @@
 		max-width: none;
 		height: 10rem;
 		object-fit: cover;
+
+		&:only-child {
+			margin-inline: auto;
+		}
 	}
 }

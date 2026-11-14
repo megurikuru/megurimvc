@@ -102,6 +102,10 @@
 		& > a {
 			flex: 0 0 auto;
 			display: block;
+
+			&:only-child {
+				margin-inline: auto;
+			}
 		}
 	}
 
