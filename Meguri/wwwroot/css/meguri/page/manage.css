@@ -1,18 +1,18 @@
 /* Manageページ固有スタイル */
 body[data-controller="Manage" i] {
 
-	h2 {
-		border-bottom: 1px solid var(--color-border);
-	}
-
 	#qrCode {
 		display: block;
 		width: fit-content;
-		margin: 1rem auto;
+		margin: 0.5rem auto 0 auto;
 		position: relative;
 		left: -1rem;
 		padding: 1.5rem;
 		border: 1px solid var(--color-border);
+	}
+
+	#nav-main {
+		margin-top: 0.5rem;
 	}
 }
 

@@ -2,35 +2,49 @@
 @media (min-width: 768px) {
 	/* 全体レイアウト */
 	body {
-		grid-template-columns: minmax(0, 1fr) 260px;
+		grid-template-columns: minmax(0, 1fr) calc(260px + 0.5rem);
 		align-items: start;
 		max-width: 920px;
 		margin: 0 auto;
-		gap: 0.5rem;
 	}
 
 	header {
 		grid-column: 1 / -1;
-		padding-bottom: 0;	
 	}
 
 	footer {
 		grid-column: 1 / -1;
+		margin-top: 0.5rem;
 		border-top: none;
-		padding-top: 0;
+		padding: 0.5rem;
 	}
 
 	main {
 		grid-column: 1;
 		grid-row: 2;
+		margin-top: 0.5rem;
 		width: 100%;
 		min-width: 0;
+
+		& > .in-develop + * {
+			margin-top: 0.5rem;
+		}
 	}
 
-	/* 基本要素 */	
+	/* 基本要素 */
 	article {
 		border-right: 1px solid var(--color-border);
 		border-left: 1px solid var(--color-border);
+	}
+
+	body[data-controller="Account" i],
+	body[data-controller="Manage" i],
+	body[data-controller="Message" i],
+	body[data-controller="Post" i] {
+		article {
+			padding-bottom: 0.5rem;
+			border-bottom: 1px solid var(--color-border);
+		}
 	}
 
 	h1,
@@ -39,8 +53,12 @@
 		border-left: 1px solid var(--color-border);
 	}
 
+	body[data-controller="Account" i],
+	body[data-controller="Manage" i],
+	body[data-controller="Message" i],
 	body[data-controller="Home" i],
-	body[data-controller="Message" i] {
+	body[data-controller="Post" i],
+	body[data-controller="Profile" i] {
 		article {
 			h1,
 			h2 {
@@ -51,14 +69,13 @@
 	}
 
 	/* パーツ */
-
 	.in-develop {
 		padding-top: 0;
 	}
 
 	.breadcrumb {
 		border-right: 1px solid var(--color-border);
-		border-left: 1px solid var(--color-border);		
+		border-left: 1px solid var(--color-border);
 	}
 
 	.fandom-meta {
@@ -71,6 +88,15 @@
 		border-left: 1px solid var(--color-border);
 	}
 
+	body[data-controller="Post" i] {
+		main .nav-grid {
+			border-right: none;
+			border-left: none;
+		}
+	}
+
+
+
 	.pagination {
 		padding: 0.5rem 0 0 0;
 	}
@@ -78,18 +104,39 @@
 	#search-box {
 		padding: 0;
 		border: none;
-		margin-bottom: 0.5rem;
 
-		form {
-			padding: 0;
+		.search {
+			padding-right: 0;
+			margin-left: -0.5rem;
+		}
+	}
+
+	body[data-controller="Tag" i] {
+		#search-box {
+			margin-top: 0.5rem;
+		}
+	}
+
+	.tag-wrap {
+		border-right: 1px solid var(--color-border);
+		border-left: 1px solid var(--color-border);
+	}
+
+	body[data-controller="Post" i] {
+		.tag-wrap {
+			border-right: none;
+			border-left: none;
 		}
 	}
 
 	.account {
 		width: 100%;
-		max-width: 560px;
-		margin: 0 auto;
-		padding: 1rem;
+		margin: 0;
+		padding: 0.5rem max(0.5rem, calc((100% - 560px) / 2)) 0;
+
+		& + .account {
+			padding-top: 0;
+		}
 
 		& button:not([hidden]):not(.btn-sm):not(.image-preview-remove) {
 			width: auto;
@@ -107,7 +154,6 @@
 		border-left: 1px solid var(--color-border);
 	}
 
-	.attribute-wrap > button:not(.btn-sm),
 	.btn-block {
 		width: auto;
 		min-width: 12rem;
@@ -123,12 +169,6 @@
 			min-width: 9rem;
 		}
 	}
-
-	/* タグ一覧ページ */
-	.tag-page {
-		max-width: 100%;
-	}
-
 	/* FinderサムネイルやプロフィールバナーをPC画面向けに調整 */
 	.finder {
 		border-bottom: 1px solid var(--color-border);
@@ -138,70 +178,65 @@
 		height: 10rem;
 	}
 
-	/*	.profile-avatar {
-		width: 120px;
-		height: 120px;
-	}
-
-	.profile-header {
-		height: 120px;
-	}*/
-
 	.image-order-item .image-order-name {
 		max-width: 360px;
 	}
-
 	/* ホーム画面 */
 	body:has(> .nav-sub) {
-		& #nav-main {
+		& > #nav-main {
 			grid-column: 1 / -1;
 			grid-row: 2;
+			margin-top: 0.5rem;
 
 			& ul {
 				grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 			}
 		}
 
-		& main {
+		& > main {
 			grid-column: 1;
 			grid-row: 3;
+			margin-top: 0.5rem;
 		}
 
-		& .nav-sub {
+		& > .nav-sub {
 			grid-column: 2;
 			grid-row: 3;
+			margin-top: 0.5rem;
+			margin-left: 0.5rem;
 			position: sticky;
 			top: 1rem;
 		}
-		/* 右端（6の倍数）に右枠線を表示 */
+		/* 右端に右枠線を表示 */
 		#nav-main li {
 			border-left: 1px solid var(--color-border);
 			border-right: none;
 			border-bottom: 1px solid var(--color-border);
 
-			&:nth-child(6n) {
+			&:last-child {
 				border-right: 1px solid var(--color-border);
 			}
 		}
 	}
-
 	/* ホーム画面以外 */
 	body:not(:has(> .nav-sub)) {
-		& #nav-main {
+		& > #nav-main {
 			grid-column: 2;
 			grid-row: 2;
+			margin-top: 0.5rem;
+			margin-left: 0.5rem;
 			position: sticky;
 			top: 1rem;
 
 			& ul {
 				grid-template-columns: 1fr;
-				/* 右端（6の倍数）に右枠線を表示 */
+
 				li {
 					border-left: 1px solid var(--color-border);
 					border-right: 1px solid var(--color-border);
+					border-bottom: none;
 
-					&:nth-child(6n) {
-						border-right: 1px solid var(--color-border);
+					&:last-child {
 						border-bottom: 1px solid var(--color-border);
 					}
 				}

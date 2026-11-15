@@ -5,44 +5,46 @@
 	ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
-<h2>@ViewData["Title"]</h2>
-<div class="account">
-	@* 2要素認証（2FA）が有効な場合の状態表示と操作リンク *@
-	@if (Model.Is2faEnabled) {
-		// リカバリーコードの残数に応じた警告メッセージを表示
-		if (Model.RecoveryCodesLeft == 0) {
-			<div>
-				<strong>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes"]</strong>
-				<p>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes_Message"]</p>
-			</div>
-		} else if (Model.RecoveryCodesLeft == 1) {
-			<div>
-				<strong>@SharedLocalizer["Manage_TwoFactorAuthentication_OneCodeLeft"]</strong>
-				<p>@SharedLocalizer["Manage_TwoFactorAuthentication_OneCodeLeft_Message"]</p>
-			</div>
-		} else if (Model.RecoveryCodesLeft <= 3) {
-			<div>
-				<strong>@string.Format(SharedLocalizer["Manage_TwoFactorAuthentication_CodesLeft"].Value, Model.RecoveryCodesLeft)</strong>
-				<p>@SharedLocalizer["Manage_TwoFactorAuthentication_CodesLeft_Message"]</p>
-			</div>
+<article>
+	<h2>@ViewData["Title"]</h2>
+	<div class="account">
+		@* 2要素認証（2FA）が有効な場合の状態表示と操作リンク *@
+		@if (Model.Is2faEnabled) {
+			// リカバリーコードの残数に応じた警告メッセージを表示
+			if (Model.RecoveryCodesLeft == 0) {
+				<div>
+					<strong>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes"]</strong>
+					<p>@SharedLocalizer["Manage_TwoFactorAuthentication_NoCodes_Message"]</p>
+				</div>
+			} else if (Model.RecoveryCodesLeft == 1) {
+				<div>
+					<strong>@SharedLocalizer["Manage_TwoFactorAuthentication_OneCodeLeft"]</strong>
+					<p>@SharedLocalizer["Manage_TwoFactorAuthentication_OneCodeLeft_Message"]</p>
+				</div>
+			} else if (Model.RecoveryCodesLeft <= 3) {
+				<div>
+					<strong>@string.Format(SharedLocalizer["Manage_TwoFactorAuthentication_CodesLeft"].Value, Model.RecoveryCodesLeft)</strong>
+					<p>@SharedLocalizer["Manage_TwoFactorAuthentication_CodesLeft_Message"]</p>
+				</div>
+			}
+
+			@* 2FAの無効化およびリカバリーコード再生成ページへのリンク *@
+			<a class="button-like" asp-action="Disable2faWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_Disable2FA"]</a>
+			<a class="button-like" asp-action="GenerateRecoveryCodesWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetRecoveryCodes"]</a>
 		}
 
-		@* 2FAの無効化およびリカバリーコード再生成ページへのリンク *@
-		<a class="button-like" asp-action="Disable2faWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_Disable2FA"]</a>
-		<a class="button-like" asp-action="GenerateRecoveryCodesWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetRecoveryCodes"]</a>
-	}
-
-	@* 認証アプリ（Authenticator）の設定・リセット操作リンク *@
-	<label>@SharedLocalizer["Manage_TwoFactorAuthentication_AuthenticatorApp"]</label>
-	@if (!Model.HasAuthenticator) {
-		@* 認証アプリ未登録の場合：追加リンクを表示 *@
-		<a class="button-like" asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_AddAuthenticator"]</a>
-	} else {
-		@* 認証アプリ登録済みの場合：再設定およびキーのリセットリンクを表示 *@
-		<a class="button-like" asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_ConfigureAuthenticator"]</a>
-		<a class="button-like" asp-action="ResetAuthenticatorWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetAuthenticatorKey"]</a>
-	}
-</div>
+		@* 認証アプリ（Authenticator）の設定・リセット操作リンク *@
+		<label>@SharedLocalizer["Manage_TwoFactorAuthentication_AuthenticatorApp"]</label>
+		@if (!Model.HasAuthenticator) {
+			@* 認証アプリ未登録の場合：追加リンクを表示 *@
+			<a class="button-like" asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_AddAuthenticator"]</a>
+		} else {
+			@* 認証アプリ登録済みの場合：再設定およびキーのリセットリンクを表示 *@
+			<a class="button-like" asp-action="EnableAuthenticator">@SharedLocalizer["Manage_TwoFactorAuthentication_ConfigureAuthenticator"]</a>
+			<a class="button-like" asp-action="ResetAuthenticatorWarning">@SharedLocalizer["Manage_TwoFactorAuthentication_ResetAuthenticatorKey"]</a>
+		}
+	</div>
+</article>
 
 @section Scripts {
 	@* クライアントサイドバリデーションスクリプトの読み込み *@

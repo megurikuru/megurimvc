@@ -2,34 +2,42 @@
 
 /* メッセージ一覧 */
 #messageContainer {
-	display: block grid;
-	gap: 0.5rem;
-	padding: 0.5rem 0;
+	display: block;
+	padding: 0.5rem 0 0 0;
+
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.5rem;
+	}
 
 	& .message-thread {
-		display: block grid;
-		gap: 0.5rem;
-		padding-bottom: 0.5rem;
-		border-bottom: 1px solid var(--color-border-light);
+		display: block;
 
-		&:last-child {
-			padding-bottom: 0;
-			border-bottom: none;
+		& > :not([hidden]) ~ :not([hidden]) {
+			margin-top: 0.5rem;
+		}
+
+		& + .message-thread {
+			margin-top: 0.5rem;
+			padding-top: 0.5rem;
+			border-top: 1px solid var(--color-border-light);
 		}
 	}
 
 	& .message-item {
-		display: block grid;
-		gap: 0.35rem;
+		display: block;
 		text-align: left;
 		margin: 0 0.5rem;
 		min-width: 0;
 		overflow-wrap: anywhere;
 		scroll-margin-top: 1rem;
 
+		& > :not([hidden]) ~ :not([hidden]) {
+			margin-top: 0.5rem;
+		}
+
 		&.message-reply {
 			padding-left: 0.5rem;
-			border-left: 3px solid var(--color-border);
+			border-left: 1px solid var(--color-border);
 		}
 
 		&.message-indent-1 {
@@ -46,14 +54,17 @@
 	}
 
 	& .message-box {
-		display: block grid;
-		gap: 0.35rem;
+		display: block;
 		min-width: 0;
 		text-align: left;
 		padding: 0.5rem 0.65rem;
 		border: 1px solid var(--color-border-light);
 		border-radius: var(--radius-md);
 		background-color: var(--color-bg-message-is-other);
+
+		& > :not([hidden]) ~ :not([hidden]) {
+			margin-top: 0.5rem;
+		}
 	}
 
 	& .message-header {
@@ -61,14 +72,21 @@
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
-		gap: 0.25rem 0.5rem;
+		margin: -0.5rem 0 0 -0.5rem;
 		font-size: 0.85rem;
+
+		& > * {
+			margin: 0.5rem 0 0 0.5rem;
+		}
 
 		& .message-sender {
 			display: inline-flex;
 			align-items: center;
-			gap: 0.25rem;
 			font-weight: 600;
+
+			& > * + * {
+				margin-left: 0.5rem;
+			}
 
 			& .icon,
 			& .user-avatar-sm {
@@ -78,6 +96,7 @@
 
 		& .message-time {
 			margin-left: auto;
+			padding-left: 0.5rem;
 			font-size: 0.75rem;
 			color: var(--color-text-muted);
 		}
@@ -97,11 +116,14 @@
 		flex-wrap: nowrap;
 		overflow-x: auto;
 		min-width: 0;
-		gap: 0.5rem;
 
 		& > a {
 			flex: 0 0 auto;
 			display: block;
+
+			& + a {
+				margin-left: 0.5rem;
+			}
 
 			&:only-child {
 				margin-inline: auto;
@@ -119,26 +141,21 @@
 }
 
 .message-disclosure {
-	padding: 0.5rem;
+	padding: 0.5rem 0.5rem 0 0.5rem;
 	min-width: 0;
 	overflow-wrap: anywhere;
 
 	&[open] {
-		display: block grid;
-		gap: 0.5rem;
+		display: block;
+
+		& > :not([hidden]) ~ :not([hidden]) {
+			margin-top: 0.5rem;
+		}
 	}
 
 	& > summary {
 		cursor: pointer;
 		box-sizing: border-box;
-	}
-
-	& .input-group {
-		flex-wrap: wrap;
-
-		& > input[type="date"] {
-			flex-basis: 100%;
-		}
 	}
 }
 
@@ -151,10 +168,11 @@ h1 + .message-disclosure:first-of-type {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 0.5rem;
+	margin: -0.5rem 0 0 -0.5rem;
 
 	& > li {
 		display: flex;
+		margin: 0.5rem 0 0 0.5rem;
 	}
 
 	& a,
@@ -190,7 +208,11 @@ h1 + .message-disclosure:first-of-type {
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: flex-end;
-	gap: 0.25rem 0.5rem;
+	margin: -0.5rem 0 0 -0.5rem;
+
+	& > :not([hidden]) {
+		margin: 0.5rem 0 0 0.5rem;
+	}
 }
 
 .chat-more-actions {
@@ -214,9 +236,12 @@ h1 + .message-disclosure:first-of-type {
 	}
 
 	&[open] {
-		display: block grid;
-		gap: 0.5rem;
+		display: block;
 		flex-basis: 100%;
+
+		& > :not([hidden]) ~ :not([hidden]) {
+			margin-top: 0.5rem;
+		}
 	}
 
 	&[open] > summary {
@@ -226,24 +251,30 @@ h1 + .message-disclosure:first-of-type {
 }
 
 .chat-actions-panel {
-	display: block grid;
-	gap: 0.35rem;
+	display: block;
 	padding-top: 0.5rem;
 	border-top: 1px solid var(--color-border-light);
+
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.5rem;
+	}
 }
 
 .message-reply-preview {
 	display: flex;
 	align-items: center;
-	gap: 0.4rem;
 	min-width: 0;
 	padding: 0.25rem 0.5rem;
-	border-left: 2px solid var(--color-border);
+	border-left: 1px solid var(--color-border);
 	border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 	background-color: var(--color-bg-base);
 	color: var(--color-text-muted);
 	font-size: 0.8rem;
 	text-decoration: none;
+
+	& > * + * {
+		margin-left: 0.5rem;
+	}
 
 	& .message-reply-target {
 		flex-shrink: 0;
@@ -261,11 +292,15 @@ h1 + .message-disclosure:first-of-type {
 }
 
 .message-composer {
+	margin-top: 0.5rem;
 	border-top: 1px solid var(--color-border);
 
 	& > form {
-		display: block grid;
-		gap: 0.5rem;
+		display: block;
+
+		& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"]) {
+			margin-top: 0.5rem;
+		}
 	}
 
 	& .attribute-wrap {
@@ -290,11 +325,14 @@ h1 + .message-disclosure:first-of-type {
 .message-reply-notice {
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
 	margin: 0 0.5rem;
 	padding: 0.5rem;
-	border-left: 2px solid var(--color-border);
+	border-left: 1px solid var(--color-border);
 	font-size: 0.875rem;
+
+	& > * + * {
+		margin-left: 0.5rem;
+	}
 
 	& > div {
 		flex: 1;
@@ -330,44 +368,52 @@ h1 + .message-disclosure:first-of-type {
 			margin-left: 4.5rem;
 		}
 	}
-
-	.message-disclosure .input-group > input[type="date"] {
-		flex-basis: auto;
-	}
 }
 
 /* メッセージ新規作成の宛先検索・選択リスト */
 .recipient-search-results {
-	display: block grid;
-	gap: 0.5rem;
+	display: block;
 	max-height: 220px;
 	overflow-y: auto;
 	padding: 0.5rem;
 	border: 1px solid var(--color-border);
 	border-radius: var(--radius-sm);
 	background-color: var(--color-bg-control);
+
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.5rem;
+	}
 }
 
 .selected-recipients-section {
-	display: block grid;
-	gap: 0.5rem;
+	display: block;
+
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.5rem;
+	}
 }
 
 .selected-recipients-list {
-	display: block grid;
-	gap: 0.5rem;
+	display: block;
+
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.5rem;
+	}
 }
 
 .recipient-user-item {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	gap: 0.5rem;
 	padding: 0.5rem;
 	border: 1px solid var(--color-border);
 	border-radius: var(--radius-sm);
 	background-color: var(--color-bg-control);
 	box-sizing: border-box;
+
+	& > * + * {
+		margin-left: 0.5rem;
+	}
 }
 
 .recipient-empty-message {

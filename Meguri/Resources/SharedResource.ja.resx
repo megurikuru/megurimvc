@@ -528,6 +528,9 @@
   <data name="Manage_SetPassword_Button" xml:space="preserve">
     <value>パスワードを設定</value>
   </data>
+  <data name="Manage_SetPassword_PasskeyDisabled" xml:space="preserve">
+    <value>パスキーを使用している場合、パスワードは設定できません。</value>
+  </data>
   <data name="Manage_Disable2fa_Title" xml:space="preserve">
     <value>二段階認証 (2FA) を無効にする</value>
   </data>
@@ -685,7 +688,7 @@
     <value>戻る</value>
   </data>
   <data name="Common_Submit" xml:space="preserve">
-    <value>送信</value>
+    <value>投稿</value>
   </data>
   <data name="Common_Search" xml:space="preserve">
     <value>検索</value>

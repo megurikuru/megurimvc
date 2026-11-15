@@ -1,17 +1,23 @@
 ﻿/* 界隈のメタ情報 */
 .fandom-meta {
 	display: block flex; /* 自身：ブロック要素 / 子：Flexbox（横並び・上下中央揃え）で配置 */
-	padding: 0.25rem 0.5rem 0.5rem 0.5rem;
+	padding: 0.5rem;
 	justify-content: flex-end;
 	align-items: center; /* 上下中央揃え */
 	font-size: 0.9rem;
-	gap: 0.5rem;
 	background-color: var(--color-bg-title);
+
+	.breadcrumb + & {
+		padding-top: 0;
+	}
 
 	& > div {
 		display: block flex;
 		align-items: center;
-		gap: 0.25rem;
+
+		& + div {
+			margin-left: 0.5rem;
+		}
 	}
 	/* アイコン */
 	& img.icon {

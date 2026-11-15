@@ -4,9 +4,9 @@
 	ViewData.AddActivePage(ManageNavPages.Index);
 }
 
+<article>
 <h2>@ViewData["Title"]</h2>
 @await Html.PartialAsync("_StatusMessage", Model.StatusMessage)
-
 <form method="post" enctype="multipart/form-data" class="account">
 	<div asp-validation-summary="All"></div>
 	<div>
@@ -85,6 +85,7 @@
 	</div>
 	<button type="submit">@SharedLocalizer["Manage_Profile_Save"]</button>
 </form>
+</article>
 
 @section Scripts {
 	@await Html.PartialAsync("_ValidationScriptsPartial")

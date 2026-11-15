@@ -40,7 +40,7 @@
 		: post.Subject;
 }
 
-<article class="post-item">
+<article>
 	@* 投稿タイトル（詳細画面への個別リンク） *@
 	<h1>
 		<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@displayTitle</a>

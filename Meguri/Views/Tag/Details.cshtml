@@ -105,7 +105,9 @@
 	<h1>@string.Format(SharedLocalizer["Tag_RelatedPostsTitleFormat"].Value, Model.PostTagsTotalCount)</h1>
 	@if (!Model.PostTags.Any()) {
 		@* 関連投稿が存在しない場合のメッセージ *@
-		<p>@SharedLocalizer["Post_NoPostsFound"]</p>
+		<article>
+			<p>@SharedLocalizer["Post_NoPostsFound"]</p>
+		</article>
 	} else {
 		@* 関連投稿リストの描画（タイトル・投稿者・日付のみ表示し、本文・画像は非表示） *@
 		@foreach (var pt in Model.PostTags) {

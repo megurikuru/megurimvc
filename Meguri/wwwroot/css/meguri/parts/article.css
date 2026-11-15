@@ -1,28 +1,30 @@
 ﻿/* 投稿 */
 article {
-	/*	margin: 0 0.5rem 0 0.5rem;
-	border: 1px solid var(--color-border);
-	border-radius: var(--radius-md);
-	overflow: hidden;*/
+	margin-top: 0.5rem;
+	&:first-of-type {
+		margin-top: 0;
+	}
 	min-width: 0;
 
 	.article-header {
-		display: block grid;
-		gap: 0.25rem;
+		display: block;
+
+		& > :not([hidden]) ~ :not([hidden]) {
+			margin-top: 0.5rem;
+		}
 	}
 	/* 投稿のメタ情報 */
 	.article-meta {
 		display: block flex; /* 自身：ブロック要素 / 子：Flexbox（横並び・上下中央揃え）で配置 */
+		flex-wrap: wrap;
 		padding: 0.5rem;
 		justify-content: flex-end;
 		align-items: center; /* 上下中央揃え */
 		font-size: 0.9rem;
-		gap: 0.75rem;
 
-		& > div {
-			display: block flex;
-			align-items: center;
-			gap: 0.25rem;
+		& > a,
+		& > span {
+			margin-right: 0.5rem;
 		}
 		/* アイコン */
 		& img.icon {
@@ -30,21 +32,26 @@ article {
 			width: 1rem;
 		}
 	}
+
+	.post-tags {
+		display: block flex;
+		flex-wrap: wrap;
+		padding: 0 0.5rem 0 0;
+
+		& > a {
+			margin: 0.5rem 0 0 0.5rem;
+		}
+	}
 	/* 投稿の本文 */
 	p {
 		padding: 0.5rem 0.5rem 0 0.5rem;
-		border-top: 1px solid var(--color-border);
 	}
 
 	small {
 		display: block;
-		padding: 0.5rem;
+		padding: 0.5rem 0.5rem 0 0.5rem;
 		font-size: 0.9rem;
 		text-align: right;
-	}
-
-	.post-image {
-		padding: 0.5rem 0.5rem 0 0.5rem;
 	}
 
 	.post-images {
@@ -53,11 +60,19 @@ article {
 		overflow-x: auto;
 		min-width: 0;
 		padding: 0.5rem 0.5rem 0 0.5rem;
-		gap: 0.5rem;
+		border-top: 1px solid var(--color-border);
+
+		:not(h1):not(h2) + & {
+			margin-top: 0.5rem;
+		}
 
 		& > a {
 			flex: 0 0 auto;
 			display: block;
+
+			& + a {
+				margin-left: 0.5rem;
+			}
 
 			&:only-child {
 				margin-inline: auto;
@@ -69,7 +84,7 @@ article {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（3均等列）で配置 */
 		grid-template-columns: repeat(3, 1fr);
 		margin-top: 0.5rem;
-		padding: 0.5rem;
+		padding: 0.5rem 0.5rem 0 0.5rem;
 		border-top: 1px solid var(--color-border);
 		text-align: center;
 	}
@@ -87,15 +102,19 @@ article {
 	}
 	/* リアクションボタンラッパー */
 	.reaction-buttons {
-		padding: 0.5rem;
+		margin-top: 0.5rem;
+		padding: 0.5rem 0.5rem 0 0.5rem;
 		border-top: 1px solid var(--color-border);
 	}
 	/* リアクションボタン一覧 */
 	.reaction-list {
 		display: block flex;
 		flex-wrap: wrap;
-		gap: 0.5rem;
-		padding-top: 0.5rem;
+		margin: -0.5rem 0 0 -0.5rem;
+
+		& > * {
+			margin: 0.5rem 0 0 0.5rem;
+		}
 
 		& button {
 			min-height: var(--control-height-sm);
@@ -107,16 +126,5 @@ article {
 				border-color: var(--color-border);
 			}
 		}
-	}
-	/* コメント添付画像・返信スレッド */
-	.comment-attachment-img {
-		max-height: 120px;
-		object-fit: cover;
-	}
-
-	.comment-replies {
-		margin-left: 1.5rem;
-		padding-left: 0.75rem;
-		border-left: 2px solid var(--color-border-light);
 	}
 }

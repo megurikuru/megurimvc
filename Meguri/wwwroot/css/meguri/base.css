@@ -54,14 +54,6 @@ textarea {
 }
 
 /* 基本要素 */
-a {
-	color: var(--color-primary);
-}
-
-.felt-bg {
-}
-
-
 h1, h2, h3, h4, h5, h6 {
 	font-size: 1.1rem;
 	padding: 0.5rem;
@@ -71,6 +63,10 @@ h1, h2 {
 	text-align: center;
 	border-top: 1px solid var(--color-border);
 	background-color: var(--color-bg-title);
+}
+
+:not(.breadcrumb):not(.nav-grid):not([hidden]) + :is(h1, h2) {
+	margin-top: 0.5rem;
 }
 
 img {
@@ -88,9 +84,6 @@ img {
 label {
 	display: inline-block;
 	line-height: 1.4;
-}
-
-input {
 }
 
 input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
@@ -122,13 +115,19 @@ textarea {
 }
 
 ol {
-	display: block grid;
+	display: block;
 	margin-left: 2rem;
 	list-style: decimal;
-	gap: 0.5rem;
+
+	& > li + li {
+		margin-top: 0.5rem;
+	}
 
 	& > li > div {
-		display: block grid;
-		gap: 0.5rem;
+		display: block;
+
+		& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"]) {
+			margin-top: 0.5rem;
+		}
 	}
 }
