@@ -3,13 +3,17 @@
 	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び）で配置 */
 	flex-direction: row;
 	flex-wrap: wrap;
-	padding: 0 0.5rem;
+	margin-top: -0.5rem;
+	padding: 0 0.5rem 0 0;
 	align-items: stretch;
-	gap: 0.5rem;
 
-	& input[type="text"],
-	& input[type="date"],
-	& select {
+	& > input[type="text"],
+	& > button,
+	& > a {
+		margin: 0.5rem 0 0 0.5rem;
+	}
+
+	& input[type="text"] {
 		flex: 1 1 8rem; /* 残りの横幅いっぱいに広がる */
 		min-width: 0;
 		min-height: var(--control-height);

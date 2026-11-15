@@ -1,27 +1,44 @@
 ﻿/* アカウント */
 .account {
-	display: block grid;
-	gap: 0.5rem;
-	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	display: block;
+	padding: 0.5rem 0.5rem 0 0.5rem;
+
+	&:first-of-type {
+		border-top: 1px solid var(--color-border);
+	}
+
+	& > :not([hidden]):not([type="hidden"]):not(.validation-summary-valid):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.validation-summary-valid):not(.field-validation-valid):not(:empty) {
+		margin-top: 0.5rem;
+	}
 
 	& > #passwordSection:not([hidden]) {
-		gap: 1rem;
+		display: block;
+
+		& > :not([hidden]) ~ :not([hidden]) {
+			padding-top: 0.5rem;
+		}
 
 		& > div:not([hidden]) {
-			display: block grid;
-			gap: 0.25rem;
+			display: block;
+
+			& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) {
+				margin-top: 0.5rem;
+			}
 		}
 	}
 
 	& + .account {
+		margin-top: 0.5rem;
 		padding-top: 0;
 	}
-	/* フォーム直下の直接の子要素（div, label, button, 各種コンテナ）にグリッドのギャップを適用 */
-	& > div:not([hidden]):not(.inline-actions),
-	& > button:not([hidden]),
+	/* フォーム直下の直接の子要素コンテナ内の縦余白を適用 */
+	& > div:not([hidden]):not(.inline-actions):not(.option-row),
 	& > .account-links:not([hidden]) {
-		display: block grid;
-		gap: 0.25rem;
+		display: block;
+
+		& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(.image-preview-list) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(.image-preview-list) {
+			margin-top: 0.5rem;
+		}
 	}
 
 	& h3 {
@@ -41,6 +58,7 @@
 	& textarea {
 		width: 100%;
 		min-height: var(--control-height);
+		margin-top: 0.5rem;
 		padding: 0.5rem 0.75rem;
 		font-size: 1rem;
 		box-sizing: border-box;
@@ -59,12 +77,11 @@
 		display: block;
 		width: fit-content;
 		margin-inline: auto;
-		padding: 0.5rem 0;
+		padding: 0;
 		color: var(--color-link);
 		background: none;
 		border: none;
 	}
-
 	/* ホバー時のスタイル（色を少し濃くする、下線をつけるなど） */
 	& a:not(.inline-link):hover {
 		color: var(--color-link-hover);
@@ -80,9 +97,12 @@
 	& .option-row {
 		display: block flex;
 		align-items: center;
-		gap: 0.5rem;
 		min-height: var(--control-height);
-		padding: 0.25rem 0;
+		padding: 0;
+
+		& > * + * {
+			margin-left: 0.5rem;
+		}
 	}
 
 	& .option-row label {
@@ -93,7 +113,10 @@
 	& .birth {
 		display: block flex;
 		align-items: center;
-		gap: 0.35rem;
+
+		& > * + * {
+			margin-left: 0.5rem;
+		}
 
 		& input {
 			flex: 1;
@@ -108,7 +131,7 @@
 		justify-content: center;
 		width: 100%;
 		min-height: var(--control-height);
-		margin: 0 auto;
+		margin-inline: auto;
 		padding: 0.65rem 1.5rem;
 		font-size: 1rem;
 	}

@@ -46,7 +46,7 @@
 					}
 					var indentClass = depth > 0 ? $"message-indent-{depth}" : null;
 					var messageBoxClass = isMine ? "message-box is-mine" : "message-box";
-					<div id="message-@msg.Id" class="message-item @indentClass @(msg.ParentMessageId.HasValue ? "message-reply" : "message-root")">
+					<div id="message-@msg.Id" class="message-item @indentClass @(msg.ParentMessageId.HasValue ? "message-reply" : "")">
 						<div class="@messageBoxClass">
 							<div class="message-header">
 								@if (!isMine) {
@@ -86,7 +86,7 @@
 							}
 							@* 返信元と同じ件名や「Re:」付きの重複件名は、返信先の引用に役割を寄せて省略する。 *@
 							@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Subject) && (replyParent == null || msg.Subject != "Re: " + replyParent.Subject && msg.Subject != replyParent.Subject)) {
-								<div class="message-subject"><strong>@msg.Subject</strong></div>
+								<div><strong>@msg.Subject</strong></div>
 							}
 							@* メッセージ本文 *@
 							@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Body)) {

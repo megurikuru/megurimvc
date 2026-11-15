@@ -51,7 +51,7 @@
 		<span class="field-validation-valid" data-valmsg-for="@Model.InputName" data-valmsg-replace="true"></span>
 		<div id="@Model.ResolvedPreviewContainerId" class="@previewListClass"></div>
 		@foreach (var hint in Model.Hints) {
-			<div class="description">@hint</div>
+			<p class="description">@hint</p>
 		}
 	</details>
 } else {
@@ -88,7 +88,7 @@
 		<span class="field-validation-valid" data-valmsg-for="@Model.InputName" data-valmsg-replace="true"></span>
 		<div id="@Model.ResolvedPreviewContainerId" class="@previewListClass"></div>
 		@foreach (var hint in Model.Hints) {
-			<div class="description">@hint</div>
+			<p class="description">@hint</p>
 		}
 	</div>
 }

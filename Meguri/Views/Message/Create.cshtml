@@ -3,93 +3,94 @@
 	ViewData["Title"] = SharedLocalizer["Message_NewConversation"];
 }
 
-<h2>@SharedLocalizer["Message_NewConversation"]</h2>
+<article>
+	<h1>@SharedLocalizer["Message_NewConversation"]</h1>
+	<div>
+		<form asp-action="Create" method="post" enctype="multipart/form-data">
+			<div asp-validation-summary="ModelOnly"></div>
 
-<div>
-	<form asp-action="Create" method="post" enctype="multipart/form-data">
-		<div asp-validation-summary="ModelOnly"></div>
-
-		<div class="attribute-wrap">
-			<label>@SharedLocalizer["Message_ChatTypeLabel"]</label>
-			<div class="inline-actions">
-				<label class="check-row" for="typeDirect">
-					<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" />
-					@SharedLocalizer["Message_Direct"]
-				</label>
-				<label class="check-row" for="typeGroup">
-					<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" />
-					@SharedLocalizer["Message_Group"]
-				</label>
+			<div class="attribute-wrap">
+				<label>@SharedLocalizer["Message_ChatTypeLabel"]</label>
+				<div class="inline-actions">
+					<label class="check-row" for="typeDirect">
+						<input type="radio" name="IsGroup" id="typeDirect" value="false" checked="@(!Model.IsGroup)" />
+						@SharedLocalizer["Message_Direct"]
+					</label>
+					<label class="check-row" for="typeGroup">
+						<input type="radio" name="IsGroup" id="typeGroup" value="true" checked="@Model.IsGroup" />
+						@SharedLocalizer["Message_Group"]
+					</label>
+				</div>
 			</div>
-		</div>
 
-		<div id="groupTitleContainer" class="attribute-wrap" hidden="@(!Model.IsGroup)">
-			<label asp-for="Title">@SharedLocalizer["Message_GroupName"]</label>
-			<input asp-for="Title" placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
-		</div>
-
-		<div class="attribute-wrap">
-			<label for="recipientSearchInput">@SharedLocalizer["Message_SelectRecipient"] <span>*</span></label>
-			<div class="input-group">
-				<input type="text"
-						 id="recipientSearchInput"
-						 placeholder="@SharedLocalizer["Message_RecipientSearchPlaceholder"]"
-						 autocomplete="off"
-						 data-search-url="@Url.Action("SearchUsers", "Message")"
-						 data-initial-users="@(System.Text.Json.JsonSerializer.Serialize(Model.SelectedUsers, new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }))"
-						 data-select-label="@SharedLocalizer["Message_SelectUserBtn"]"
-						 data-selected-label="@SharedLocalizer["Message_SelectedBadge"]"
-						 data-remove-label="@SharedLocalizer["Common_Remove"]"
-						 data-no-results-label="@SharedLocalizer["Message_NoUsersFound"]"
-						 data-no-selected-label="@SharedLocalizer["Message_NoSelectedRecipients"]" />
-				<button type="button" data-search-recipient>@SharedLocalizer["Common_Search"]</button>
+			<div id="groupTitleContainer" class="attribute-wrap" hidden="@(!Model.IsGroup)">
+				<label asp-for="Title">@SharedLocalizer["Message_GroupName"]</label>
+				<input asp-for="Title" placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
 			</div>
-			<div id="recipientSearchResults" class="recipient-search-results" hidden></div>
-			<div class="selected-recipients-section">
-				<label>@SharedLocalizer["Message_SelectedRecipientsLabel"] <span id="selectedRecipientCount">(0)</span></label>
-				<div id="selectedRecipientsContainer" class="selected-recipients-list"></div>
+
+			<div class="attribute-wrap">
+				<label for="recipientSearchInput">@SharedLocalizer["Message_SelectRecipient"] <span>*</span></label>
+				<div class="input-group">
+					<input type="text"
+							 id="recipientSearchInput"
+							 placeholder="@SharedLocalizer["Message_RecipientSearchPlaceholder"]"
+							 autocomplete="off"
+							 data-search-url="@Url.Action("SearchUsers", "Message")"
+							 data-initial-users="@(System.Text.Json.JsonSerializer.Serialize(Model.SelectedUsers, new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }))"
+							 data-select-label="@SharedLocalizer["Message_SelectUserBtn"]"
+							 data-selected-label="@SharedLocalizer["Message_SelectedBadge"]"
+							 data-remove-label="@SharedLocalizer["Common_Remove"]"
+							 data-no-results-label="@SharedLocalizer["Message_NoUsersFound"]"
+							 data-no-selected-label="@SharedLocalizer["Message_NoSelectedRecipients"]" />
+					<button type="button" data-search-recipient>@SharedLocalizer["Common_Search"]</button>
+				</div>
+				<div id="recipientSearchResults" class="recipient-search-results" hidden></div>
+				<div class="selected-recipients-section">
+					<label>@SharedLocalizer["Message_SelectedRecipientsLabel"] <span id="selectedRecipientCount">(0)</span></label>
+					<div id="selectedRecipientsContainer" class="selected-recipients-list"></div>
+				</div>
+				<div id="hiddenRecipientInputs"></div>
+				<span asp-validation-for="SelectedUserIds"></span>
 			</div>
-			<div id="hiddenRecipientInputs"></div>
-			<span asp-validation-for="SelectedUserIds"></span>
-		</div>
 
-		<div class="attribute-wrap">
-			<label asp-for="Subject">@SharedLocalizer["Message_OptionalSubject"]</label>
-			<input asp-for="Subject" />
-			<span asp-validation-for="Subject"></span>
-		</div>
+			<div class="attribute-wrap">
+				<label asp-for="Subject">@SharedLocalizer["Message_OptionalSubject"]</label>
+				<input asp-for="Subject" />
+				<span asp-validation-for="Subject"></span>
+			</div>
 
-		<div class="attribute-wrap">
-			<label asp-for="InitialMessage">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
-			<textarea asp-for="InitialMessage" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
-			<span asp-validation-for="InitialMessage"></span>
-		</div>
+			<div class="attribute-wrap">
+				<label asp-for="InitialMessage">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
+				<textarea asp-for="InitialMessage" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
+				<span asp-validation-for="InitialMessage"></span>
+			</div>
 
-		<div class="attribute-wrap">
-			@{
-				var messageImageUpload = new FileUploadViewModel {
-					InputId = "ImageFiles",
-					InputName = "ImageFiles",
-					LabelText = SharedLocalizer["Message_ImageAttachLabel"].Value,
-					MaxImages = 16,
-					ShowCount = true,
-					PreviewContainerId = "imagePreviewContainer",
-					CountDisplayId = "imageCountDisplay",
-					Hints = [
-						SharedLocalizer["Post_ImageUploadHint1"].Value,
-						SharedLocalizer["Post_ImageUploadHint2"].Value
-					]
-				};
-			}
-			<partial name="_FileUpload" model="messageImageUpload" />
-		</div>
+			<div class="attribute-wrap">
+				@{
+					var messageImageUpload = new FileUploadViewModel {
+						InputId = "ImageFiles",
+						InputName = "ImageFiles",
+						LabelText = SharedLocalizer["Message_ImageAttachLabel"].Value,
+						MaxImages = 16,
+						ShowCount = true,
+						PreviewContainerId = "imagePreviewContainer",
+						CountDisplayId = "imageCountDisplay",
+						Hints = [
+							SharedLocalizer["Post_ImageUploadHint1"].Value,
+							SharedLocalizer["Post_ImageUploadHint2"].Value
+						]
+					};
+				}
+				<partial name="_FileUpload" model="messageImageUpload" />
+			</div>
 
-		<div class="button-wrap">
-			<a asp-action="Index" class="button-like">@SharedLocalizer["Common_Cancel"]</a>
-			<button type="submit">@SharedLocalizer["Message_SendBtn"]</button>
-		</div>
-	</form>
-</div>
+			<div class="button-wrap">
+				<a asp-action="Index" class="button-like">@SharedLocalizer["Common_Cancel"]</a>
+				<button type="submit">@SharedLocalizer["Message_SendBtn"]</button>
+			</div>
+		</form>
+	</div>
+</article>
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />

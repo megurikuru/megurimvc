@@ -48,7 +48,7 @@
 		<!-- コメント投稿フォーム -->
 		<div id="commentForm" class="message-composer">
 			@if (TempData["CommentError"] is string commentError && !string.IsNullOrEmpty(commentError)) {
-				<div class="validation-summary-errors" role="alert">
+				<div role="alert">
 					<ul><li>@commentError</li></ul>
 				</div>
 			}
@@ -116,7 +116,7 @@
 						}
 						var indentClass = depth > 0 ? $"message-indent-{depth}" : null;
 
-						<div id="comment-@comment.Id" class="message-item @indentClass @(comment.ParentId.HasValue ? "message-reply" : "message-root")">
+						<div id="comment-@comment.Id" class="message-item @indentClass @(comment.ParentId.HasValue ? "message-reply" : "")">
 							<div class="message-box @(isMine ? "is-mine" : "")">
 								<div class="message-header">
 									@if (!isMine) {

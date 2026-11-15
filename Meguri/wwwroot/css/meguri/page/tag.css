@@ -1,34 +1,19 @@
 /* Tagコントローラー固有スタイル */
 
-/* Tag/Index */
-.tag-page {
-	display: block grid;
-	gap: 0.5rem;
-	padding: 0.5rem;
-	max-width: 600px;
-	margin: 0 auto;
-}
+body[data-controller="Tag" i] {
+	/* Tag/Disambiguation */
+	&[data-action="Disambiguation" i] {
 
-.tag-page h2 {
-	font-size: 1.25rem;
-}
+		article > div {
+			padding: 0.5rem 0.5rem 0 0.5rem;
 
-.tag-page p {
-	color: var(--color-text-muted);
-	margin: 0;
-}
+			& > :not(.inline-actions):not([hidden]) {
+				margin-top: 0.5rem;
 
-/* Tag/Disambiguation */
-body[data-controller="Tag" i][data-action="Disambiguation" i] {
-/*	main article > p {
-		padding: 0.5rem;
-	}*/
-
-	article > h2 + p {
-		padding-bottom: 0;
-	}
-
-	article > div {
-		padding: 0.5rem;
+				&:first-child {
+					margin-top: 0;
+				}
+			}
+		}
 	}
 }

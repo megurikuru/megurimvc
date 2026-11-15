@@ -4,7 +4,7 @@
 	display: block;
 	width: fit-content;
 	margin: 0 auto;
-	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	padding: 0.5rem 0.5rem 0 0.5rem;
 	font-size: 0.8rem;
 	color: #0069B7; /* 青色 */ 
 }
@@ -19,16 +19,5 @@
 .icon-wrap {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.25rem;
-
-	& > .icon,
-	& > .user-avatar-sm {
-		margin-right: 0;
-	}
-}
-
-.space-between-wrap {
-	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（両端揃え space-between）で配置 */
-	justify-content: space-between;
 }
 

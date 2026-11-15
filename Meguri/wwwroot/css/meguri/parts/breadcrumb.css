@@ -1,6 +1,6 @@
 ﻿/* パンくずリスト */
 .breadcrumb {
-	padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+	padding: 0.5rem;
 	border-top: 1px solid var(--color-border);
 	background-color: var(--color-bg-title);
 
@@ -17,6 +17,9 @@
 	li {
 		margin: 0;
 		/* 隣接するliの前に区切り文字（/）を挿入 */
+		& + li {
+			margin-top: 0;
+		}
 		& + li::before {
 			content: "/";
 			margin: 0 0.5rem;

@@ -4,7 +4,6 @@
 .input-group {
 	display: block flex;
 	align-items: stretch;
-	gap: 0.5rem;
 
 	& > input:not([type="hidden"]),
 	& > select {
@@ -23,19 +22,28 @@
 	& > img.icon {
 		flex-shrink: 0;
 		align-self: center;
+		margin-right: 0;
+	}
+
+	& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"]) {
+		margin-left: 0.5rem;
 	}
 }
 
 /* 補助ボタン等の横並びラッパー */
 .inline-actions {
 	display: block flex;
+	margin: 0 0.5rem 0 0;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 1rem;
+
+	& > :not([hidden]) {
+		margin: 0.5rem 0 0 0.5rem;
+	}
 
 	form {
-		padding: 0.5rem;
-		display: inline;
+		padding: 0;
+		display: inline-flex;
 	}
 
 	p {
@@ -45,8 +53,7 @@
 }
 
 .attribute-wrap {
-	display: block grid; /* 自身：ブロック要素 / 子：縦並びで余白を統一 */
-	gap: 0.5rem;
+	display: block; /* 自身：ブロック要素 / 子：縦並びで余白を統一 */
 	margin-top: 0.5rem;
 	padding: 0.5rem 0.5rem 0 0.5rem;
 	border-top: 1px solid var(--color-border);
@@ -55,15 +62,22 @@
 		display: none;
 	}
 
+	& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(#selectedTagsContainer):not(#tagSuggestions):not(.image-preview-list) {
+		margin-top: 0.5rem;
+	}
+
 	& > form {
-		display: block grid;
-		gap: 0.5rem;
+		display: block;
+
+		& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(#selectedTagsContainer):not(#tagSuggestions):not(.image-preview-list) {
+			margin-top: 0.5rem;
+		}
 	}
 
 	& label {
 		display: block flow; /* 自身：ブロック要素（横幅全域・改行） / 子：通常のインライン/ブロックフロー配置 */
 	}
-	/* 中身が空のときは非表示にして余白（gap）を詰める */
+	/* 中身が空のときは非表示にして余白を詰める */
 	span.field-validation-valid,
 	#tagSuggestions:empty,
 	#selectedTagsContainer:empty,
@@ -80,29 +94,31 @@
 .attribute-wrap textarea {
 	display: block;
 	box-sizing: border-box;
-	margin: 0;
+	margin-inline: 0;
 	padding: 0.75rem;
 	width: 100%;
 	min-height: 3rem;
 	font-size: 1rem;
 }
 
-.attribute-wrap > button:not(.btn-sm) {
-	min-height: var(--control-height);
-	width: 100%;
-}
-
 .checkbox-wrap {
-	display: block grid; /* 自身：ブロック要素（横幅全域・改行） / 子：縦並びで余白を統一 */
-	gap: 1rem;
+	display: block; /* 自身：ブロック要素（横幅全域・改行） / 子：縦並びで余白を統一 */
+
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.5rem;
+	}
 }
 
 .check-row {
 	display: flex;
-	margin: 0.5rem 0 0.5rem 0;
+	margin: 0.5rem 0 0 0;
 	align-items: center;
 	vertical-align: middle;
 	cursor: pointer;
+
+	&:first-child {
+		margin-top: 0;
+	}
 }
 
 .check-row input[type="checkbox"],
@@ -113,15 +129,12 @@
 	flex-shrink: 0;
 }
 
-.check-row label {
-	margin: 0;
-	cursor: pointer;
-}
-
 .description {
-	display: block grid; /* 自身：ブロック要素（横幅全域・改行） / 子：縦並びで余白を統一 */
+	display: block; /* 自身：ブロック要素（横幅全域・改行） / 子：縦並びで余白を統一 */
 	padding: 0.5rem 0.5rem 0 0.5rem;
-	border-top: 1px solid var(--color-border);
-	gap: 0.5rem;
 	color: var(--color-text-muted);
+
+	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.5rem;
+	}
 }

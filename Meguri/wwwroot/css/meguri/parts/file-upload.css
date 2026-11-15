@@ -1,8 +1,11 @@
 /* ファイル選択・画像プレビュー部品 */
 
 div.file-upload {
-	display: block grid;
-	gap: 0.5rem;
+	display: block;
+
+	& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(.image-preview-list) {
+		margin-top: 0.5rem;
+	}
 }
 
 .file-upload {
@@ -17,7 +20,8 @@ input[type="file"],
 	box-sizing: border-box;
 	width: 100%;
 	min-height: var(--control-height);
-	margin: 0;
+	margin-inline: 0;
+	margin-top: 0.5rem;
 	padding: 0.5rem;
 	font-size: 0.9rem;
 	border: 1px dashed var(--color-border);
@@ -27,13 +31,13 @@ input[type="file"],
 	&::file-selector-button {
 		box-sizing: border-box;
 		min-height: var(--control-height);
-		margin-right: 0.75rem;
+		margin-right: 0.5rem;
 		padding: 0.5rem 1.25rem;
 		font-size: 1rem;
 		line-height: 1.25;
 		color: var(--color-text);
 		background-color: var(--color-bg-control);
-		border: 2px solid var(--color-border);
+		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
 		cursor: pointer;
 		transition: background-color 0.2s ease, color 0.2s ease;
@@ -45,16 +49,14 @@ input[type="file"],
 }
 
 /* 既存画像表示（アバター・ヘッダー・一般） */
-.file-upload-current-avatar,
-.manage-avatar-img {
+.file-upload-current-avatar {
 	width: 120px;
 	height: 120px;
 	object-fit: cover;
 	border-radius: 50%;
 }
 
-.file-upload-current-header,
-.manage-header-img {
+.file-upload-current-header {
 	max-width: 100%;
 	max-height: 150px;
 	object-fit: cover;
@@ -70,7 +72,7 @@ input[type="file"],
 .image-preview-list {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 0.5rem;
+	margin-left: -0.5rem;
 
 	&:empty {
 		display: none;
@@ -81,13 +83,17 @@ input[type="file"],
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 0.25rem;
+	margin: 0.5rem 0 0 0.5rem;
 	width: 100px;
 	padding: 0.25rem;
 	border: 1px solid var(--color-border);
 	border-radius: var(--radius-sm);
 	background-color: var(--color-bg-title);
 	box-sizing: border-box;
+
+	& > * + * {
+		margin-top: 0.5rem;
+	}
 
 	& .image-preview-header {
 		display: flex;

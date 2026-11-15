@@ -404,20 +404,30 @@ namespace Meguri.Controllers {
                 return RedirectToAction(nameof(ChangePassword));
             }
 
-            var model = new SetPasswordViewModel { StatusMessage = StatusMessage };
+            var passkeys = await _userManager.GetPasskeysAsync(user);
+            var model = new SetPasswordViewModel {
+                StatusMessage = StatusMessage,
+                HasPasskeys = passkeys.Count > 0
+            };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(SetPasswordViewModel model) {
-            if (!ModelState.IsValid) {
-                return View(model);
-            }
-
             var user = await _userManager.GetUserAsync(User);
             if (user == null) {
                 return await SignOutAndRedirectToLoginAsync();
+            }
+
+            var passkeys = await _userManager.GetPasskeysAsync(user);
+            model.HasPasskeys = passkeys.Count > 0;
+            if (model.HasPasskeys) {
+                return RedirectToAction(nameof(SetPassword));
+            }
+
+            if (!ModelState.IsValid) {
+                return View(model);
             }
 
             var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword);

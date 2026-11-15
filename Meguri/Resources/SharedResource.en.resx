@@ -528,6 +528,9 @@
   <data name="Manage_SetPassword_Button" xml:space="preserve">
     <value>Set password</value>
   </data>
+  <data name="Manage_SetPassword_PasskeyDisabled" xml:space="preserve">
+    <value>A password cannot be set when using a passkey.</value>
+  </data>
   <data name="Manage_Disable2fa_Title" xml:space="preserve">
     <value>Disable two-factor authentication (2FA)</value>
   </data>

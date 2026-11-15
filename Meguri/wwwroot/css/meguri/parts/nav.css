@@ -1,4 +1,8 @@
 ﻿/* ナビゲーション */
+#nav-main {
+	margin-top: 0.5rem;
+}
+
 .nav-grid {
 	font-size: 1rem;
 
@@ -19,8 +23,8 @@
 			display: block; /* 自身：ブロック要素 */
 
 			border-top: 1px solid var(--color-border);
-			/* 右端（2の倍数）に左枠線を表示 */
-			&:nth-child(2), &:nth-child(3), &:nth-child(5), &:nth-child(6) {
+			/* 左端以外の列に左枠線を表示 */
+			&:not(:nth-child(3n + 1)) {
 				border-left: 1px solid var(--color-border);
 			}
 
@@ -51,12 +55,5 @@
 }
 
 .nav-sub {
-	border-top: 1px solid var(--color-border);
-
-	& > .title {
-		padding: 0.5rem 0;
-		font-size: 1.1rem;
-		text-align: center;
-		background-color: var(--color-bg-title);
-	}
+	margin-top: 0.5rem;
 }

@@ -17,6 +17,8 @@ namespace Meguri.ViewModels.Manage {
         [Compare("NewPassword", ErrorMessage = "Validation_Compare")]
         public string ConfirmPassword { get; set; }
 
+        public bool HasPasskeys { get; set; }
+
         public string StatusMessage { get; set; }
     }
 }

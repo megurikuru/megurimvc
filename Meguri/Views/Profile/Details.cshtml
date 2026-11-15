@@ -7,7 +7,7 @@
 	@if (Model.Profile.ActiveAvatarImageId.HasValue || Model.Profile.HeaderImageId.HasValue) {
 		<div class="profile-banner">
 			@if (Model.Profile.HeaderImageId.HasValue) {
-				<img src="/Image/File/@Model.Profile.HeaderImageId" alt="" class="profile-header" />
+				<img src="/Image/File/@Model.Profile.HeaderImageId" alt="" />
 			}
 		</div>
 	}
