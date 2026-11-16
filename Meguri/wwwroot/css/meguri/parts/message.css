@@ -3,7 +3,6 @@
 /* メッセージ一覧 */
 #messageContainer {
 	display: block;
-	padding: 0.5rem 0 0 0;
 
 	& > :not([hidden]) ~ :not([hidden]) {
 		margin-top: 0.5rem;
@@ -292,15 +291,10 @@ h1 + .message-disclosure:first-of-type {
 }
 
 .message-composer {
-	margin-top: 0.5rem;
 	border-top: 1px solid var(--color-border);
 
 	& > form {
 		display: block;
-
-		& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"]) {
-			margin-top: 0.5rem;
-		}
 	}
 
 	& .attribute-wrap {
@@ -416,7 +410,8 @@ h1 + .message-disclosure:first-of-type {
 	}
 }
 
-.recipient-empty-message {
+#selectedRecipientsContainer > p {
+	padding: 0;
 	color: var(--color-text-muted);
-	font-size: 0.875rem;
+	font-size: 0.9rem;
 }

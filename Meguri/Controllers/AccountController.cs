@@ -340,19 +340,19 @@ namespace Meguri.Controllers {
             ViewData["ReturnUrl"] = returnUrl;
             if (!await _turnstileService.VerifyAsync(turnstileToken, "signup", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
                 ModelState.AddModelError(string.Empty, _localizer["Account_Error_TurnstileFailed"]);
-                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
             }
 
             if (string.IsNullOrEmpty(model.CredentialJson)) {
                 ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
-                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
             }
 
             if (ModelState.IsValid) {
                 var withdrawnUser = await _userManager.FindByNameAsync(model.UserName);
                 if (withdrawnUser != null && withdrawnUser.IsWithdrawn) {
                     ModelState.AddModelError(nameof(model.UserName), _localizer["Account_Error_UnavailableUserName"]);
-                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
                 }
 
                 PasskeyAttestationResult attestation;
@@ -361,13 +361,13 @@ namespace Meguri.Controllers {
                 } catch (Exception ex) {
                     _logger.LogWarning(ex, "Passkey attestation threw an exception.");
                     ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
-                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
                 }
 
                 if (!attestation.Succeeded) {
                     _logger.LogWarning("Passkey registration failed: {Error}", attestation.Failure?.Message);
                     ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
-                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
                 }
 
                 var user = new ApplicationUser {
@@ -380,7 +380,7 @@ namespace Meguri.Controllers {
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with passkey.");
 
-                    attestation.Passkey.Name = _localizer["Manage_Passkeys_DefaultName"].Value;
+                    attestation.Passkey.Name = string.IsNullOrWhiteSpace(model.PasskeyName) ? _localizer["Manage_Passkeys_DefaultName"].Value : model.PasskeyName.Trim();
                     var addPasskeyResult = await _userManager.AddOrUpdatePasskeyAsync(user, attestation.Passkey);
                     if (!addPasskeyResult.Succeeded) {
                         _logger.LogWarning("Failed to associate passkey with user: {Errors}", string.Join(", ", addPasskeyResult.Errors.Select(e => e.Description)));
@@ -398,7 +398,7 @@ namespace Meguri.Controllers {
                 AddErrors(result);
             }
 
-            return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay });
+            return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
         }
 
         [HttpGet]

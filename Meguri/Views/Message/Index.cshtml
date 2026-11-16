@@ -44,17 +44,17 @@
 </div>
 
 @if (!Model.Conversations.Any()) {
-	<article>
+	<article class="no-message">
 		<h2>@SharedLocalizer["Message_NoConversations"]</h2>
 		<p>@SharedLocalizer["Message_NoConversationsHint"]</p>
 		<div class="button-wrap">
-			<a asp-action="Create" class="button-like icon-wrap"><img src="~/icons/plus.svg" class="icon" />@SharedLocalizer["Message_NewConversation"]</a>
+			<a asp-action="Create" class="button-like icon-wrap">@SharedLocalizer["Message_NewConversation"]</a>
 		</div>
 	</article>
 } else {
 	@foreach (var c in Model.Conversations) {
-		<a asp-action="Details" asp-route-id="@c.Id">
-			<article>
+		<article>
+			<a asp-action="Details" asp-route-id="@c.Id">
 				<div class="article-header">
 					<h2>
 						@if (!c.IsGroup && c.AvatarImageId.HasValue) {
@@ -70,8 +70,8 @@
 				</div>
 				<p>@(c.LastMessageText.Length > 100 ? c.LastMessageText.Substring(0, 100) + "..." : c.LastMessageText)</p>
 				<small>@LocalTimeExtensions.ToLocalTime(c.LastMessageTime)</small>
-			</article>
-		</a>
+			</a>
+		</article>
 	}
 }
 

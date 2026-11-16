@@ -19,7 +19,7 @@
 				<strong>@passkey.Name</strong>
 				<span>@passkey.CreatedAt.ToLocalTime().ToString("yyyy/MM/dd HH:mm")</span>
 				<input type="hidden" name="id" value="@passkey.Id" />
-				<button type="submit" class="btn-sm">@SharedLocalizer["Manage_Passkeys_Remove"]</button>
+				<button type="submit">@SharedLocalizer["Manage_Passkeys_Remove"]</button>
 			</form>
 		}
 	</div>
