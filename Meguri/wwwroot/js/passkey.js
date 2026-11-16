@@ -87,12 +87,72 @@ export default class PasskeyManager {
     }
 
     /**
+     * 認証方式（パスキー／パスワード）の切り替えを初期化する
+     */
+    #initAuthMethodSelector() {
+        const selector = document.getElementById('authMethodSelector');
+        if (!selector) {
+            return;
+        }
+
+        const passkeyRadio = document.getElementById('authMethodPasskey');
+        const passwordRadio = document.getElementById('authMethodPassword');
+        const passwordSection = document.getElementById('passwordSection');
+        const passkeySection = document.getElementById('passkeySection');
+        const passwordSubmitButton = document.getElementById('passwordSubmitButton');
+        const passwordInputs = passwordSection ? passwordSection.querySelectorAll('input') : [];
+        const passkeyInputs = passkeySection ? passkeySection.querySelectorAll('input') : [];
+        const form = selector.closest('form');
+        const passkeyButton = passkeySection?.querySelector('button[data-passkey]');
+
+        const setMode = (isPasskey) => {
+            if (isPasskey) {
+                if (passwordSection) passwordSection.hidden = true;
+                passwordInputs.forEach(i => i.disabled = true);
+                if (passkeySection) passkeySection.hidden = false;
+                passkeyInputs.forEach(i => i.disabled = false);
+                if (passwordSubmitButton) {
+                    passwordSubmitButton.hidden = true;
+                    passwordSubmitButton.disabled = true;
+                }
+            } else {
+                if (passwordSection) passwordSection.hidden = false;
+                passwordInputs.forEach(i => i.disabled = false);
+                if (passkeySection) passkeySection.hidden = true;
+                passkeyInputs.forEach(i => i.disabled = true);
+                if (passwordSubmitButton) {
+                    passwordSubmitButton.hidden = false;
+                    passwordSubmitButton.disabled = false;
+                }
+            }
+        };
+
+        form?.addEventListener('submit', (e) => {
+            if (passkeyRadio?.checked) {
+                e.preventDefault();
+                passkeyButton?.click();
+            }
+        });
+
+        if (!PasskeyManager.isSupported()) {
+            selector.hidden = true;
+            if (passwordRadio) passwordRadio.checked = true;
+            setMode(false);
+        } else {
+            passkeyRadio?.addEventListener('change', () => setMode(true));
+            passwordRadio?.addEventListener('change', () => setMode(false));
+            setMode(!passwordRadio?.checked);
+        }
+    }
+
+    /**
      * 対象のボタンをすべて取得してバインドを実行する
      */
     init() {
         document.querySelectorAll('button[data-passkey]').forEach((button) => {
             this.#bind(button);
         });
+        this.#initAuthMethodSelector();
     }
 }
 

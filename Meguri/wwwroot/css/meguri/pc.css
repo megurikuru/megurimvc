@@ -33,16 +33,19 @@
 
 	/* 基本要素 */
 	article {
+		margin-top: 0;
 		border-right: 1px solid var(--color-border);
 		border-left: 1px solid var(--color-border);
 	}
 
 	body[data-controller="Account" i],
 	body[data-controller="Manage" i],
-	body[data-controller="Message" i],
 	body[data-controller="Post" i] {
 		article {
 			padding-bottom: 0.5rem;
+		}
+
+		article:last-of-type {
 			border-bottom: 1px solid var(--color-border);
 		}
 	}
@@ -138,7 +141,7 @@
 			padding-top: 0;
 		}
 
-		& button:not([hidden]):not(.btn-sm):not(.image-preview-remove) {
+		& button:not([hidden]):not(.btn-sm):not(.image-preview-remove):not(.inline-actions button) {
 			width: auto;
 			min-width: 12rem;
 			background-color: var(--color-button-main);

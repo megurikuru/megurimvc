@@ -41,6 +41,15 @@
 		margin: 0.5rem 0 0 0.5rem;
 	}
 
+	& > button,
+	& > .button-like {
+		width: max-content;
+	}
+
+	& > .check-row + .check-row {
+		margin-left: 1rem;
+	}
+
 	form {
 		padding: 0;
 		display: inline-flex;
@@ -53,7 +62,9 @@
 }
 
 .attribute-wrap {
-	display: block; /* 自身：ブロック要素 / 子：縦並びで余白を統一 */
+	display: flex; /* 自身：縦並びFlexコンテナ / 子：gapで余白を統一 */
+	flex-direction: column;
+	gap: 0.5rem;
 	margin-top: 0.5rem;
 	padding: 0.5rem 0.5rem 0 0.5rem;
 	border-top: 1px solid var(--color-border);
@@ -62,16 +73,14 @@
 		display: none;
 	}
 
-	& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(#selectedTagsContainer):not(#tagSuggestions):not(.image-preview-list) {
-		margin-top: 0.5rem;
+	& > #selectedTagsContainer,
+	& > #tagSuggestions,
+	& > .image-preview-list {
+		margin-top: -0.5rem;
 	}
 
 	& > form {
 		display: block;
-
-		& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(#selectedTagsContainer):not(#tagSuggestions):not(.image-preview-list) {
-			margin-top: 0.5rem;
-		}
 	}
 
 	& label {
@@ -116,7 +125,7 @@
 	vertical-align: middle;
 	cursor: pointer;
 
-	&:first-child {
+	:not(.inline-actions) > &:first-child {
 		margin-top: 0;
 	}
 }

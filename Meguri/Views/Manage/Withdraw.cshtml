@@ -4,20 +4,22 @@
 	ViewData.AddActivePage(ManageNavPages.Withdraw);
 }
 
-<h2>@ViewData["Title"]</h2>
+<article>
+	<h2>@ViewData["Title"]</h2>
 
-<form method="post" class="account" data-confirm="@SharedLocalizer["Manage_Withdraw_Confirm"]">
-	<p>@SharedLocalizer["Manage_Withdraw_Description"]</p>
-	<div asp-validation-summary="All"></div>
-	@if (Model.HasPassword) {
-		<div>
-			<label asp-for="Password">@SharedLocalizer["Account_Field_Password"]</label>
-			<input asp-for="Password" autocomplete="current-password" />
-			<span asp-validation-for="Password"></span>
-		</div>
-	}
-	<button type="submit">@SharedLocalizer["Manage_Withdraw_Button"]</button>
-</form>
+	<form method="post" class="account" data-confirm="@SharedLocalizer["Manage_Withdraw_Confirm"]">
+		<p>@SharedLocalizer["Manage_Withdraw_Description"]</p>
+		<div asp-validation-summary="All"></div>
+		@if (Model.HasPassword) {
+			<div>
+				<label asp-for="Password">@SharedLocalizer["Account_Field_Password"]</label>
+				<input asp-for="Password" autocomplete="current-password" />
+				<span asp-validation-for="Password"></span>
+			</div>
+		}
+		<button type="submit">@SharedLocalizer["Manage_Withdraw_Button"]</button>
+	</form>
+</article>
 
 @section Scripts {
 	@await Html.PartialAsync("_ValidationScriptsPartial")

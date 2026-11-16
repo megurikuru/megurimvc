@@ -4,139 +4,85 @@
 @inject IOptions<TurnstileConf> TurnstileOptions
 @{
 	ViewData["Title"] = SharedLocalizer["Account_Register_Title"];
+	var isPasswordMode = ViewData.ModelState.ContainsKey(nameof(Model.Password))
+		|| ViewData.ModelState.ContainsKey(nameof(Model.ConfirmPassword));
 }
 
-<h1>@ViewData["Title"]</h1>
+<article>
+	<h1>@ViewData["Title"]</h1>
 
-<form class="account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
-	<p>@SharedLocalizer["Account_Register_CreateNewAccount"]</p>
-	<div asp-validation-summary="All"></div>
-	<input type="hidden" name="credentialJson" />
+	<form class="account" asp-action="Register" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+		<p>@SharedLocalizer["Account_Register_CreateNewAccount"]</p>
+		<div asp-validation-summary="All"></div>
+		<input type="hidden" name="credentialJson" />
 
-	<div id="authMethodSelector">
-		<label class="option-row">
-			<input type="radio" name="authMethod" id="authMethodPasskey" value="passkey" checked />
-			<span>@SharedLocalizer["Account_Register_MethodPasskey"]</span>
-		</label>
-		<label class="option-row">
-			<input type="radio" name="authMethod" id="authMethodPassword" value="password" />
-			<span>@SharedLocalizer["Account_Register_MethodPassword"]</span>
-		</label>
-	</div>
+		<div id="authMethodSelector">
+			<label class="option-row">
+				<input type="radio" name="authMethod" id="authMethodPasskey" value="passkey" checked="@(!isPasswordMode)" />
+				<span>@SharedLocalizer["Account_Register_MethodPasskey"]</span>
+			</label>
+			<label class="option-row">
+				<input type="radio" name="authMethod" id="authMethodPassword" value="password" checked="@isPasswordMode" />
+				<span>@SharedLocalizer["Account_Register_MethodPassword"]</span>
+			</label>
+		</div>
 
-	<div>
-		<label asp-for="UserName">@SharedLocalizer["Account_Field_UserName"]</label>
-		<input asp-for="UserName" />
-		<span asp-validation-for="UserName"></span>
-	</div>
-	<div>
-		<label asp-for="Email">@SharedLocalizer["Account_Field_Email"]</label>
-		<input asp-for="Email" />
-		<span asp-validation-for="Email"></span>
-	</div>
-	<div id="passwordSection" hidden>
 		<div>
-			<label asp-for="Password">@SharedLocalizer["Account_Field_Password"]</label>
-			<input asp-for="Password" disabled />
-			<span asp-validation-for="Password"></span>
+			<label asp-for="UserName">@SharedLocalizer["Account_Field_UserName"]</label>
+			<input asp-for="UserName" />
+			<span asp-validation-for="UserName"></span>
 		</div>
 		<div>
-			<label asp-for="ConfirmPassword">@SharedLocalizer["Account_Field_ConfirmPassword"]</label>
-			<input asp-for="ConfirmPassword" disabled />
-			<span asp-validation-for="ConfirmPassword"></span>
+			<label asp-for="Email">@SharedLocalizer["Account_Field_Email"]</label>
+			<input asp-for="Email" />
+			<span asp-validation-for="Email"></span>
 		</div>
-	</div>
-	<div>
-		<label>@SharedLocalizer["Account_Field_DateOfBirth"]</label>
-		<div class="birth">
-			<input asp-for="BirthYear" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_YearPlaceholder"]" autocomplete="bday-year" />
-			<span>@SharedLocalizer["Account_Field_DateOfBirth_YearUnit"]</span>
-			<input asp-for="BirthMonth" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_MonthPlaceholder"]" autocomplete="bday-month" />
-			<span>@SharedLocalizer["Account_Field_DateOfBirth_MonthUnit"]</span>
-			<input asp-for="BirthDay" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_DayPlaceholder"]" autocomplete="bday-day" />
-			<span>@SharedLocalizer["Account_Field_DateOfBirth_DayUnit"]</span>
+		<div id="passwordSection" hidden>
+			<div>
+				<label asp-for="Password">@SharedLocalizer["Account_Field_Password"]</label>
+				<input asp-for="Password" disabled />
+				<span asp-validation-for="Password"></span>
+			</div>
+			<div>
+				<label asp-for="ConfirmPassword">@SharedLocalizer["Account_Field_ConfirmPassword"]</label>
+				<input asp-for="ConfirmPassword" disabled />
+				<span asp-validation-for="ConfirmPassword"></span>
+			</div>
 		</div>
-		<span asp-validation-for="BirthYear"></span>
-		<span asp-validation-for="BirthMonth"></span>
-		<span asp-validation-for="BirthDay"></span>
-	</div>
-	@if (TurnstileOptions.Value.Enabled) {
-		<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="signup"></div>
-	}
-	<div id="passkeySection">
-		<button type="button" data-passkey="create" data-options-url="@Url.Action("PasskeyRegisterOptions", "Account")" data-submit-url="@Url.Action("PasskeyRegister", "Account", new { returnUrl = ViewData["ReturnUrl"] })" data-error-text="@SharedLocalizer["Account_Register_PasskeyFailed"]">@SharedLocalizer["Account_Register_PasskeyButton"]</button>
-		<span data-passkey-message></span>
-	</div>
-	<button type="submit" id="passwordSubmitButton" hidden disabled>@SharedLocalizer["Account_Register_Button"]</button>
-</form>
+		<div>
+			<label>@SharedLocalizer["Account_Field_DateOfBirth"]</label>
+			<div class="birth">
+				<input asp-for="BirthYear" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_YearPlaceholder"]" autocomplete="bday-year" />
+				<span>@SharedLocalizer["Account_Field_DateOfBirth_YearUnit"]</span>
+				<input asp-for="BirthMonth" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_MonthPlaceholder"]" autocomplete="bday-month" />
+				<span>@SharedLocalizer["Account_Field_DateOfBirth_MonthUnit"]</span>
+				<input asp-for="BirthDay" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_DayPlaceholder"]" autocomplete="bday-day" />
+				<span>@SharedLocalizer["Account_Field_DateOfBirth_DayUnit"]</span>
+			</div>
+			<span asp-validation-for="BirthYear"></span>
+			<span asp-validation-for="BirthMonth"></span>
+			<span asp-validation-for="BirthDay"></span>
+		</div>
+		@if (TurnstileOptions.Value.Enabled) {
+			<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="signup"></div>
+		}
+		<div id="passkeySection">
+			<div>
+				<label asp-for="PasskeyName">@SharedLocalizer["Manage_Passkeys_Name"]</label>
+				<input asp-for="PasskeyName" maxlength="100" />
+				<span asp-validation-for="PasskeyName"></span>
+			</div>
+			<button type="button" data-passkey="create" data-options-url="@Url.Action("PasskeyRegisterOptions", "Account")" data-submit-url="@Url.Action("PasskeyRegister", "Account", new { returnUrl = ViewData["ReturnUrl"] })" data-error-text="@SharedLocalizer["Account_Register_PasskeyFailed"]">@SharedLocalizer["Account_Register_PasskeyButton"]</button>
+			<span data-passkey-message></span>
+		</div>
+		<button type="submit" id="passwordSubmitButton" hidden disabled>@SharedLocalizer["Account_Register_Button"]</button>
+	</form>
+</article>
 
 @section Scripts {
 	@if (TurnstileOptions.Value.Enabled) {
 		<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 	}
 	<script type="module" src="~/js/passkey.js" asp-append-version="true"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const passkeyRadio = document.getElementById('authMethodPasskey');
-			const passwordRadio = document.getElementById('authMethodPassword');
-			const passwordSection = document.getElementById('passwordSection');
-			const passkeySection = document.getElementById('passkeySection');
-			const passwordSubmitButton = document.getElementById('passwordSubmitButton');
-			const selector = document.getElementById('authMethodSelector');
-			const passwordInputs = passwordSection ? passwordSection.querySelectorAll('input') : [];
-			const form = selector?.closest('form');
-			const passkeyButton = passkeySection?.querySelector('button[data-passkey]');
-
-			const isPasskeySupported = window.PublicKeyCredential &&
-				typeof PublicKeyCredential.parseCreationOptionsFromJSON === 'function' &&
-				typeof PublicKeyCredential.parseRequestOptionsFromJSON === 'function';
-
-			function setMode(isPasskey) {
-				if (isPasskey) {
-					if (passwordSection) passwordSection.hidden = true;
-					passwordInputs.forEach(i => i.disabled = true);
-					if (passkeySection) passkeySection.hidden = false;
-					if (passwordSubmitButton) {
-						passwordSubmitButton.hidden = true;
-						passwordSubmitButton.disabled = true;
-					}
-				} else {
-					if (passwordSection) passwordSection.hidden = false;
-					passwordInputs.forEach(i => i.disabled = false);
-					if (passkeySection) passkeySection.hidden = true;
-					if (passwordSubmitButton) {
-						passwordSubmitButton.hidden = false;
-						passwordSubmitButton.disabled = false;
-					}
-				}
-			}
-
-			form?.addEventListener('submit', (e) => {
-				if (passkeyRadio?.checked) {
-					e.preventDefault();
-					passkeyButton?.click();
-				}
-			});
-
-			if (!isPasskeySupported) {
-				if (selector) selector.hidden = true;
-				if (passwordRadio) passwordRadio.checked = true;
-				setMode(false);
-			} else {
-				passkeyRadio?.addEventListener('change', () => setMode(true));
-				passwordRadio?.addEventListener('change', () => setMode(false));
-				@if (ViewData.ModelState.ContainsKey(nameof(Model.Password)) || ViewData.ModelState.ContainsKey(nameof(Model.ConfirmPassword))) {
-					<text>
-					if (passwordRadio) passwordRadio.checked = true;
-					setMode(false);
-					</text>
-				} else {
-					<text>
-					setMode(true);
-					</text>
-				}
-			}
-		});
-	</script>
 	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

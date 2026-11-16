@@ -1,29 +1,27 @@
 ﻿/* アカウント */
 .account {
-	display: block;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
 	padding: 0.5rem 0.5rem 0 0.5rem;
+
+	&[hidden] {
+		display: none;
+	}
 
 	&:first-of-type {
 		border-top: 1px solid var(--color-border);
 	}
 
-	& > :not([hidden]):not([type="hidden"]):not(.validation-summary-valid):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.validation-summary-valid):not(.field-validation-valid):not(:empty) {
-		margin-top: 0.5rem;
-	}
-
 	& > #passwordSection:not([hidden]) {
-		display: block;
-
-		& > :not([hidden]) ~ :not([hidden]) {
-			padding-top: 0.5rem;
-		}
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
 
 		& > div:not([hidden]) {
-			display: block;
-
-			& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) {
-				margin-top: 0.5rem;
-			}
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
 		}
 	}
 
@@ -32,13 +30,10 @@
 		padding-top: 0;
 	}
 	/* フォーム直下の直接の子要素コンテナ内の縦余白を適用 */
-	& > div:not([hidden]):not(.inline-actions):not(.option-row),
-	& > .account-links:not([hidden]) {
-		display: block;
-
-		& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(.image-preview-list) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(.image-preview-list) {
-			margin-top: 0.5rem;
-		}
+	& > div:not([hidden], .inline-actions, .option-row, .file-upload) {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
 	}
 
 	& h3 {
@@ -49,16 +44,16 @@
 		display: none;
 	}
 	/* エラーがない時は非表示にして余白を消す */
-	& > div.validation-summary-valid {
+	& > div.validation-summary-valid,
+	& .field-validation-valid {
 		display: none;
 	}
 
-	& input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+	& input:not([type="checkbox"], [type="radio"], [type="file"]),
 	& select,
 	& textarea {
 		width: 100%;
 		min-height: var(--control-height);
-		margin-top: 0.5rem;
 		padding: 0.5rem 0.75rem;
 		font-size: 1rem;
 		box-sizing: border-box;
@@ -95,18 +90,18 @@
 	}
 
 	& .option-row {
-		display: block flex;
+		display: flex;
 		align-items: center;
+		gap: 1rem;
 		min-height: var(--control-height);
 		padding: 0;
-
-		& > * + * {
-			margin-left: 0.5rem;
-		}
 	}
 
-	& .option-row label {
+	& .option-row label,
+	& .option-row > span {
 		margin: 0;
+		line-height: 1;
+		transform: translateY(-0.12em);
 		cursor: pointer;
 	}
 
@@ -125,7 +120,7 @@
 		}
 	}
 
-	& button:not([hidden]):not(.btn-sm):not(.image-preview-remove) {
+	& button:not([hidden], .btn-sm, .image-preview-remove):not(.inline-actions button) {
 		display: flex;
 		align-items: center;
 		justify-content: center;

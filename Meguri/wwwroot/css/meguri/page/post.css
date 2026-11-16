@@ -4,7 +4,7 @@ body[data-controller="Post" i] {
 		margin-top: 0.5rem;
 	}
 
-	&[data-action="Details" i] {
+/*	&[data-action="Details" i] {
 		#nav-main {
 			margin-top: 0;
 		}
@@ -12,5 +12,5 @@ body[data-controller="Post" i] {
 		.attribute-wrap {
 			margin-top: 0;
 		}
-	}
+	}*/
 }

@@ -41,7 +41,6 @@ main {
 }
 
 #search-box {
-	margin-top: 0.5rem;
 	padding: 0.5rem 0 0 0;
 	border-top: 1px solid var(--color-border);
 

@@ -1,22 +1,53 @@
 /* Messageコントローラー固有スタイル */
 body[data-controller="Message" i] {
 
-	article {
+	article:first-of-type {
 		margin-top: 0.5rem;
+	}
+
+	article:not(:first-of-type) {
+		margin-top: 0;
+	}
+
+	.article-header + p {
+		border-top: 1px solid var(--color-border);
+	}
+
+	article.no-message {
+		padding-bottom: 0.5rem;
 	}
 
 	form .attribute-wrap:first-of-type {
 		margin-top: 0;
 	}
 
-	.description {
-		border-top: none;
+	span.description {
+		margin-top: 0;
 		padding: 0.5rem 0.5rem 0 0.5rem;
+		border-top: none;
 	}
-	/*一覧画面*/
+
 	&[data-action="Index" i] {
 		.attribute-wrap {
 			margin-top: 0;
 		}
+	}
+
+	&[data-action="Create" i] {
+		main {
+			margin-top: 0;
+		}
+
+		.button-wrap {
+			padding-bottom: 0.5rem;
+		}
+	}
+
+	#nav-main {
+		margin-top: 0;
+	}
+
+	.pagination {
+		margin-top: 0;
 	}
 }

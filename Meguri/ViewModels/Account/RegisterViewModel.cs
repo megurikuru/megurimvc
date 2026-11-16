@@ -29,6 +29,10 @@ namespace Meguri.ViewModels.Account {
         [Display(Name = "Account_Field_DateOfBirth_Day")]
         public int? BirthDay { get; set; }
 
+        [StringLength(100, ErrorMessage = "Validation_StringLengthMax")]
+        [Display(Name = "Manage_Passkeys_Name")]
+        public string? PasskeyName { get; set; }
+
         public DateOnly DateOfBirth { get; protected set; }
 
         public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
