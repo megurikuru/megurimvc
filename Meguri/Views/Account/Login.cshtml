@@ -15,62 +15,57 @@
 	ViewData["Title"] = SharedLocalizer["Account_Login_Title"];
 }
 
-<h2>@ViewData["Title"]</h2>
-<section>
-	<form class="account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
-		<div asp-validation-summary="All"></div>
-		<input type="hidden" name="credentialJson" />
+<article>
+	<h2>@ViewData["Title"]</h2>
+	<section>
+		<form class="account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+			<div asp-validation-summary="All"></div>
+			<input type="hidden" name="credentialJson" />
 
-		<div id="authMethodSelector">
-			<label class="option-row">
-				<input type="radio" name="authMethod" id="authMethodPasskey" value="passkey" checked />
-				<span>@SharedLocalizer["Account_Login_MethodPasskey"]</span>
-			</label>
-			<label class="option-row">
-				<input type="radio" name="authMethod" id="authMethodPassword" value="password" />
-				<span>@SharedLocalizer["Account_Login_MethodPassword"]</span>
-			</label>
-		</div>
-
-		<div>
-			<label asp-for="UserName"></label>
-			<input asp-for="UserName" />
-			<span asp-validation-for="UserName"></span>
-		</div>
-
-		<div id="passwordSection" hidden>
-			<div>
-				<label asp-for="Password"></label>
-				<input asp-for="Password" disabled />
-				<span asp-validation-for="Password"></span>
+			<div id="authMethodSelector">
+				<label class="option-row">
+					<input type="radio" name="authMethod" id="authMethodPasskey" value="passkey" checked />
+					<span>@SharedLocalizer["Account_Login_MethodPasskey"]</span>
+				</label>
+				<label class="option-row">
+					<input type="radio" name="authMethod" id="authMethodPassword" value="password" />
+					<span>@SharedLocalizer["Account_Login_MethodPassword"]</span>
+				</label>
 			</div>
-		</div>
 
-		<label asp-for="RememberMe" class="check-row">
-			<input asp-for="RememberMe" />
-			@Html.DisplayNameFor(m => m.RememberMe)
-		</label>
+			<div>
+				<label asp-for="UserName"></label>
+				<input asp-for="UserName" />
+				<span asp-validation-for="UserName"></span>
+			</div>
 
-		@if (TurnstileOptions.Value.Enabled) {
-			<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="login"></div>
-		}
+			<div id="passwordSection" hidden>
+				<div>
+					<label asp-for="Password"></label>
+					<input asp-for="Password" disabled />
+					<span asp-validation-for="Password"></span>
+				</div>
+			</div>
 
-		<div id="passkeySection">
-			<button type="button" data-passkey="login" data-options-url="@Url.Action("PasskeyRequestOptions", "Account")" data-submit-url="@Url.Action("PasskeyLogin", "Account", new { returnUrl = ViewData["ReturnUrl"] })" data-error-text="@SharedLocalizer["Account_Login_PasskeyFailed"]">@SharedLocalizer["Account_Login_PasskeyButton"]</button>
-			<span data-passkey-message></span>
-		</div>
-		<button type="submit" id="passwordSubmitButton" hidden disabled>@SharedLocalizer["Account_Login_Button"]</button>
+			<label asp-for="RememberMe" class="check-row">
+				<input asp-for="RememberMe" />
+				@Html.DisplayNameFor(m => m.RememberMe)
+			</label>
 
-		<div class="account-links">
-			<p>
-				<a asp-action="ForgotPassword">@SharedLocalizer["Account_Login_ForgotPassword"]</a>
-			</p>
-			<p>
-				<a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">@SharedLocalizer["Account_Login_RegisterNewUser"]</a>
-			</p>
-		</div>
-	</form>
-</section>
+			@if (TurnstileOptions.Value.Enabled) {
+				<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="login"></div>
+			}
+
+			<div id="passkeySection">
+				<button type="button" data-passkey="login" data-options-url="@Url.Action("PasskeyRequestOptions", "Account")" data-submit-url="@Url.Action("PasskeyLogin", "Account", new { returnUrl = ViewData["ReturnUrl"] })" data-error-text="@SharedLocalizer["Account_Login_PasskeyFailed"]">@SharedLocalizer["Account_Login_PasskeyButton"]</button>
+				<span data-passkey-message></span>
+			</div>
+			<button type="submit" id="passwordSubmitButton" hidden disabled>@SharedLocalizer["Account_Login_Button"]</button>
+			<a asp-action="ForgotPassword">@SharedLocalizer["Account_Login_ForgotPassword"]</a>
+			<a asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]">@SharedLocalizer["Account_Login_RegisterNewUser"]</a>
+		</form>
+	</section>
+</article>
 
 @section Scripts {
 	@if (TurnstileOptions.Value.Enabled) {

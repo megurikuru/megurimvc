@@ -138,6 +138,8 @@
 			display: none;
 		}
 	}
+
+	& > a {
+		line-height: 2.5rem;
+	}
 }
-
-
