@@ -18,7 +18,36 @@
 	}
 }
 
-button, 
+button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 100%;
+	min-height: var(--control-height);
+	padding: 0.5rem 1.25rem;
+	line-height: 1.25;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-sm);
+	color: var(--color-text);
+	transition: background-color 0.2s ease, color 0.2s ease;
+
+	& > img.icon:only-child {
+		margin-right: 0;
+	}
+
+	&:hover:not(:disabled) {
+		background-color: var(--color-button-main-hover);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
 .button-like {
 	display: inline-flex;
 	align-items: center;
