@@ -42,13 +42,17 @@
 
 <article>
 	@* 投稿タイトル（詳細画面への個別リンク） *@
-	<h1>
-		<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@displayTitle</a>
-	</h1>
+	<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+		<h1>
+			@displayTitle
+		</h1>
+	</a>
 
 	@* 本文プレビュー（Home/Index, Profile/Details, Post/Index, Tag/Details で表示） *@
 	@if (Model.BodyMaxLength > 0 && !string.IsNullOrWhiteSpace(post.Body)) {
-		<p>@(post.Body.Length > Model.BodyMaxLength ? post.Body.Substring(0, Model.BodyMaxLength) + "..." : post.Body)</p>
+		<a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">
+			<p>@(post.Body.Length > Model.BodyMaxLength ? post.Body.Substring(0, Model.BodyMaxLength) + "..." : post.Body)</p>
+		</a>
 	}
 
 	@* 添付画像一覧（LinkImagesToFile=true なら画像ファイルを別タブで開く） *@

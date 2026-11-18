@@ -25,10 +25,6 @@ main {
 	margin-top: 0.5rem;
 	min-width: 0;
 
-	& > .in-develop + * {
-		margin-top: 0.5rem;
-	}
-
 	#post-list {
 		display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（縦並び column）で配置 */
 		flex-direction: column;
@@ -42,7 +38,7 @@ main {
 
 #search-box {
 	padding: 0.5rem 0 0 0;
-	border-top: 1px solid var(--color-border);
+	/*border-top: 1px solid var(--color-border);*/
 
 	& > p {
 		margin-top: 0.5rem;
@@ -51,8 +47,7 @@ main {
 }
 
 footer {
-	margin-top: 0.5rem;
-	nav.nav-grid + & {
+	:where(nav.nav-grid) + & {
 		margin-top: 0;
 	}
 
@@ -60,4 +55,10 @@ footer {
 	padding: 0.5rem;
 	border-top: 1px solid var(--color-border);
 	text-align: center;
+
+	.footer-links {
+		display: block grid;
+		grid-template-columns: repeat(3, 1fr);
+		margin-bottom: 0.5rem;
+	}
 }

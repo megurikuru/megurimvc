@@ -1,12 +1,10 @@
 ﻿/* 各種パーツ */
 
 .in-develop {
-	display: block;
-	width: fit-content;
-	margin: 0 auto;
-	padding: 0.5rem 0.5rem 0 0.5rem;
-	font-size: 0.8rem;
-	color: #0069B7; /* 青色 */ 
+	padding: 0.5rem;
+	font-size: 0.7em;
+	text-align: center;
+	color: #0069B7; /* 青色 */
 }
 
 .top-link {
@@ -14,6 +12,18 @@
 	width: fit-content;
 	margin: 0 auto;
 	color: #E4007F; /* ピンク */
+
+	& a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	& .top-icon {
+		width: 1.1rem;
+		height: 1.1rem;
+		transform: translateY(0.1rem);
+	}
 }
 
 .icon-wrap {

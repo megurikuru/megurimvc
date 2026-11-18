@@ -1,10 +1,15 @@
 ﻿/* ナビゲーション */
-#nav-main {
+/*body:not([data-controller="Fandom" i]) #nav-main {
 	margin-top: 0.5rem;
+}*/
+
+body {
+	&:has(.pagination) #nav-main {
+		margin-top: 0.5rem;
+	}
 }
 
 .nav-grid {
-	font-size: 1rem;
 
 	ul {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（3均等列）で配置 */

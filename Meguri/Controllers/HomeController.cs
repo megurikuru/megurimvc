@@ -202,6 +202,21 @@ namespace Meguri.Controllers {
             return View();
         }
 
+        // プライバシーポリシー画面の表示
+        public IActionResult Privacy() {
+            return View();
+        }
+
+        // 利用規約画面の表示
+        public IActionResult Terms() {
+            return View();
+        }
+
+        // 運営者情報画面の表示
+        public IActionResult Operator() {
+            return View();
+        }
+
         // エラー画面の表示
         public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

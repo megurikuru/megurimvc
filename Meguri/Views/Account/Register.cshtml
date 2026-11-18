@@ -63,19 +63,30 @@
 			<span asp-validation-for="BirthMonth"></span>
 			<span asp-validation-for="BirthDay"></span>
 		</div>
-		@if (TurnstileOptions.Value.Enabled) {
-			<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="signup"></div>
-		}
 		<div id="passkeySection">
 			<div>
 				<label asp-for="PasskeyName">@SharedLocalizer["Manage_Passkeys_Name"]</label>
 				<input asp-for="PasskeyName" maxlength="100" />
 				<span asp-validation-for="PasskeyName"></span>
 			</div>
-			<button type="button" data-passkey="create" data-options-url="@Url.Action("PasskeyRegisterOptions", "Account")" data-submit-url="@Url.Action("PasskeyRegister", "Account", new { returnUrl = ViewData["ReturnUrl"] })" data-error-text="@SharedLocalizer["Account_Register_PasskeyFailed"]">@SharedLocalizer["Account_Register_PasskeyButton"]</button>
-			<span data-passkey-message></span>
 		</div>
-		<button type="submit" id="passwordSubmitButton" hidden disabled>@SharedLocalizer["Account_Register_Button"]</button>
+		<div>
+			<label>@SharedLocalizer["Account_Register_Terms"]</label>
+			<div class="terms-box">
+				@await Html.PartialAsync("_TermsContent")
+			</div>
+			<label class="option-row">
+				<input asp-for="AgreeToTerms" required data-msg-required="@SharedLocalizer["Validation_AgreeToTerms"]" />
+				<span>@SharedLocalizer["Account_Register_AgreeToTerms"]</span>
+			</label>
+			<span asp-validation-for="AgreeToTerms"></span>
+		</div>
+		@if (TurnstileOptions.Value.Enabled) {
+			<div class="cf-turnstile" data-sitekey="@TurnstileOptions.Value.SiteKey" data-action="signup"></div>
+		}
+		<button type="submit" id="passwordSubmitButton" hidden="@(!isPasswordMode)" disabled="@(!isPasswordMode)">@SharedLocalizer["Account_Register_Button"]</button>
+		<button type="button" data-passkey="create" data-options-url="@Url.Action("PasskeyRegisterOptions", "Account")" data-submit-url="@Url.Action("PasskeyRegister", "Account", new { returnUrl = ViewData["ReturnUrl"] })" data-error-text="@SharedLocalizer["Account_Register_PasskeyFailed"]" hidden="@isPasswordMode" disabled="@isPasswordMode">@SharedLocalizer["Account_Register_PasskeyButton"]</button>
+		<span data-passkey-message></span>
 	</form>
 </article>
 

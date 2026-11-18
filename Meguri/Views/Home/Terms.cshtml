@@ -1,0 +1,10 @@
+@{
+	ViewData["Title"] = "利用規約";
+}
+
+<article>
+	<h2>@ViewData["Title"]</h2>
+	<section class="terms">
+		@await Html.PartialAsync("_TermsContent")
+	</section>
+</article>
