@@ -103,7 +103,7 @@ export default class PasskeyManager {
         const passwordInputs = passwordSection ? passwordSection.querySelectorAll('input') : [];
         const passkeyInputs = passkeySection ? passkeySection.querySelectorAll('input') : [];
         const form = selector.closest('form');
-        const passkeyButton = passkeySection?.querySelector('button[data-passkey]');
+        const passkeyButton = form?.querySelector('button[data-passkey]');
 
         const setMode = (isPasskey) => {
             if (isPasskey) {
@@ -111,6 +111,10 @@ export default class PasskeyManager {
                 passwordInputs.forEach(i => i.disabled = true);
                 if (passkeySection) passkeySection.hidden = false;
                 passkeyInputs.forEach(i => i.disabled = false);
+                if (passkeyButton) {
+                    passkeyButton.hidden = false;
+                    passkeyButton.disabled = false;
+                }
                 if (passwordSubmitButton) {
                     passwordSubmitButton.hidden = true;
                     passwordSubmitButton.disabled = true;
@@ -120,6 +124,10 @@ export default class PasskeyManager {
                 passwordInputs.forEach(i => i.disabled = false);
                 if (passkeySection) passkeySection.hidden = true;
                 passkeyInputs.forEach(i => i.disabled = true);
+                if (passkeyButton) {
+                    passkeyButton.hidden = true;
+                    passkeyButton.disabled = true;
+                }
                 if (passwordSubmitButton) {
                     passwordSubmitButton.hidden = false;
                     passwordSubmitButton.disabled = false;

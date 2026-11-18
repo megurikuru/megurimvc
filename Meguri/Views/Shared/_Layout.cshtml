@@ -12,8 +12,8 @@
 	@if (isHomePage) {
 		@await Html.PartialAsync("_NavMain")
 	}
-	<main>
-		@* <div class="in-develop">開発中のため、データを消去する場合があります。</div> *@
+	<main>		
+		<p class="in-develop">現在開発中です。予告なく、データが消去されたり、サービスが停止する場合があります。</p>
 		@RenderBody()
 	</main>
 	@if (isHomePage) {
@@ -24,14 +24,14 @@
 	@await Html.PartialAsync("_Footer")
 
 	<script>
-		window.MeguriI18n = {
-			maxTagsAlertFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_MaxTagsAlertFormat"].Value)),
-			maxImagesAlertFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_MaxImagesAlertFormat"].Value)),
-			maxImageSizeErrorFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Image_Error_MaxSizeExceeded"].Value)),
-			replyNoticeFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_ReplyNoticeFormat"].Value)),
-			removeLabel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Common_Remove"].Value)),
-			cancelLabel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Common_Cancel"].Value))
-		};
+			window.MeguriI18n = {
+				maxTagsAlertFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_MaxTagsAlertFormat"].Value)),
+				maxImagesAlertFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_MaxImagesAlertFormat"].Value)),
+				maxImageSizeErrorFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Image_Error_MaxSizeExceeded"].Value)),
+				replyNoticeFormat: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Js_ReplyNoticeFormat"].Value)),
+				removeLabel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Common_Remove"].Value)),
+				cancelLabel: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(SharedLocalizer["Common_Cancel"].Value))
+					};
 	</script>
 	<script type="module" src="~/js/meguri.js" asp-append-version="true"></script>
 	@RenderSection("Scripts", required: false)

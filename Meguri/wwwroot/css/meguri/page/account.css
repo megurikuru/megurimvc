@@ -1,0 +1,7 @@
+/* Account コントローラー固有スタイル */
+body[data-controller="Account" i] {
+
+	#nav-main {
+		margin-top: 0.5rem;
+	}
+}

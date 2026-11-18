@@ -1,5 +1,22 @@
 ﻿/* 画面幅が 768px 以上の場合（タブレット・デスクトップ向け） */
 @media (min-width: 768px) {
+
+	body > main > p.in-develop,
+	body[data-controller="Home" i] > main > p.in-develop {
+		padding-top: 0;
+		border-top: none;
+	}
+
+	body[data-controller="Home" i][data-action="Index" i] .in-develop {
+		border-top: none;
+	}
+
+	body[data-controller="Home" i][data-action="Privacy" i] > main > p.in-develop,
+	body[data-controller="Home" i][data-action="Terms" i] > main > p.in-develop,
+	body[data-controller="Home" i][data-action="Operator" i] > main > p.in-develop {
+		padding-top: 0.5rem;
+	}
+	
 	/* 全体レイアウト */
 	body {
 		grid-template-columns: minmax(0, 1fr) calc(260px + 0.5rem);
@@ -15,7 +32,7 @@
 	footer {
 		grid-column: 1 / -1;
 		margin-top: 0.5rem;
-		border-top: none;
+		border-top: 1px solid var(--color-border);
 		padding: 0.5rem;
 	}
 
@@ -25,10 +42,6 @@
 		margin-top: 0.5rem;
 		width: 100%;
 		min-width: 0;
-
-		& > .in-develop + * {
-			margin-top: 0.5rem;
-		}
 	}
 
 	/* 基本要素 */
@@ -40,7 +53,8 @@
 
 	body[data-controller="Account" i],
 	body[data-controller="Manage" i],
-	body[data-controller="Post" i] {
+	body[data-controller="Post" i],
+	body[data-controller="Home" i]:not([data-action="Index" i]) {
 		article {
 			padding-bottom: 0.5rem;
 		}
@@ -72,10 +86,6 @@
 	}
 
 	/* パーツ */
-	.in-develop {
-		padding-top: 0;
-	}
-
 	.breadcrumb {
 		border-right: 1px solid var(--color-border);
 		border-left: 1px solid var(--color-border);
@@ -98,15 +108,12 @@
 		}
 	}
 
-
-
 	.pagination {
 		padding: 0.5rem 0 0 0;
 	}
 
 	#search-box {
 		padding: 0;
-		border: none;
 
 		.search {
 			padding-right: 0;
@@ -116,7 +123,7 @@
 
 	body[data-controller="Tag" i] {
 		#search-box {
-			margin-top: 0.5rem;
+			padding-top: 0.5rem;
 		}
 	}
 

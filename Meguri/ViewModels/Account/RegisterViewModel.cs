@@ -33,11 +33,15 @@ namespace Meguri.ViewModels.Account {
         [Display(Name = "Manage_Passkeys_Name")]
         public string? PasskeyName { get; set; }
 
+        [Display(Name = "Account_Register_AgreeToTerms")]
+        public bool AgreeToTerms { get; set; }
+
         public DateOnly DateOfBirth { get; protected set; }
 
         public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
+            var localizer = validationContext.GetService(typeof(IStringLocalizer<SharedResource>)) as IStringLocalizer<SharedResource>;
+
             if (BirthYear.HasValue && BirthMonth.HasValue && BirthDay.HasValue) {
-                var localizer = validationContext.GetService(typeof(IStringLocalizer<SharedResource>)) as IStringLocalizer<SharedResource>;
                 string invalidDateMessage = localizer?["Validation_InvalidDate"] ?? "Validation_InvalidDate";
 
                 bool isValidDate = true;
@@ -50,6 +54,11 @@ namespace Meguri.ViewModels.Account {
                 if (!isValidDate || DateOfBirth > DateOnly.FromDateTime(DateTime.Today)) {
                     yield return new ValidationResult(invalidDateMessage, new[] { nameof(BirthYear), nameof(BirthMonth), nameof(BirthDay) });
                 }
+            }
+
+            if (!AgreeToTerms) {
+                string agreeToTermsMessage = localizer?["Validation_AgreeToTerms"] ?? "Validation_AgreeToTerms";
+                yield return new ValidationResult(agreeToTermsMessage, new[] { nameof(AgreeToTerms) });
             }
         }
     }

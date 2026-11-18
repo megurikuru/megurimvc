@@ -1,5 +1,10 @@
 /* Homeページ固有スタイル */
 
+body[data-controller="Home" i][data-action="Index" i] .in-develop {
+	padding-bottom: 0;
+	border-top: 1px solid var(--color-border);
+}
+
 body[data-controller="Home" i] {
 
 	main {
@@ -41,9 +46,55 @@ body[data-controller="Home" i] {
 		}
 	}
 
-	.pagination,
-	footer {
+	.pagination {
 		margin-top: 0;
 	}
-}
+	/* 運営者ページ */
+	.operator-info {
+		border-top: 1px solid var(--color-border);
+		padding: 0.75rem 0.5rem;
 
+		& > div + div {
+			margin-top: 1.25rem;
+		}
+
+		& dt {
+			font-weight: bold;
+		}
+
+		& dd {
+			margin-top: 0.5rem;
+
+			& + dd {
+				margin-top: 0.75rem;
+			}
+		}
+
+		& a {
+			padding: 0.35rem 0;
+		}
+
+		& .icon-external {
+			margin-left: 0.25rem;
+			margin-right: 0;
+			width: 1rem;
+			height: 1rem;
+		}
+	}
+
+	.terms {
+		border-top: 1px solid var(--color-border);
+
+		p {
+			margin-bottom: 0.5rem;
+		}
+	}
+
+	.privacy {
+		border-top: 1px solid var(--color-border);
+
+		p {
+			margin-bottom: 0.5rem;
+		}
+	}
+}

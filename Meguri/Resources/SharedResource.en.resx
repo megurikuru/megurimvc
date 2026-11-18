@@ -1843,4 +1843,13 @@
   <data name="Message_Error_DirectSingleRecipient" xml:space="preserve">
     <value>Only one recipient can be selected for a direct message.</value>
   </data>
+  <data name="Account_Register_Terms" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="Account_Register_AgreeToTerms" xml:space="preserve">
+    <value>I agree to the Terms of Service</value>
+  </data>
+  <data name="Validation_AgreeToTerms" xml:space="preserve">
+    <value>You must agree to the Terms of Service.</value>
+  </data>
 </root>

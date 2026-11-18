@@ -340,19 +340,19 @@ namespace Meguri.Controllers {
             ViewData["ReturnUrl"] = returnUrl;
             if (!await _turnstileService.VerifyAsync(turnstileToken, "signup", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
                 ModelState.AddModelError(string.Empty, _localizer["Account_Error_TurnstileFailed"]);
-                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
+                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName, AgreeToTerms = model.AgreeToTerms });
             }
 
             if (string.IsNullOrEmpty(model.CredentialJson)) {
                 ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
-                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
+                return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName, AgreeToTerms = model.AgreeToTerms });
             }
 
             if (ModelState.IsValid) {
                 var withdrawnUser = await _userManager.FindByNameAsync(model.UserName);
                 if (withdrawnUser != null && withdrawnUser.IsWithdrawn) {
                     ModelState.AddModelError(nameof(model.UserName), _localizer["Account_Error_UnavailableUserName"]);
-                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName, AgreeToTerms = model.AgreeToTerms });
                 }
 
                 PasskeyAttestationResult attestation;
@@ -361,13 +361,13 @@ namespace Meguri.Controllers {
                 } catch (Exception ex) {
                     _logger.LogWarning(ex, "Passkey attestation threw an exception.");
                     ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
-                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName, AgreeToTerms = model.AgreeToTerms });
                 }
 
                 if (!attestation.Succeeded) {
                     _logger.LogWarning("Passkey registration failed: {Error}", attestation.Failure?.Message);
                     ModelState.AddModelError(string.Empty, _localizer["Account_Register_PasskeyFailed"]);
-                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName, AgreeToTerms = model.AgreeToTerms });
                 }
 
                 var user = new ApplicationUser {
@@ -398,7 +398,7 @@ namespace Meguri.Controllers {
                 AddErrors(result);
             }
 
-            return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName });
+            return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName, AgreeToTerms = model.AgreeToTerms });
         }
 
         [HttpGet]

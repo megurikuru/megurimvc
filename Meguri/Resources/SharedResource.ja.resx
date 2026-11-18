@@ -1843,4 +1843,13 @@
   <data name="Message_Error_DirectSingleRecipient" xml:space="preserve">
     <value>ダイレクトメッセージの宛先は1名のみ選択できます。</value>
   </data>
+  <data name="Account_Register_Terms" xml:space="preserve">
+    <value>利用規約</value>
+  </data>
+  <data name="Account_Register_AgreeToTerms" xml:space="preserve">
+    <value>利用規約に同意する</value>
+  </data>
+  <data name="Validation_AgreeToTerms" xml:space="preserve">
+    <value>利用規約への同意が必要です。</value>
+  </data>
 </root>

@@ -1,6 +1,6 @@
 ﻿/* 投稿 */
 article {
-	margin-top: 0.5rem;
+	/*margin-top: 0.5rem;*/
 
 	&:first-of-type {
 		margin-top: 0;
@@ -11,7 +11,9 @@ article {
 		padding: 0.5rem 0.5rem 0 0.5rem;
 	}
 
-	h1 + p {
+	h1 + p,
+	:has(> h1) + p,
+	:has(> h1) + * > p:first-of-type {
 		border-top: 1px solid var(--color-border);
 	}
 
@@ -67,7 +69,6 @@ article {
 		overflow-x: auto;
 		min-width: 0;
 		padding: 0.5rem;
-		border-top: 1px solid var(--color-border);
 
 		:not(h1):not(h2) + & {
 			margin-top: 0.5rem;

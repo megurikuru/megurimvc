@@ -18,7 +18,7 @@ textarea {
 	--color-border: #BBB9CA;					/* 紫みがかったライトグレー */
 
 	/* ナビゲーション */
-	--color-nav-main: #E9E4F0;				/* 淡いラベンダーグレー（薄紫色） */
+	--color-nav-main: #EAE3EF;				 /*淡いラベンダーグレー（薄紫色）*/ 
 	--color-nav-main-hover: #D8CFE8;	/* やや深みのある淡いラベンダー（薄紫色） */
 
 
@@ -26,7 +26,7 @@ textarea {
 	--color-button-main: #FFFFFF;				/* 純白 */
 	--color-button-main-hover: #EBEBEB;	/* 薄いグレー */
 
-	--color-bg-title: #DBDBDB;				/* 明るいライトグレー */
+	--color-bg-title: #E5E5E5;				/* 明るいライトグレー */
 
 	--color-text: #1f2937;						/* わずかに青みがかったダークグレー */
 
