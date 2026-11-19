@@ -1,8 +1,11 @@
 /* Homeページ固有スタイル */
 
 body[data-controller="Home" i][data-action="Index" i] .in-develop {
-	padding-bottom: 0;
 	border-top: 1px solid var(--color-border);
+
+	&:has(+ #search-box) {
+		padding-bottom: 0;
+	}
 }
 
 body[data-controller="Home" i] {

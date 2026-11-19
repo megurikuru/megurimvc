@@ -11,7 +11,7 @@ namespace Meguri.ViewModels.Manage {
 
         public bool HasAuthenticator { get; set; }
 
-        public bool CanRemovePasswordAnd2fa => Passkeys.Count > 0 && (HasPassword || Is2faEnabled || HasAuthenticator);
+        public bool CanRemovePasswordAnd2fa => Passkeys.Count > 0 && HasPassword;
 
         public string StatusMessage { get; set; }
     }

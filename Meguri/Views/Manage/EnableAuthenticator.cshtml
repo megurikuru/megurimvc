@@ -4,43 +4,45 @@
 	ViewData.AddActivePage(ManageNavPages.TwoFactorAuthentication);
 }
 
-<h2>@ViewData["Title"]</h2>
-<div class="description">
-	<p>@SharedLocalizer["Manage_EnableAuthenticator_Intro"]</p>
-	<ol>
-		<li>
-			<p>
-				@SharedLocalizer["Manage_EnableAuthenticator_AppInstruction"]
-			</p>
-		</li>
-		<li>
-			<div>
+<article>
+	<h2>@ViewData["Title"]</h2>
+	<div class="description">
+		<p>@SharedLocalizer["Manage_EnableAuthenticator_Intro"]</p>
+		<ol>
+			<li>
 				<p>
-					@SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt"] 
-					<br />
-					<br /><kbd>@Model.SharedKey</kbd>
+					@SharedLocalizer["Manage_EnableAuthenticator_AppInstruction"]
 				</p>
-				@* <div >@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div> *@
-				<div id="qrCode"></div>
-				<div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
-			</div>
-		</li>
-		<li>
-			<p>
-				@SharedLocalizer["Manage_EnableAuthenticator_ConfirmationPrompt"]
-			</p>
-			<form method="post" class="account">
+			</li>
+			<li>
 				<div>
-					<label asp-for="Code">@SharedLocalizer["Manage_EnableAuthenticator_VerificationCode"]</label>
-					<input asp-for="Code" autocomplete="off" inputmode="numeric" />
-					<span asp-validation-for="Code"></span>
+					<p>
+						@SharedLocalizer["Manage_EnableAuthenticator_ScanPrompt"] 
+						<br />
+						<br /><kbd>@Model.SharedKey</kbd>
+					</p>
+					@* <div >@SharedLocalizer["Manage_EnableAuthenticator_QRHint"] <a href="https://go.microsoft.com/fwlink/?Linkid=852423">@SharedLocalizer["Manage_EnableAuthenticator_Documentation"]</a>.</div> *@
+					<div id="qrCode"></div>
+					<div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
 				</div>
-				<button type="submit">@SharedLocalizer["Manage_EnableAuthenticator_VerifyButton"]</button>
-				<div asp-validation-summary="All"></div>
-			</form>
-		</li>
-	</ol>
-</div>
+			</li>
+			<li>
+				<p>
+					@SharedLocalizer["Manage_EnableAuthenticator_ConfirmationPrompt"]
+				</p>
+				<form method="post">
+					<div class="two-factor-code">
+						<label asp-for="Code">@SharedLocalizer["Manage_EnableAuthenticator_VerificationCode"]</label>
+						<input asp-for="Code" autocomplete="off" inputmode="numeric" />
+						<span asp-validation-for="Code"></span>
+					</div>
+					<button type="submit">@SharedLocalizer["Manage_EnableAuthenticator_VerifyButton"]</button>
+					<div asp-validation-summary="All"></div>
+				</form>
+			</li>
+		</ol>
+	</div>
+</article>
 
 @section Scripts {
 	<script src="~/lib/qrcodejs/qrcode.min.js"></script>

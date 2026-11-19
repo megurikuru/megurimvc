@@ -50,6 +50,8 @@ input[type="file"],
 
 /* 既存画像表示（アバター・ヘッダー・一般） */
 .file-upload-current-avatar {
+	display: block;
+	margin: 0.5rem auto;
 	width: 120px;
 	height: 120px;
 	object-fit: cover;
@@ -57,12 +59,14 @@ input[type="file"],
 }
 
 .file-upload-current-header {
+	display: block;
 	max-width: 100%;
 	max-height: 150px;
 	object-fit: cover;
 }
 
 .file-upload-current-img {
+	display: block;
 	max-width: 100%;
 	max-height: 150px;
 	object-fit: cover;
