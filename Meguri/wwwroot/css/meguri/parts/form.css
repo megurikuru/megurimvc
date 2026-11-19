@@ -33,16 +33,22 @@
 /* 補助ボタン等の横並びラッパー */
 .inline-actions {
 	display: block flex;
-	margin: 0 0.5rem 0 0;
+	margin: 0.5rem;
 	flex-wrap: wrap;
 	align-items: center;
-
+	/*
 	& > :not([hidden]) {
 		margin: 0.5rem 0 0 0.5rem;
+	}
+	*/
+
+	span {
+		margin-left: 0.5rem;
 	}
 
 	& > button,
 	& > .button-like {
+		margin-left: 1rem;
 		width: max-content;
 	}
 
@@ -142,9 +148,29 @@
 .description {
 	display: block; /* 自身：ブロック要素（横幅全域・改行） / 子：縦並びで余白を統一 */
 	padding: 0.5rem 0.5rem 0 0.5rem;
+	border-top: 1px solid var(--color-border);
 	color: var(--color-text-muted);
 
 	& > :not([hidden]) ~ :not([hidden]) {
+		margin-top: 0.5rem;
+	}
+}
+
+.two-factor-code {
+	display: block; /* 自身：ブロック要素（横幅全域・改行） / 子：縦並びで余白を統一 */
+	margin-top: 0.5rem;
+
+	input[type="text"] {
+		width: 100%;
+		min-height: var(--control-height);
+		padding: 0.5rem 0.75rem;
+		font-size: 1rem;
+		box-sizing: border-box;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-sm);
+	}
+
+	& + button {
 		margin-top: 0.5rem;
 	}
 }

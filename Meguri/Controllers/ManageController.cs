@@ -156,17 +156,15 @@ namespace Meguri.Controllers {
             }
 
             var passkeys = await _userManager.GetPasskeysAsync(user);
-            if (passkeys.Count == 0) {
+            if (passkeys.Count == 0 || !await _userManager.HasPasswordAsync(user)) {
                 StatusMessage = _localizer["Manage_Passkeys_Failed"].Value;
                 return RedirectToAction(nameof(Passkeys));
             }
 
-            if (await _userManager.HasPasswordAsync(user)) {
-                var removePasswordResult = await _userManager.RemovePasswordAsync(user);
-                if (!removePasswordResult.Succeeded) {
-                    AddErrors(removePasswordResult);
-                    return RedirectToAction(nameof(Passkeys));
-                }
+            var removePasswordResult = await _userManager.RemovePasswordAsync(user);
+            if (!removePasswordResult.Succeeded) {
+                AddErrors(removePasswordResult);
+                return RedirectToAction(nameof(Passkeys));
             }
 
             if (user.TwoFactorEnabled) {
