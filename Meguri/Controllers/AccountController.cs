@@ -164,7 +164,7 @@ namespace Meguri.Controllers {
 
             // サインカウント等を更新してからサインイン（Passkeyは多要素認証済みのため2FAは求めない）
             await _userManager.AddOrUpdatePasskeyAsync(user, assertion!.Passkey);
-            await _signInManager.SignInAsync(user, rememberMe);
+            await _signInManager.SignInAsync(user, rememberMe, "passkey");
             _logger.LogInformation("User logged in with a passkey.");
             return RedirectToLocal(returnUrl);
         }
