@@ -5,9 +5,19 @@
 @using Meguri.ViewModels.Manage
 @using Meguri.Views.Manage
 @inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
 	var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 	var isPasskeyLogin = User.HasClaim(c => (c.Type == ClaimTypes.AuthenticationMethod || c.Type == "amr") && c.Value == "passkey");
+	if (!isPasskeyLogin) {
+		var currentUser = await UserManager.GetUserAsync(User);
+		if (currentUser != null
+			&& !await UserManager.HasPasswordAsync(currentUser)
+			&& (await UserManager.GetPasskeysAsync(currentUser)).Count > 0
+			&& (await UserManager.GetLoginsAsync(currentUser)).Count == 0) {
+			isPasskeyLogin = true;
+		}
+	}
 }
 
 <nav class="nav-grid">
