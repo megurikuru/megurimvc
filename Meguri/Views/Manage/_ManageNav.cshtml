@@ -1,4 +1,5 @@
-﻿@using Meguri
+﻿@using System.Security.Claims
+@using Meguri
 @using Meguri.Models
 @using Meguri.ViewModels.Account
 @using Meguri.ViewModels.Manage
@@ -6,17 +7,30 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @{
 	var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+	var isPasskeyLogin = User.HasClaim(c => (c.Type == ClaimTypes.AuthenticationMethod || c.Type == "amr") && c.Value == "passkey");
 }
 
 <nav class="nav-grid">
 	<ul>
 		<li><a asp-action="Index">@SharedLocalizer["Manage_Nav_Profile"]</a></li>
-		<li><a asp-action="ChangePassword">@SharedLocalizer["Manage_Nav_Password"]</a></li>
+		<li>
+			@if (isPasskeyLogin) {
+				<button type="button" disabled>@SharedLocalizer["Manage_Nav_Password"]</button>
+			} else {
+				<a asp-action="ChangePassword">@SharedLocalizer["Manage_Nav_Password"]</a>
+			}
+		</li>
 		@if (hasExternalLogins) {
 			<li><a asp-action="ExternalLogins">@SharedLocalizer["Manage_Nav_ExternalLogins"]</a></li>
 		}
 		<li><a asp-action="Passkeys">@SharedLocalizer["Manage_Nav_Passkeys"]</a></li>
-		<li><a asp-action="TwoFactorAuthentication">@SharedLocalizer["Manage_Nav_TwoFactorAuthentication"]</a></li>
+		<li>
+			@if (isPasskeyLogin) {
+				<button type="button" disabled>@SharedLocalizer["Manage_Nav_TwoFactorAuthentication"]</button>
+			} else {
+				<a asp-action="TwoFactorAuthentication">@SharedLocalizer["Manage_Nav_TwoFactorAuthentication"]</a>
+			}
+		</li>
 		<li><a asp-action="Options">@SharedLocalizer["Manage_Nav_Options"]</a></li>
 		<li><a asp-action="Withdraw">@SharedLocalizer["Manage_Nav_Withdraw"]</a></li>
 	</ul>
