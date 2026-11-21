@@ -72,7 +72,20 @@ builder.Services.ConfigureApplicationCookie(options => {
 });
 
 // 存在しないユーザーの認証Cookieを毎リクエストで無効化する(DB初期化後の古いCookie対策)
-builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.Zero);
+builder.Services.Configure<SecurityStampValidatorOptions>(options => {
+    options.ValidationInterval = TimeSpan.Zero;
+    options.OnRefreshingPrincipal = context => {
+        if (context.CurrentPrincipal != null && context.NewPrincipal?.Identity is System.Security.Claims.ClaimsIdentity newIdentity) {
+            foreach (var claim in context.CurrentPrincipal.Claims) {
+                if ((claim.Type == System.Security.Claims.ClaimTypes.AuthenticationMethod || claim.Type == "amr")
+                    && !newIdentity.HasClaim(claim.Type, claim.Value)) {
+                    newIdentity.AddClaim(new System.Security.Claims.Claim(claim.Type, claim.Value));
+                }
+            }
+        }
+        return Task.CompletedTask;
+    };
+});
 
 // メール送信サービスの設定と登録
 var smtpServerConf = builder.Configuration.GetSection("SMTPServerConf");                                    // appsettings.jsonからSMTPサーバー設定を取得
