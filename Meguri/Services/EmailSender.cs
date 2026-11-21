@@ -11,8 +11,12 @@ using Meguri.Models;
 
 namespace Meguri.Services;
 
+public interface IAppEmailSender : IEmailSender<ApplicationUser> {
+    Task SendAlreadyRegisteredNoticeAsync(string email, string loginLink, string forgotPasswordLink);
+}
+
 // .NET 標準の IEmailSender<TUser> インターフェースを実装
-public class EmailSender : IEmailSender<ApplicationUser> {
+public class EmailSender : IAppEmailSender {
 
     private readonly ILogger _logger;
     private readonly IStringLocalizer<SharedResource> _localizer;
@@ -42,6 +46,11 @@ public class EmailSender : IEmailSender<ApplicationUser> {
     public async Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode) {
         var textMessage = string.Format(_localizer["Email_ResetPasswordCode_Body"].Value, resetCode);
         await Execute(_localizer["Email_ResetPasswordCode_Subject"].Value, textMessage, email);
+    }
+
+    public async Task SendAlreadyRegisteredNoticeAsync(string email, string loginLink, string forgotPasswordLink) {
+        var textMessage = string.Format(_localizer["Email_AlreadyRegistered_Body"].Value, loginLink, forgotPasswordLink);
+        await Execute(_localizer["Email_AlreadyRegistered_Subject"].Value, textMessage, email);
     }
 
     public async Task Execute(string subject, string message, string toEmail) {

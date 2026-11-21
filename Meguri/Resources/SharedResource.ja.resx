@@ -1385,12 +1385,17 @@
     <value>パスキーの操作に失敗しました。</value>
   </data>
   <data name="Email_ConfirmAccount_Subject" xml:space="preserve">
-    <value>アカウントの確認</value>
+    <value>メールアドレスの確認</value>
   </data>
   <data name="Email_ConfirmAccount_Body" xml:space="preserve">
-    <value>以下のリンクをクリックして、アカウントを確定してください。
+    <value>メールアドレスの実在確認のため、以下のリンクをクリックしてください。
 
-{0}</value>
+{0}
+
+ユーザー登録を完了するためには、メールアドレスの実在確認が必要になります。
+よろしくお願いいたします。
+
+meguri - 『好き』がめぐるSNS</value>
   </data>
   <data name="Email_ResetPassword_Subject" xml:space="preserve">
     <value>パスワードのリセット</value>
@@ -1851,5 +1856,31 @@
   </data>
   <data name="Validation_AgreeToTerms" xml:space="preserve">
     <value>利用規約への同意が必要です。</value>
+  </data>
+  <data name="Email_AlreadyRegistered_Subject" xml:space="preserve">
+    <value>アカウント登録のお知らせ</value>
+  </data>
+  <data name="Email_AlreadyRegistered_Body" xml:space="preserve">
+    <value>このメールアドレスを使用してアカウントの新規登録が試行されましたが、このメールアドレスは既に登録されています。
+
+既にアカウントをお持ちの場合は、以下のページからログインしてください。
+{0}
+
+パスワードをお忘れの場合は、以下のページから再設定を行ってください。
+{1}
+
+このメールにお心当たりがない場合は、第三者が誤って入力した可能性があります。アカウントへの影響はありませんので、このまま破棄してください。</value>
+  </data>
+  <data name="Manage_Options_ContentDisplay" xml:space="preserve">
+    <value>コンテンツ表示設定</value>
+  </data>
+  <data name="Manage_Options_ShowSexual" xml:space="preserve">
+    <value>性的な投稿（R-18）を表示する</value>
+  </data>
+  <data name="Manage_Options_ShowViolence" xml:space="preserve">
+    <value>暴力表現・グロテスクを含む投稿（R-18G）を表示する</value>
+  </data>
+  <data name="Manage_Options_UnderageNotice" xml:space="preserve">
+    <value>※18歳未満の方は性的・暴力表現を含む投稿を表示できません。</value>
   </data>
 </root>

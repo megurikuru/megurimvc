@@ -42,16 +42,41 @@ builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(options => {
         options.SignIn.RequireConfirmedEmail = true;
         options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;   // Passkeyテーブルを使用
+
+        // パスワード強度・アカウントロックアウトの推奨既定値（NIST SP 800-63B 準拠・appsettings.json の Identity セクションで上書き可能）
+        options.Password.RequiredLength = Meguri.Constants.IdConst.MinLength;
+        options.Password.RequiredUniqueChars = Meguri.Constants.IdConst.RequiredUniqueChars;
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+
+        options.Lockout.AllowedForNewUsers = true;
+        options.Lockout.MaxFailedAccessAttempts = Meguri.Constants.IdConst.MaxFailedAccessAttempts;
+        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(Meguri.Constants.IdConst.LockoutMinutes);
+
+        builder.Configuration.GetSection("Identity").Bind(options);
     })
     .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();                    // パスワードリセット、2要素認証用のトークン生成機能
+
+// 認証Cookieのセキュリティ設定
+builder.Services.ConfigureApplicationCookie(options => {
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.SlidingExpiration = true;
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
 
 // 存在しないユーザーの認証Cookieを毎リクエストで無効化する(DB初期化後の古いCookie対策)
 builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.Zero);
 
 // メール送信サービスの設定と登録
 var smtpServerConf = builder.Configuration.GetSection("SMTPServerConf");                                    // appsettings.jsonからSMTPサーバー設定を取得
+builder.Services.AddTransient<IAppEmailSender, EmailSender>();                                              // アプリケーション拡張メール送信サービスをDIコンテナに登録
 builder.Services.AddTransient<Microsoft.AspNetCore.Identity.IEmailSender<ApplicationUser>, EmailSender>();  // Identity用メール送信サービスをDIコンテナに登録(使用時に毎回新しいインスタンスを生成)
 builder.Services.Configure<SMTPServerConf>(smtpServerConf);                                                 // SMTPサーバー設定をオプションパターンで利用可能にする
 
@@ -136,13 +161,18 @@ builder.Services.Configure<ForwardedHeadersOptions>(options => {
     }
 });
 
-// IPアドレス制限(一定時間内のアクセス回数超過で、そのIPを一定時間ブロック)
+// IPアドレス制限(全体アクセス制限 + パスワードログイン・パスキー試行レート制限)
 var ipRateLimitConf = builder.Configuration.GetSection("IpRateLimiting").Get<IpRateLimitConf>() ?? new IpRateLimitConf();
+var passwordLoginRateLimitConf = builder.Configuration.GetSection("PasswordLoginRateLimiting").Get<PasswordLoginRateLimitConf>() ?? new PasswordLoginRateLimitConf();
+var passkeyRateLimitConf = builder.Configuration.GetSection("PasskeyRateLimiting").Get<PasskeyRateLimitConf>() ?? new PasskeyRateLimitConf();
 var ipBlockList = new IpBlockList();
-if (ipRateLimitConf.Enabled) {
-    var blockDuration = TimeSpan.FromMinutes(Math.Max(1, ipRateLimitConf.BlockMinutes));
-    builder.Services.AddRateLimiter(options => {
-        options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+var blockDuration = TimeSpan.FromMinutes(Math.Max(1, ipRateLimitConf.BlockMinutes));
+const string endpointRateLimitMarkerKey = "EndpointRateLimitPolicy";
+
+builder.Services.AddRateLimiter(options => {
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    if (ipRateLimitConf.Enabled) {
         options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext => {
             var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
             return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions {
@@ -152,17 +182,50 @@ if (ipRateLimitConf.Enabled) {
                 QueueLimit = 0
             });
         });
-        options.OnRejected = (context, _) => {
+    }
+
+    options.AddPolicy(PasswordLoginRateLimitConf.PolicyName, httpContext => {
+        if (!passwordLoginRateLimitConf.Enabled) {
+            return RateLimitPartition.GetNoLimiter("unlimited");
+        }
+        httpContext.Items[endpointRateLimitMarkerKey] = PasswordLoginRateLimitConf.PolicyName;
+        var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions {
+            PermitLimit = Math.Max(1, passwordLoginRateLimitConf.MaxAttempts),
+            Window = TimeSpan.FromMinutes(Math.Max(1, passwordLoginRateLimitConf.WindowMinutes)),
+            QueueLimit = 0
+        });
+    });
+
+    options.AddPolicy(PasskeyRateLimitConf.PolicyName, httpContext => {
+        if (!passkeyRateLimitConf.Enabled) {
+            return RateLimitPartition.GetNoLimiter("unlimited");
+        }
+        httpContext.Items[endpointRateLimitMarkerKey] = PasskeyRateLimitConf.PolicyName;
+        var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        return RateLimitPartition.GetFixedWindowLimiter(ip, _ => new FixedWindowRateLimiterOptions {
+            PermitLimit = Math.Max(1, passkeyRateLimitConf.MaxAttempts),
+            Window = TimeSpan.FromMinutes(Math.Max(1, passkeyRateLimitConf.WindowMinutes)),
+            QueueLimit = 0
+        });
+    });
+
+    options.OnRejected = (context, _) => {
+        var isEndpointPolicy = context.HttpContext.Items.ContainsKey(endpointRateLimitMarkerKey);
+        if (!isEndpointPolicy && ipRateLimitConf.Enabled) {
             var ip = context.HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
             ipBlockList.Block(ip, blockDuration);
             if (ipBlockList.TryGetBlockedUntil(ip, out var until)) {
                 var retryAfter = (int)Math.Ceiling((until - DateTimeOffset.UtcNow).TotalSeconds);
                 context.HttpContext.Response.Headers.RetryAfter = Math.Max(retryAfter, 1).ToString();
             }
-            return ValueTask.CompletedTask;
-        };
-    });
-}
+        } else if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfterSpan)) {
+            var retryAfter = (int)Math.Ceiling(retryAfterSpan.TotalSeconds);
+            context.HttpContext.Response.Headers.RetryAfter = Math.Max(retryAfter, 1).ToString();
+        }
+        return ValueTask.CompletedTask;
+    };
+});
 
 // アプリケーションのビルド(サービス登録完了後
 var app = builder.Build();
@@ -202,7 +265,6 @@ if (ipRateLimitConf.Enabled) {
         }
         await next();
     });
-    app.UseRateLimiter();
 }
 
 app.UseRequestLocalization(localizationOptions);
@@ -212,6 +274,11 @@ app.UseStaticFiles();
 
 // ルーティングを有効化(URLをコントローラー/アクションにマッピング)
 app.UseRouting();
+
+// エンドポイント単位のレート制限属性([EnableRateLimiting])を有効にするためUseRoutingの後に配置
+if (ipRateLimitConf.Enabled || passwordLoginRateLimitConf.Enabled || passkeyRateLimitConf.Enabled) {
+    app.UseRateLimiter();
+}
 
 // 認証ミドルウェア(ユーザーが誰かを確認)
 app.UseAuthentication();

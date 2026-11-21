@@ -29,24 +29,6 @@ namespace Meguri.Controllers {
             _userManager = userManager;
         }
 
-        // ログイン中のユーザーが18歳以上かどうか判定（ImageControllerと同じロジック）
-        private async Task<bool> IsUserAdultAsync() {
-            // 未ログインの場合は成人ではないと判定
-            if (User.Identity?.IsAuthenticated != true) {
-                return false;
-            }
-
-            // ログイン中ユーザー情報を取得
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) {
-                return false;
-            }
-
-            // 生年月日に18年を加算した日付が今日以前か確認して年齢を判定
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            return user.DateOfBirth.AddYears(18) <= today;
-        }
-
         // トップページ（インデックス画面）の表示処理
         public async Task<IActionResult> 
             Index(string? search, int? skip) {
@@ -55,9 +37,12 @@ namespace Meguri.Controllers {
             // パラメータの正規化
             var resolvedSkip = skip.HasValue && skip.Value > 0 ? skip.Value : 0;
 
-            // ユーザーの認証状態と年齢制限のチェック
+            // ユーザーの認証状態とコンテンツ表示設定のチェック
             var isAuthenticated = User.Identity?.IsAuthenticated == true;
-            var isAdult = isAuthenticated && await IsUserAdultAsync();
+            var currentUser = isAuthenticated ? await _userManager.GetUserAsync(User) : null;
+            var isAdult = currentUser?.IsAdult() == true;
+            var showSexual = isAdult && currentUser!.ShowSexual;
+            var showViolence = isAdult && currentUser!.ShowViolence;
 
             // 1. ベースとなる SQL（テーブル名・カラム名をダブルクォーテーションで囲む）
             var sql = @"
@@ -92,10 +77,13 @@ namespace Meguri.Controllers {
             // SQL から Posts のクエリを作成
             var postQuery = _context.Posts.FromSqlRaw(sql, parameters.ToArray());
 
-            // 未ログイン時は外部公開かつ性的・暴力表現なしの投稿のみ、ログイン時は外部公開の投稿または参加している界隈の投稿のみ
-            if (isAuthenticated) {
-                var currentUserId = _userManager.GetUserId(User);
-                postQuery = postQuery.Where(p => p.IsPublic || _context.FandomUsers.Any(fu => fu.UserId == currentUserId && fu.FandomId == p.FandomId));
+            // 未ログイン時は外部公開かつ性的・暴力表現なしの投稿のみ、ログイン時は外部公開または参加界隈の投稿かつ表示設定に一致する投稿のみ
+            if (isAuthenticated && currentUser != null) {
+                var currentUserId = currentUser.Id;
+                postQuery = postQuery.Where(p =>
+                    (p.IsPublic || _context.FandomUsers.Any(fu => fu.UserId == currentUserId && fu.FandomId == p.FandomId)) &&
+                    (!p.IsSexual || showSexual) &&
+                    (!p.IsViolence || showViolence));
             } else {
                 postQuery = postQuery.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
             }

@@ -28,14 +28,6 @@ namespace Meguri.Controllers {
             _userManager = userManager;
         }
 
-        private async Task<bool> IsUserAdultAsync() {
-            if (User.Identity?.IsAuthenticated != true) return false;
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return false;
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            return user.DateOfBirth.AddYears(18) <= today;
-        }
-
         private async Task<(bool CanView, bool Cacheable)> CheckAccessAsync(Image image) {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var isAuthenticated = !string.IsNullOrEmpty(userId);
@@ -43,10 +35,15 @@ namespace Meguri.Controllers {
                 return (true, false);
             }
 
-            var isAdult = await IsUserAdultAsync();
+            var currentUser = isAuthenticated ? await _userManager.GetUserAsync(User) : null;
+            var isAdult = currentUser?.IsAdult() == true;
+            var showSexual = isAdult && currentUser!.ShowSexual;
+            var showViolence = isAdult && currentUser!.ShowViolence;
 
             bool PostVisible(Post p) =>
-                (p.IsPublic || isAuthenticated) && ((!p.IsSexual && !p.IsViolence) || isAdult);
+                (p.IsPublic || isAuthenticated) &&
+                (!p.IsSexual || showSexual) &&
+                (!p.IsViolence || showViolence);
 
             var posts = await _context.PostImages
                 .Where(pi => pi.ImageId == image.Id)

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Meguri.Models;
@@ -21,9 +22,12 @@ namespace Meguri.Controllers {
     [Authorize]
     [Route("[controller]/[action]")]
     public class AccountController : Controller {
+        private static readonly ApplicationUser DummyTimingUser = new() { UserName = "dummy" };
+        private static readonly string DummyPasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(DummyTimingUser, "DummyPassword123!");
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender<ApplicationUser> _emailSender;
+        private readonly IAppEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
         private readonly IStringLocalizer<SharedResource> _localizer;
@@ -32,7 +36,7 @@ namespace Meguri.Controllers {
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender<ApplicationUser> emailSender,
+            IAppEmailSender emailSender,
             ILogger<AccountController> logger,
             ApplicationDbContext context,
             IStringLocalizer<SharedResource> localizer,
@@ -62,6 +66,7 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [EnableRateLimiting(PasswordLoginRateLimitConf.PolicyName)]
         public async Task<IActionResult> Login(LoginViewModel model, [FromForm(Name = "cf-turnstile-response")] string? turnstileToken = null, string returnUrl = null) {
             ViewData["ReturnUrl"] = returnUrl;
             if (!await _turnstileService.VerifyAsync(turnstileToken, "login", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
@@ -71,11 +76,17 @@ namespace Meguri.Controllers {
             if (ModelState.IsValid) {
                 // UserNameベースでログインする
                 var existingUser = await _userManager.FindByNameAsync(model.UserName);
-                if (existingUser != null && existingUser.IsWithdrawn) {
+                if (existingUser == null) {
+                    // ユーザー存在有無による応答時間差（タイミング攻撃）を防ぐためダミーハッシュを検証する
+                    _userManager.PasswordHasher.VerifyHashedPassword(DummyTimingUser, DummyPasswordHash, model.Password);
+                    ModelState.AddModelError(string.Empty, _localizer["Account_InvalidLoginAttempt"]);
+                    return View(model);
+                }
+                if (existingUser.IsWithdrawn) {
                     ModelState.AddModelError(string.Empty, _localizer["Account_Error_UserWithdrawn"]);
                     return View(model);
                 }
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(existingUser, model.Password, model.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded) {
                     _logger.LogInformation("User logged in.");
                     return RedirectToLocal(returnUrl);
@@ -105,6 +116,7 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [EnableRateLimiting(PasskeyRateLimitConf.PolicyName)]
         public async Task<IActionResult> PasskeyRequestOptions(string? userName = null) {
             ApplicationUser? user = null;
             if (!string.IsNullOrWhiteSpace(userName)) {
@@ -117,6 +129,7 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [EnableRateLimiting(PasskeyRateLimitConf.PolicyName)]
         public async Task<IActionResult> PasskeyLogin(string credentialJson, string? userName = null, [FromForm(Name = "cf-turnstile-response")] string? turnstileToken = null, bool rememberMe = false, string returnUrl = null) {
             ViewData["ReturnUrl"] = returnUrl;
             if (!await _turnstileService.VerifyAsync(turnstileToken, "login", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
@@ -175,6 +188,7 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [EnableRateLimiting(PasswordLoginRateLimitConf.PolicyName)]
         public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe, string returnUrl = null) {
             if (!ModelState.IsValid) {
                 return View(model);
@@ -219,6 +233,7 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [EnableRateLimiting(PasswordLoginRateLimitConf.PolicyName)]
         public async Task<IActionResult> LoginWithRecoveryCode(LoginWithRecoveryCodeViewModel model, string returnUrl = null) {
             if (!ModelState.IsValid) {
                 return View(model);
@@ -276,6 +291,21 @@ namespace Meguri.Controllers {
                     return View(model);
                 }
                 var user = new ApplicationUser { UserName = model.UserName, Email = model.Email, DateOfBirth = model.DateOfBirth };
+                var validationErrors = await ValidateRegistrationUserAsync(user, model.Password);
+                if (validationErrors.Count > 0) {
+                    AddErrors(IdentityResult.Failed(validationErrors.ToArray()));
+                    return View(model);
+                }
+
+                var existingByEmail = await FindUserByEmailAsync(model.Email);
+                if (existingByEmail != null) {
+                    // ユーザー存在有無による応答時間差（タイミング攻撃）を防ぐためダミーハッシュを計算する
+                    _userManager.PasswordHasher.HashPassword(DummyTimingUser, model.Password);
+                    await SendAlreadyRegisteredEmailAsync(existingByEmail.Email ?? model.Email);
+                    _logger.LogInformation("Registration attempted with an already registered email address.");
+                    return RedirectToAction(nameof(RegisterConfirmation));
+                }
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with password.");
@@ -290,7 +320,12 @@ namespace Meguri.Controllers {
                     // E-Mail確認が必須なので、自動ログインせずに確認画面へリダイレクト
                     return RedirectToAction(nameof(RegisterConfirmation));
                 }
-                AddErrors(result);
+                if (result.Errors.All(e => e.Code == nameof(IdentityErrorDescriber.DuplicateEmail))) {
+                    await SendAlreadyRegisteredEmailAsync(model.Email);
+                    _logger.LogInformation("Registration attempted with an already registered email address.");
+                    return RedirectToAction(nameof(RegisterConfirmation));
+                }
+                AddErrors(IdentityResult.Failed(result.Errors.Where(e => e.Code != nameof(IdentityErrorDescriber.DuplicateEmail)).ToArray()));
             }
 
             // If we got this far, something failed, redisplay form
@@ -300,6 +335,7 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [EnableRateLimiting(PasskeyRateLimitConf.PolicyName)]
         public async Task<IActionResult> PasskeyRegisterOptions(PasskeyRegisterViewModel model) {
             if (!ModelState.IsValid) {
                 var firstError = ModelState.Values
@@ -309,21 +345,25 @@ namespace Meguri.Controllers {
                 return BadRequest(new { message = firstError ?? _localizer["Account_Register_PasskeyFailed"].Value });
             }
 
-            var withdrawnUser = await _userManager.FindByNameAsync(model.UserName);
-            if (withdrawnUser != null && withdrawnUser.IsWithdrawn) {
-                return BadRequest(new { message = _localizer["Account_Error_UnavailableUserName"].Value });
-            }
-
             var existingByName = await _userManager.FindByNameAsync(model.UserName);
             if (existingByName != null) {
+                if (existingByName.IsWithdrawn) {
+                    return BadRequest(new { message = _localizer["Account_Error_UnavailableUserName"].Value });
+                }
                 return BadRequest(new { message = string.Format(_localizer["Identity_DuplicateUserName"].Value, model.UserName) });
             }
 
-            var existingByEmail = await _userManager.FindByEmailAsync(model.Email);
-            if (existingByEmail != null) {
-                return BadRequest(new { message = string.Format(_localizer["Identity_DuplicateEmail"].Value, model.Email) });
+            var candidateUser = new ApplicationUser {
+                UserName = model.UserName,
+                Email = model.Email,
+                DateOfBirth = model.DateOfBirth
+            };
+            var validationErrors = await ValidateRegistrationUserAsync(candidateUser);
+            if (validationErrors.Count > 0) {
+                return BadRequest(new { message = validationErrors[0].Description });
             }
 
+            // メールアドレスの重複はユーザー列挙攻撃防止のためここではエラーにせず、PasskeyRegister 側で通知メール送信＋確認画面遷移とする
             var userEntity = new PasskeyUserEntity {
                 Id = Guid.NewGuid().ToString(),
                 Name = model.UserName,
@@ -336,6 +376,7 @@ namespace Meguri.Controllers {
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [EnableRateLimiting(PasskeyRateLimitConf.PolicyName)]
         public async Task<IActionResult> PasskeyRegister(PasskeyRegisterViewModel model, [FromForm(Name = "cf-turnstile-response")] string? turnstileToken = null, string returnUrl = null) {
             ViewData["ReturnUrl"] = returnUrl;
             if (!await _turnstileService.VerifyAsync(turnstileToken, "signup", HttpContext.Connection.RemoteIpAddress?.ToString(), HttpContext.RequestAborted)) {
@@ -376,6 +417,19 @@ namespace Meguri.Controllers {
                     Email = model.Email,
                     DateOfBirth = model.DateOfBirth
                 };
+                var validationErrors = await ValidateRegistrationUserAsync(user);
+                if (validationErrors.Count > 0) {
+                    AddErrors(IdentityResult.Failed(validationErrors.ToArray()));
+                    return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName, AgreeToTerms = model.AgreeToTerms });
+                }
+
+                var existingByEmail = await FindUserByEmailAsync(model.Email);
+                if (existingByEmail != null) {
+                    await SendAlreadyRegisteredEmailAsync(existingByEmail.Email ?? model.Email);
+                    _logger.LogInformation("Passkey registration attempted with an already registered email address.");
+                    return RedirectToAction(nameof(RegisterConfirmation));
+                }
+
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded) {
                     _logger.LogInformation("User created a new account with passkey.");
@@ -395,7 +449,12 @@ namespace Meguri.Controllers {
 
                     return RedirectToAction(nameof(RegisterConfirmation));
                 }
-                AddErrors(result);
+                if (result.Errors.All(e => e.Code == nameof(IdentityErrorDescriber.DuplicateEmail))) {
+                    await SendAlreadyRegisteredEmailAsync(model.Email);
+                    _logger.LogInformation("Passkey registration attempted with an already registered email address.");
+                    return RedirectToAction(nameof(RegisterConfirmation));
+                }
+                AddErrors(IdentityResult.Failed(result.Errors.Where(e => e.Code != nameof(IdentityErrorDescriber.DuplicateEmail)).ToArray()));
             }
 
             return View(nameof(Register), new RegisterViewModel { UserName = model.UserName, Email = model.Email, BirthYear = model.BirthYear, BirthMonth = model.BirthMonth, BirthDay = model.BirthDay, PasskeyName = model.PasskeyName, AgreeToTerms = model.AgreeToTerms });
@@ -500,7 +559,12 @@ namespace Meguri.Controllers {
                 throw new ApplicationException($"Unable to load user with ID '{userId}'.");
             }
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            if (!result.Succeeded || user.IsWithdrawn) {
+                return View("Error");
+            }
+            await _signInManager.SignInAsync(user, isPersistent: false);
+            _logger.LogInformation("User confirmed email and signed in.");
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
 
         [HttpGet]
@@ -566,10 +630,14 @@ namespace Meguri.Controllers {
             }
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded) {
+                if (await _userManager.IsLockedOutAsync(user)) {
+                    await _userManager.SetLockoutEndDateAsync(user, null);
+                }
+                await _userManager.ResetAccessFailedCountAsync(user);
                 return RedirectToAction(nameof(ResetPasswordConfirmation));
             }
             AddErrors(result);
-            return View();
+            return View(model);
         }
 
         [HttpGet]
@@ -585,6 +653,43 @@ namespace Meguri.Controllers {
         }
 
         #region Helpers
+
+        private async Task<ApplicationUser?> FindUserByEmailAsync(string email) {
+            var normalizedEmail = _userManager.NormalizeEmail(email);
+            if (string.IsNullOrEmpty(normalizedEmail)) {
+                return null;
+            }
+            return await _userManager.Users
+                .Where(u => u.NormalizedEmail == normalizedEmail)
+                .OrderByDescending(u => u.EmailConfirmed)
+                .FirstOrDefaultAsync();
+        }
+
+        private async Task<List<IdentityError>> ValidateRegistrationUserAsync(ApplicationUser user, string? password = null) {
+            var errors = new List<IdentityError>();
+            foreach (var validator in _userManager.UserValidators) {
+                var result = await validator.ValidateAsync(_userManager, user);
+                if (!result.Succeeded) {
+                    // DuplicateEmail はユーザー列挙攻撃防止のため画面エラーには含めない
+                    errors.AddRange(result.Errors.Where(e => e.Code != nameof(IdentityErrorDescriber.DuplicateEmail)));
+                }
+            }
+            if (password != null) {
+                foreach (var validator in _userManager.PasswordValidators) {
+                    var result = await validator.ValidateAsync(_userManager, user, password);
+                    if (!result.Succeeded) {
+                        errors.AddRange(result.Errors);
+                    }
+                }
+            }
+            return errors;
+        }
+
+        private async Task SendAlreadyRegisteredEmailAsync(string email) {
+            var loginUrl = Url.Action(nameof(Login), "Account", null, Request.Scheme) ?? string.Empty;
+            var forgotPasswordUrl = Url.Action(nameof(ForgotPassword), "Account", null, Request.Scheme) ?? string.Empty;
+            await _emailSender.SendAlreadyRegisteredNoticeAsync(email, loginUrl, forgotPasswordUrl);
+        }
 
         private void AddErrors(IdentityResult result) {
             foreach (var error in result.Errors) {

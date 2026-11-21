@@ -37,13 +37,24 @@ namespace Meguri.Controllers {
             if (fandom == null) return NotFound();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var isAuthenticated = User.Identity?.IsAuthenticated == true;
-            var isJoined = userId != null && await _context.FandomUsers.AnyAsync(fu => fu.FandomId == fandom.Id && fu.UserId == userId);
+            var isAuthenticated = User.Identity?.IsAuthenticated == true && !string.IsNullOrEmpty(userId);
+            var isJoined = isAuthenticated && await _context.FandomUsers.AnyAsync(fu => fu.FandomId == fandom.Id && fu.UserId == userId);
+
+            bool showSexual = false;
+            bool showViolence = false;
+            if (isAuthenticated) {
+                var currentUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == userId);
+                var isAdult = currentUser?.IsAdult() == true;
+                showSexual = isAdult && currentUser!.ShowSexual;
+                showViolence = isAdult && currentUser!.ShowViolence;
+            }
 
             var basePostsQuery = _context.Posts
                 .Where(p => p.FandomId == fandom.Id);
             if (!isAuthenticated) {
                 basePostsQuery = basePostsQuery.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
+            } else {
+                basePostsQuery = basePostsQuery.Where(p => (!p.IsSexual || showSexual) && (!p.IsViolence || showViolence));
             }
 
             var postsQuery = basePostsQuery
@@ -81,6 +92,8 @@ namespace Meguri.Controllers {
             var countablePosts = _context.Posts.AsQueryable();
             if (!isAuthenticated) {
                 countablePosts = countablePosts.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
+            } else {
+                countablePosts = countablePosts.Where(p => (!p.IsSexual || showSexual) && (!p.IsViolence || showViolence));
             }
             if (fandom.Id == 1) {
                 descendantPostsCount = await countablePosts.CountAsync();

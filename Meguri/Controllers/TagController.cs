@@ -124,14 +124,29 @@ namespace Meguri.Controllers {
             if (concept == null) return NotFound();
 
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var isAuthenticated = User.Identity?.IsAuthenticated == true;
+            var isAuthenticated = User.Identity?.IsAuthenticated == true && !string.IsNullOrEmpty(currentUserId);
             var canEdit = concept.UserId == currentUserId || User.IsInRole("Admin");
+
+            bool showSexual = false;
+            bool showViolence = false;
+            if (isAuthenticated) {
+                var currentUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == currentUserId);
+                var isAdult = currentUser?.IsAdult() == true;
+                showSexual = isAdult && currentUser!.ShowSexual;
+                showViolence = isAdult && currentUser!.ShowViolence;
+            }
 
             // PostTags の件数取得とデータ取得 (SQL)
             int postTagsTotalCount;
             if (isAuthenticated) {
                 postTagsTotalCount = await _context.Database
-                    .SqlQuery<int>($"SELECT COUNT(*) AS \"Value\" FROM \"PostTags\" WHERE \"TagConceptId\" = {conceptId}")
+                    .SqlQuery<int>($@"
+                        SELECT COUNT(*) AS ""Value""
+                        FROM ""PostTags"" pt
+                        INNER JOIN ""Posts"" p ON pt.""PostId"" = p.""Id""
+                        WHERE pt.""TagConceptId"" = {conceptId}
+                          AND (p.""IsSexual"" = FALSE OR {showSexual})
+                          AND (p.""IsViolence"" = FALSE OR {showViolence})")
                     .SingleAsync();
             } else {
                 postTagsTotalCount = await _context.Database
@@ -159,6 +174,8 @@ namespace Meguri.Controllers {
                         FROM ""PostTags"" pt
                         INNER JOIN ""Posts"" p ON pt.""PostId"" = p.""Id""
                         WHERE pt.""TagConceptId"" = {conceptId}
+                          AND (p.""IsSexual"" = FALSE OR {showSexual})
+                          AND (p.""IsViolence"" = FALSE OR {showViolence})
                         ORDER BY p.""CreatedAt"" DESC
                         LIMIT {pageSize} OFFSET {resolvedPostSkip}")
                     .Include(pt => pt.Post).ThenInclude(p => p.User)

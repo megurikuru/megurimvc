@@ -26,15 +26,23 @@ namespace Meguri.Controllers {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == id && !u.IsWithdrawn);
             if (user == null) return NotFound();
 
-            var isOwner = User.FindFirstValue(ClaimTypes.NameIdentifier) == user.Id;
-            if (!user.IsProfilePublic && User.Identity?.IsAuthenticated != true) return NotFound();
+            var viewerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAuthenticated = User.Identity?.IsAuthenticated == true && !string.IsNullOrEmpty(viewerId);
+            var isOwner = isAuthenticated && viewerId == user.Id;
+            if (!user.IsProfilePublic && !isAuthenticated) return NotFound();
 
             var query = _context.Posts.Where(p => p.UserId == user.Id);
             if (!isOwner) {
                 query = query.Where(p => p.IsPublic);
-            }
-            if (User.Identity?.IsAuthenticated != true) {
-                query = query.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
+                if (!isAuthenticated) {
+                    query = query.Where(p => !p.IsSexual && !p.IsViolence);
+                } else {
+                    var viewer = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == viewerId);
+                    var isAdult = viewer?.IsAdult() == true;
+                    var showSexual = isAdult && viewer!.ShowSexual;
+                    var showViolence = isAdult && viewer!.ShowViolence;
+                    query = query.Where(p => (!p.IsSexual || showSexual) && (!p.IsViolence || showViolence));
+                }
             }
 
             var totalCount = await query.CountAsync();
