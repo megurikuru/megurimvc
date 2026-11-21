@@ -26,6 +26,12 @@ namespace Meguri.Models {
         /// マイページの外部公開フラグ
         public bool IsProfilePublic { get; set; } = false;
 
+        /// 性的な投稿（R-18）を表示するかどうか
+        public bool ShowSexual { get; set; } = false;
+
+        /// 暴力表現を含む投稿（R-18G）を表示するかどうか
+        public bool ShowViolence { get; set; } = false;
+
         /// マイページのヘッダー画像
         public long? HeaderImageId { get; set; }
         public Image? HeaderImage { get; set; }
@@ -48,5 +54,8 @@ namespace Meguri.Models {
         public ICollection<Message> SentMessages { get; set; } = new List<Message>();
         public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
         public ICollection<TagConcept> TagConcepts { get; set; } = new List<TagConcept>();
+
+        /// 18歳以上かどうかを判定
+        public bool IsAdult() => DateOfBirth.AddYears(18) <= DateOnly.FromDateTime(DateTime.UtcNow);
     }
 }

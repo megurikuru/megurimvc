@@ -1,22 +1,6 @@
 ﻿/* 画面幅が 768px 以上の場合（タブレット・デスクトップ向け） */
 @media (min-width: 768px) {
 
-	body > main > p.in-develop,
-	body[data-controller="Home" i] > main > p.in-develop {
-		padding-top: 0;
-		border-top: none;
-	}
-
-	body[data-controller="Home" i][data-action="Index" i] .in-develop {
-		border-top: none;
-	}
-
-	body[data-controller="Home" i][data-action="Privacy" i] > main > p.in-develop,
-	body[data-controller="Home" i][data-action="Terms" i] > main > p.in-develop,
-	body[data-controller="Home" i][data-action="Operator" i] > main > p.in-develop {
-		padding-top: 0.5rem;
-	}
-	
 	/* 全体レイアウト */
 	body {
 		grid-template-columns: minmax(0, 1fr) calc(260px + 0.5rem);

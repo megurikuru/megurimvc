@@ -40,6 +40,8 @@ namespace Meguri.Controllers {
         // GET: /Post
         public async Task<IActionResult> Index(int? fandomId, string? tag, string? search, int? skip) {
             const int pageSize = 10;
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAuthenticated = User.Identity?.IsAuthenticated == true && !string.IsNullOrEmpty(currentUserId);
 
             var query = _context.Posts
                 .Include(p => p.User)
@@ -49,8 +51,14 @@ namespace Meguri.Controllers {
                 .Include(p => p.Reactions)
                 .AsQueryable();
 
-            if (User.Identity?.IsAuthenticated != true) {
+            if (!isAuthenticated) {
                 query = query.Where(p => p.IsPublic && !p.IsSexual && !p.IsViolence);
+            } else {
+                var currentUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == currentUserId);
+                var isAdult = currentUser?.IsAdult() == true;
+                var showSexual = isAdult && currentUser!.ShowSexual;
+                var showViolence = isAdult && currentUser!.ShowViolence;
+                query = query.Where(p => (!p.IsSexual || showSexual) && (!p.IsViolence || showViolence));
             }
 
             Fandom? currentFandom = null;
@@ -82,7 +90,6 @@ namespace Meguri.Controllers {
                 .ToListAsync();
 
             var fandoms = await _context.Fandoms.ToListAsync();
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var canPostToCurrentFandom = !fandomId.HasValue || (fandomId.Value != 1 && currentUserId != null && await IsJoinedAsync(fandomId.Value, currentUserId));
 
             var routeValues = new Dictionary<string, string>();
@@ -139,8 +146,20 @@ namespace Meguri.Controllers {
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (post == null) return NotFound();
-            if (User.Identity?.IsAuthenticated != true && (!post.IsPublic || post.IsSexual || post.IsViolence)) {
-                return NotFound();
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAuthorOrAdmin = !string.IsNullOrEmpty(currentUserId) && (post.UserId == currentUserId || User.IsInRole("Admin"));
+            if (User.Identity?.IsAuthenticated != true) {
+                if (!post.IsPublic || post.IsSexual || post.IsViolence) {
+                    return NotFound();
+                }
+            } else if (!isAuthorOrAdmin && (post.IsSexual || post.IsViolence)) {
+                var currentUser = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == currentUserId);
+                var isAdult = currentUser?.IsAdult() == true;
+                var showSexual = isAdult && currentUser!.ShowSexual;
+                var showViolence = isAdult && currentUser!.ShowViolence;
+                if ((post.IsSexual && !showSexual) || (post.IsViolence && !showViolence)) {
+                    return NotFound();
+                }
             }
 
             // 多階層パンくず用：投稿先の界隈の祖先を最上位から順に取得する。
@@ -160,11 +179,10 @@ namespace Meguri.Controllers {
             post.ViewCount++;
             await _context.SaveChangesAsync();
 
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var viewModel = new PostDetailsViewModel {
                 Post = post,
                 DisplayTitle = string.IsNullOrWhiteSpace(post.Subject) ? _localizer["Post_Untitled"].Value : post.Subject,
-                IsAuthor = post.UserId == currentUserId || User.IsInRole("Admin"),
+                IsAuthor = isAuthorOrAdmin,
                 Ancestors = ancestors
             };
 

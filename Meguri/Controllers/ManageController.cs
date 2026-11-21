@@ -684,10 +684,14 @@ namespace Meguri.Controllers {
             }
 
             var colorMode = Request.Cookies["meguri_theme"] ?? "auto";
+            var isAdult = user.IsAdult();
 
             var model = new OptionsViewModel {
                 Culture = currentCulture,
                 ColorMode = colorMode,
+                IsAdult = isAdult,
+                ShowSexual = isAdult && user.ShowSexual,
+                ShowViolence = isAdult && user.ShowViolence,
                 StatusMessage = StatusMessage
             };
 
@@ -716,6 +720,20 @@ namespace Meguri.Controllers {
                     model.ColorMode,
                     new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1), IsEssential = true, SameSite = SameSiteMode.Lax }
                 );
+            }
+
+            var isAdult = user.IsAdult();
+            var newShowSexual = isAdult && model.ShowSexual;
+            var newShowViolence = isAdult && model.ShowViolence;
+            if (user.ShowSexual != newShowSexual || user.ShowViolence != newShowViolence) {
+                user.ShowSexual = newShowSexual;
+                user.ShowViolence = newShowViolence;
+                var updateResult = await _userManager.UpdateAsync(user);
+                if (!updateResult.Succeeded) {
+                    AddErrors(updateResult);
+                    model.IsAdult = isAdult;
+                    return View(model);
+                }
             }
 
             StatusMessage = _localizer["Manage_Options_Updated"];
@@ -799,6 +817,8 @@ namespace Meguri.Controllers {
             user.ActiveAvatarImageId = null;
             user.HeaderImageId = null;
             user.IsProfilePublic = false;
+            user.ShowSexual = false;
+            user.ShowViolence = false;
             user.ExternalUrls = string.Empty;
             _context.Posts.RemoveRange(posts);            _context.Images.RemoveRange(images);
 

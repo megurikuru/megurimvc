@@ -12,8 +12,7 @@
 	@if (isHomePage) {
 		@await Html.PartialAsync("_NavMain")
 	}
-	<main>		
-		<p class="in-develop">現在開発中です。予告なく、データが消去されたり、サービスが停止する場合があります。</p>
+	<main>
 		@RenderBody()
 	</main>
 	@if (isHomePage) {

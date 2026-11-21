@@ -23,6 +23,37 @@
 				@SharedLocalizer["Manage_Options_Language_En"]
 			</label>
 		</div>
+
+		<label>@SharedLocalizer["Manage_Options_ContentDisplay"]</label>
+		@if (Model.IsAdult) {
+			<div class="option-row">
+				<input type="checkbox" asp-for="ShowSexual" id="showSexual">
+				<label for="showSexual">
+					@SharedLocalizer["Manage_Options_ShowSexual"]
+				</label>
+			</div>
+			<div class="option-row">
+				<input type="checkbox" asp-for="ShowViolence" id="showViolence">
+				<label for="showViolence">
+					@SharedLocalizer["Manage_Options_ShowViolence"]
+				</label>
+			</div>
+		} else {
+			<div class="option-row">
+				<input type="checkbox" id="showSexual" disabled>
+				<label for="showSexual">
+					@SharedLocalizer["Manage_Options_ShowSexual"]
+				</label>
+			</div>
+			<div class="option-row">
+				<input type="checkbox" id="showViolence" disabled>
+				<label for="showViolence">
+					@SharedLocalizer["Manage_Options_ShowViolence"]
+				</label>
+			</div>
+			<p class="description">@SharedLocalizer["Manage_Options_UnderageNotice"]</p>
+		}
+
 		<button type="submit">@SharedLocalizer["Manage_Options_Save"]</button>
 	</form>
 </article>

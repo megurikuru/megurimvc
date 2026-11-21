@@ -1,0 +1,138 @@
+﻿{
+  // データベース接続文字列
+  "ConnectionStrings": {
+    // ローカルのDBに接続する場合
+    "DefaultConnection": "Server=localhost;Port=;Database=;Username=;Password="
+    // リモートのDBに接続する場合
+    // "DefaultConnection": "Server=;Port=;Database=;Username=;Password="
+  },
+  // データベース初期化設定
+  "DatabaseInitialization": {
+    // trueの場合、起動のたびにユーザー・認証情報を含む全DBデータを削除します。実行後はfalseに戻してください
+    "DeleteAllData": false,
+    // trueの場合、起動時に界隈・タグの初期データを登録します（既存データの削除は行いません）
+    "Enabled": false,
+    // true の場合、Enabled の初期データ登録後にテスト用ユーザー・投稿・画像・メッセージを登録します（登録済みの場合はスキップ）
+    // テストユーザーのパスワードは TestPassword1234! です。
+    "SeedTestData": false
+  },
+  // .NET標準のAddRateLimiterを使用したIPアドレス制限設定
+  "IpRateLimiting": {
+    // true の場合、IPアドレス制限を有効にします
+    "Enabled": true,
+    // アクセス回数を集計する時間(分)
+    "WindowMinutes": 1,
+    // 集計時間内にこの回数以上アクセスしたIPアドレスをブロックします
+    "MaxRequests": 1600,
+    // ブロックする時間(分)
+    "BlockMinutes": 60
+  },
+  // ASP.NET Core Identity の認証・パスワード強度・アカウントロックアウト設定
+  "Identity": {
+    "Password": {
+      // パスワードの最小文字数（最新基準：15文字以上）
+      "RequiredLength": 15,
+      // パスワードに含める必要がある異なる文字の種類数（パスフレーズ許容・構成規則なしのため1）
+      "RequiredUniqueChars": 1,
+      // 数字 ('0'-'9') を1文字以上必須とするか
+      "RequireDigit": false,
+      // 英小文字 ('a'-'z') を1文字以上必須とするか
+      "RequireLowercase": false,
+      // 英大文字 ('A'-'Z') を1文字以上必須とするか
+      "RequireUppercase": false,
+      // 記号（英数字以外の文字）を1文字以上必須とするか
+      "RequireNonAlphanumeric": false
+    },
+    "Lockout": {
+      // 新規登録ユーザーに対してもロックアウト機能を有効にするか
+      "AllowedForNewUsers": true,
+      // ロックアウトされるまでの連続ログイン失敗回数
+      "MaxFailedAccessAttempts": 5,
+      // アカウントをロックする時間（HH:mm:ss形式）
+      "DefaultLockoutTimeSpan": "00:15:00"
+    }
+  },
+  // パスワードログイン試行のIPアドレス単位レート制限設定（パスワードスプレー・辞書攻撃対策）
+  "PasswordLoginRateLimiting": {
+    // true の場合、ログイン試行のレート制限を有効にします
+    "Enabled": true,
+    // ログイン試行回数を集計する時間(分)
+    "WindowMinutes": 5,
+    // 集計時間内に同一IPアドレスから許可する最大ログイン試行回数
+    "MaxAttempts": 10
+  },
+  // パスキー認証・登録のIPアドレス単位レート制限設定（ユーザー列挙・署名検証DoS対策）
+  "PasskeyRateLimiting": {
+    // true の場合、パスキー関連エンドポイントのレート制限を有効にします
+    "Enabled": true,
+    // リクエスト回数を集計する時間(分)
+    "WindowMinutes": 5,
+    // 集計時間内に同一IPアドレスから許可する最大リクエスト回数（1回の操作でOptions取得と検証の2回通信が発生）
+    "MaxAttempts": 20
+  },
+  // リクエストとして有効なホスト名
+  "AllowedHosts": "*", // 開発環境
+  //"AllowedHosts": "", // 本番環境
+  //  Webサーバー（Kestrel）の起動アドレス設定（ローカルの5000番ポートで待ち受ける）
+  "Kestrel": {
+    "Endpoints": {
+      "MyHttpEndpoint": {
+        "Url": "http://127.0.0.1:5000"
+        //"Url": ""  // テストでKesrelで直接受ける場合
+      }
+    }
+  },
+  // 信頼するプロキシサーバーのIPアドレス（リバースプロキシ経由でアクセスする場合に必要）
+  // この設定を行うことで、リバースプロキシ経由でアクセスされた場合でも、正しいクライアントIPアドレスを取得できます。
+  "ForwardedHeaders": {
+    "KnownProxies": [
+      "127.0.0.1",
+      "::1"
+    ]
+  },
+  // ロギング（運用）
+  //"Logging": {
+  //  "LogLevel": {
+  //    "Default": "Information",
+  //    "Microsoft.AspNetCore": "Warning"
+  //  }
+  //},
+  // ロギング（開発）
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information",
+      "Microsoft.AspNetCore": "Information"
+    }
+  },
+  "SMTPServerConf": {
+    "HostName": "",
+    "Port": ,
+    "LocalDomain": "",
+    "Account": "",
+    "Password": "",
+    "FromName": ""
+  },
+  // Cloudflare R2ストレージ設定（画像アップロードに使用）
+  "R2Storage": {
+    "AccountId": "",
+    "AccessKeyId": "",
+    "SecretAccessKey": "",
+    "BucketName": ""
+  },
+  // Cloudflare Turnstile設定（CAPTCHAに使用）
+  "Turnstile": {
+    // true の場合、Turnstileによる認証を有効にします
+    "Enabled": false,
+    "WidgetName": "",
+    "SiteKey": "",
+    "SecretKey": "",
+    "Hostnames": [
+      "localhost",
+      "127.0.0.1",
+      ""
+    ]
+  }
+}
+

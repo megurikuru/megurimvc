@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Meguri.Validation;
 using Microsoft.Extensions.Localization;
 
 namespace Meguri.ViewModels.Account {
@@ -65,7 +66,7 @@ namespace Meguri.ViewModels.Account {
 
     public class RegisterViewModel : RegisterBaseViewModel {
         [Required(ErrorMessage = "Validation_Required")]
-        [StringLength(100, ErrorMessage = "Validation_StringLength", MinimumLength = 6)]
+        [PasswordRequirements]
         [DataType(DataType.Password)]
         [Display(Name = "Account_Field_Password")]
         public string Password { get; set; }

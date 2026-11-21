@@ -14,7 +14,7 @@ namespace Meguri.Data {
     public static class TestDataSeeder {
 
         private const string TestUserPrefix = "testuser";
-        private const string TestPassword = "Test1234!";
+        private const string TestPassword = "TestPassword1234!";
 
         // 投稿先の界隈ID（DbInitializerの初期データに対応）
         // 3:イラスト 4:漫画(創作) 5:小説 7:アニメ 8:漫画(見る) 9:ゲーム 10:コスプレ 11:音楽 12:アイドル 15:トヨタ 17:ホンダ 24:BMW 27:IT 28:社会 30:運営
@@ -267,6 +267,7 @@ namespace Meguri.Data {
                     Email = email,
                     NormalizedEmail = email.ToUpperInvariant(),
                     EmailConfirmed = true,
+                    LockoutEnabled = true,
                     DateOfBirth = new DateOnly(1990 + i, (i % 12) + 1, 10),
                     Bio = $"{UserNames[i]}です。テスト用アカウントです。",
                     SecurityStamp = Guid.NewGuid().ToString(),

@@ -92,6 +92,12 @@ namespace Meguri.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<bool>("ShowSexual")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("ShowViolence")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
