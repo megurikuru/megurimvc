@@ -62,6 +62,28 @@ function handleCommonUiClick(e) {
         return;
     }
 
+    // パスワード表示・非表示の切り替え
+    const togglePasswordBtn = target.closest('[data-toggle-password]');
+    if (togglePasswordBtn) {
+        const input = togglePasswordBtn.closest('.input-group')?.querySelector('input');
+        if (input) {
+            const isHidden = input.type === 'password';
+            input.type = isHidden ? 'text' : 'password';
+            togglePasswordBtn.setAttribute('aria-pressed', String(isHidden));
+            const label = isHidden ? togglePasswordBtn.dataset.labelHide : togglePasswordBtn.dataset.labelShow;
+            if (label) {
+                togglePasswordBtn.setAttribute('aria-label', label);
+                togglePasswordBtn.title = label;
+            }
+            const img = togglePasswordBtn.querySelector('img');
+            const iconSrc = isHidden ? togglePasswordBtn.dataset.iconHide : togglePasswordBtn.dataset.iconShow;
+            if (img && iconSrc) {
+                img.src = iconSrc;
+            }
+        }
+        return;
+    }
+
     // 親要素の削除（ステータスメッセージの閉じるボタン等）
     const dismissBtn = target.closest('[data-dismiss-parent]');
     if (dismissBtn) {

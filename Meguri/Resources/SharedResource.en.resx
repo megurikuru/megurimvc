@@ -426,6 +426,12 @@
   <data name="Account_Field_ConfirmPassword" xml:space="preserve">
     <value>Confirm password</value>
   </data>
+  <data name="Account_Password_Show" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="Account_Password_Hide" xml:space="preserve">
+    <value>Hide password</value>
+  </data>
   <data name="Account_Field_RememberMe" xml:space="preserve">
     <value>Remember me?</value>
   </data>
