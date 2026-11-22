@@ -194,4 +194,27 @@
 .date-search {
 	padding: 0.5rem 0.5rem 0 0.5rem;
 	border-top: 1px solid var(--color-border);
+
+	input[type="date"] {
+		position: relative;
+		-webkit-appearance: none;
+		appearance: none;
+		padding-right: 2.25rem;
+		background-image: url("/icons/calendar.svg");
+		background-repeat: no-repeat;
+		background-position: right 0.6rem center;
+		background-size: 1.1rem 1.1rem;
+
+		/* ブラウザ標準のアイコン（PCのカレンダーやAndroidの▼）を透明にして二重表示を防ぐ */
+		&::-webkit-calendar-picker-indicator {
+			position: absolute;
+			right: 0;
+			width: 2.25rem;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			opacity: 0;
+			cursor: pointer;
+		}
+	}
 }
