@@ -167,6 +167,13 @@
 	}
 }
 
+.field-hint {
+	margin: 0;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	color: var(--color-text-muted);
+}
+
 .two-factor-code {
 	display: block; /* 自身：ブロック要素（横幅全域・改行） / 子：縦並びで余白を統一 */
 	margin-top: 0.5rem;

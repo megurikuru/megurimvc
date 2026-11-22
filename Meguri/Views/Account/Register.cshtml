@@ -1,11 +1,17 @@
 ﻿@using Meguri.Services
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Configuration
 @using Microsoft.Extensions.Options
 @model RegisterViewModel
 @inject IOptions<TurnstileConf> TurnstileOptions
+@inject IOptions<IdentityOptions> IdentityOptions
+@inject IConfiguration Configuration
 @{
 	ViewData["Title"] = SharedLocalizer["Account_Register_Title"];
-	var isPasswordMode = ViewData.ModelState.ContainsKey(nameof(Model.Password))
-		|| ViewData.ModelState.ContainsKey(nameof(Model.ConfirmPassword));
+	var isPasswordMode = ViewData.ModelState.ContainsKey(nameof(Model.Password));
+	var passwordMinLength = IdentityOptions.Value.Password.RequiredLength;
+	var passwordMaxLength = Configuration.GetValue<int>("Identity:Password:MaxLength");
+	var passwordUniqueChars = IdentityOptions.Value.Password.RequiredUniqueChars;
 }
 
 <article>
@@ -41,22 +47,13 @@
 			<div>
 				<label asp-for="Password">@SharedLocalizer["Account_Field_Password"]</label>
 				<div class="input-group">
-					<input asp-for="Password" class="form-control" disabled />
+					<input asp-for="Password" class="form-control" autocomplete="new-password" aria-describedby="passwordHint" disabled />
 					<button type="button" class="password-toggle" data-toggle-password aria-pressed="false" aria-label="@SharedLocalizer["Account_Password_Show"]" title="@SharedLocalizer["Account_Password_Show"]" data-label-show="@SharedLocalizer["Account_Password_Show"]" data-label-hide="@SharedLocalizer["Account_Password_Hide"]" data-icon-show="@Url.Content("~/icons/eye.svg")" data-icon-hide="@Url.Content("~/icons/eye-off.svg")">
 						<img src="~/icons/eye.svg" class="icon" alt="" aria-hidden="true" />
 					</button>
 				</div>
+				<p id="passwordHint" class="field-hint">@SharedLocalizer["Account_Password_Hint", passwordMinLength, passwordMaxLength, passwordUniqueChars]</p>
 				<span asp-validation-for="Password"></span>
-			</div>
-			<div>
-				<label asp-for="ConfirmPassword">@SharedLocalizer["Account_Field_ConfirmPassword"]</label>
-				<div class="input-group">
-					<input asp-for="ConfirmPassword" class="form-control" disabled />
-					<button type="button" class="password-toggle" data-toggle-password aria-pressed="false" aria-label="@SharedLocalizer["Account_Password_Show"]" title="@SharedLocalizer["Account_Password_Show"]" data-label-show="@SharedLocalizer["Account_Password_Show"]" data-label-hide="@SharedLocalizer["Account_Password_Hide"]" data-icon-show="@Url.Content("~/icons/eye.svg")" data-icon-hide="@Url.Content("~/icons/eye-off.svg")">
-						<img src="~/icons/eye.svg" class="icon" alt="" aria-hidden="true" />
-					</button>
-				</div>
-				<span asp-validation-for="ConfirmPassword"></span>
 			</div>
 		</div>
 		<div>

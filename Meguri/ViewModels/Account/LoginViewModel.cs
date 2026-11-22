@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Meguri.Constants;
+using Meguri.Validation;
 
 namespace Meguri.ViewModels.Account {
     public class LoginViewModel {
@@ -12,7 +12,7 @@ namespace Meguri.ViewModels.Account {
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Validation_Required")]
-        [StringLength(IdConst.MaxLength, ErrorMessage = "Validation_StringLengthMax")]
+        [PasswordMaxLength]
         [DataType(DataType.Password)]
         [Display(Name = "Account_Field_Password")]
         public string Password { get; set; }

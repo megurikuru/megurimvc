@@ -13,11 +13,6 @@ namespace Meguri.ViewModels.Manage {
         [Display(Name = "Manage_SetPassword_NewPassword")]
         public string NewPassword { get; set; }
 
-        [DataType(DataType.Password)]
-        [Display(Name = "Manage_SetPassword_ConfirmPassword")]
-        [Compare("NewPassword", ErrorMessage = "Validation_Compare")]
-        public string ConfirmPassword { get; set; }
-
         public bool HasPasskeys { get; set; }
 
         public string StatusMessage { get; set; }

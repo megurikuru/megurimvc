@@ -432,6 +432,9 @@
   <data name="Account_Password_Hide" xml:space="preserve">
     <value>Hide password</value>
   </data>
+  <data name="Account_Password_Hint" xml:space="preserve">
+    <value>Use {0}–{1} characters with at least {2} unique characters. Passwords cannot contain your username or email address, or be too common.</value>
+  </data>
   <data name="Account_Field_RememberMe" xml:space="preserve">
     <value>Remember me?</value>
   </data>
@@ -1655,6 +1658,15 @@ meguri - Where Fandom Love Circulates</value>
   </data>
   <data name="Identity_PasswordRequiresUpper" xml:space="preserve">
     <value>Passwords must have at least one uppercase ('A'-'Z').</value>
+  </data>
+  <data name="Identity_PasswordContainsUserName" xml:space="preserve">
+    <value>Passwords cannot contain your username.</value>
+  </data>
+  <data name="Identity_PasswordContainsEmail" xml:space="preserve">
+    <value>Passwords cannot contain your email address.</value>
+  </data>
+  <data name="Identity_PasswordTooCommon" xml:space="preserve">
+    <value>This password is too common. Please choose a more secure password.</value>
   </data>
   <data name="Home_UsersHeading" xml:space="preserve">
     <value>Users</value>

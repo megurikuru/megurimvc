@@ -70,11 +70,6 @@ namespace Meguri.ViewModels.Account {
         [DataType(DataType.Password)]
         [Display(Name = "Account_Field_Password")]
         public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Account_Field_ConfirmPassword")]
-        [Compare("Password", ErrorMessage = "Validation_Compare")]
-        public string ConfirmPassword { get; set; }
     }
 
     public class PasskeyRegisterViewModel : RegisterBaseViewModel {

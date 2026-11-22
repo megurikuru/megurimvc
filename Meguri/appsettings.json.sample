@@ -30,10 +30,12 @@
   // ASP.NET Core Identity の認証・パスワード強度・アカウントロックアウト設定
   "Identity": {
     "Password": {
-      // パスワードの最小文字数（最新基準：15文字以上）
-      "RequiredLength": 15,
-      // パスワードに含める必要がある異なる文字の種類数（パスフレーズ許容・構成規則なしのため1）
-      "RequiredUniqueChars": 1,
+      // パスワードの最小文字数（12文字以上）
+      "RequiredLength": 12,
+      // パスワードの最大文字数（パスフレーズ対応）
+      "MaxLength": 128,
+      // パスワードに含める必要がある異なる文字の種類数（単純連打の防止）
+      "RequiredUniqueChars": 4,
       // 数字 ('0'-'9') を1文字以上必須とするか
       "RequireDigit": false,
       // 英小文字 ('a'-'z') を1文字以上必須とするか
