@@ -421,7 +421,7 @@
     <value>メールアドレス</value>
   </data>
   <data name="Account_Field_Password" xml:space="preserve">
-    <value>パスワード</value>
+    <value>パスワード（15文字以上、文字種自由）</value>
   </data>
   <data name="Account_Field_ConfirmPassword" xml:space="preserve">
     <value>パスワード（確認）</value>
