@@ -6,7 +6,7 @@
 <div id="@Model.ContainerId">
 	<form class="@Model.FormClass" asp-controller="@Model.Controller" asp-action="@Model.Action" method="get">
 		@* 検索キーワード入力欄 *@
-		<input type="text" name="@Model.ParameterName" value="@Model.Value" placeholder="@SharedLocalizer[Model.PlaceholderKey]" />
+		<input type="text" class="form-control" name="@Model.ParameterName" value="@Model.Value" placeholder="@SharedLocalizer[Model.PlaceholderKey]" />
 
 		@* 検索送信ボタン *@
 		<button type="submit">@SharedLocalizer["Common_Search"]</button>

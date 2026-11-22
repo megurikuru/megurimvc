@@ -33,7 +33,7 @@
 				<form method="post">
 					<div class="two-factor-code">
 						<label asp-for="Code">@SharedLocalizer["Manage_EnableAuthenticator_VerificationCode"]</label>
-						<input asp-for="Code" autocomplete="off" inputmode="numeric" />
+						<input asp-for="Code" class="form-control" autocomplete="off" inputmode="numeric" />
 						<span asp-validation-for="Code"></span>
 					</div>
 					<button type="submit">@SharedLocalizer["Manage_EnableAuthenticator_VerifyButton"]</button>

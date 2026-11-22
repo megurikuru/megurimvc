@@ -13,7 +13,7 @@
 		@if (Model.HasPassword) {
 			<div>
 				<label asp-for="Password">@SharedLocalizer["Account_Field_Password"]</label>
-				<input asp-for="Password" autocomplete="current-password" />
+				<input asp-for="Password" class="form-control" autocomplete="current-password" />
 				<span asp-validation-for="Password"></span>
 			</div>
 		}

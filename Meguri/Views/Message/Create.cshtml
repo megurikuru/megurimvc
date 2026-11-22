@@ -25,13 +25,14 @@
 
 			<div id="groupTitleContainer" class="attribute-wrap" hidden="@(!Model.IsGroup)">
 				<label asp-for="Title">@SharedLocalizer["Message_GroupName"]</label>
-				<input asp-for="Title" placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
+				<input asp-for="Title" class="form-control" placeholder="@SharedLocalizer["Message_GroupNamePlaceholder"]" />
 			</div>
 
 			<div class="attribute-wrap">
 				<label for="recipientSearchInput">@SharedLocalizer["Message_SelectRecipient"] <span>*</span></label>
 				<div class="input-group">
 					<input type="text"
+							 class="form-control"
 							 id="recipientSearchInput"
 							 placeholder="@SharedLocalizer["Message_RecipientSearchPlaceholder"]"
 							 autocomplete="off"
@@ -55,13 +56,13 @@
 
 			<div class="attribute-wrap">
 				<label asp-for="Subject">@SharedLocalizer["Message_OptionalSubject"]</label>
-				<input asp-for="Subject" />
+				<input asp-for="Subject" class="form-control" />
 				<span asp-validation-for="Subject"></span>
 			</div>
 
 			<div class="attribute-wrap">
 				<label asp-for="InitialMessage">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
-				<textarea asp-for="InitialMessage" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
+				<textarea asp-for="InitialMessage" class="form-control" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
 				<span asp-validation-for="InitialMessage"></span>
 			</div>
 

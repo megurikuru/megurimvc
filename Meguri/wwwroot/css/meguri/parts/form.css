@@ -10,6 +10,7 @@
 		flex: 1;
 		min-width: 0;
 		margin: 0;
+		border: 1px solid var(--color-border);
 	}
 
 	& > button,
@@ -104,16 +105,11 @@
 }
 
 /* フォーム部品 */
-.attribute-wrap input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
-.attribute-wrap select,
-.attribute-wrap textarea {
+.attribute-wrap .form-control {
 	display: block;
 	box-sizing: border-box;
 	margin-inline: 0;
-	padding: 0.75rem;
 	width: 100%;
-	min-height: 3rem;
-	font-size: 1rem;
 }
 
 .checkbox-wrap {
@@ -173,4 +169,9 @@
 	& + button {
 		margin-top: 0.5rem;
 	}
+}
+
+.date-search {
+	padding: 0.5rem 0.5rem 0 0.5rem;
+	border-top: 1px solid var(--color-border);
 }

@@ -13,13 +13,13 @@
 
 		<div class="attribute-wrap">
 			<label asp-for="Subject">@SharedLocalizer["Message_OptionalSubject"]</label>
-			<input asp-for="Subject" />
+			<input asp-for="Subject" class="form-control" />
 			<span asp-validation-for="Subject"></span>
 		</div>
 
 		<div class="attribute-wrap">
 			<label asp-for="Body">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
-			<textarea asp-for="Body" rows="4" required></textarea>
+			<textarea asp-for="Body" class="form-control" rows="4" required></textarea>
 			<span asp-validation-for="Body"></span>
 		</div>
 

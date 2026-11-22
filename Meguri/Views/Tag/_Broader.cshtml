@@ -26,7 +26,7 @@
 					@Html.AntiForgeryToken()
 					<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
 					<input type="hidden" name="predicate" value="broader" />
-					<input type="text" name="targetTagText" placeholder="@SharedLocalizer["Tag_BroaderPlaceholder"]" required />
+					<input type="text" class="form-control" name="targetTagText" placeholder="@SharedLocalizer["Tag_BroaderPlaceholder"]" required />
 					<button type="submit">@SharedLocalizer["Common_Add"]</button>
 				</form>
 			</div>

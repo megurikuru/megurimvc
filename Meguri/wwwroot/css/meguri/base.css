@@ -82,9 +82,7 @@ label {
 	line-height: 1.4;
 }
 
-input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
-select,
-textarea {
+.form-control {
 	display: block;
 	box-sizing: border-box;
 	width: 100%;
@@ -105,7 +103,7 @@ input[type="radio"] {
 	cursor: pointer;
 }
 
-textarea {
+textarea.form-control {
 	min-height: 6rem;
 	resize: vertical;
 }
