@@ -11,13 +11,13 @@
 	<div asp-validation-summary="All"></div>
 	<div>
 		<label asp-for="Username">@SharedLocalizer["Manage_Profile_Username"]</label>
-		<input asp-for="Username" />
+		<input asp-for="Username" class="form-control" />
 		<span asp-validation-for="Username"></span>
 	</div>
 	<div>
 		<label asp-for="Email">@SharedLocalizer["Manage_Profile_Email"]</label>
 		<div class="input-group">
-			<input asp-for="Email" />
+			<input asp-for="Email" class="form-control" />
 			@if (Model.IsEmailConfirmed) {
 				<img src="~/icons/check.svg" class="icon" aria-hidden="true" />
 			}
@@ -29,16 +29,16 @@
 	</div>
 	<div>
 		<label asp-for="PhoneNumber">@SharedLocalizer["Manage_Profile_PhoneNumber"]</label>
-		<input asp-for="PhoneNumber" />
+		<input asp-for="PhoneNumber" class="form-control" />
 		<span asp-validation-for="PhoneNumber"></span>
 	</div>
 	<div>
 		<label asp-for="DateOfBirth">@SharedLocalizer["Manage_Profile_DateOfBirth"]</label>
-		<input asp-for="DateOfBirth" type="date" readonly disabled />
+		<input asp-for="DateOfBirth" class="form-control" type="date" readonly disabled />
 	</div>
 	<div>
 		<label asp-for="Bio">@SharedLocalizer["Manage_Profile_Bio"]</label>
-		<textarea asp-for="Bio" rows="4" placeholder="@SharedLocalizer["Manage_Profile_BioPlaceholder"]"></textarea>
+		<textarea asp-for="Bio" class="form-control" rows="4" placeholder="@SharedLocalizer["Manage_Profile_BioPlaceholder"]"></textarea>
 		<span asp-validation-for="Bio"></span>
 	</div>
 	@{
@@ -76,7 +76,7 @@
 	<div>
 		<label>@SharedLocalizer["Manage_Profile_ExternalUrlsLabel"]</label>
 		@for (var i = 0; i < 5; i++) {
-			<input type="url" name="ExternalUrls[@i]" value="@Model.ExternalUrls[i]" maxlength="500" placeholder="https://" />
+			<input type="url" class="form-control" name="ExternalUrls[@i]" value="@Model.ExternalUrls[i]" maxlength="500" placeholder="https://" />
 		}
 		<span asp-validation-for="ExternalUrls"></span>
 	</div>

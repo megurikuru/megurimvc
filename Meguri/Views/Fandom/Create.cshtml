@@ -15,13 +15,13 @@
 
 										<div class="attribute-wrap">
 												<label asp-for="Name" >@SharedLocalizer["Fandom_Name"] <span >*</span></label>
-												<input asp-for="Name"  placeholder="@SharedLocalizer["Fandom_NamePlaceholder"]" required />
+												<input asp-for="Name" class="form-control" placeholder="@SharedLocalizer["Fandom_NamePlaceholder"]" required />
 												<span asp-validation-for="Name" ></span>
 										</div>
 
 										<div class="attribute-wrap">
 												<label asp-for="ParentFandomId" >@SharedLocalizer["Fandom_Parent"]</label>
-												<select asp-for="ParentFandomId">
+												<select asp-for="ParentFandomId" class="form-control">
 														<option value="">-- @SharedLocalizer["Fandom_NoParent"] --</option>
 														@foreach (var p in Model.ParentFandoms) {
 																<option value="@p.Id">@p.Name</option>

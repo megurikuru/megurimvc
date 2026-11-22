@@ -98,16 +98,17 @@
 
 	#search-box {
 		padding: 0;
+		border-top: none;
+	}
 
-		.search {
-			padding-right: 0;
-			margin-left: -0.5rem;
-		}
+	.date-search {
+		padding: 0.5rem 0 0 0;
 	}
 
 	body[data-controller="Tag" i] {
 		#search-box {
 			padding-top: 0.5rem;
+			border-top: 1px solid var(--color-border);
 		}
 	}
 

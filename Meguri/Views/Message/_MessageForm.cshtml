@@ -18,10 +18,10 @@
 		@* 本文入力を中心にするため、任意の件名と画像添付は必要なときだけ展開する。 *@
 		<details class="message-disclosure">
 			<summary>@SharedLocalizer["Message_OptionalSubject"]</summary>
-			<input type="text" id="messageSubject" name="subject" aria-label="@SharedLocalizer["Message_SubjectLabel"]" />
+			<input type="text" class="form-control" id="messageSubject" name="subject" aria-label="@SharedLocalizer["Message_SubjectLabel"]" />
 		</details>
 		<div class="attribute-wrap">
-			<textarea id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
+			<textarea class="form-control" id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
 		</div>
 		@{
 			var chatImageUpload = new FileUploadViewModel {

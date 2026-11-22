@@ -29,34 +29,34 @@
 
 		<div>
 			<label asp-for="UserName">@SharedLocalizer["Account_Field_UserName"]</label>
-			<input asp-for="UserName" />
+			<input asp-for="UserName" class="form-control" />
 			<span asp-validation-for="UserName"></span>
 		</div>
 		<div>
 			<label asp-for="Email">@SharedLocalizer["Account_Field_Email"]</label>
-			<input asp-for="Email" />
+			<input asp-for="Email" class="form-control" />
 			<span asp-validation-for="Email"></span>
 		</div>
 		<div id="passwordSection" hidden>
 			<div>
 				<label asp-for="Password">@SharedLocalizer["Account_Field_Password"]</label>
-				<input asp-for="Password" disabled />
+				<input asp-for="Password" class="form-control" disabled />
 				<span asp-validation-for="Password"></span>
 			</div>
 			<div>
 				<label asp-for="ConfirmPassword">@SharedLocalizer["Account_Field_ConfirmPassword"]</label>
-				<input asp-for="ConfirmPassword" disabled />
+				<input asp-for="ConfirmPassword" class="form-control" disabled />
 				<span asp-validation-for="ConfirmPassword"></span>
 			</div>
 		</div>
 		<div>
 			<label>@SharedLocalizer["Account_Field_DateOfBirth"]</label>
 			<div class="birth">
-				<input asp-for="BirthYear" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_YearPlaceholder"]" autocomplete="bday-year" />
+				<input asp-for="BirthYear" class="form-control" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_YearPlaceholder"]" autocomplete="bday-year" />
 				<span>@SharedLocalizer["Account_Field_DateOfBirth_YearUnit"]</span>
-				<input asp-for="BirthMonth" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_MonthPlaceholder"]" autocomplete="bday-month" />
+				<input asp-for="BirthMonth" class="form-control" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_MonthPlaceholder"]" autocomplete="bday-month" />
 				<span>@SharedLocalizer["Account_Field_DateOfBirth_MonthUnit"]</span>
-				<input asp-for="BirthDay" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_DayPlaceholder"]" autocomplete="bday-day" />
+				<input asp-for="BirthDay" class="form-control" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2" placeholder="@SharedLocalizer["Account_Field_DateOfBirth_DayPlaceholder"]" autocomplete="bday-day" />
 				<span>@SharedLocalizer["Account_Field_DateOfBirth_DayUnit"]</span>
 			</div>
 			<span asp-validation-for="BirthYear"></span>
@@ -66,7 +66,7 @@
 		<div id="passkeySection">
 			<div>
 				<label asp-for="PasskeyName">@SharedLocalizer["Manage_Passkeys_Name"]</label>
-				<input asp-for="PasskeyName" maxlength="100" />
+				<input asp-for="PasskeyName" class="form-control" maxlength="100" />
 				<span asp-validation-for="PasskeyName"></span>
 			</div>
 		</div>

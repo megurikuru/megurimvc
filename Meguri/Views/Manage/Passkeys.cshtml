@@ -29,7 +29,7 @@
 		<input type="hidden" name="credentialJson" />
 		<div>
 			<label for="passkeyName">@SharedLocalizer["Manage_Passkeys_Name"]</label>
-			<input id="passkeyName" name="name" maxlength="100" />
+			<input id="passkeyName" class="form-control" name="name" maxlength="100" />
 		</div>
 		<div>
 			<button type="button" data-passkey="create" data-options-url="@Url.Action("PasskeyCreationOptions", "Manage")" data-error-text="@SharedLocalizer["Manage_Passkeys_Failed"]">@SharedLocalizer["Manage_Passkeys_Add"]</button>

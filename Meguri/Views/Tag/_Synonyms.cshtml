@@ -25,7 +25,7 @@
 				<form asp-action="AddSynonym" method="post" class="input-group">
 					@Html.AntiForgeryToken()
 					<input type="hidden" name="tagConceptId" value="@Model.TagConceptId" />
-					<input type="text" name="synonymText" placeholder="@SharedLocalizer["Tag_SynonymPlaceholder"]" required />
+					<input type="text" class="form-control" name="synonymText" placeholder="@SharedLocalizer["Tag_SynonymPlaceholder"]" required />
 					<button type="submit">@SharedLocalizer["Common_Add"]</button>
 				</form>
 			</div>

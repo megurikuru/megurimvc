@@ -35,14 +35,14 @@
 
 			<div>
 				<label asp-for="UserName"></label>
-				<input asp-for="UserName" />
+				<input asp-for="UserName" class="form-control" />
 				<span asp-validation-for="UserName"></span>
 			</div>
 
 			<div id="passwordSection" hidden>
 				<div>
 					<label asp-for="Password"></label>
-					<input asp-for="Password" disabled />
+					<input asp-for="Password" class="form-control" disabled />
 					<span asp-validation-for="Password"></span>
 				</div>
 			</div>

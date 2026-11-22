@@ -14,7 +14,7 @@
             <div asp-validation-summary="All" ></div>
             <div>
                 <label asp-for="RecoveryCode" ></label>
-                <input asp-for="RecoveryCode"  autocomplete="off" />
+                <input asp-for="RecoveryCode" class="form-control" autocomplete="off" />
                 <span asp-validation-for="RecoveryCode" ></span>
             </div>
             <button type="submit" >@SharedLocalizer["Account_Login_Button"]</button>

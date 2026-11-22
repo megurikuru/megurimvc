@@ -3,21 +3,12 @@
 	display: block flex; /* 自身：ブロック要素として改行 / 子：Flexbox（横並び）で配置 */
 	flex-direction: row;
 	flex-wrap: wrap;
-	margin-top: -0.5rem;
-	padding: 0 0.5rem 0 0;
 	align-items: stretch;
-
-	& > input[type="text"],
-	& > button,
-	& > a {
-		margin: 0.5rem 0 0 0.5rem;
-	}
 
 	& input[type="text"] {
 		flex: 1 1 8rem; /* 残りの横幅いっぱいに広がる */
 		min-width: 0;
 		min-height: var(--control-height);
-		padding: 0.5rem 0.75rem;
 		font-size: 1rem;
 		border: 1px solid var(--color-border);
 	}
@@ -30,11 +21,11 @@
 	}
 
 	& button, & a {
+		margin-left: 0.5rem;
 		width: max-content;
 		min-height: var(--control-height);
 		white-space: nowrap; /* テキストの意図しない改行を防止 */
 		padding: 0.5rem 1rem;
-		font-size: 1rem;
 		border: 1px solid var(--color-border);
 		border-radius: var(--radius-sm);
 		background-color: white;
