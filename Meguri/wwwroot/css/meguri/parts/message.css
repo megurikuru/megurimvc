@@ -14,10 +14,6 @@
 		& > :not([hidden]) ~ :not([hidden]) {
 			margin-top: 0.5rem;
 		}
-
-		& + .message-thread {
-			border-top: 1px solid var(--color-border-light);
-		}
 	}
 
 	& .message-item {
@@ -301,7 +297,6 @@ h1 + .message-disclosure:first-of-type {
 
 	& .message-disclosure {
 		padding: 0.5rem 0.5rem 0 0.5rem;
-		border-top: 1px solid var(--color-border);
 	}
 
 	& > form > .message-disclosure:first-of-type,
