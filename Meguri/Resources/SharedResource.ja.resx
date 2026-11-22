@@ -385,7 +385,7 @@
     <value>ご登録ありがとうございます。</value>
   </data>
   <data name="Account_RegisterConfirmation_EmailSent" xml:space="preserve">
-    <value>登録された E-Mail アドレスに確認メールを送信しました。メール内のリンクをクリックして、アカウントを有効化してください。</value>
+    <value>登録されたメールアドレスに確認メールを送信しました。メール内のリンクをクリックしてメールアドレスの実在確認を完了してください。</value>
   </data>
   <data name="Account_RegisterConfirmation_CheckSpam" xml:space="preserve">
     <value>確認メールが届かない場合は、迷惑メールフォルダをご確認ください。</value>
@@ -1498,7 +1498,7 @@ meguri - 『好き』がめぐるSNS</value>
     <value>存在しないユーザーです。</value>
   </data>
   <data name="Account_Error_EmailNotConfirmed" xml:space="preserve">
-    <value>E-Mailアドレスの確認が完了していません。登録時に送信された確認メールをご確認ください。</value>
+    <value>メールアドレスの確認が完了していません。登録時に送信された確認メールをご確認ください。</value>
   </data>
   <data name="Account_Error_InvalidAuthenticatorCode" xml:space="preserve">
     <value>認証コードが正しくありません。</value>
