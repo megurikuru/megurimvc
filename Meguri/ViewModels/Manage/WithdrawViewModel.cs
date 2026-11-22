@@ -6,6 +6,6 @@ namespace Meguri.ViewModels.Manage {
 
         [DataType(DataType.Password)]
         [Display(Name = "Account_Field_Password")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 }
