@@ -120,7 +120,7 @@
 		}
 	}
 
-	& button:not([hidden], .btn-sm, .image-preview-remove):not(.inline-actions button) {
+	& button:not([hidden], .btn-sm, .image-preview-remove, .password-toggle):not(.inline-actions button) {
 		display: flex;
 		align-items: center;
 		justify-content: center;

@@ -29,6 +29,21 @@
 	& > :not([hidden]):not([type="hidden"]) ~ :not([hidden]):not([type="hidden"]) {
 		margin-left: 0.5rem;
 	}
+
+	& > button.password-toggle {
+		min-width: var(--control-height);
+		padding: 0.5rem;
+		background-color: var(--color-button-main);
+
+		&:hover:not(:disabled) {
+			background-color: var(--color-button-main-hover);
+		}
+	}
+
+	&:has(.password-toggle) > input[type="password"]::-ms-reveal,
+	&:has(.password-toggle) > input[type="password"]::-ms-clear {
+		display: none;
+	}
 }
 
 /* 補助ボタン等の横並びラッパー */
