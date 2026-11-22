@@ -421,7 +421,7 @@
     <value>メールアドレス</value>
   </data>
   <data name="Account_Field_Password" xml:space="preserve">
-    <value>パスワード（15文字以上、文字種自由）</value>
+    <value>パスワード</value>
   </data>
   <data name="Account_Field_ConfirmPassword" xml:space="preserve">
     <value>パスワード（確認）</value>
@@ -1888,5 +1888,17 @@ meguri - 『好き』がめぐるSNS</value>
   </data>
   <data name="Manage_Options_UnderageNotice" xml:space="preserve">
     <value>※18歳未満の方は性的・暴力表現を含む投稿を表示できません。</value>
+  </data>
+  <data name="Identity_PasswordContainsUserName" xml:space="preserve">
+    <value>パスワードにユーザー名を含めることはできません。</value>
+  </data>
+  <data name="Identity_PasswordContainsEmail" xml:space="preserve">
+    <value>パスワードにメールアドレスを含めることはできません。</value>
+  </data>
+  <data name="Identity_PasswordTooCommon" xml:space="preserve">
+    <value>このパスワードは一般的すぎるため使用できません。推測されにくいパスワードを設定してください。</value>
+  </data>
+  <data name="Account_Password_Hint" xml:space="preserve">
+    <value>{0}〜{1}文字（{2}種類以上の異なる文字を使用）で入力してください。ユーザー名やメールアドレスを含むもの、推測されやすいパスワードは使用できません。</value>
   </data>
 </root>

@@ -35,4 +35,7 @@
     <None Include="C:\Users\toshi\source\repos\megurimvc\Meguri\.editorconfig" />
     <None Include="Views\Shared\_Header.cshtml.new" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Constants\" />
+  </ItemGroup>
 </Project>

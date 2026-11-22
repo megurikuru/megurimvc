@@ -38,26 +38,27 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // ASP.NET Core Identityを設定（ユーザー認証・認可システム）
+var identitySection = builder.Configuration.GetSection("Identity");
+if (!identitySection.Exists()) {
+    throw new InvalidOperationException("Configuration section 'Identity' not found in appsettings.json.");
+}
+if (identitySection.GetValue<int?>("Password:RequiredLength") is null or <= 0) {
+    throw new InvalidOperationException("Configuration value 'Identity:Password:RequiredLength' must be a positive integer.");
+}
+if (identitySection.GetValue<int?>("Password:MaxLength") is null or <= 0) {
+    throw new InvalidOperationException("Configuration value 'Identity:Password:MaxLength' must be a positive integer.");
+}
+
 builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(options => {
         options.SignIn.RequireConfirmedEmail = true;
         options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;   // Passkeyテーブルを使用
 
-        // パスワード強度・アカウントロックアウトの推奨既定値（NIST SP 800-63B 準拠・appsettings.json の Identity セクションで上書き可能）
-        options.Password.RequiredLength = Meguri.Constants.IdConst.MinLength;
-        options.Password.RequiredUniqueChars = Meguri.Constants.IdConst.RequiredUniqueChars;
-        options.Password.RequireDigit = false;
-        options.Password.RequireLowercase = false;
-        options.Password.RequireUppercase = false;
-        options.Password.RequireNonAlphanumeric = false;
-
-        options.Lockout.AllowedForNewUsers = true;
-        options.Lockout.MaxFailedAccessAttempts = Meguri.Constants.IdConst.MaxFailedAccessAttempts;
-        options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(Meguri.Constants.IdConst.LockoutMinutes);
-
-        builder.Configuration.GetSection("Identity").Bind(options);
+        // パスワード強度・アカウントロックアウト設定を appsettings.json の Identity セクションから読み込み
+        identitySection.Bind(options);
     })
     .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
+    .AddPasswordValidator<Meguri.Validation.CommonPasswordValidator>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();                    // パスワードリセット、2要素認証用のトークン生成機能
 
