@@ -92,4 +92,10 @@ body[data-controller="Home" i] {
 			margin-bottom: 0.5rem;
 		}
 	}
+
+	&[data-action="Privacy" i] main > article,
+	&[data-action="Terms" i] main > article,
+	&[data-action="Operator" i] main > article {
+		margin-top: 0.5rem;
+	}
 }
