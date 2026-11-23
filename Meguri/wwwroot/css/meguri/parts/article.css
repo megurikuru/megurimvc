@@ -73,9 +73,9 @@ article {
 		min-width: 0;
 		padding: 0.5rem;
 
-		:not(h1):not(h2) + & {
+		/*:not(h1):not(h2) + & {
 			margin-top: 0.5rem;
-		}
+		}*/
 
 		& > a {
 			flex: 0 0 auto;
@@ -89,6 +89,10 @@ article {
 				margin-inline: auto;
 			}
 		}
+	}
+
+	&:not(:has(p)) .post-images:nth-child(1 of .post-images) {
+		border-top: 1px solid var(--color-border);
 	}
 
 	.post-meta {

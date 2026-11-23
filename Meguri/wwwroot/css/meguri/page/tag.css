@@ -5,7 +5,6 @@ body[data-controller="Tag" i] {
 	.pagination {
 		margin-top: 0;
 	}
-
 	/* Tag/Disambiguation */
 	&[data-action="Disambiguation" i] {
 
@@ -20,5 +19,9 @@ body[data-controller="Tag" i] {
 				}
 			}
 		}
+	}
+
+	#nav-main {
+		margin-top: 0.5rem;
 	}
 }

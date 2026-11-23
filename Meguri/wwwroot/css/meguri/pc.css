@@ -54,6 +54,16 @@
 		border-left: 1px solid var(--color-border);
 	}
 
+	#post-list > article {
+		h1,
+		h2 {
+			border-right: none;
+			border-left: none;
+		}
+	}
+
+
+
 	body[data-controller="Account" i],
 	body[data-controller="Manage" i],
 	body[data-controller="Message" i],

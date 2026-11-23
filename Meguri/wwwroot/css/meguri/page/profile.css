@@ -7,8 +7,4 @@ body[data-controller="Profile" i][data-action="Details" i] {
 	article p {
 		padding: 0.5rem 0.5rem 0 0.5rem;
 	}
-
-	#post-list {
-		margin-top: 0.5rem;
-	}
 }
