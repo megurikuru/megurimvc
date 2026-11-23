@@ -62,7 +62,21 @@ footer {
 
 	.footer-links {
 		display: block grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3等分で各列の最小幅を0に */
+		gap: 0.5rem;
 		margin-bottom: 0.5rem;
+
+		> p {
+			min-width: 0; /* Grid子要素のはみ出し・縮小制限を解除 */
+			margin: 0;
+		}
+	}
+
+	.truncate-text {
+		display: block;
+		max-width: 100%;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }

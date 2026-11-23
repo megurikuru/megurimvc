@@ -31,3 +31,10 @@
 	align-items: center;
 }
 
+.truncate-text {
+  display: block;             /* 親幅いっぱいに広げたい場合は block が扱いやすい */
+  max-width: 100%;            /* 親要素の幅を上限にする */
+  overflow: hidden;           /* はみ出た部分を隠す */
+  text-overflow: ellipsis;    /* 隠れた部分を「...」にする */
+  white-space: nowrap;        /* 折り返しを禁止する */
+}
