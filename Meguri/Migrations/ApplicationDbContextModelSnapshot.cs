@@ -101,6 +101,9 @@ namespace Meguri.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("UseMarkdownBio")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -155,6 +158,9 @@ namespace Meguri.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("UseMarkdown")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -508,6 +514,9 @@ namespace Meguri.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<bool>("UseMarkdown")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ConversationId");
@@ -595,6 +604,9 @@ namespace Meguri.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("UseMarkdown")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserId")
                         .IsRequired()

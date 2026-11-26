@@ -197,6 +197,7 @@ namespace Meguri.Controllers {
                 PhoneNumber = user.PhoneNumber,
                 DateOfBirth = user.DateOfBirth,
                 Bio = user.Bio,
+                UseMarkdownBio = user.UseMarkdownBio,
                 IsEmailConfirmed = user.EmailConfirmed,
                 IsProfilePublic = user.IsProfilePublic,
                 AvatarImageId = user.ActiveAvatarImageId,
@@ -275,6 +276,12 @@ namespace Meguri.Controllers {
             bool isUserModified = false;
             if ((model.Bio ?? string.Empty) != user.Bio) {
                 user.Bio = model.Bio ?? string.Empty;
+                isUserModified = true;
+                isChanged = true;
+            }
+
+            if (user.UseMarkdownBio != model.UseMarkdownBio) {
+                user.UseMarkdownBio = model.UseMarkdownBio;
                 isUserModified = true;
                 isChanged = true;
             }

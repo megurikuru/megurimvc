@@ -52,6 +52,10 @@ namespace Meguri.ViewModels.Message {
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Message_Title")]
         public string InitialMessage { get; set; } = string.Empty;
+
+        [Display(Name = "Post_UseMarkdown")]
+        public bool UseMarkdown { get; set; } = false;
+
         public List<IFormFile>? ImageFiles { get; set; }
 
         public List<ApplicationUser> AvailableUsers { get; set; } = new List<ApplicationUser>();
@@ -67,6 +71,9 @@ namespace Meguri.ViewModels.Message {
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Message_Title")]
         public string Body { get; set; } = string.Empty;
+
+        [Display(Name = "Post_UseMarkdown")]
+        public bool UseMarkdown { get; set; } = false;
     }
 
     public class MessageRoomViewModel {

@@ -22,6 +22,7 @@ namespace Meguri.Models {
         public string Subject { get; set; } = string.Empty; 
         [Required]
         public string Body { get; set; } = string.Empty;  
+        public bool UseMarkdown { get; set; } = false;                                           // Markdownを使用するか
         public bool IsDeleted { get; set; }                                                      // 論理削除フラグ
         public DateTime CreatedAt { get; set; }                                                  // メッセージの作成日時
         public DateTime UpdatedAt { get; set; }                                                  // メッセージの最終更新日時

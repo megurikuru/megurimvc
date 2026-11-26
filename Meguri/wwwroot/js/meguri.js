@@ -8,6 +8,7 @@ import { initCommentReply } from './meguri/comment-reply.js';
 import { initImageOrder } from './meguri/image-order.js';
 import { initMessageUi } from './meguri/message-ui.js';
 import { initImageViewer } from './meguri/image-viewer.js';
+import { initMarkdownEditor } from './meguri/markdown-editor.js';
 
 function onDOMContentLoaded() {
     localizeTimes();
@@ -19,6 +20,7 @@ function onDOMContentLoaded() {
     initCommentReply();
     initMessageUi();
     initImageViewer();
+    initMarkdownEditor();
 }
 
 // DOM読み込み完了時に初期化処理を実行

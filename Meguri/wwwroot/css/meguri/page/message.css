@@ -9,29 +9,15 @@ body[data-controller="Message" i] {
 		margin-top: 0;
 	}
 
-	.article-header + p {
-		border-top: 1px solid var(--color-border);
-	}
-
 	article.no-message {
 		padding-bottom: 0.5rem;
 		border-bottom: 1px solid var(--color-border);
-	}
-
-	form .attribute-wrap:first-of-type {
-		margin-top: 0;
 	}
 
 	span.description {
 		margin-top: 0;
 		padding: 0.5rem 0.5rem 0 0.5rem;
 		border-top: none;
-	}
-
-	&[data-action="Index" i] {
-		.attribute-wrap {
-			margin-top: 0;
-		}
 	}
 
 	&[data-action="Create" i] {
@@ -41,9 +27,6 @@ body[data-controller="Message" i] {
 
 		article {
 			border-bottom: 1px solid var(--color-border);
-		}
-
-		.button-wrap {
 			padding-bottom: 0.5rem;
 		}
 	}

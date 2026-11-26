@@ -46,7 +46,7 @@ main {
 
 	& > p {
 		margin-top: 0.5rem;
-		padding: 0 0.5rem;
+		padding: 0;
 	}
 }
 

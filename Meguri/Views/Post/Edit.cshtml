@@ -4,7 +4,7 @@
 }
 
 <h1>@SharedLocalizer["Post_EditTitle"]</h1>
-<div>
+<article>
 	<form asp-action="Edit" method="post" enctype="multipart/form-data">
 		<input type="hidden" asp-for="Id" />
 		<div asp-validation-summary="ModelOnly"></div>
@@ -22,7 +22,17 @@
 		<!-- 本文 -->
 		<div class="attribute-wrap">
 			<label asp-for="Text">@SharedLocalizer["Post_OptionalBody"]</label>
-			<textarea asp-for="Text" class="form-control" rows="6"></textarea>
+			@{
+				var markdownEditor = new MarkdownEditorViewModel {
+					InputId = "Text",
+					InputName = "Text",
+					Value = Model.Text,
+					Placeholder = SharedLocalizer["Post_BodyPlaceholder"].Value,
+					Rows = 10,
+					UseMarkdown = Model.UseMarkdown
+				};
+			}
+			<partial name="_MarkdownEditor" model="markdownEditor" />
 			<span asp-validation-for="Text"></span>
 		</div>
 
@@ -107,7 +117,7 @@
 			<button type="submit">@SharedLocalizer["Common_Save"]</button>
 		</div>
 	</form>
-</div>
+</article>
 
 
 @section Scripts {

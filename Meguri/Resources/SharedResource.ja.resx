@@ -1901,4 +1901,97 @@ meguri - 『好き』がめぐるSNS</value>
   <data name="Account_Password_Hint" xml:space="preserve">
     <value>{0}〜{1}文字（{2}種類以上の異なる文字を使用）で入力してください。ユーザー名やメールアドレスを含むもの、推測されやすいパスワードは使用できません。</value>
   </data>
+  <data name="Markdown_TabWrite" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="Markdown_TabPreview" xml:space="preserve">
+    <value>プレビュー</value>
+  </data>
+  <data name="Markdown_Toolbar_Heading" xml:space="preserve">
+    <value>見出し</value>
+  </data>
+  <data name="Markdown_Toolbar_Bold" xml:space="preserve">
+    <value>太字 (Ctrl+B)</value>
+  </data>
+  <data name="Markdown_Toolbar_Italic" xml:space="preserve">
+    <value>斜体 (Ctrl+I)</value>
+  </data>
+  <data name="Markdown_Toolbar_Strikethrough" xml:space="preserve">
+    <value>取り消し線</value>
+  </data>
+  <data name="Markdown_Toolbar_Quote" xml:space="preserve">
+    <value>引用</value>
+  </data>
+  <data name="Markdown_Toolbar_Code" xml:space="preserve">
+    <value>インラインコード</value>
+  </data>
+  <data name="Markdown_Toolbar_CodeBlock" xml:space="preserve">
+    <value>コードブロック</value>
+  </data>
+  <data name="Markdown_Toolbar_Link" xml:space="preserve">
+    <value>リンク (Ctrl+K)</value>
+  </data>
+  <data name="Markdown_Toolbar_BulletList" xml:space="preserve">
+    <value>箇条書きリスト</value>
+  </data>
+  <data name="Markdown_Toolbar_NumberedList" xml:space="preserve">
+    <value>番号付きリスト</value>
+  </data>
+  <data name="Markdown_Toolbar_TaskList" xml:space="preserve">
+    <value>タスクリスト</value>
+  </data>
+  <data name="Markdown_Toolbar_Table" xml:space="preserve">
+    <value>テーブル</value>
+  </data>
+  <data name="Markdown_Toolbar_InsertMyImage" xml:space="preserve">
+    <value>画像を挿入</value>
+  </data>
+  <data name="Markdown_PreviewEmpty" xml:space="preserve">
+    <value>プレビューする内容がありません。</value>
+  </data>
+  <data name="Markdown_PreviewLoading" xml:space="preserve">
+    <value>プレビューを読み込み中...</value>
+  </data>
+  <data name="Markdown_PreviewError" xml:space="preserve">
+    <value>プレビューの読み込みに失敗しました。</value>
+  </data>
+  <data name="Markdown_Hint" xml:space="preserve">
+    <value>GitHub互換のMarkdown記法に対応しています（見出し、太字、取り消し線、テーブル、タスクリスト、コードブロック等）。</value>
+  </data>
+  <data name="Markdown_ImagePicker_Title" xml:space="preserve">
+    <value>画像を挿入</value>
+  </data>
+  <data name="Markdown_ImagePicker_SearchPlaceholder" xml:space="preserve">
+    <value>画像名で絞り込み...</value>
+  </data>
+  <data name="Markdown_ImagePicker_Loading" xml:space="preserve">
+    <value>画像を読み込み中...</value>
+  </data>
+  <data name="Markdown_ImagePicker_Empty" xml:space="preserve">
+    <value>投稿済みの画像がありません。</value>
+  </data>
+  <data name="Markdown_ImagePicker_Error" xml:space="preserve">
+    <value>画像一覧の読み込みに失敗しました。</value>
+  </data>
+  <data name="Markdown_ImagePicker_LoadMore" xml:space="preserve">
+    <value>さらに読み込む</value>
+  </data>
+  <data name="Markdown_ImagePicker_Close" xml:space="preserve">
+    <value>閉じる</value>
+  </data>
+  <data name="Markdown_ImagePicker_UploadButton" xml:space="preserve">
+    <value>新しい画像をアップロードして挿入</value>
+  </data>
+  <data name="Markdown_ImagePicker_Uploading" xml:space="preserve">
+    <value>アップロード中...</value>
+  </data>
+  <data name="Markdown_ImagePicker_UploadError" xml:space="preserve">
+    <value>画像のアップロードに失敗しました。</value>
+  </data>
+  <data name="Markdown_ImagePicker_UploadNoFile" xml:space="preserve">
+    <value>アップロードする画像ファイルを選択してください。</value>
+  </data>
+  <data name="Post_UseMarkdown" xml:space="preserve">
+    <value>マークダウンを使用する</value>
+  </data>
 </root>

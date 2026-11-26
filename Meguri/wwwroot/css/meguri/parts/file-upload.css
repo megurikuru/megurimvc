@@ -1,16 +1,18 @@
 /* ファイル選択・画像プレビュー部品 */
 
 div.file-upload {
-	display: block;
-
-	& > :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty) ~ :not([hidden]):not([type="hidden"]):not(.field-validation-valid):not(:empty):not(.image-preview-list) {
-		margin-top: 0.5rem;
-	}
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
 }
 
 .file-upload {
 	& span.field-validation-valid {
 		display: none;
+	}
+
+	& > p.description {
+		padding: 0;
 	}
 }
 
@@ -20,8 +22,7 @@ input[type="file"],
 	box-sizing: border-box;
 	width: 100%;
 	min-height: var(--control-height);
-	margin-inline: 0;
-	margin-top: 0.5rem;
+	margin: 0;
 	padding: 0.5rem;
 	font-size: 0.9rem;
 	border: 1px dashed var(--color-border);
@@ -51,7 +52,7 @@ input[type="file"],
 /* 既存画像表示（アバター・ヘッダー・一般） */
 .file-upload-current-avatar {
 	display: block;
-	margin: 0.5rem auto;
+	margin: 0 auto;
 	width: 120px;
 	height: 120px;
 	object-fit: cover;
@@ -76,7 +77,7 @@ input[type="file"],
 .image-preview-list {
 	display: flex;
 	flex-wrap: wrap;
-	margin-left: -0.5rem;
+	gap: 0.5rem;
 
 	&:empty {
 		display: none;
@@ -87,17 +88,13 @@ input[type="file"],
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin: 0.5rem 0 0 0.5rem;
+	gap: 0.5rem;
 	width: 100px;
 	padding: 0.25rem;
 	border: 1px solid var(--color-border);
 	border-radius: var(--radius-sm);
 	background-color: var(--color-bg-title);
 	box-sizing: border-box;
-
-	& > * + * {
-		margin-top: 0.5rem;
-	}
 
 	& .image-preview-header {
 		display: flex;

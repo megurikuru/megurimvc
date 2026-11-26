@@ -22,6 +22,7 @@ namespace Meguri.Controllers {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IR2StorageService _r2StorageService;
         private readonly IImageProcessingService _imageProcessingService;
+        private readonly IMarkdownService _markdownService;
         private readonly IStringLocalizer<SharedResource> _localizer;
 
         public MessageController(
@@ -29,11 +30,13 @@ namespace Meguri.Controllers {
             UserManager<ApplicationUser> userManager,
             IR2StorageService r2StorageService,
             IImageProcessingService imageProcessingService,
+            IMarkdownService markdownService,
             IStringLocalizer<SharedResource> localizer) {
             _context = context;
             _userManager = userManager;
             _r2StorageService = r2StorageService;
             _imageProcessingService = imageProcessingService;
+            _markdownService = markdownService;
             _localizer = localizer;
         }
 
@@ -90,12 +93,18 @@ namespace Meguri.Controllers {
                     }
                 }
 
+                var lastMessageText = lastMsg == null
+                    ? _localizer["Message_NoMessagesInConv"].Value
+                    : lastMsg.IsDeleted
+                        ? _localizer["Message_Deleted"].Value
+                        : (lastMsg.UseMarkdown ? _markdownService.ToPlainText(lastMsg.Body) : lastMsg.Body);
+
                 vmList.Add(new ConversationItemViewModel {
                     Id = conv.Id,
                     Title = title,
                     IsGroup = conv.IsGroup,
                     AvatarImageId = avatarImageId,
-                    LastMessageText = lastMsg == null ? _localizer["Message_NoMessagesInConv"].Value : (lastMsg.IsDeleted ? _localizer["Message_Deleted"].Value : lastMsg.Body),
+                    LastMessageText = lastMessageText,
                     LastMessageTime = lastMsg?.CreatedAt ?? conv.CreatedAt,
                     MemberNames = conv.Members.Select(m => m.User?.UserName ?? _localizer["Common_UnknownUser"].Value).ToList()
                 });
@@ -317,7 +326,7 @@ namespace Meguri.Controllers {
                     .FirstOrDefaultAsync();
 
                 if (existingConv != null) {
-                    await SendMessageInternal(existingConv.Id, currentUserId, model.InitialMessage, model.ImageFiles, model.Subject);
+                    await SendMessageInternal(existingConv.Id, currentUserId, model.InitialMessage, model.ImageFiles, model.Subject, null, model.UseMarkdown);
                     return RedirectToAction(nameof(Details), new { id = existingConv.Id });                }
             }
 
@@ -338,7 +347,7 @@ namespace Meguri.Controllers {
             _context.Conversations.Add(conv);
             await _context.SaveChangesAsync();
 
-            await SendMessageInternal(conv.Id, currentUserId, model.InitialMessage, model.ImageFiles, model.Subject);
+            await SendMessageInternal(conv.Id, currentUserId, model.InitialMessage, model.ImageFiles, model.Subject, null, model.UseMarkdown);
 
             return RedirectToAction(nameof(Details), new { id = conv.Id });
         }
@@ -357,7 +366,8 @@ namespace Meguri.Controllers {
                 Id = message.Id,
                 ConversationId = message.ConversationId,
                 Subject = message.Subject,
-                                Body = message.Body
+                Body = message.Body,
+                UseMarkdown = message.UseMarkdown
             });
         }
 
@@ -380,7 +390,8 @@ namespace Meguri.Controllers {
             }
 
             message.Subject = model.Subject ?? string.Empty;
-                        message.Body = model.Body;
+            message.Body = model.Body;
+            message.UseMarkdown = model.UseMarkdown;
             message.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
@@ -421,7 +432,7 @@ namespace Meguri.Controllers {
         // POST: /Message/SendMessage
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SendMessage(long conversationId, string? subject, string text, List<IFormFile>? imageFiles, long? parentMessageId = null) {
+        public async Task<IActionResult> SendMessage(long conversationId, string? subject, string text, List<IFormFile>? imageFiles, long? parentMessageId = null, bool useMarkdown = false) {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserId)) return Challenge();
 
@@ -451,7 +462,7 @@ namespace Meguri.Controllers {
                     TempData["Error"] = string.Format(_localizer["Message_Error_MaxRepliesPerParentFormat"].Value, MaxRepliesPerParent);
                     return RedirectToAction(nameof(Details), new { id = conversationId });
                 }
-                await SendMessageInternal(conversationId, currentUserId, text, imageFiles, subject, parentMessageId);
+                await SendMessageInternal(conversationId, currentUserId, text, imageFiles, subject, parentMessageId, useMarkdown);
             }
 
             return RedirectToAction(nameof(Details), new { id = conversationId });
@@ -517,13 +528,14 @@ namespace Meguri.Controllers {
         }
 
         private async Task SendMessageInternal(long conversationId, string senderId, string text,
-        List<IFormFile>? imageFiles, string? subject = null, long? parentMessageId = null) {
+        List<IFormFile>? imageFiles, string? subject = null, long? parentMessageId = null, bool useMarkdown = false) {
             var message = new Message {
                 ConversationId = conversationId,
                 ParentMessageId = parentMessageId,
                 SenderId = senderId,
                 Subject = subject ?? string.Empty,
-                                Body = text ?? string.Empty,
+                Body = text ?? string.Empty,
+                UseMarkdown = useMarkdown,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

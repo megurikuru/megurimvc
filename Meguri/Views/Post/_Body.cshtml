@@ -22,9 +22,17 @@
 	}
 	<h1>@Model.DisplayTitle</h1>
 	<!-- 本文 -->
-	<p>
-		@Model.Post.Body
-	</p>
+	@if (Model.Post.UseMarkdown) {
+		@if (!string.IsNullOrWhiteSpace(Model.RenderedBodyHtml)) {
+			<div class="markdown-body post-body">
+				@Html.Raw(Model.RenderedBodyHtml)
+			</div>
+		}
+	} else {
+		<p>
+			@Model.Post.Body
+		</p>
+	}
 	<!-- 添付画像（順序付き） -->
 	@if (Model.Post.PostImages.Any()) {
 		<div class="post-images">

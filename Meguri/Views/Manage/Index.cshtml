@@ -38,7 +38,20 @@
 	</div>
 	<div>
 		<label asp-for="Bio">@SharedLocalizer["Manage_Profile_Bio"]</label>
-		<textarea asp-for="Bio" class="form-control" rows="4" placeholder="@SharedLocalizer["Manage_Profile_BioPlaceholder"]"></textarea>
+		@{
+			var bioMarkdownEditor = new MarkdownEditorViewModel {
+				InputId = "Bio",
+				InputName = "Bio",
+				Value = Model.Bio,
+				Placeholder = SharedLocalizer["Manage_Profile_BioPlaceholder"].Value,
+				Rows = 4,
+				MaxLength = 1000,
+				ToggleInputId = "UseMarkdownBio",
+				ToggleInputName = "UseMarkdownBio",
+				UseMarkdown = Model.UseMarkdownBio
+			};
+		}
+		<partial name="_MarkdownEditor" model="bioMarkdownEditor" />
 		<span asp-validation-for="Bio"></span>
 	</div>
 	@{

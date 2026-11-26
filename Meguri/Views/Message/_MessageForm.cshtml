@@ -21,7 +21,20 @@
 			<input type="text" class="form-control" id="messageSubject" name="subject" aria-label="@SharedLocalizer["Message_SubjectLabel"]" />
 		</details>
 		<div class="attribute-wrap">
-			<textarea class="form-control" id="messageText" name="text" rows="3" required aria-label="@SharedLocalizer["Message_TextPlaceholder"]" placeholder="@SharedLocalizer["Message_TextPlaceholder"]"></textarea>
+			@{
+				var replyMarkdownEditor = new MarkdownEditorViewModel {
+					InputId = "messageText",
+					InputName = "text",
+					Placeholder = SharedLocalizer["Message_TextPlaceholder"].Value,
+					AriaLabel = SharedLocalizer["Message_TextPlaceholder"].Value,
+					Rows = 3,
+					Required = true,
+					ToggleInputId = "messageUseMarkdown",
+					ToggleInputName = "useMarkdown",
+					UseMarkdown = false
+				};
+			}
+			<partial name="_MarkdownEditor" model="replyMarkdownEditor" />
 		</div>
 		@{
 			var chatImageUpload = new FileUploadViewModel {

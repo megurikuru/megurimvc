@@ -4,7 +4,7 @@ body[data-controller="Profile" i][data-action="Details" i] {
 		text-align: center;
 	}
 
-	article p {
+	article p:not(.markdown-body *, .markdown-editor *) {
 		padding: 0.5rem 0.5rem 0 0.5rem;
 	}
 }

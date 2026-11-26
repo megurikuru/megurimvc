@@ -18,8 +18,27 @@ namespace Meguri.ViewModels.Post {
     public class PostDetailsViewModel {
         public Meguri.Models.Post Post { get; set; } = null!;
         public string DisplayTitle { get; set; } = string.Empty;
+        public string RenderedBodyHtml { get; set; } = string.Empty;
         public bool IsAuthor { get; set; }
         public List<Meguri.Models.Fandom> Ancestors { get; set; } = new List<Meguri.Models.Fandom>();
+    }
+
+    public class MarkdownPreviewRequest {
+        public string? Markdown { get; set; }
+    }
+
+    public class MarkdownEditorViewModel {
+        public string InputId { get; set; } = "Text";
+        public string InputName { get; set; } = "Text";
+        public string? Value { get; set; }
+        public string? Placeholder { get; set; }
+        public string? AriaLabel { get; set; }
+        public int Rows { get; set; } = 10;
+        public int? MaxLength { get; set; }
+        public bool Required { get; set; } = false;
+        public string ToggleInputId { get; set; } = "UseMarkdown";
+        public string ToggleInputName { get; set; } = "UseMarkdown";
+        public bool UseMarkdown { get; set; } = false;
     }
 
     public class PostCreateViewModel {
@@ -29,6 +48,9 @@ namespace Meguri.ViewModels.Post {
 
         [Display(Name = "Post_PostText")]
         public string? Text { get; set; }
+
+        [Display(Name = "Post_UseMarkdown")]
+        public bool UseMarkdown { get; set; } = false;
 
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_SelectFandom")]
@@ -59,6 +81,9 @@ namespace Meguri.ViewModels.Post {
 
         [Display(Name = "Post_PostText")]
         public string? Text { get; set; }
+
+        [Display(Name = "Post_UseMarkdown")]
+        public bool UseMarkdown { get; set; } = false;
 
         [Required(ErrorMessage = "Validation_Required")]
         [Display(Name = "Post_SelectFandom")]

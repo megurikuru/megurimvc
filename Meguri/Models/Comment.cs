@@ -25,6 +25,9 @@ namespace Meguri.Models {
 
         public string Text { get; set; } = string.Empty;
 
+        /// Markdownを使用するか
+        public bool UseMarkdown { get; set; } = false;
+
         /// 論理削除フラグ（削除されたレスのアンカー破壊防止用）
         public bool IsDeleted { get; set; } = false;
 

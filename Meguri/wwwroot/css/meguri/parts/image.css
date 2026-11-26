@@ -14,16 +14,12 @@
 	flex-wrap: wrap;
 	justify-content: space-between;
 	align-items: center;
-	padding: 0 0.5rem 0 0;
+	gap: 0.5rem;
 
 	& > div {
 		display: flex;
 		align-items: center;
-		margin: 0.5rem 0 0 0.5rem;
-
-		& > * + * {
-			margin-left: 0.5rem;
-		}
+		gap: 0.5rem;
 	}
 
 	& img:not(.icon) {

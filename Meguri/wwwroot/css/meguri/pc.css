@@ -35,6 +35,7 @@
 
 	body[data-controller="Account" i],
 	body[data-controller="Manage" i],
+	body[data-controller="Message" i],
 	body[data-controller="Post" i],
 	body[data-controller="Home" i]:not([data-action="Index" i]) {
 		article {
@@ -52,28 +53,37 @@
 		border-left: 1px solid var(--color-border);
 	}
 
-	#post-list > article {
-		h1,
-		h2 {
-			border-right: none;
-			border-left: none;
-		}
+	/* すでに左右枠線を持つコンテナ内（article・.profile-info）およびMarkdown本文内の見出しは左右枠線を付けない */
+	article :is(h1, h2),
+	.profile-info :is(h1, h2),
+	.markdown-body :is(h1, h2) {
+		border-right: none;
+		border-left: none;
 	}
 
+	/* プロフィール詳細・メッセージ詳細など、article外の本文・編集領域もPCでは左右枠線で囲む */
+	.profile-info {
+		border-right: 1px solid var(--color-border);
+		border-left: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--color-border);
+		padding-bottom: 0.5rem;
+	}
 
+	body[data-controller="Message" i][data-action="Details" i] {
+		main > div:first-child .message-disclosure {
+			border-right: 1px solid var(--color-border);
+			border-left: 1px solid var(--color-border);
+		}
 
-	body[data-controller="Account" i],
-	body[data-controller="Manage" i],
-	body[data-controller="Message" i],
-	body[data-controller="Home" i],
-	body[data-controller="Post" i],
-	body[data-controller="Profile" i] {
-		article {
-			h1,
-			h2 {
-				border-right: none;
-				border-left: none;
-			}
+		.message-composer,
+		#messageContainer {
+			border-right: 1px solid var(--color-border);
+			border-left: 1px solid var(--color-border);
+		}
+
+		#messageContainer {
+			padding-bottom: 0.5rem;
+			border-bottom: 1px solid var(--color-border);
 		}
 	}
 

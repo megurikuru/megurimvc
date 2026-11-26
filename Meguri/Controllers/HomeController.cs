@@ -111,6 +111,7 @@ namespace Meguri.Controllers {
                     Id = p.Id,
                     Subject = p.Subject,
                     Body = p.Body,
+                    UseMarkdown = p.UseMarkdown,
                     IsPublic = p.IsPublic,
                     IsSexual = p.IsSexual,
                     IsViolence = p.IsViolence,

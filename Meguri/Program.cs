@@ -105,6 +105,9 @@ builder.Services.AddScoped<IR2StorageService, R2StorageService>();
 // 画像検証・変換・圧縮サービス
 builder.Services.AddScoped<IImageProcessingService, ImageProcessingService>();
 
+// GitHub互換Markdown変換・サニタイズサービス
+builder.Services.AddSingleton<IMarkdownService, MarkdownService>();
+
 // 画像複数枚添付（最大16枚）およびJavaScript無効時のサイズ超過エラー返却のため、
 // KestrelとMultipartフォームの読み取り上限を拡張（個別ファイルの5MB上限はサーバー側で検証）
 const long maxMultipartRequestSizeBytes = 200L * 1024 * 1024; // 200MB

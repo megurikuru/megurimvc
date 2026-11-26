@@ -62,7 +62,20 @@
 
 			<div class="attribute-wrap">
 				<label asp-for="InitialMessage">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
-				<textarea asp-for="InitialMessage" class="form-control" rows="3" placeholder="@SharedLocalizer["Message_TextPlaceholder"]" required></textarea>
+				@{
+					var messageMarkdownEditor = new MarkdownEditorViewModel {
+						InputId = "InitialMessage",
+						InputName = "InitialMessage",
+						Value = Model.InitialMessage,
+						Placeholder = SharedLocalizer["Message_TextPlaceholder"].Value,
+						Rows = 4,
+						Required = true,
+						ToggleInputId = "UseMarkdown",
+						ToggleInputName = "UseMarkdown",
+						UseMarkdown = Model.UseMarkdown
+					};
+				}
+				<partial name="_MarkdownEditor" model="messageMarkdownEditor" />
 				<span asp-validation-for="InitialMessage"></span>
 			</div>
 

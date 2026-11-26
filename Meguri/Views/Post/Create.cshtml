@@ -20,7 +20,17 @@
 		<!-- 本文 -->
 		<div class="attribute-wrap">
 			<label asp-for="Text">@SharedLocalizer["Post_OptionalBody"]</label>
-			<textarea asp-for="Text" class="form-control" rows="6" placeholder="@SharedLocalizer["Post_BodyPlaceholder"]"></textarea>
+			@{
+				var markdownEditor = new MarkdownEditorViewModel {
+					InputId = "Text",
+					InputName = "Text",
+					Value = Model.Text,
+					Placeholder = SharedLocalizer["Post_BodyPlaceholder"].Value,
+					Rows = 10,
+					UseMarkdown = Model.UseMarkdown
+				};
+			}
+			<partial name="_MarkdownEditor" model="markdownEditor" />
 			<span asp-validation-for="Text"></span>
 		</div>
 

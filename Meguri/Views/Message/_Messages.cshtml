@@ -1,5 +1,6 @@
 @model Meguri.ViewModels.Message.MessageRoomViewModel
 @using Meguri.Extensions
+@inject Meguri.Services.IMarkdownService MarkdownService
 @{
 	// 表示中のメッセージから返信先や祖先をIDで参照する。
 	var messagesById = Model.Messages.ToDictionary(m => m.Id);
@@ -8,10 +9,15 @@
 		? SharedLocalizer["Common_UnknownUser"].Value
 		: message.Sender.UserName + (message.Sender.IsWithdrawn ? "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")" : "");
 	// 引用は本文・件名・添付の順に選び、削除済みの内容は表示しない。
-	string Preview(Message message) => message.IsDeleted ? SharedLocalizer["Message_Deleted"].Value
-		: !string.IsNullOrWhiteSpace(message.Body) ? new string(message.Body.Take(80).ToArray())
-		: !string.IsNullOrWhiteSpace(message.Subject) ? new string(message.Subject.Take(80).ToArray())
-		: SharedLocalizer["Message_ImageAttachLabel"].Value;
+	string Preview(Message message) {
+		if (message.IsDeleted) return SharedLocalizer["Message_Deleted"].Value;
+		if (!string.IsNullOrWhiteSpace(message.Body)) {
+			var plain = message.UseMarkdown ? MarkdownService.ToPlainText(message.Body) : message.Body;
+			if (!string.IsNullOrWhiteSpace(plain)) return new string(plain.Take(80).ToArray());
+		}
+		if (!string.IsNullOrWhiteSpace(message.Subject)) return new string(message.Subject.Take(80).ToArray());
+		return SharedLocalizer["Message_ImageAttachLabel"].Value;
+	}
 
 	// ルートメッセージ単位でスレッドをグループ化する。
 	var threads = new List<List<Message>>();
@@ -90,7 +96,14 @@
 							}
 							@* メッセージ本文 *@
 							@if (!msg.IsDeleted && !string.IsNullOrEmpty(msg.Body)) {
-								<div class="chat-message-body">@msg.Body</div>
+								@if (msg.UseMarkdown) {
+									var renderedHtml = MarkdownService.ToSafeHtml(msg.Body);
+									if (!string.IsNullOrWhiteSpace(renderedHtml)) {
+										<div class="markdown-body chat-message-markdown">@Html.Raw(renderedHtml)</div>
+									}
+								} else {
+									<div class="chat-message-body">@msg.Body</div>
+								}
 							}
 							@if (!msg.IsDeleted && msg.MessageImages.Any()) {
 								<div class="message-images">

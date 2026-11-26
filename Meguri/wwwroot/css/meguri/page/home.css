@@ -15,11 +15,6 @@ body[data-controller="Home" i] {
 
 		.article-meta {
 			margin-top: 0.5rem;
-
-			.post-images + & {
-				margin-top: 0;
-			}
-
 			border-top: 1px solid var(--color-border);
 		}
 	}
@@ -46,11 +41,10 @@ body[data-controller="Home" i] {
 	}
 	/* 運営者ページ */
 	.operator-info {
-		border-top: 1px solid var(--color-border);
-		padding: 0.75rem 0.5rem;
+		padding: 0.5rem 0.5rem 0 0.5rem;
 
 		& > div + div {
-			margin-top: 1.25rem;
+			margin-top: 0.5rem;
 		}
 
 		& dt {
@@ -59,14 +53,10 @@ body[data-controller="Home" i] {
 
 		& dd {
 			margin-top: 0.5rem;
-
-			& + dd {
-				margin-top: 0.75rem;
-			}
 		}
 
 		& a {
-			padding: 0.35rem 0;
+			padding: 0.25rem 0;
 		}
 
 		& .icon-external {
@@ -77,19 +67,10 @@ body[data-controller="Home" i] {
 		}
 	}
 
-	.terms {
-		border-top: 1px solid var(--color-border);
-
-		p {
-			margin-bottom: 0.5rem;
-		}
-	}
-
+	.terms,
 	.privacy {
-		border-top: 1px solid var(--color-border);
-
 		p {
-			margin-bottom: 0.5rem;
+			margin-bottom: 0;
 		}
 	}
 

@@ -16,6 +16,9 @@ namespace Meguri.Models {
         /// 自己紹介文（Bio / Profile description）
         public string Bio { get; set; } = string.Empty;
 
+        /// 自己紹介文にMarkdownを使用するか
+        public bool UseMarkdownBio { get; set; } = false;
+
         /// 退会フラグ（論理削除）
         public bool IsWithdrawn { get; set; } = false;
 

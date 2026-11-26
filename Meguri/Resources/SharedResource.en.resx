@@ -1901,4 +1901,97 @@ If you did not request this, someone may have entered your email address by mist
   <data name="Manage_Options_UnderageNotice" xml:space="preserve">
     <value>* Users under 18 cannot view adult or violent content.</value>
   </data>
+  <data name="Markdown_TabWrite" xml:space="preserve">
+    <value>Write</value>
+  </data>
+  <data name="Markdown_TabPreview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="Markdown_Toolbar_Heading" xml:space="preserve">
+    <value>Heading</value>
+  </data>
+  <data name="Markdown_Toolbar_Bold" xml:space="preserve">
+    <value>Bold (Ctrl+B)</value>
+  </data>
+  <data name="Markdown_Toolbar_Italic" xml:space="preserve">
+    <value>Italic (Ctrl+I)</value>
+  </data>
+  <data name="Markdown_Toolbar_Strikethrough" xml:space="preserve">
+    <value>Strikethrough</value>
+  </data>
+  <data name="Markdown_Toolbar_Quote" xml:space="preserve">
+    <value>Quote</value>
+  </data>
+  <data name="Markdown_Toolbar_Code" xml:space="preserve">
+    <value>Inline code</value>
+  </data>
+  <data name="Markdown_Toolbar_CodeBlock" xml:space="preserve">
+    <value>Code block</value>
+  </data>
+  <data name="Markdown_Toolbar_Link" xml:space="preserve">
+    <value>Link (Ctrl+K)</value>
+  </data>
+  <data name="Markdown_Toolbar_BulletList" xml:space="preserve">
+    <value>Unordered list</value>
+  </data>
+  <data name="Markdown_Toolbar_NumberedList" xml:space="preserve">
+    <value>Numbered list</value>
+  </data>
+  <data name="Markdown_Toolbar_TaskList" xml:space="preserve">
+    <value>Task list</value>
+  </data>
+  <data name="Markdown_Toolbar_Table" xml:space="preserve">
+    <value>Table</value>
+  </data>
+  <data name="Markdown_Toolbar_InsertMyImage" xml:space="preserve">
+    <value>Insert image</value>
+  </data>
+  <data name="Markdown_PreviewEmpty" xml:space="preserve">
+    <value>Nothing to preview.</value>
+  </data>
+  <data name="Markdown_PreviewLoading" xml:space="preserve">
+    <value>Loading preview...</value>
+  </data>
+  <data name="Markdown_PreviewError" xml:space="preserve">
+    <value>Failed to load preview.</value>
+  </data>
+  <data name="Markdown_Hint" xml:space="preserve">
+    <value>Supports GitHub-flavored Markdown (headings, bold, strikethrough, tables, task lists, code blocks, etc.).</value>
+  </data>
+  <data name="Markdown_ImagePicker_Title" xml:space="preserve">
+    <value>Insert image</value>
+  </data>
+  <data name="Markdown_ImagePicker_SearchPlaceholder" xml:space="preserve">
+    <value>Filter by image name...</value>
+  </data>
+  <data name="Markdown_ImagePicker_Loading" xml:space="preserve">
+    <value>Loading images...</value>
+  </data>
+  <data name="Markdown_ImagePicker_Empty" xml:space="preserve">
+    <value>You have no uploaded images yet.</value>
+  </data>
+  <data name="Markdown_ImagePicker_Error" xml:space="preserve">
+    <value>Failed to load images.</value>
+  </data>
+  <data name="Markdown_ImagePicker_LoadMore" xml:space="preserve">
+    <value>Load more</value>
+  </data>
+  <data name="Markdown_ImagePicker_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Markdown_ImagePicker_UploadButton" xml:space="preserve">
+    <value>Upload and insert new image</value>
+  </data>
+  <data name="Markdown_ImagePicker_Uploading" xml:space="preserve">
+    <value>Uploading...</value>
+  </data>
+  <data name="Markdown_ImagePicker_UploadError" xml:space="preserve">
+    <value>Failed to upload image.</value>
+  </data>
+  <data name="Markdown_ImagePicker_UploadNoFile" xml:space="preserve">
+    <value>Please select an image file to upload.</value>
+  </data>
+  <data name="Post_UseMarkdown" xml:space="preserve">
+    <value>Use Markdown</value>
+  </data>
 </root>

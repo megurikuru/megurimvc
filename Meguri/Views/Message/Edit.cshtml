@@ -3,9 +3,8 @@
 	ViewData["Title"] = SharedLocalizer["Common_Edit"];
 }
 
-<h2><img src="~/icons/square-pen.svg" class="icon" />@SharedLocalizer["Common_Edit"]</h2>
-
-<div>
+<article>
+	<h2><img src="~/icons/square-pen.svg" class="icon" />@SharedLocalizer["Common_Edit"]</h2>
 	<form asp-action="Edit" asp-route-id="@Model.Id" method="post">
 		<input type="hidden" asp-for="Id" />
 		<input type="hidden" asp-for="ConversationId" />
@@ -19,7 +18,20 @@
 
 		<div class="attribute-wrap">
 			<label asp-for="Body">@SharedLocalizer["Message_InputPlaceholder"] <span>*</span></label>
-			<textarea asp-for="Body" class="form-control" rows="4" required></textarea>
+			@{
+				var editMessageMarkdownEditor = new MarkdownEditorViewModel {
+					InputId = "Body",
+					InputName = "Body",
+					Value = Model.Body,
+					Placeholder = SharedLocalizer["Message_TextPlaceholder"].Value,
+					Rows = 5,
+					Required = true,
+					ToggleInputId = "UseMarkdown",
+					ToggleInputName = "UseMarkdown",
+					UseMarkdown = Model.UseMarkdown
+				};
+			}
+			<partial name="_MarkdownEditor" model="editMessageMarkdownEditor" />
 			<span asp-validation-for="Body"></span>
 		</div>
 
@@ -28,7 +40,7 @@
 			<button type="submit">@SharedLocalizer["Common_Save"]</button>
 		</div>
 	</form>
-</div>
+</article>
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />

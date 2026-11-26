@@ -15,7 +15,7 @@ body[data-controller="Manage" i] {
 		margin-top: 0.5rem;
 	}
 
-	&[data-action="Passkeys" i] article{
+	&[data-action="Passkeys" i] article + article {
 		margin-top: 0.5rem;
 	}
 }

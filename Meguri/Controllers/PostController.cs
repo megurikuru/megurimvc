@@ -22,6 +22,7 @@ namespace Meguri.Controllers {
         private readonly ITagService _tagService;
         private readonly IR2StorageService _r2StorageService;
         private readonly IImageProcessingService _imageProcessingService;
+        private readonly IMarkdownService _markdownService;
         private readonly IStringLocalizer<SharedResource> _localizer;
 
         public PostController(
@@ -29,11 +30,13 @@ namespace Meguri.Controllers {
             ITagService tagService,
             IR2StorageService r2StorageService,
             IImageProcessingService imageProcessingService,
+            IMarkdownService markdownService,
             IStringLocalizer<SharedResource> localizer) {
             _context = context;
             _tagService = tagService;
             _r2StorageService = r2StorageService;
             _imageProcessingService = imageProcessingService;
+            _markdownService = markdownService;
             _localizer = localizer;
         }
 
@@ -182,11 +185,21 @@ namespace Meguri.Controllers {
             var viewModel = new PostDetailsViewModel {
                 Post = post,
                 DisplayTitle = string.IsNullOrWhiteSpace(post.Subject) ? _localizer["Post_Untitled"].Value : post.Subject,
+                RenderedBodyHtml = post.UseMarkdown ? _markdownService.ToSafeHtml(post.Body) : string.Empty,
                 IsAuthor = isAuthorOrAdmin,
                 Ancestors = ancestors
             };
 
             return View(viewModel);
+        }
+
+        // POST: /Post/PreviewMarkdown
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public IActionResult PreviewMarkdown([FromBody] MarkdownPreviewRequest? request) {
+            var html = _markdownService.ToSafeHtml(request?.Markdown);
+            return Json(new { html });
         }
 
         // GET: /Post/Create
@@ -262,6 +275,7 @@ namespace Meguri.Controllers {
                 UserId = userId,
                 Subject = model.Name ?? string.Empty,
                 Body = model.Text ?? string.Empty,
+                UseMarkdown = model.UseMarkdown,
                 FandomId = model.FandomId,
                 IsSexual = model.IsSexual,
                 IsViolence = model.IsViolence,
@@ -342,6 +356,7 @@ namespace Meguri.Controllers {
                 Id = post.Id,
                 Name = post.Subject,
                 Text = post.Body,
+                UseMarkdown = post.UseMarkdown,
                 FandomId = post.FandomId,
                 IsSexual = post.IsSexual,
                 IsViolence = post.IsViolence,
@@ -427,6 +442,7 @@ namespace Meguri.Controllers {
 
             post.Subject = model.Name ?? string.Empty;
             post.Body = model.Text ?? string.Empty;
+            post.UseMarkdown = model.UseMarkdown;
             post.FandomId = model.FandomId;
             post.IsSexual = model.IsSexual;
             post.IsViolence = model.IsViolence;

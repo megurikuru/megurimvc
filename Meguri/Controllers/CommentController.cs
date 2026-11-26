@@ -35,7 +35,7 @@ namespace Meguri.Controllers {
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(long? docId, long? imageId, long? parentId, string text, IFormFile? commentImage, string? returnUrl) {
+        public async Task<IActionResult> Create(long? docId, long? imageId, long? parentId, string text, IFormFile? commentImage, string? returnUrl, bool useMarkdown = false) {
             if (string.IsNullOrWhiteSpace(text) && commentImage == null) {
                 return Redirect(returnUrl ?? "/");
             }
@@ -92,6 +92,7 @@ namespace Meguri.Controllers {
                 ParentId = parentId,
                 Number = nextNumber,
                 Text = text ?? string.Empty,
+                UseMarkdown = useMarkdown,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 IsDeleted = false

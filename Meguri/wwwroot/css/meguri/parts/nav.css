@@ -10,6 +10,10 @@ body {
 }
 
 .nav-grid {
+	:is(h1, h2) + & > ul > li:nth-child(-n + 3),
+	:has(> :is(h1, h2):last-child) + & > ul > li:nth-child(-n + 3) {
+		border-top: none;
+	}
 
 	ul {
 		display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（3均等列）で配置 */

@@ -1,4 +1,5 @@
 ﻿@model Meguri.ViewModels.Profile.ProfileDetailsViewModel
+@inject Meguri.Services.IMarkdownService MarkdownService
 @{
 	ViewData["Title"] = Model.Profile.UserName;
 }
@@ -23,7 +24,14 @@
 	}
 	</h1>
 	@if (!string.IsNullOrEmpty(Model.Profile.Bio)) {
-		<p class="profile-bio">@Model.Profile.Bio</p>
+		@if (Model.Profile.UseMarkdownBio) {
+			var renderedBio = MarkdownService.ToSafeHtml(Model.Profile.Bio);
+			if (!string.IsNullOrWhiteSpace(renderedBio)) {
+				<div class="profile-bio markdown-body">@Html.Raw(renderedBio)</div>
+			}
+		} else {
+			<p class="profile-bio">@Model.Profile.Bio</p>
+		}
 	}
 	@if (Model.ExternalUrls.Any()) {
 		<ul class="profile-external-urls">

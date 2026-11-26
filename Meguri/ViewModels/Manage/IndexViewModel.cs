@@ -30,6 +30,9 @@ namespace Meguri.ViewModels.Manage {
         [StringLength(1000, ErrorMessage = "Validation_StringLengthMax")]
         public string Bio { get; set; } = string.Empty;
 
+        [Display(Name = "Post_UseMarkdown")]
+        public bool UseMarkdownBio { get; set; } = false;
+
         public bool IsProfilePublic { get; set; }
 
         public Microsoft.AspNetCore.Http.IFormFile? AvatarFile { get; set; }

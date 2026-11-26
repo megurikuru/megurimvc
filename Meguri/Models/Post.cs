@@ -26,6 +26,7 @@ namespace Meguri.Models {
         public string Subject { get; set; } = string.Empty;
         [Required]
         public string Body { get; set; } = string.Empty;
+        public bool UseMarkdown { get; set; } = false;                                  // Markdownを使用するか
         public bool IsPublic { get; set; } = false;                                     // 公開フラグ
         public bool IsSexual { get; set; } = false;                                     // 性的表現あり
         public bool IsViolence { get; set; } = false;                                   // 暴力表現あり

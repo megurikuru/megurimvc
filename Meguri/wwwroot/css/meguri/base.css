@@ -62,7 +62,25 @@ h1, h2, h3, h4, h5, h6 {
 h1, h2 {
 	text-align: center;
 	border-top: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--color-border);
 	background-color: var(--color-bg-title);
+}
+
+/* 連続する見出し（h1/h2）で枠線が二重にならないようにする */
+:is(h1, h2) + :is(h1, h2),
+:is(h1, h2) + :is(a, div, article, section) > :is(h1, h2):first-child,
+:is(h1, h2) + #post-list > article:first-child > a:first-child > h1:first-child,
+:has(> :is(h1, h2):last-child) + :is(h1, h2),
+:has(> :is(h1, h2):last-child) + :is(article, section, div) > :is(h1, h2):first-child,
+:has(> :is(h1, h2):last-child) + #post-list > article:first-child > a:first-child > h1:first-child,
+article:has(> h1:last-child, > h2:last-child) + article > :is(h1, h2):first-child {
+	border-top: none;
+}
+
+/* 見出し直後に境界線付き要素が続く場合の二重線防止 */
+:is(h1, h2) + .message-composer,
+:has(> :is(h1, h2):last-child) + .message-composer {
+	border-top: none;
 }
 
 img {

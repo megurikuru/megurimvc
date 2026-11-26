@@ -1,6 +1,7 @@
 ﻿@model (List<Meguri.Models.Comment> Comments, string TargetType, long TargetId, bool IsLocked)
 @using System.Security.Claims
 @using Meguri.Extensions
+@inject Meguri.Services.IMarkdownService MarkdownService
 
 @{
 	var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -29,9 +30,14 @@
 		? SharedLocalizer["Common_UnknownUser"].Value
 		: comment.User.UserName + (comment.User.IsWithdrawn ? "(" + SharedLocalizer["Common_WithdrawnUser"].Value + ")" : "");
 
-	string Preview(Meguri.Models.Comment comment) => comment.IsDeleted ? SharedLocalizer["Comment_DeletedText"].Value
-		: !string.IsNullOrWhiteSpace(comment.Text) ? new string(comment.Text.Take(80).ToArray())
-		: SharedLocalizer["Message_ImageAttachLabel"].Value;
+	string Preview(Meguri.Models.Comment comment) {
+		if (comment.IsDeleted) return SharedLocalizer["Comment_DeletedText"].Value;
+		if (!string.IsNullOrWhiteSpace(comment.Text)) {
+			var plain = comment.UseMarkdown ? MarkdownService.ToPlainText(comment.Text) : comment.Text;
+			if (!string.IsNullOrWhiteSpace(plain)) return new string(plain.Take(80).ToArray());
+		}
+		return SharedLocalizer["Message_ImageAttachLabel"].Value;
+	}
 
 	var commentThreads = new List<List<Meguri.Models.Comment>>();
 	foreach (var c in orderedComments) {
@@ -70,7 +76,20 @@
 				</div>
 
 				<div class="attribute-wrap">
-					<textarea class="form-control" name="text" id="commentTextInput" rows="3" placeholder="@SharedLocalizer["Comment_WritePlaceholder"]" aria-label="@SharedLocalizer["Comment_WritePlaceholder"]" required></textarea>
+					@{
+						var commentMarkdownEditor = new MarkdownEditorViewModel {
+							InputId = "commentTextInput",
+							InputName = "text",
+							Placeholder = SharedLocalizer["Comment_WritePlaceholder"].Value,
+							AriaLabel = SharedLocalizer["Comment_WritePlaceholder"].Value,
+							Rows = 3,
+							Required = true,
+							ToggleInputId = "commentUseMarkdown",
+							ToggleInputName = "useMarkdown",
+							UseMarkdown = false
+						};
+					}
+					<partial name="_MarkdownEditor" model="commentMarkdownEditor" />
 				</div>
 
 				@{
@@ -154,7 +173,14 @@
 									<div><em>@SharedLocalizer["Comment_DeletedText"]</em></div>
 								} else {
 									@if (!string.IsNullOrEmpty(comment.Text)) {
-										<div class="chat-message-body">@comment.Text</div>
+										@if (comment.UseMarkdown) {
+											var renderedCommentHtml = MarkdownService.ToSafeHtml(comment.Text);
+											if (!string.IsNullOrWhiteSpace(renderedCommentHtml)) {
+												<div class="markdown-body chat-message-markdown">@Html.Raw(renderedCommentHtml)</div>
+											}
+										} else {
+											<div class="chat-message-body">@comment.Text</div>
+										}
 									}
 									@if (comment.CommentImages.Any()) {
 										<div class="message-images">

@@ -1,0 +1,138 @@
+@model Meguri.ViewModels.Post.MarkdownEditorViewModel
+@{
+	var pickerTitleId = $"mdImagePickerTitle_{Model.InputId}";
+}
+
+<div class="markdown-editor-wrapper" data-markdown-editor-root>
+	<div class="markdown-editor @(Model.UseMarkdown ? "" : "is-plain")"
+		 data-markdown-editor
+		 data-preview-url="@Url.Action("PreviewMarkdown", "Post")"
+		 data-my-images-url="@Url.Action("MyImages", "Image")"
+		 data-upload-image-url="@Url.Action("Upload", "Image")"
+		 data-msg-preview-empty="@SharedLocalizer["Markdown_PreviewEmpty"].Value"
+		 data-msg-preview-loading="@SharedLocalizer["Markdown_PreviewLoading"].Value"
+		 data-msg-preview-error="@SharedLocalizer["Markdown_PreviewError"].Value"
+		 data-msg-images-loading="@SharedLocalizer["Markdown_ImagePicker_Loading"].Value"
+		 data-msg-images-empty="@SharedLocalizer["Markdown_ImagePicker_Empty"].Value"
+		 data-msg-images-error="@SharedLocalizer["Markdown_ImagePicker_Error"].Value"
+		 data-msg-upload-loading="@SharedLocalizer["Markdown_ImagePicker_Uploading"].Value"
+		 data-msg-upload-error="@SharedLocalizer["Markdown_ImagePicker_UploadError"].Value">
+
+		<div class="markdown-editor-header" data-md-header @(Model.UseMarkdown ? null : "hidden")>
+			<div class="markdown-editor-tabs" role="tablist">
+				<button type="button" class="markdown-editor-tab is-active" role="tab" aria-selected="true" data-md-tab="write">
+					@SharedLocalizer["Markdown_TabWrite"]
+				</button>
+				<button type="button" class="markdown-editor-tab" role="tab" aria-selected="false" data-md-tab="preview">
+					@SharedLocalizer["Markdown_TabPreview"]
+				</button>
+			</div>
+
+			<div class="markdown-editor-toolbar" data-md-toolbar role="toolbar">
+				<button type="button" class="markdown-toolbar-btn" data-md-action="heading" title="@SharedLocalizer["Markdown_Toolbar_Heading"]" aria-label="@SharedLocalizer["Markdown_Toolbar_Heading"]">
+					<img src="~/icons/heading.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="bold" title="@SharedLocalizer["Markdown_Toolbar_Bold"]" aria-label="@SharedLocalizer["Markdown_Toolbar_Bold"]">
+					<img src="~/icons/bold.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="italic" title="@SharedLocalizer["Markdown_Toolbar_Italic"]" aria-label="@SharedLocalizer["Markdown_Toolbar_Italic"]">
+					<img src="~/icons/italic.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="strikethrough" title="@SharedLocalizer["Markdown_Toolbar_Strikethrough"]" aria-label="@SharedLocalizer["Markdown_Toolbar_Strikethrough"]">
+					<img src="~/icons/strikethrough.svg" class="icon" alt="" />
+				</button>
+				<span class="markdown-toolbar-sep" aria-hidden="true"></span>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="quote" title="@SharedLocalizer["Markdown_Toolbar_Quote"]" aria-label="@SharedLocalizer["Markdown_Toolbar_Quote"]">
+					<img src="~/icons/quote.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="code" title="@SharedLocalizer["Markdown_Toolbar_Code"]" aria-label="@SharedLocalizer["Markdown_Toolbar_Code"]">
+					<img src="~/icons/code.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="codeblock" title="@SharedLocalizer["Markdown_Toolbar_CodeBlock"]" aria-label="@SharedLocalizer["Markdown_Toolbar_CodeBlock"]">
+					<img src="~/icons/square-code.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="link" title="@SharedLocalizer["Markdown_Toolbar_Link"]" aria-label="@SharedLocalizer["Markdown_Toolbar_Link"]">
+					<img src="~/icons/link.svg" class="icon" alt="" />
+				</button>
+				<span class="markdown-toolbar-sep" aria-hidden="true"></span>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="ul" title="@SharedLocalizer["Markdown_Toolbar_BulletList"]" aria-label="@SharedLocalizer["Markdown_Toolbar_BulletList"]">
+					<img src="~/icons/list.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="ol" title="@SharedLocalizer["Markdown_Toolbar_NumberedList"]" aria-label="@SharedLocalizer["Markdown_Toolbar_NumberedList"]">
+					<img src="~/icons/list-ordered.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="task" title="@SharedLocalizer["Markdown_Toolbar_TaskList"]" aria-label="@SharedLocalizer["Markdown_Toolbar_TaskList"]">
+					<img src="~/icons/list-todo.svg" class="icon" alt="" />
+				</button>
+				<button type="button" class="markdown-toolbar-btn" data-md-action="table" title="@SharedLocalizer["Markdown_Toolbar_Table"]" aria-label="@SharedLocalizer["Markdown_Toolbar_Table"]">
+					<img src="~/icons/table.svg" class="icon" alt="" />
+				</button>
+				<span class="markdown-toolbar-sep" aria-hidden="true"></span>
+				<button type="button" class="markdown-toolbar-btn markdown-toolbar-btn-labeled" data-md-action="insert-my-image" title="@SharedLocalizer["Markdown_Toolbar_InsertMyImage"]">
+					<img src="~/icons/image.svg" class="icon" alt="" />
+					<span>@SharedLocalizer["Markdown_Toolbar_InsertMyImage"]</span>
+				</button>
+			</div>
+		</div>
+
+		<div class="markdown-editor-panel" data-md-panel="write">
+			<textarea id="@Model.InputId"
+						name="@Model.InputName"
+						class="form-control markdown-editor-textarea"
+						rows="@Model.Rows"
+						placeholder="@Model.Placeholder"
+						aria-label="@Model.AriaLabel"
+						maxlength="@Model.MaxLength"
+						required="@Model.Required"
+						data-md-textarea>@Model.Value</textarea>
+		</div>
+
+		<div class="markdown-editor-panel markdown-editor-preview-panel" data-md-panel="preview" hidden>
+			<div class="markdown-body" data-md-preview></div>
+		</div>
+
+		<p class="description markdown-editor-hint" data-md-hint @(Model.UseMarkdown ? null : "hidden")>@SharedLocalizer["Markdown_Hint"]</p>
+
+		<!-- 画像選択・アップロードモーダル -->
+		<div class="md-image-picker-overlay" data-md-image-picker hidden role="dialog" aria-modal="true" aria-labelledby="@pickerTitleId">
+			<div class="md-image-picker-dialog">
+				<div class="md-image-picker-header">
+					<h3 id="@pickerTitleId">@SharedLocalizer["Markdown_ImagePicker_Title"]</h3>
+					<button type="button" class="md-image-picker-close" data-md-image-picker-close aria-label="@SharedLocalizer["Markdown_ImagePicker_Close"]">
+						<img src="~/icons/x.svg" class="icon" alt="" />
+					</button>
+				</div>
+				<div class="md-image-picker-search">
+					<div class="md-image-picker-actions">
+						<input type="search" class="form-control" data-md-image-search placeholder="@SharedLocalizer["Markdown_ImagePicker_SearchPlaceholder"]" />
+						<input type="file" accept="image/*" hidden data-md-image-upload-input />
+						<button type="button" class="md-image-picker-upload-btn" data-md-image-upload-btn>
+							<img src="~/icons/image-plus.svg" class="icon" alt="" />
+							<span>@SharedLocalizer["Markdown_ImagePicker_UploadButton"]</span>
+						</button>
+					</div>
+					<p class="md-image-picker-upload-status" data-md-image-upload-status hidden></p>
+				</div>
+				<div class="md-image-picker-body">
+					<p class="md-image-picker-status" data-md-image-status hidden></p>
+					<div class="md-image-picker-grid" data-md-image-grid></div>
+					<div class="md-image-picker-more" data-md-image-more-wrap hidden>
+						<button type="button" data-md-image-load-more>@SharedLocalizer["Markdown_ImagePicker_LoadMore"]</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<label class="check-row markdown-toggle-row" for="@Model.ToggleInputId">
+		<input type="checkbox"
+				 id="@Model.ToggleInputId"
+				 name="@Model.ToggleInputName"
+				 value="true"
+				 role="switch"
+				 data-md-toggle
+				 @(Model.UseMarkdown ? "checked" : null) />
+		@SharedLocalizer["Post_UseMarkdown"]
+	</label>
+	<input type="hidden" name="@Model.ToggleInputName" value="false" />
+</div>
