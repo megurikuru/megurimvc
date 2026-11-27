@@ -47,6 +47,10 @@
 		}
 	}
 
+	body[data-controller="Post" i][data-action="Details" i] article:has(> .reaction-buttons:last-child) {
+		padding-bottom: 0;
+	}
+
 	h1,
 	h2 {
 		border-right: 1px solid var(--color-border);

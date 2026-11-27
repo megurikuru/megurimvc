@@ -1458,9 +1458,6 @@ meguri - Where Fandom Love Circulates</value>
   <data name="Reaction_Bravo_Label" xml:space="preserve">
     <value>Bravo</value>
   </data>
-  <data name="Reaction_Insight_Label" xml:space="preserve">
-    <value>I see</value>
-  </data>
   <data name="Reaction_Impressed_Label" xml:space="preserve">
     <value>Intrigued</value>
   </data>
@@ -1481,9 +1478,6 @@ meguri - Where Fandom Love Circulates</value>
   </data>
   <data name="Reaction_Bravo_Desc" xml:space="preserve">
     <value>Amazing / Applause / Great work</value>
-  </data>
-  <data name="Reaction_Insight_Desc" xml:space="preserve">
-    <value>I see / Makes sense / Understood</value>
   </data>
   <data name="Reaction_Impressed_Desc" xml:space="preserve">
     <value>Interesting / Impressive</value>

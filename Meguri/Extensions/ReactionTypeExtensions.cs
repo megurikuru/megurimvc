@@ -17,11 +17,10 @@ namespace Meguri.Extensions {
             ReactionType.Like => "❤️",
             ReactionType.Emotional => "😭",
             ReactionType.Bravo => "👏",
-            ReactionType.Insight => "😊",
             ReactionType.Impressed => "🧐",
-            ReactionType.Seen => "🙇",
+            ReactionType.Seen => "👀",
+            ReactionType.Thinking => "🤔",
             ReactionType.Lol => "😂",
-            ReactionType.Thinking => "🙆",
             _ => string.Empty
         };
 
@@ -30,7 +29,6 @@ namespace Meguri.Extensions {
             ReactionType.Like => GetResourceString("Reaction_Like_Label"),
             ReactionType.Emotional => GetResourceString("Reaction_Emotional_Label"),
             ReactionType.Bravo => GetResourceString("Reaction_Bravo_Label"),
-            ReactionType.Insight => GetResourceString("Reaction_Insight_Label"),
             ReactionType.Impressed => GetResourceString("Reaction_Impressed_Label"),
             ReactionType.Seen => GetResourceString("Reaction_Seen_Label"),
             ReactionType.Thinking => GetResourceString("Reaction_Thinking_Label"),
@@ -51,7 +49,6 @@ namespace Meguri.Extensions {
             ReactionType.Like => GetResourceString("Reaction_Like_Desc"),
             ReactionType.Emotional => GetResourceString("Reaction_Emotional_Desc"),
             ReactionType.Bravo => GetResourceString("Reaction_Bravo_Desc"),
-            ReactionType.Insight => GetResourceString("Reaction_Insight_Desc"),
             ReactionType.Impressed => GetResourceString("Reaction_Impressed_Desc"),
             ReactionType.Seen => GetResourceString("Reaction_Seen_Desc"),
             ReactionType.Thinking => GetResourceString("Reaction_Thinking_Desc"),

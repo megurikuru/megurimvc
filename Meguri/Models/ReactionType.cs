@@ -12,20 +12,17 @@ namespace Meguri.Models {
         /// 👏 すごい / 拍手
         Bravo = 3,
 
-        /// 💡 なるほど（納得・理解）
-        Insight = 4,
-
         /// 🧐 ほぅ（興味・感銘・関心）
-        Impressed = 5,
+        Impressed = 4,
 
         /// 👀 読了 / 見たよ（足あと）
-        Seen = 6 ,
+        Seen = 5 ,
 
         /// 🤔 考えさせられる（深考・考察）
-        Thinking = 7,
+        Thinking = 6,
 
         /// 😂 草 / ｗｗ（ユーモア・ギャグ）
-        Lol = 8
+        Lol = 7
     }
 
 }

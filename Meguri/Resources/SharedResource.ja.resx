@@ -432,6 +432,9 @@
   <data name="Account_Password_Hide" xml:space="preserve">
     <value>パスワードを隠す</value>
   </data>
+  <data name="Account_Password_Hint" xml:space="preserve">
+    <value>{0}〜{1}文字（{2}種類以上の異なる文字を使用）で入力してください。ユーザー名やメールアドレスを含むもの、推測されやすいパスワードは使用できません。</value>
+  </data>
   <data name="Account_Field_RememberMe" xml:space="preserve">
     <value>ログイン状態を保持する</value>
   </data>
@@ -1447,16 +1450,13 @@ meguri - 『好き』がめぐるSNS</value>
     <value>WebPへの変換に失敗しました。</value>
   </data>
   <data name="Reaction_Like_Label" xml:space="preserve">
-    <value>すき</value>
+    <value>好き</value>
   </data>
   <data name="Reaction_Emotional_Label" xml:space="preserve">
-    <value>エモい</value>
+    <value>泣いた</value>
   </data>
   <data name="Reaction_Bravo_Label" xml:space="preserve">
     <value>すごい</value>
-  </data>
-  <data name="Reaction_Insight_Label" xml:space="preserve">
-    <value>なるほど</value>
   </data>
   <data name="Reaction_Impressed_Label" xml:space="preserve">
     <value>ほぅ</value>
@@ -1465,34 +1465,31 @@ meguri - 『好き』がめぐるSNS</value>
     <value>見たよ</value>
   </data>
   <data name="Reaction_Thinking_Label" xml:space="preserve">
-    <value>考えさせられる</value>
+    <value>ふ～ん</value>
   </data>
   <data name="Reaction_Lol_Label" xml:space="preserve">
-    <value>草</value>
+    <value>笑える</value>
   </data>
   <data name="Reaction_Like_Desc" xml:space="preserve">
-    <value>すき・いいね</value>
+    <value>好き・いいね</value>
   </data>
   <data name="Reaction_Emotional_Desc" xml:space="preserve">
-    <value>泣けた・エモい・感動した</value>
+    <value>泣いた・感動</value>
   </data>
   <data name="Reaction_Bravo_Desc" xml:space="preserve">
-    <value>すごい・拍手・素晴らしい完成度</value>
-  </data>
-  <data name="Reaction_Insight_Desc" xml:space="preserve">
-    <value>なるほど・納得・理解</value>
+    <value>すごい・拍手</value>
   </data>
   <data name="Reaction_Impressed_Desc" xml:space="preserve">
-    <value>ほぅ・興味深い・感銘</value>
+    <value>ほぅ・興味深い</value>
   </data>
   <data name="Reaction_Seen_Desc" xml:space="preserve">
-    <value>読了・見たよ・足あと</value>
+    <value>見たよ・足跡</value>
   </data>
   <data name="Reaction_Thinking_Desc" xml:space="preserve">
-    <value>考えさせられる・深いテーマ</value>
+    <value>ふ～ん・考え中</value>
   </data>
   <data name="Reaction_Lol_Desc" xml:space="preserve">
-    <value>草・面白い・ｗｗ</value>
+    <value>笑える・www</value>
   </data>
   <data name="Account_Error_UserWithdrawn" xml:space="preserve">
     <value>存在しないユーザーです。</value>
@@ -1655,6 +1652,15 @@ meguri - 『好き』がめぐるSNS</value>
   </data>
   <data name="Identity_PasswordRequiresUpper" xml:space="preserve">
     <value>パスワードには大文字 ('A'-'Z') を1文字以上含める必要があります。</value>
+  </data>
+  <data name="Identity_PasswordContainsUserName" xml:space="preserve">
+    <value>パスワードにユーザー名を含めることはできません。</value>
+  </data>
+  <data name="Identity_PasswordContainsEmail" xml:space="preserve">
+    <value>パスワードにメールアドレスを含めることはできません。</value>
+  </data>
+  <data name="Identity_PasswordTooCommon" xml:space="preserve">
+    <value>このパスワードは一般的すぎるため使用できません。推測されにくいパスワードを設定してください。</value>
   </data>
   <data name="Home_UsersHeading" xml:space="preserve">
     <value>ユーザー</value>
@@ -1888,18 +1894,6 @@ meguri - 『好き』がめぐるSNS</value>
   </data>
   <data name="Manage_Options_UnderageNotice" xml:space="preserve">
     <value>※18歳未満の方は性的・暴力表現を含む投稿を表示できません。</value>
-  </data>
-  <data name="Identity_PasswordContainsUserName" xml:space="preserve">
-    <value>パスワードにユーザー名を含めることはできません。</value>
-  </data>
-  <data name="Identity_PasswordContainsEmail" xml:space="preserve">
-    <value>パスワードにメールアドレスを含めることはできません。</value>
-  </data>
-  <data name="Identity_PasswordTooCommon" xml:space="preserve">
-    <value>このパスワードは一般的すぎるため使用できません。推測されにくいパスワードを設定してください。</value>
-  </data>
-  <data name="Account_Password_Hint" xml:space="preserve">
-    <value>{0}〜{1}文字（{2}種類以上の異なる文字を使用）で入力してください。ユーザー名やメールアドレスを含むもの、推測されやすいパスワードは使用できません。</value>
   </data>
   <data name="Markdown_TabWrite" xml:space="preserve">
     <value>編集</value>
