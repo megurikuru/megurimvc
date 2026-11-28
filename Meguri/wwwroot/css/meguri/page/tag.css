@@ -1,5 +1,9 @@
 body[data-controller="Tag" i] {
 
+	#post-list {
+		border-bottom: 1px solid var(--color-border);
+	}
+
 	.pagination {
 		border-top: none;
 	}
@@ -19,7 +23,6 @@ body[data-controller="Tag" i] {
 
 		nav.pagination {
 			margin-top: 0;
-			border-top: none;
 		}
 
 		footer {

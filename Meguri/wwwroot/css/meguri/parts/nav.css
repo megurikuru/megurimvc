@@ -34,6 +34,7 @@ body {
 			display: block; /* 自身：ブロック要素 */
 
 			border-top: 1px solid var(--color-border);
+
 			/* 左端以外の列に左枠線を表示 */
 			&:not(:nth-child(3n + 1)) {
 				border-left: 1px solid var(--color-border);
@@ -68,6 +69,10 @@ body {
 			}
 		}
 	}
+}
+
+body > main > div:nth-child(1) > nav.nav-grid > ul > li {
+	border-top: none;
 }
 
 .nav-sub {
