@@ -34,6 +34,9 @@
     <EditorConfigFiles Remove="C:\Users\toshi\source\repos\megurimvc\Meguri\.editorconfig" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="c109-meguri-book.md" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="C:\Users\toshi\source\repos\megurimvc\Meguri\.editorconfig" />
     <None Include="Views\Shared\_Header.cshtml.new" />
   </ItemGroup>

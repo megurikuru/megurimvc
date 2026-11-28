@@ -882,12 +882,6 @@
   <data name="Fandom_Join" xml:space="preserve">
     <value>参加</value>
   </data>
-  <data name="Fandom_Joined" xml:space="preserve">
-    <value>入ってる</value>
-  </data>
-  <data name="Fandom_JoinedBadge" xml:space="preserve">
-    <value>入ってる</value>
-  </data>
   <data name="Fandom_Leave" xml:space="preserve">
     <value>退出</value>
   </data>
@@ -902,9 +896,6 @@
   </data>
   <data name="Fandom_Explore" xml:space="preserve">
     <value>界隈を探す</value>
-  </data>
-  <data name="Fandom_MyFandoms" xml:space="preserve">
-    <value>入ってる界隈</value>
   </data>
   <data name="Fandom_NoPosts" xml:space="preserve">
     <value>この界隈にはまだ投稿がありません。</value>
@@ -1483,7 +1474,7 @@ meguri - 『好き』がめぐるSNS</value>
     <value>ほぅ・興味深い</value>
   </data>
   <data name="Reaction_Seen_Desc" xml:space="preserve">
-    <value>見たよ・足跡</value>
+    <value>見たよ</value>
   </data>
   <data name="Reaction_Thinking_Desc" xml:space="preserve">
     <value>ふ～ん・考え中</value>
