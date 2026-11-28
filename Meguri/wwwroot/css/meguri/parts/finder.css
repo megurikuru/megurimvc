@@ -15,10 +15,13 @@
 	border-top: 1px solid var(--color-border);
 	transition: background-color 0.2s ease;
 
+	&:first-child {
+		border-top: none;
+	}
+
 	&:hover {
 		background-color: var(--color-button-main-hover);
 	}
-
 	/* アイコン */
 	.icon {
 		width: 1.25rem;

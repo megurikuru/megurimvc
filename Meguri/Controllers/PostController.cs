@@ -527,6 +527,7 @@ namespace Meguri.Controllers {
             if (post != null) {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 if (post.UserId == userId || User.IsInRole("Admin")) {
+                    var fandomId = post.FandomId;
                     foreach (var pi in post.PostImages) {
                         if (pi.Image != null && !string.IsNullOrEmpty(pi.Image.StorageKey)) {
                             await _r2StorageService.DeleteFileAsync(pi.Image.StorageKey);
@@ -534,9 +535,11 @@ namespace Meguri.Controllers {
                     }
                     _context.Posts.Remove(post);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(FandomController.Details), "Fandom", new { id = fandomId });
                 }
             }
-            return RedirectToAction(nameof(Index));
+            // return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }

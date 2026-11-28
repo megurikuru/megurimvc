@@ -13,9 +13,10 @@
 		grid-column: 1 / -1;
 	}
 
-	footer {
+	body > footer {
 		grid-column: 1 / -1;
 		margin-top: 0.5rem;
+		border-top: 1px solid var(--color-border);
 	}
 
 	main {
@@ -38,9 +39,11 @@
 	body[data-controller="Message" i],
 	body[data-controller="Post" i],
 	body[data-controller="Home" i]:not([data-action="Index" i]) {
+		/*
 		article {
 			padding-bottom: 0.5rem;
 		}
+		*/
 
 		article:last-of-type {
 			border-bottom: 1px solid var(--color-border);
@@ -130,7 +133,6 @@
 	body[data-controller="Tag" i] {
 		#search-box {
 			padding-top: 0.5rem;
-			border-top: 1px solid var(--color-border);
 		}
 	}
 
@@ -149,7 +151,7 @@
 	.account {
 		width: 100%;
 		margin: 0;
-		padding: 0.5rem max(0.5rem, calc((100% - 560px) / 2)) 0;
+		padding: 0.5rem max(0.5rem, calc((100% - 560px) / 2));
 
 		& + .account {
 			padding-top: 0;
@@ -237,13 +239,13 @@
 		#nav-main li {
 			border-left: 1px solid var(--color-border);
 			border-right: none;
-			border-bottom: 1px solid var(--color-border);
 
 			&:last-child {
 				border-right: 1px solid var(--color-border);
 			}
 		}
 	}
+
 	/* ホーム画面以外 */
 	body:not(:has(> .nav-sub)) {
 		& > #nav-main {
@@ -261,12 +263,25 @@
 					border-left: 1px solid var(--color-border);
 					border-right: 1px solid var(--color-border);
 					border-bottom: none;
-
-					&:last-child {
-						border-bottom: 1px solid var(--color-border);
-					}
 				}
 			}
+		}
+	}
+
+	body:not([data-controller="Home" i]) {
+		footer {
+			border-top: 1px solid var(--color-border);
+		}
+	}
+
+	body[data-controller="message" i] {
+		.date-search {
+			border-top: none;
+		}
+
+		.pagination {
+			margin-top: 0;
+			border-top: none;
 		}
 	}
 }

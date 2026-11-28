@@ -10,5 +10,13 @@ body[data-controller="Profile" i][data-action="Details" i] {
 
 	#post-list {
 		margin-top: 0.5rem;
+
+		article:first-of-type h1 {
+			border-top: none;
+		}
+	}
+
+	#nav-main {
+		margin-top: 0.5rem;
 	}
 }

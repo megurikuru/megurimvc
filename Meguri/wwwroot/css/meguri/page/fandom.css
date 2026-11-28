@@ -4,7 +4,6 @@ body[data-controller="Fandom" i] {
 	&[data-action="Details" i] {
 		.pagination {
 			margin-top: 0;
-			border-top: none;
 		}
 	}
 }

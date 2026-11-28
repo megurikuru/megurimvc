@@ -18,6 +18,18 @@ body[data-controller="Manage" i] {
 	&[data-action="Passkeys" i] article + article {
 		margin-top: 0.5rem;
 	}
+
+	article > h2 {
+		border-top: none;
+	}
+
+	main > h2 {
+		border-top: none;
+	}
+
+	footer {
+		border-top: none;
+	}
 }
 
 

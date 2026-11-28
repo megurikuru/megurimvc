@@ -1,9 +1,30 @@
-/* Tagコントローラー固有スタイル */
-
 body[data-controller="Tag" i] {
 
 	.pagination {
-		margin-top: 0;
+		border-top: none;
+	}
+
+	#search-box {
+		border-top: none;
+	}
+
+	&[data-action="Details" i] {
+		#post-list > h1 {
+			border-top: none;
+		}
+
+		#post-list > article:first-of-type h1 {
+			border-top: none;
+		}
+
+		nav.pagination {
+			margin-top: 0;
+			border-top: none;
+		}
+
+		footer {
+			border-top: none;
+		}
 	}
 	/* Tag/Disambiguation */
 	&[data-action="Disambiguation" i] {
