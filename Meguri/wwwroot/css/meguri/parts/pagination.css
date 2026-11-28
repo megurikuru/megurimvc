@@ -1,4 +1,4 @@
-﻿.pagination {
+﻿ .pagination {
 	display: block grid; /* 自身：ブロック要素 / 子：Gridレイアウト（均等3列）で配置 */
 	grid-template-columns: auto 1fr auto;
 	padding: 0.5rem 0.5rem 0 0.5rem;

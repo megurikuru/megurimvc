@@ -66,6 +66,10 @@ h1, h2 {
 	background-color: var(--color-bg-title);
 }
 
+.nav-grid + h1 {
+	border-top: none;
+}
+
 /* 連続する見出し（h1/h2）で枠線が二重にならないようにする */
 :is(h1, h2) + :is(h1, h2),
 :is(h1, h2) + :is(a, div, article, section) > :is(h1, h2):first-child,

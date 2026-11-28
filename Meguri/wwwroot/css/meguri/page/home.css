@@ -6,6 +6,10 @@ body[data-controller="Home" i] {
 		margin-top: 0;
 	}
 
+	main > h1 {
+		border-top: none;
+	}
+
 	#search-box {
 		border-top: none;
 	}
